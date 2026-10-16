@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#08060f">
 <meta name="color-scheme" content="dark">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏫</text></svg>">
 <meta name="description" content="Quản lý lớp học thông minh: sơ đồ chỗ ngồi, vòng quay gọi tên, bài tập, bảng tin, bảng xếp hạng.">
 <title>Quản Lý Lớp Học Thông Minh</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -396,6 +397,28 @@
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
   }
+  /* ====== TỐI ƯU CẢM ỨNG / ĐIỆN THOẠI ====== */
+  button, [role="button"], .menu-item, select { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+  [role="button"]:focus-visible { outline: 2px solid #c084fc; outline-offset: 2px; }
+  .modal-box { max-height: 85vh; max-height: 85dvh; overscroll-behavior: contain; }
+  .modal-close { min-width: 32px; text-align: center; }
+  .rank-table td .secondary, .rank-table td .green, .user-table td button { white-space: nowrap; }
+
+  @media (pointer: coarse) {
+    .student-list li .del-btn, .desk-title .remove-desk, .pick-btn, .task-item .del-btn, .homework-card .del-btn, .criteria-item .del-btn { min-width: 34px; min-height: 34px; display: inline-flex; align-items: center; justify-content: center; }
+    .modal-close { min-width: 40px; min-height: 40px; display: inline-flex; align-items: center; justify-content: center; }
+    .menu-item { min-height: 46px; }
+    .task-item input[type="checkbox"] { width: 20px; height: 20px; }
+  }
+
+  @media (max-width: 640px) {
+    .modal-box { max-height: 92vh; max-height: 92dvh; }
+    .menu-drawer { width: 290px; }
+    .rank-table td:nth-child(5) { white-space: nowrap; }
+    .btn-row button { flex: 1 1 auto; justify-content: center; }
+    .period-tabs { width: 100%; }
+    .period-tabs .period-btn { flex: 1; justify-content: center; }
+  }
 </style>
 </head>
 <body>
@@ -471,7 +494,7 @@
         </div>
         <div class="admin-edit-only inline-form">
           <input type="text" id="tabNewStudentInput" class="input-control" placeholder="Họ và tên học sinh mới..." aria-label="Họ và tên học sinh mới">
-          <button id="tabAddStudentBtn">Trống</button>
+          <button id="tabAddStudentBtn">➕ Thêm</button>
         </div>
       </div>
       <div class="table-wrap wide">
@@ -1298,6 +1321,8 @@
     renderProfile();
     renderAdminUserManagement();
     renderAuthBar();
+    // Cho phép dùng bàn phím với các nút dạng <span role="button">
+    document.querySelectorAll('[role="button"]:not([tabindex])').forEach(el => { el.tabIndex = 0; });
     saveState();
   }
 
@@ -1444,6 +1469,8 @@
   }
 
   function deleteStudent(id) {
+    const target = getStudent(id);
+    if (target && !confirm(`Bạn có chắc muốn xóa học sinh "${target.name}"?`)) return;
     state.students = state.students.filter(s => s.id !== id);
     state.desks.forEach(d => { d.seats = d.seats.map(sid => sid === id ? null : sid); });
     if (pendingStudentId === id) pendingStudentId = null;
@@ -1624,6 +1651,7 @@
   };
 
   document.getElementById('resetBtn').onclick = () => {
+    if (!confirm('Bạn có chắc muốn xóa toàn bộ chỗ ngồi hiện tại?')) return;
     state.desks.forEach(desk => { desk.seats = desk.seats.map(() => null); });
     pendingStudentId = null;
     render();
@@ -1983,7 +2011,8 @@
     };
     state.weeksHistory.unshift(weekData);
 
-    state.students.forEach((st, idx) => {
+    // Thưởng XP theo đúng thứ hạng điểm tuần (không theo thứ tự trong danh sách)
+    [...state.students].sort((a, b) => (b.weekScore || 0) - (a.weekScore || 0)).forEach((st, idx) => {
       let xpBonus = 5;
       if (idx === 0) xpBonus = 50;
       else if (idx === 1) xpBonus = 40;
@@ -1993,7 +2022,7 @@
 
       addXp(st, xpBonus, `Thưởng tổng kết Tuần ${state.currentWeek} (Top ${idx + 1})`);
       st.weekScore = 0;
-      if (st.logs) st.logs = [];
+      // Giữ lại nhật ký để hồ sơ cá nhân còn thống kê tháng/năm (lịch sử tuần vẫn lọc theo số tuần)
     });
 
     state.currentWeek++;
@@ -2021,6 +2050,14 @@
     }
     openModal('weeksHistoryModal');
   };
+
+  // Hỗ trợ phím Enter/Space cho các nút xóa dạng span
+  document.addEventListener('keydown', (e) => {
+    if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('.del-btn, .remove-desk, .remove-seat-student')) {
+      e.preventDefault();
+      e.target.click();
+    }
+  });
 
   // Initial render
   render();
