@@ -9229,6 +9229,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
 #hzInstall button.hzi-b { flex:0 0 auto; padding:8px 12px !important; font-size:11.5px; font-weight:800;
   background:rgba(168,85,247,.22) !important; color:#f3e8ff !important; border:1px solid rgba(192,132,252,.55) !important; }
 #hzInstall button.hzi-b:hover { background:rgba(168,85,247,.36) !important; }
+#hzInstall button.hzi-b[disabled] { opacity:.62; cursor:default; }
 #hzInstall button.hzi-x { flex:0 0 auto; width:26px; height:26px; padding:0 !important;
   background:transparent !important; border:0 !important; color:#7c7490 !important; }
 #hzInstall button.hzi-x:hover { color:#d6d3e0 !important; }
@@ -9260,15 +9261,16 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
   if (navigator.onLine === false) setTimeout(function () { say('Đang dùng bản lưu trên máy (không có mạng).', 'warn'); }, 1200);
 
   /* ---------- Nút "Cài đặt ứng dụng" hiện trong trang ----------
-     Máy chỉ báo trang cài được bằng sự kiện beforeinstallprompt. Nhận được sự kiện
-     đó mới vẽ thẻ; không nhận được thì để yên (đỡ hiện nút bấm không ăn gì).
-     iPhone/iPad dùng Safari: máy không cho trang tự bấm nút cài, nên thẻ chỉ dẫn
-     cô trò mở nút Chia sẻ rồi chọn "Thêm vào Màn hình chính".
-     Đã cài rồi (display-mode: standalone) -> không hiện nữa. */
+     Thẻ vẽ sau 4 giây cho MỌI máy (kể cả iPhone), nên cô trò chỉ cần chạm 1 cái.
+     - Trình duyệt báo cài được (sự kiện beforeinstallprompt): chạm "Cài đặt" là
+       hiện hộp hỏi của chính máy -> Đồng ý là xong.
+     - Trình duyệt không cho trang tự mở hộp (iPhone/Safari, hoặc Chrome chưa báo):
+       chạm "Cài đặt" thì dòng chữ đổi thành hướng dẫn đúng 2 bước của máy đó.
+     Đã cài rồi (display-mode: standalone) hoặc vừa bấm "Để sau" (nguội 3 ngày) -> ẩn. */
   var LATER = 'hz_install_later';   // mốc thời gian cô bấm "để sau"
   var DONE = 'hz_install_done';     // đã cài thành công
   var WAIT_MS = 3 * 24 * 3600 * 1000;
-  var deferred = null, card = null;
+  var deferred = null, card = null, descEl = null, okBtn = null;
 
   function wr(k, v) { try { if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, String(v)); } catch (e) { } }
   function rd(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
@@ -9302,7 +9304,15 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     card.hidden = gameZoom() || isStandalone() || nagged();
   }
 
-  function buildCard(iosHint) {
+  /* Câu ngắn trên thẻ, và hướng dẫn 2 bước hiện ra khi máy không cho trang tự mở hộp cài. */
+  var DESC = 'Mở nhanh như app thật, hết wifi vẫn xem được hồ sơ và chơi game.';
+  function guidance() {
+    return isIOS()
+      ? 'B1: chạm nút Chia sẻ (hình ô vuông có mũi tên đi lên) ở thanh dưới. B2: chọn "Thêm vào Màn hình chính".'
+      : 'B1: chạm dấu ba chấm ở góc trên bên phải trình duyệt. B2: chọn "Cài đặt ứng dụng".';
+  }
+
+  function buildCard() {
     if (card) return card;
     var w = document.createElement('div');
     w.id = 'hzInstall';
@@ -9316,20 +9326,15 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     var tx = document.createElement('div');
     tx.className = 'hzi-tx';
     var b = document.createElement('b');
-    b.textContent = iosHint ? 'Cài app ra màn hình chính' : 'Cài app ra màn hình chính';
+    b.textContent = 'Cài app ra màn hình chính';
     var s = document.createElement('span');
-    s.textContent = iosHint
-      ? 'Safari: chạm nút Chia sẻ ở thanh dưới, rồi chọn "Thêm vào Màn hình chính".'
-      : 'Mở nhanh như app thật, hết wifi vẫn xem được hồ sơ và chơi game.';
+    s.textContent = DESC;
     tx.appendChild(b); tx.appendChild(s);
 
-    var ok = null;
-    if (!iosHint) {
-      ok = document.createElement('button');
-      ok.type = 'button';
-      ok.className = 'hzi-b';
-      ok.textContent = 'Cài đặt';
-    }
+    var ok = document.createElement('button');
+    ok.type = 'button';
+    ok.className = 'hzi-b';
+    ok.textContent = 'Cài đặt';
 
     var x = document.createElement('button');
     x.type = 'button';
@@ -9338,34 +9343,45 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     x.setAttribute('aria-label', 'Để sau');
     x.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12"/><path d="M18 6L6 18"/></svg>';
 
-    w.appendChild(ic); w.appendChild(tx);
-    if (ok) w.appendChild(ok);
-    w.appendChild(x);
+    w.appendChild(ic); w.appendChild(tx); w.appendChild(ok); w.appendChild(x);
     document.body.appendChild(w);
-    card = w;
+    card = w; descEl = s; okBtn = ok;
 
     x.addEventListener('click', function () { wr(LATER, Date.now()); place(); });
-    if (ok) ok.addEventListener('click', function () {
-      if (!deferred || typeof deferred.prompt !== 'function') { wr(LATER, Date.now()); place(); return; }
-      try {
-        deferred.prompt();
-        Promise.resolve(deferred.userChoice).then(function (r) {
-          if (r && r.outcome === 'accepted') { wr(DONE, '1'); wr(LATER, null); }
-          else wr(LATER, Date.now());
-          deferred = null;
-          place();
-        });
-      } catch (e) { wr(LATER, Date.now()); place(); }
+    ok.addEventListener('click', function () {
+      /* Máy báo cài được -> mở hộp hỏi của chính điện thoại (1 chạm là xong).
+         Máy không cho (iPhone, hoặc Chrome chưa kịp báo) -> đổi chữ thành hướng dẫn
+         2 bước để học sinh vẫn làm được, không bấm vào mà không thấy phản hồi. */
+      if (deferred && typeof deferred.prompt === 'function') {
+        try {
+          deferred.prompt();
+          Promise.resolve(deferred.userChoice).then(function (r) {
+            if (r && r.outcome === 'accepted') { wr(DONE, '1'); wr(LATER, null); }
+            else wr(LATER, Date.now());
+            deferred = null;
+            place();
+          });
+        } catch (e) { wr(LATER, Date.now()); place(); }
+        return;
+      }
+      if (descEl) descEl.textContent = guidance();
+      ok.textContent = 'Đã hiểu';
+      ok.disabled = true;
     });
     return card;
+  }
+
+  function armPrompt() {
+    if (descEl) descEl.textContent = DESC;
+    if (okBtn) { okBtn.textContent = 'Cài đặt'; okBtn.disabled = false; }
   }
 
   window.addEventListener('beforeinstallprompt', function (e) {
     try { e.preventDefault(); } catch (_) { }
     deferred = e;
     if (rd(DONE)) return;
-    buildCard(false);
-    setTimeout(place, 1800);
+    buildCard(); armPrompt();
+    setTimeout(place, 1200);
   });
 
   window.addEventListener('appinstalled', function () {
@@ -9374,10 +9390,12 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     say('Đã cài app. Lần sau mở bằng biểu tượng ngoài màn hình chính nhé.', 'ok');
   });
 
-  /* iPhone/iPad: không có sự kiện cài, nên chỉ dẫn một lần sau khi trang ổn định. */
+  /* Hiện thẻ cho mọi máy, kể cả khi trình duyệt chưa kịp báo "cài được"
+     (iPhone không báo bao giờ) — bấm nút sẽ ra hộp cài hoặc ra hướng dẫn 2 bước. */
   setTimeout(function () {
-    if (deferred || isStandalone() || nagged() || rd(DONE) || !isIOS()) return;
-    buildCard(true);
+    if (isStandalone() || nagged() || rd(DONE)) return;
+    buildCard();
+    if (deferred) armPrompt();
     place();
   }, 4000);
 
