@@ -9210,10 +9210,36 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
   });
 </script>
 
+<style>
+/* The "Cai app" card. O goc trai duoi de khong de len tin nhan goc phai,
+   z 9998 = duoi toast (10000) va menu noi Admin (9999 o cung cap, muon nut cai nam duoi). */
+#hzInstall { position:fixed; left:12px; bottom:calc(12px + env(safe-area-inset-bottom)); z-index:9998;
+  display:flex; align-items:center; gap:10px; width:min(330px,calc(100vw - 24px));
+  padding:11px 12px; border-radius:14px; background:rgba(16,12,26,.97);
+  border:1px solid rgba(192,132,252,.42); box-shadow:0 10px 30px rgba(0,0,0,.5); }
+#hzInstall[hidden] { display:none; }
+#hzInstall .hzi-ic { flex:0 0 auto; width:34px; height:34px; display:grid; place-items:center; border-radius:10px;
+  background:rgba(168,85,247,.16); border:1px solid rgba(192,132,252,.35); }
+#hzInstall .hzi-ic svg { width:18px; height:18px; fill:none; stroke:#e9d5ff; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+#hzInstall .hzi-tx { flex:1 1 auto; min-width:0; }
+#hzInstall b { display:block; font-size:12.5px; font-weight:800; line-height:1.3; color:#f4effa; }
+#hzInstall span { display:block; margin-top:2px; font-size:11px; line-height:1.45; color:#9b93a8; }
+#hzInstall button { display:inline-flex; align-items:center; justify-content:center; gap:6px;
+  min-height:0; border-radius:10px !important; box-shadow:none !important; touch-action:manipulation; }
+#hzInstall button.hzi-b { flex:0 0 auto; padding:8px 12px !important; font-size:11.5px; font-weight:800;
+  background:rgba(168,85,247,.22) !important; color:#f3e8ff !important; border:1px solid rgba(192,132,252,.55) !important; }
+#hzInstall button.hzi-b:hover { background:rgba(168,85,247,.36) !important; }
+#hzInstall button.hzi-x { flex:0 0 auto; width:26px; height:26px; padding:0 !important;
+  background:transparent !important; border:0 !important; color:#7c7490 !important; }
+#hzInstall button.hzi-x:hover { color:#d6d3e0 !important; }
+#hzInstall button.hzi-x svg { width:14px; height:14px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; }
+</style>
+
 <script>
 /* ============ PWA: THÊM VÀO MÀN HÌNH CHÍNH + CHƠI KHI MẤT MẠNG ============
    - Đăng ký sw.js (bộ nhớ tạm ngoại tuyến) để mất wifi lớp vẫn mở được game.
    - Báo một lần khi mất mạng / có mạng lại.
+   - Nút "Cài đặt ứng dụng" hiện ngay trong trang (xem bên dưới).
    - Chỉ chạy khi trang được mở bằng https (hoặc localhost). */
 (function () {
   if (!('serviceWorker' in navigator)) return;
@@ -9232,6 +9258,134 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
   window.addEventListener('offline', function () { say('Mất mạng. Hồ sơ và game vẫn mở được bằng bản đã lưu trên máy.', 'warn'); });
   window.addEventListener('online', function () { say('Đã có mạng trở lại. Điểm và tiến trình sẽ tự cập nhật.', 'ok'); });
   if (navigator.onLine === false) setTimeout(function () { say('Đang dùng bản lưu trên máy (không có mạng).', 'warn'); }, 1200);
+
+  /* ---------- Nút "Cài đặt ứng dụng" hiện trong trang ----------
+     Máy chỉ báo trang cài được bằng sự kiện beforeinstallprompt. Nhận được sự kiện
+     đó mới vẽ thẻ; không nhận được thì để yên (đỡ hiện nút bấm không ăn gì).
+     iPhone/iPad dùng Safari: máy không cho trang tự bấm nút cài, nên thẻ chỉ dẫn
+     cô trò mở nút Chia sẻ rồi chọn "Thêm vào Màn hình chính".
+     Đã cài rồi (display-mode: standalone) -> không hiện nữa. */
+  var LATER = 'hz_install_later';   // mốc thời gian cô bấm "để sau"
+  var DONE = 'hz_install_done';     // đã cài thành công
+  var WAIT_MS = 3 * 24 * 3600 * 1000;
+  var deferred = null, card = null;
+
+  function wr(k, v) { try { if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, String(v)); } catch (e) { } }
+  function rd(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+
+  function isStandalone() {
+    try { if (window.matchMedia && matchMedia('(display-mode: standalone)').matches) return true; } catch (e) { }
+    try { if (window.matchMedia && matchMedia('(display-mode: fullscreen)').matches) return true; } catch (e) { }
+    try { if (navigator.standalone === true) return true; } catch (e) { }
+    return false;
+  }
+
+  function isIOS() {
+    var ua = String(navigator.userAgent || '');
+    return (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) ||
+      (navigator.platform === 'MacIntel' && (navigator.maxTouchPoints || 0) > 1);
+  }
+
+  /* Đang chơi game phóng to toàn màn hình -> thẻ phải ẩn, kẻo đè lên nút điều khiển. */
+  function gameZoom() {
+    var g = document.getElementById('gameTab');
+    return !!(g && g.classList && g.classList.contains('zoom'));
+  }
+
+  function nagged() {
+    var t = parseInt(rd(LATER) || '0', 10) || 0;
+    return t && (Date.now() - t) < WAIT_MS;
+  }
+
+  function place() {
+    if (!card) return;
+    card.hidden = gameZoom() || isStandalone() || nagged();
+  }
+
+  function buildCard(iosHint) {
+    if (card) return card;
+    var w = document.createElement('div');
+    w.id = 'hzInstall';
+    w.hidden = true;
+    w.setAttribute('role', 'note');
+
+    var ic = document.createElement('div');
+    ic.className = 'hzi-ic';
+    ic.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v10"/><path d="M8 9l4 4 4-4"/><path d="M5 17.5h14"/><path d="M5 20.5h14"/></svg>';
+
+    var tx = document.createElement('div');
+    tx.className = 'hzi-tx';
+    var b = document.createElement('b');
+    b.textContent = iosHint ? 'Cài app ra màn hình chính' : 'Cài app ra màn hình chính';
+    var s = document.createElement('span');
+    s.textContent = iosHint
+      ? 'Safari: chạm nút Chia sẻ ở thanh dưới, rồi chọn "Thêm vào Màn hình chính".'
+      : 'Mở nhanh như app thật, hết wifi vẫn xem được hồ sơ và chơi game.';
+    tx.appendChild(b); tx.appendChild(s);
+
+    var ok = null;
+    if (!iosHint) {
+      ok = document.createElement('button');
+      ok.type = 'button';
+      ok.className = 'hzi-b';
+      ok.textContent = 'Cài đặt';
+    }
+
+    var x = document.createElement('button');
+    x.type = 'button';
+    x.className = 'hzi-x';
+    x.title = 'Để sau';
+    x.setAttribute('aria-label', 'Để sau');
+    x.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12"/><path d="M18 6L6 18"/></svg>';
+
+    w.appendChild(ic); w.appendChild(tx);
+    if (ok) w.appendChild(ok);
+    w.appendChild(x);
+    document.body.appendChild(w);
+    card = w;
+
+    x.addEventListener('click', function () { wr(LATER, Date.now()); place(); });
+    if (ok) ok.addEventListener('click', function () {
+      if (!deferred || typeof deferred.prompt !== 'function') { wr(LATER, Date.now()); place(); return; }
+      try {
+        deferred.prompt();
+        Promise.resolve(deferred.userChoice).then(function (r) {
+          if (r && r.outcome === 'accepted') { wr(DONE, '1'); wr(LATER, null); }
+          else wr(LATER, Date.now());
+          deferred = null;
+          place();
+        });
+      } catch (e) { wr(LATER, Date.now()); place(); }
+    });
+    return card;
+  }
+
+  window.addEventListener('beforeinstallprompt', function (e) {
+    try { e.preventDefault(); } catch (_) { }
+    deferred = e;
+    if (rd(DONE)) return;
+    buildCard(false);
+    setTimeout(place, 1800);
+  });
+
+  window.addEventListener('appinstalled', function () {
+    wr(DONE, '1'); wr(LATER, null); deferred = null;
+    if (card) card.hidden = true;
+    say('Đã cài app. Lần sau mở bằng biểu tượng ngoài màn hình chính nhé.', 'ok');
+  });
+
+  /* iPhone/iPad: không có sự kiện cài, nên chỉ dẫn một lần sau khi trang ổn định. */
+  setTimeout(function () {
+    if (deferred || isStandalone() || nagged() || rd(DONE) || !isIOS()) return;
+    buildCard(true);
+    place();
+  }, 4000);
+
+  try {
+    var gt = document.getElementById('gameTab');
+    if (gt && window.MutationObserver) new MutationObserver(place).observe(gt, { attributes: true, attributeFilter: ['class'] });
+  } catch (e) { }
+  window.addEventListener('resize', place);
 })();
 </script>
 
