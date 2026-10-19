@@ -1,0 +1,21 @@
+{
+  "name": "LỚP 11A1 - hoanghaoZ",
+  "short_name": "hoanghaoZ",
+  "description": "Hồ sơ, nhiệm vụ và game của lớp 11A1",
+  "start_url": "new.html",
+  "scope": ".",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "any",
+  "background_color": "#08060f",
+  "theme_color": "#a855f7",
+  "lang": "vi",
+  "icons": [
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
