@@ -5867,6 +5867,8 @@
       }
       tbody.appendChild(tr);
     });
+    // So tai khoan o cung tab "Tai khoan": ve lai theo danh sach em hien co
+    try { if (typeof renderAccountNotes === 'function') renderAccountNotes(); } catch (e) { }
   }
 
   function changeUserRole(username, newRole) {
@@ -17884,6 +17886,252 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
   #menuDrawer .menu-item.hz-locked .hz-lock-ic { display:inline-flex; }
 </style>
 
+<!-- ================= SO TAI KHOAN (menu Admin > tab Tai khoan) ================= -->
+<style>
+  .hz-note-bar { display:flex; flex-wrap:wrap; align-items:center; gap:7px; margin:2px 0 8px; }
+  .hz-note-bar .hz-check { font-size:11.5px; color:#c9ad72; flex:1 1 150px; }
+  .hz-note-msg { margin:2px 0 7px; font-size:11px; line-height:1.5; color:#a98c4d; }
+  .hz-note-msg.warn { color:#ffb3ad; }
+  .hz-note-table { width:100%; border-collapse:collapse; table-layout:fixed; }
+  /* Co lay chieu rong rieng de o ghi mat khau khong bi hai nut an chen mat.
+     O mat khau rong nhat vi trong do phai tru 2 nut nho (26px x 2). */
+  .hz-note-table th:nth-child(1), .hz-note-table td:nth-child(1) { width:21%; }
+  .hz-note-table th:nth-child(2), .hz-note-table td:nth-child(2) { width:45%; }
+  .hz-note-table th:nth-child(3), .hz-note-table td:nth-child(3) { width:19%; }
+  .hz-note-table th:nth-child(4), .hz-note-table td:nth-child(4) { width:15%; text-align:center; }
+  .hz-note-table td.hz-note-bts, .hz-note-table th:nth-child(4) { white-space:nowrap; }
+  .hz-note-table td.hz-note-bts button { white-space:nowrap; }
+  .hz-note-table th { padding:4px 4px; font-size:10px; letter-spacing:.4px; text-transform:uppercase; color:#b9a06a; text-align:left; }
+  .hz-note-table td { padding:3px 4px; border-top:1px dashed rgba(245,158,11,.16); vertical-align:middle; font-size:11px; }
+  .hz-note-name { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:#fde68a; }
+  .hz-note-off { font-style:normal; font-size:10px; color:#a98c4d; }
+  .hz-note-cell { display:flex; align-items:center; gap:4px; }
+  .hz-note-cell input { min-width:0; }
+  #hzAdminPanel .hz-note-in { box-sizing:border-box; width:100%; padding:6px 7px; border-radius:8px; font-size:11.5px; font-family:inherit;
+    background:rgba(255,255,255,.05); border:1px solid rgba(245,158,11,.28); color:#fde68a; }
+  #hzAdminPanel .hz-note-mk { letter-spacing:.2px; }
+  button.hz-b.sm { padding:5px 8px !important; font-size:10.5px !important; border-radius:8px !important; }
+  button.hz-b.danger { background:rgba(190,18,60,.32) !important; color:#fecdd3 !important; border:1px solid rgba(244,63,94,.45) !important; }
+  button.hz-note-eye { flex:0 0 auto; width:26px; height:26px; min-height:0 !important; padding:0 !important; display:inline-flex;
+    align-items:center; justify-content:center; border-radius:8px !important; background:rgba(255,255,255,.06) !important;
+    border:1px solid rgba(245,158,11,.3) !important; color:#fcd34d !important; box-shadow:none !important; }
+  button.hz-note-eye:hover { background:rgba(245,158,11,.18) !important; color:#fff !important; }
+  button.hz-note-eye svg { width:14px; height:14px; display:block; fill:none; stroke:currentColor; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
+  .hz-note-wrap { margin-top:12px; padding-top:9px; border-top:1px dashed rgba(245,158,11,.28); }
+  .hz-note-h4 { margin:0 0 4px; display:flex; align-items:center; gap:6px; font-size:10.5px; letter-spacing:.7px;
+    text-transform:uppercase; color:#d9b45a; font-weight:800; }
+  .hz-note-h4 svg { width:14px; height:14px; flex:0 0 auto; fill:none; stroke:#eab308; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
+</style>
+
+<script>
+  /* ============================================================
+     SO TAI KHOAN (20/10) — menu Admin > tab "Tai khoan".
+     Co TU ghi lai thong tin dang nhap cua tung em (em nhan mieng, em quen mat khau,
+     hoac co tao chung mot tai khoan dung chung trong lop) va xem lai duoc ngay trong menu.
+     APP KHONG LUU MAT KHAU DANG NHAP THAT cua Firebase o dau ca (mat khau chi dung luc
+     dang nhap roi bi xoa truoc khi luu), nen day la so ghi chu — KHONG phai chuc nang
+     "doi mat khau cho em" (muon doi thi em phai dang nhap va doi cua chinh em).
+     LUU O DAU: chi tren may co (localStorage 'hoanghao_acc_notes'), hoc sinh khong doc duoc.
+     Vi sao khong day len lop: Rules hien tai cua lop cho MOI tai khoan dang nhap doc toan bo
+     du lieu ("root .read: auth != null"), nen thu gi day len lop cung nhu cong khai voi cac em.
+     May khac muon co thi dung nut "Xuat file .txt" de chep sang.
+     ============================================================ */
+  var NOTE_KEY = 'hoanghao_acc_notes';
+  var noteData = {};      // { tenTaiKhoan: { mk, ghi, hiden } }
+  var noteUn = [];        // ten tai khoan hien trong so, thu theo A-Z
+
+  function noteTrim(name, rec) {
+    var out = {};
+    if (rec && String(rec.mk || '').trim()) out.mk = String(rec.mk).trim();
+    if (rec && String(rec.ghi || '').trim()) out.ghi = String(rec.ghi).trim();
+    if (rec && rec.hiden) out.hiden = 1;
+    if (!name) return out;
+    noteData[name] = out;
+    if (!out.mk && !out.ghi && !out.hiden) delete noteData[name];
+    return out;
+  }
+
+  function noteStore() {
+    try { localStorage.setItem(NOTE_KEY, JSON.stringify(noteData)); return true; }
+    catch (e) { return false; }
+  }
+
+  function noteLoad() {
+    try { return JSON.parse(localStorage.getItem(NOTE_KEY) || '{}') || {}; } catch (e) { return {}; }
+  }
+
+  function noteSetMsg(text, warn) {
+    var box = document.getElementById('hzNoteMsg');
+    if (!box) return;
+    box.textContent = text || '';
+    box.className = 'hz-note-msg' + (warn && text ? ' warn' : '');
+  }
+
+  function noteEnsure(username) {
+    var name = String(username || '');
+    if (!name) return '';
+    if (!noteData[name]) noteData[name] = {};
+    return name;
+  }
+
+  function noteSel(name) {
+    return '.hz-note-mk[data-u="' + (window.CSS && CSS.escape ? CSS.escape(name) : name) + '"]';
+  }
+
+  // May chan bo nho trinh duyet (an danh cua Safari) thi bao de co biet mà xuat file
+  function noteSavedOk() {
+    if (!noteStore()) noteSetMsg('Máy này đang chặn bộ nhớ trình duyệt nên sổ không giữ được sau khi tải lại. Cô bấm "Xuat file .txt" để giữ lại bản trên máy.', true);
+    else noteSetMsg('');
+  }
+
+  var NOTE_EYE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12S6 5.8 12 5.8 21.5 12 21.5 12 18 18.2 12 18.2 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+  var NOTE_EYE_OFF = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4l16 16"/><path d="M9.6 6.2A9.7 9.7 0 0 1 12 5.8c6 0 9.5 6.2 9.5 6.2a17 17 0 0 1-3.3 3.9M6.4 8.2A17.6 17.6 0 0 0 2.5 12S6 18.2 12 18.2c1 0 1.9-.2 2.7-.5"/></svg>';
+  var NOTE_COPY = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M15 5.5H6A2 2 0 0 0 4 7.5V15"/></svg>';
+
+  function renderAccountNotes() {
+    var tbody = document.getElementById('accountNotesBody');
+    if (!tbody) return;
+    var list = (typeof state !== 'undefined' && state && Array.isArray(state.users)) ? state.users : [];
+    var names = [];
+    list.forEach(function (u) { if (u && u.username && names.indexOf(String(u.username)) < 0) names.push(String(u.username)); });
+    // Giu lai dong co noi dung ma tai khoan da bi xoa de co khoi mat bai da viet
+    Object.keys(noteData).forEach(function (k) {
+      var r = noteData[k] || {};
+      if (names.indexOf(k) < 0 && (r.mk || r.ghi)) names.push(k);
+    });
+    names.sort(function (a2, b2) { return a2.localeCompare(b2, 'vi', { sensitivity: 'base' }); });
+    noteUn = names;
+    if (!names.length) {
+      tbody.innerHTML = '<tr><td colspan="4"><em>Chưa có tài khoản nào trong lớp.</em></td></tr>';
+      return;
+    }
+    tbody.innerHTML = names.map(function (name) {
+      var rec = noteData[name] || {};
+      var u = list.find(function (x) { return x && String(x.username) === name; });
+      var ten = u && u.fullName ? String(u.fullName) : '';
+      var show = !!rec.hiden;
+      var sub = (ten && ten !== name) ? ' <em class="hz-note-off">' + escapeHtml(name) + '</em>'
+        : (!ten ? ' <em class="hz-note-off">(đã xoá)</em>' : '');
+      return '<tr>' +
+        '<td class="hz-note-name">' + escapeHtml(ten || name) + sub + '</td>' +
+        '<td><div class="hz-note-cell"><input class="hz-note-in hz-note-mk" type="' + (show ? 'text' : 'password') + '"' +
+          ' value="' + escapeHtml(rec.mk || '').replace(/"/g, '&quot;') + '" data-u="' + escapeHtml(name) +
+          '" placeholder="' + (show ? '' : 'Mật khẩu') + '" autocomplete="off">' +
+          '<button class="hz-note-eye hz-note-all" type="button" title="' + (show ? 'Ẩn hết' : 'Hiện hết') + '" aria-label="' +
+          (show ? 'Ẩn hết mật khẩu' : 'Hiện hết mật khẩu') + '">' + (show ? NOTE_EYE_OFF : NOTE_EYE) + '</button>' +
+          '<button class="hz-note-eye hz-note-cp" type="button" title="Chép mật khẩu này" aria-label="Chép mật khẩu này">' + NOTE_COPY + '</button>' +
+        '</div></td>' +
+        '<td><input class="hz-note-in hz-note-ghi" value="' + escapeHtml(rec.ghi || '').replace(/"/g, '&quot;') +
+          '" data-u="' + escapeHtml(name) + '" placeholder="Ghi chú" autocomplete="off"></td>' +
+        '<td class="hz-note-bts"><button class="hz-b sm danger" type="button" data-clear="' + escapeHtml(name) + '">Xóa ghi</button></td>' +
+        '</tr>';
+    }).join('');
+
+    Array.prototype.forEach.call(tbody.querySelectorAll('.hz-note-mk, .hz-note-ghi'), function (inp) {
+      inp.onchange = function () {
+        var tr = inp.closest('tr');
+        var mk = tr.querySelector('.hz-note-mk'), ghi = tr.querySelector('.hz-note-ghi');
+        var name = noteEnsure(mk.dataset.u);
+        if (!name) return;
+        noteTrim(name, { mk: mk.value, ghi: ghi.value, hiden: (noteData[name] || {}).hiden });
+        noteSavedOk();
+      };
+    });
+    Array.prototype.forEach.call(tbody.querySelectorAll('.hz-note-eye'), function (btn) {
+      btn.onclick = function () {
+        var tr = btn.closest('tr');
+        var mk = tr.querySelector('.hz-note-mk'), ghi = tr.querySelector('.hz-note-ghi');
+        if (btn.classList.contains('hz-note-cp')) { noteCopy(mk.value); return; }
+        var name = noteEnsure(mk.dataset.u);
+        if (!name) return;
+        if (btn.classList.contains('hz-note-all')) {
+          // Nut hien/an dau dong: ap cho CA SO — lay gia tri dang in tren tung dong
+          var turnOn = Array.prototype.some.call(tbody.querySelectorAll('.hz-note-mk'), function (i) { return i.type === 'password'; });
+          noteUn.forEach(function (n) {
+            var row = tbody.querySelector(noteSel(n));
+            if (!row) return;
+            var g = row.closest('tr').querySelector('.hz-note-ghi');
+            noteTrim(n, { mk: row.value, ghi: g ? g.value : '', hiden: turnOn ? 1 : 0 });
+          });
+        } else {
+          noteTrim(name, { mk: mk.value, ghi: ghi.value, hiden: mk.type === 'password' ? 1 : 0 });
+        }
+        noteSavedOk();
+        renderAccountNotes();
+      };
+    });
+    Array.prototype.forEach.call(tbody.querySelectorAll('[data-clear]'), function (btn) {
+      btn.onclick = function () {
+        var name = String(btn.getAttribute('data-clear') || '');
+        if (!name) return;
+        if (!confirm('Xóa phần cô đã ghi cho tài khoản "' + name + '"?')) return;
+        delete noteData[name];
+        noteSavedOk();
+        renderAccountNotes();
+      };
+    });
+  }
+
+  function noteCopy(text) {
+    var t = String(text || '');
+    if (!t) { notify('Ô mật khẩu này chưa có gì để chép.', 'warn'); return; }
+    var fallback = function () {
+      var ta = document.createElement('textarea');
+      ta.value = t; ta.style.cssText = 'position:fixed;left:-9999px';
+      document.body.appendChild(ta); ta.select();
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      ta.remove();
+      notify(ok ? 'Đã chép mật khẩu. Cô dán vào ô Đăng nhập bằng Ctrl+V.' : 'Máy không cho chép. Cô bôi đen ô đó rồi giữ Ctrl+C nhé.', ok ? 'ok' : 'warn');
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(t).then(function () { notify('Đã chép mật khẩu. Cô dán vào ô Đăng nhập bằng Ctrl+V.', 'ok'); }, fallback);
+    } else fallback();
+  }
+
+  // O tick "Hien het mat khau": doi luyen nhin cua CA SO (khong doi noi dung)
+  function noteRevealAll(on) {
+    var tbody = document.getElementById('accountNotesBody');
+    noteUn.forEach(function (n) {
+      var row = tbody && tbody.querySelector(noteSel(n));
+      if (!row) { noteTrim(n, { mk: (noteData[n] || {}).mk, ghi: (noteData[n] || {}).ghi, hiden: on ? 1 : 0 }); return; }
+      var g = row.closest('tr').querySelector('.hz-note-ghi');
+      noteTrim(n, { mk: row.value, ghi: g ? g.value : '', hiden: on ? 1 : 0 });
+    });
+    noteStore();
+    renderAccountNotes();
+    var box = document.getElementById('hzNoteMsg');
+    if (box) box.textContent = on ? 'Đang hiện hết mật khẩu — cô nhớ tắt lại khi có người đứng cạnh.' : '';
+  }
+
+  function noteExport() {
+    var rows = noteUn.filter(function (n) { var r = noteData[n] || {}; return r.mk || r.ghi; });
+    if (!rows.length) { notify('Sổ đang trống — cô ghi mật khẩu vào vài ô trước rồi hãy xuất.', 'warn'); return; }
+    var lines = ['Sổ tài khoản lớp ' + ((typeof state !== 'undefined' && state && state.className) || '11A1'),
+      'Ghi ngày ' + new Date().toLocaleString('vi-VN'),
+      '', 'Đây là sổ cô tự ghi để nhớ, KHÔNG phải mật khẩu hệ thống.'];
+    rows.forEach(function (n) {
+      var r = noteData[n] || {};
+      lines.push('- ' + n + (r.mk ? ' | mật khẩu: ' + r.mk : ' | mật khẩu: (trống)') + (r.ghi ? ' | ghi chú: ' + r.ghi : ''));
+    });
+    var blob = new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' });
+    var a2 = document.createElement('a');
+    a2.href = URL.createObjectURL(blob);
+    a2.download = 'so-tai-khoan-lop.txt';
+    document.body.appendChild(a2); a2.click(); a2.remove();
+    setTimeout(function () { try { URL.revokeObjectURL(a2.href); } catch (e) { } }, 4000);
+    notify('Đã tải sổ ra file "so-tai-khoan-lop.txt" trong mục Tải xuống của máy.', 'ok');
+  }
+
+  noteData = noteLoad();
+
+  window.noteApi = {
+    render: function () { try { renderAccountNotes(); } catch (e) { console.warn(e); } },
+    reveal: function (on) { try { noteRevealAll(on); } catch (e) { console.warn(e); } },
+    exportTxt: function () { try { noteExport(); } catch (e) { console.warn(e); } }
+  };
+</script>
+
 <button id="hzAdminBtn" type="button" title="Menu Admin — bấm để mở, kéo để đổi chỗ" aria-label="Menu Admin">
   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8.4 6.5 11 12 5.2 17.5 11 21 8.4l-1.6 8.9H4.6z"/><path d="M4.8 19.6h14.4"/></svg>
 </button>
@@ -18049,6 +18297,24 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       </thead>
       <tbody id="userTableBody"></tbody>
     </table>
+
+    <!-- So tai khoan (20/10): cho co GHI LAI thong tin dang nhap cua tung em va xem lai.
+         Day la so ghi chu cua co — app khong luu (va khong doi duoc) mat khau dang nhap that. -->
+    <div class="hz-note-wrap">
+      <h4 class="hz-note-h4"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4.5" y="4.5" width="15" height="15" rx="4"/><path d="M9.5 10.5h5M9.5 14h3.2"/></svg>Sổ tài khoản của cô</h4>
+      <p class="hz-hint" style="margin:0 0 6px;">Cô tự ghi lại tài khoản / mật khẩu của từng em để nhớ (kể cả tài khoản cô tạo cho em). Trang lớp <strong>không lưu mật khẩu đăng nhập thật</strong> ở bất kỳ đâu, nên đây chỉ là sổ ghi — không đổi được mật khẩu của em từ đây.</p>
+      <div class="hz-note-bar">
+        <label class="hz-check"><input type="checkbox" id="hzNoteReveal" onchange="noteApi.reveal(this.checked)"><span>Hiện hết mật khẩu</span></label>
+        <button class="hz-b sm ghost" type="button" onclick="noteApi.exportTxt()">Xuất file .txt</button>
+      </div>
+      <p class="hz-note-msg" id="hzNoteMsg" role="status" aria-live="polite"></p>
+      <table class="hz-note-table">
+        <thead>
+          <tr><th>Tài khoản</th><th>Mật khẩu cô ghi</th><th>Ghi chú</th><th>Xóa</th></tr>
+        </thead>
+        <tbody id="accountNotesBody"></tbody>
+      </table>
+    </div>
   </div>
 
   <!-- Cai ket noi AI: di tu tab "Tro ly AI lop hoc" sang (giu nguyen moi id + listener cu).
@@ -18214,6 +18480,11 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
           btn.classList.remove('show'); panel.classList.remove('show');
           // Khong phai Admin: xa het noi dung cu (bang tai khoan, danh sach Tinh Thong) khoi DOM
           var tb = el('userTableBody'); if (tb) tb.innerHTML = '';
+          // So tai khoan cua co: rua sach khoi DOM khi nguoi xem khong con la Admin
+          var nb = el('accountNotesBody'), nr = el('hzNoteReveal');
+          if (nb) nb.innerHTML = '';
+          if (nr) nr.checked = false;
+          noteSetMsg('');
           var sa = el('hzMastAcc'), ss = el('hzMastStudent');
           if (sa) sa.innerHTML = ''; if (ss) ss.innerHTML = '';
           var us = el('hzUnlockSt'), ui = el('hzUnlockItem'), uh = el('hzUnlockHint');
