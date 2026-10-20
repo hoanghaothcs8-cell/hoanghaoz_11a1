@@ -9308,7 +9308,14 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
   function wr(k, v) { try { if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, String(v)); } catch (e) { } }
   function rd(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
 
+  /* Chạy trong app Hoàng Hao Z (bản .apk Android): trình đóng app tự nhận dạng
+     bằng đuôi "HoanghaoZApp" dán vào UA -> coi như đã là app, ẩn thẻ "Cài app". */
+  function inNativeApp() {
+    try { return /HoanghaoZApp/.test(String(navigator.userAgent || '')); } catch (e) { return false; }
+  }
+
   function isStandalone() {
+    if (inNativeApp()) return true;
     try { if (window.matchMedia && matchMedia('(display-mode: standalone)').matches) return true; } catch (e) { }
     try { if (window.matchMedia && matchMedia('(display-mode: fullscreen)').matches) return true; } catch (e) { }
     try { if (navigator.standalone === true) return true; } catch (e) { }
