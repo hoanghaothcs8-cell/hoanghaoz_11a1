@@ -5497,6 +5497,8 @@
     bar.textContent = message;
   }
 
+  var BOOT_TS = Date.now();          // luc mo trang, dung de biet co dang "mo muoi" hay khong
+  var CLASS_PUSH_WAIT = 10000;       // so giay cho du lieu lop ve may truoc khi duoc phep day len
   function saveState() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
@@ -5522,18 +5524,36 @@
     } catch (error) { console.warn('Không lưu được phiên trên máy này:', error); }
     const isAdmin = currentUser && currentUser.firebaseUid === ADMIN_FIREBASE_UID;
     if (isAdmin && !window.__applyingRemote && typeof window.syncStateToFirebase === 'function') {
-      // Ảnh tải từ máy được lưu local; không gửi chuỗi base64 lớn lên Firebase.
-      const firebaseState = JSON.parse(JSON.stringify(state));
-      firebaseState.processes = (state.processes || []).map(step => ({
-        id: step.id,
-        title: step.title,
-        content: step.content,
-        link: step.link,
-        image: step.image && !String(step.image).startsWith('data:') ? step.image : ''
-      }));
-      window.syncStateToFirebase(firebaseState);
+      // KHOA MUC + key AI nam trong classroomState. May Admin mo sau (luc dang nhap boot) chua kip
+      // nhan du lieu lop ma da day ho cu tren may len thi ghi de, lam mat het khoa cua lop:
+      // may co thi "reload la reset lai", may hoc sinh van khoa. -> Cho lop ve may da.
+      if (!window.__remoteSnapshotApplied && (Date.now() - BOOT_TS) < CLASS_PUSH_WAIT) {
+        window.__pushPending = true;
+      } else {
+        window.__pushPending = false;
+        // Ảnh tải từ máy được lưu local; không gửi chuỗi base64 lớn lên Firebase.
+        const firebaseState = JSON.parse(JSON.stringify(state));
+        firebaseState.processes = (state.processes || []).map(step => ({
+          id: step.id,
+          title: step.title,
+          content: step.content,
+          link: step.link,
+          image: step.image && !String(step.image).startsWith('data:') ? step.image : ''
+        }));
+        window.syncStateToFirebase(firebaseState);
+      }
     }
   }
+  // Neu khong bao gio nhan duoc du lieu lop (may mat mang / Firebase tu choi) thi van phai
+  // day cai co dang bo lai, neu khong moi thay doi cua co se nam chet tren may.
+  setTimeout(function () {
+    try {
+      if (window.__pushPending && !window.__remoteSnapshotApplied) {
+        window.__pushPending = false;
+        saveState();
+      }
+    } catch (e) { }
+  }, CLASS_PUSH_WAIT + 1500);
 
   /* ===== KEY GEMINI CHUNG CHO CA LOP =====
      Dat o day (chuyen sang tu tab "Tro ly AI") vi can `state` + `saveState()`: Admin luu key
@@ -5581,6 +5601,11 @@
       refreshAiKeyUi();    // key Gemini cua lop (state.aiKey) vua ve -> cap nhat trang thai tab AI
     } finally {
       window.__applyingRemote = false;
+    }
+    // Du lieu lop da ve may -> bay gio day lai cai co vua bo lai luc dang nhap (neu co)
+    if (window.__pushPending) {
+      window.__pushPending = false;
+      try { saveState(); } catch (e) { }
     }
   };
 
@@ -7735,6 +7760,7 @@
       
       // Cập nhật lại biến state toàn cục trong ứng dụng
       if (typeof window.reloadAppFromFirebase === 'function') {
+        window.__remoteSnapshotApplied = true;   // may da nhin thay du lieu lop -> duoc phep day lai
         window.reloadAppFromFirebase(remoteData);
       }
       isRemoteUpdating = false;
@@ -17483,6 +17509,11 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
   .hz-lock-st { font-style:normal; display:inline; margin-left:6px; font-size:10.5px; color:#e0a92e; }
   #hzLockSecs .hz-check { padding:2px 0; }
   #hzLockSecs { max-height:212px; }
+  /* Dong canh bao: khoa qua nhieu muc voi ca lop (co bam "chon tat ca" + "khoa ca lop" ma khong biet) */
+  .hz-lock-warn { display:none; margin:6px 0 2px; padding:7px 9px; font-size:11.5px; line-height:1.5;
+    color:#ffb3ad; background:rgba(179,69,63,.16); border:1px solid #8f3b36; border-left:3px solid #e0574f;
+    border-radius:8px; }
+  .hz-lock-warn.on { display:block; }
   /* O mau = hieu do goi y CARO tren ban co */
   .hz-hint-sw { display:inline-flex; align-items:center; gap:7px; margin-right:4px; vertical-align:middle; }
   .hz-hint-sw i { width:16px; height:16px; border-radius:5px; border:1.5px dashed #3ddc97;
@@ -17590,11 +17621,13 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     <div class="hz-row">
       <button class="hz-b ghost" type="button" onclick="adminWidget.lockSelAll(1)">Chọn tất cả mục</button>
       <button class="hz-b ghost" type="button" onclick="adminWidget.lockSelAll(0)">Bỏ chọn tất cả</button>
+      <button class="hz-b ghost" type="button" onclick="adminWidget.lockSelLocked()">Chọn các mục đang khoá</button>
     </div>
     <label class="hz-check" style="margin:9px 0 5px;">
       <input type="checkbox" id="hzLockAll" onchange="adminWidget.lockAll()">
       <span>Khoá <strong>mọi mục đang chọn</strong> với <strong>cả lớp</strong> — chỉ cô vào được</span>
     </label>
+    <p class="hz-lock-warn" id="hzLockWarn"></p>
     <label class="hz-lb">Hoặc khoá riêng từng em, áp cho đúng những mục đang chọn</label>
     <div class="hz-people" id="hzLockPeople"></div>
     <div class="hz-row">
@@ -17602,7 +17635,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       <button class="hz-b ghost" type="button" onclick="adminWidget.lockOpenAll()">Mở khoá tất cả</button>
     </div>
     <p class="hz-lock-sum" id="hzLockSum"></p>
-    <p class="hz-hint">Chọn bao nhiêu mục tuỳ ý, rồi tick "cả lớp" hoặc tick tên từng em — mọi thao tác lưu ngay, không cần bấm nút. Em nào <strong>chưa đăng nhập</strong> thì chưa khoá riêng được — muốn chặn hẳn thì dùng "Khoá ... với cả lớp". Cô (tài khoản Admin) luôn vào được mọi mục.</p>
+    <p class="hz-hint">Chọn bao nhiêu mục tuỳ ý, rồi tick "cả lớp" hoặc tick tên từng em — mọi thao tác lưu ngay, không cần bấm nút. <strong>Tải lại trang vẫn còn nguyên những ô cô đã tick</strong> (muốn chọn nhanh các mục đang bị khoá thì bấm "Chọn các mục đang khoá"). Em nào <strong>chưa đăng nhập</strong> thì chưa khoá riêng được — muốn chặn hẳn thì dùng "Khoá ... với cả lớp". Cô (tài khoản Admin) luôn vào được mọi mục.</p>
   </div>
 
   <!-- Muc GOI Y CARO: cai dat rieng may cua co (localStorage), khong di qua Firebase.
@@ -17735,7 +17768,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     function open() { panel.classList.add('show'); btn.classList.add('show'); try { localStorage.setItem(OPEN_KEY, '1'); } catch (e) { } refreshTables(); applyTab(); }
     function close() { panel.classList.remove('show'); try { localStorage.setItem(OPEN_KEY, '0'); } catch (e) { } }
     function toggle() { isOpen() ? close() : open(); }
-    window.adminWidget = { close: close, open: open, toggle: toggle, tab: setTab, mastUi: function () { mastUi(); }, applyMast: applyMast, maxMast: maxMast, unlockUi: function () { unlockUi(); }, doUnlock: doUnlock, unlockAll: unlockAll, modelUi: function () { modelUi(); }, doModel: doModel, grantAllModels: grantAllModels, lockUi: function () { lockUi(); }, lockAll: lockAll, lockOpen: lockOpen, lockOpenAll: lockOpenAll, lockSelAll: lockSelAll, lockSecTick: lockSecTick, hintUi: function () { hintUi(); }, hintSave: hintSave, gasUi: function () { gasUi(); }, gasSave: gasSave };
+    window.adminWidget = { close: close, open: open, toggle: toggle, tab: setTab, mastUi: function () { mastUi(); }, applyMast: applyMast, maxMast: maxMast, unlockUi: function () { unlockUi(); }, doUnlock: doUnlock, unlockAll: unlockAll, modelUi: function () { modelUi(); }, doModel: doModel, grantAllModels: grantAllModels, lockUi: function () { lockUi(); }, lockAll: lockAll, lockOpen: lockOpen, lockOpenAll: lockOpenAll, lockSelAll: lockSelAll, lockSelLocked: lockSelLocked, lockSecTick: lockSecTick, hintUi: function () { hintUi(); }, hintSave: hintSave, gasUi: function () { gasUi(); }, gasSave: gasSave };
 
     /* --------------------- chon chuc nang hien trong panel (kieu muc luc thu nho) --------------------- */
     function setTab(id) {
@@ -17832,7 +17865,8 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
           var lps = el('hzLockSecs'), lpp = el('hzLockPeople'), lsum = el('hzLockSum'), lal = el('hzLockAll');
           if (lps) lps.innerHTML = ''; if (lpp) lpp.innerHTML = ''; if (lsum) lsum.textContent = '';
           if (lal) { lal.checked = false; lal.disabled = false; }
-          try { secSel = {}; } catch (e) { }
+          /* secSel GIU NGUYEN: luc boot may chua kip nhan dien Admin (currentUser con null) nen
+             xa o day la lam mat danh sach muc co da tick truoc do. No chi chua id muc, khong co ten ai. */
           var hon = el('hzHintOn'), hlv = el('hzHintLv'), hst = el('hzHintState');
           if (hon) hon.checked = false; if (hlv) hlv.value = 'kho'; if (hst) hst.textContent = '';
           var gh = el('hzGasHost'), gp = el('hzGasPeople');
@@ -18275,8 +18309,20 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       return out;
     }
     /* Luoi chon NHIEM MUC mot luc. secSel chi la "tam nhin" tren may co (khong luu len lop),
-       con khoa that van ghi state.locks theo tung id nhu cu. */
+       con khoa that van ghi state.locks theo tung id nhu cu.
+       secSel luu o localStorage MAY CO de tai lai trang van con nguyen o da tick
+       (truoc day no nam trong bo nho nen reload la sach luoi, co nghi la mat het khoa). */
+    var SEC_SEL_KEY = 'hoanghao_lock_sel';
     var secSel = {};
+    function selSave() { try { localStorage.setItem(SEC_SEL_KEY, JSON.stringify(secSel)); } catch (e) { } }
+    function selLoad() {
+      secSel = {};
+      try {
+        var o = JSON.parse(localStorage.getItem(SEC_SEL_KEY) || 'null');
+        if (o && typeof o === 'object') SECS.forEach(function (s) { if (o[s.id]) secSel[s.id] = 1; });
+      } catch (e) { }
+    }
+    selLoad();
     function selIds() {
       var out = [];
       SECS.forEach(function (s) { if (secSel[s.id]) out.push(s.id); });
@@ -18291,34 +18337,58 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       if (!isAdmin()) return;
       secSel = {};
       if (on) SECS.forEach(function (s) { secSel[s.id] = 1; });
+      selSave();
       lockUi();
+    }
+    /* Chun nhanh nhung muc DANG bi khoa (ca lop hoac khoa rieng em) de mo lai bang 1 nut */
+    function lockSelLocked() {
+      if (!isAdmin()) return;
+      var b = lockBag(false) || {};
+      secSel = {};
+      var n = 0;
+      SECS.forEach(function (s) {
+        var X = b[s.id];
+        if (X && (X.all || lockCount(X))) { secSel[s.id] = 1; n++; }
+      });
+      selSave();
+      lockUi();
+      try {
+        notify(n ? 'Đã chọn ' + n + ' mục đang bị khoá — bấm "Mở các mục đang chọn" để trả lại cho lớp.'
+          : 'Hiện chưa có mục nào bị khoá.', n ? 'ok' : 'warn');
+      } catch (e) { }
     }
     function lockSecTick(e) {
       if (!isAdmin()) return;
       var inp = e && e.target;
       if (!inp || inp.type !== 'checkbox' || !inp.value) return;
       if (inp.checked) secSel[inp.value] = 1; else delete secSel[inp.value];
-      lockUi();
+      selSave();
+      lockUi(true);        // chi o vua tick doi -> khong ve lai ca luoi, kho bi nhay cuon / leap nut
     }
-    function lockUi() {
+    function lockUi(skipGrid) {
       if (!isAdmin()) return;
       var box = el('hzLockSecs'), al = el('hzLockAll'), pp = el('hzLockPeople'), sum = el('hzLockSum');
       if (!box || !al || !pp || !sum) return;
       var bag = lockBag(false) || {}, ids = selIds(), html = '';
-      SECS.forEach(function (s) {
-        var X = bag[s.id] || {}, st = '';
-        if (X.all) st = '(khoá cả lớp)';
-        else { var c = lockCount(X); if (c) st = '(khoá ' + c + ' em)'; }
-        html += '<label class="hz-check hz-secrow"><input type="checkbox" value="' + escq(s.id) + '"' +
-          (secSel[s.id] ? ' checked' : '') + '><span>' + esc(s.l) + '</span>' +
-          (st ? '<i class="hz-lock-st">' + esc(st) + '</i>' : '') + '</label>';
-      });
-      box.innerHTML = html;
+      var keepTop = box.scrollTop;                            // bo nho vi tri cuon de khong nhay ve dau
+      if (!skipGrid) {
+        SECS.forEach(function (s) {
+          var X = bag[s.id] || {}, st = '';
+          if (X.all) st = '(khoá cả lớp)';
+          else { var c = lockCount(X); if (c) st = '(khoá ' + c + ' em)'; }
+          html += '<label class="hz-check hz-secrow"><input type="checkbox" value="' + escq(s.id) + '"' +
+            (secSel[s.id] ? ' checked' : '') + '><span>' + esc(s.l) + '</span>' +
+            (st ? '<i class="hz-lock-st">' + esc(st) + '</i>' : '') + '</label>';
+        });
+        box.innerHTML = html;
+        try { box.scrollTop = keepTop; } catch (e) { }
+      }
       al.disabled = !ids.length;
       var onCls = ids.length > 0;
       ids.forEach(function (id) { if (!(bag[id] || {}).all) onCls = false; });
       al.checked = onCls;
       var items = lockAccountItems();
+      var keepTopP = pp.scrollTop;
       if (!ids.length) {
         pp.innerHTML = '<em>Tick chọn ít nhất một mục ở lưới trên trước — chọn được nhiều mục một lúc.</em>';
       } else if (!items.length) {
@@ -18338,17 +18408,32 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
             (note ? '<i class="hz-lock-st">' + esc(note) + '</i>' : '') + '</label>';
         });
         pp.innerHTML = h2;
+        try { pp.scrollTop = keepTopP; } catch (e) { }
       }
-      var nSec = 0, nEm = 0;
+      var nSec = 0, nEm = 0, nAll = 0;
       Object.keys(bag).forEach(function (k2) {
         var X = bag[k2] || {};
-        if (X.all) { nSec++; return; }
+        if (X.all) { nSec++; nAll++; return; }
         var c = lockCount(X);
         if (c) { nSec++; nEm += c; }
       });
       sum.innerHTML = 'Tóm tắt: đang khoá <b>' + nSec + ' mục</b>' +
         (nEm ? ' · <b>' + nEm + '</b> lượt khoá riêng theo em' : '') +
-        (ids.length ? ' · đang chọn <b>' + ids.length + '</b> mục để thao tác' : '');
+        (ids.length ? ' · đang chọn <b>' + ids.length + '</b> mục để thao tác' : ' · chưa chọn mục nào để thao tác');
+      /* Canh bao khi gan nhu KHO SACH CA APP de co biet ma mo lai */
+      var warn = el('hzLockWarn');
+      if (warn) {
+        var w = '';
+        if (nAll >= SECS.length) {
+          w = 'CẢNH BÁO: cả ' + SECS.length + ' mục đang khoá với cả lớp — học sinh mở app lên sẽ KHÔNG vào được mục nào. ' +
+            'Muốn trả lại ngay: bấm "Chọn các mục đang khoá" rồi "Mở các mục đang chọn", hoặc bấm "Mở khoá tất cả".';
+        } else if (nAll >= 8) {
+          w = 'Đang khoá cả lớp ở ' + nAll + '/' + SECS.length + ' mục — học sinh chỉ còn dùng được ' + (SECS.length - nAll) +
+            ' mục. Nếu chưa định khoá nhiều vậy: bấm "Chọn các mục đang khoá" rồi bỏ ô "Khoá ... với cả lớp".';
+        }
+        warn.textContent = w;
+        warn.classList.toggle('on', !!w);
+      }
     }
     function lockAll() {
       if (!isAdmin()) { notify('Chỉ Admin mới khoá được mục.'); return; }
@@ -18356,6 +18441,17 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       if (!ids.length || !bag) return;
       if (!al) return;
       var on = al.checked ? 1 : 0, left = 0;
+      /* Nguoc tay bam "chon tat ca" + "khoa ca lop" la khoa sach ca app -> hoi lai khi tu 8 muc tro len */
+      if (on && ids.length >= 8) {
+        var ten = ids.slice(0, 6).map(function (i2) { return '· ' + lockLabel(i2); }).join('\n');
+        if (ids.length > 6) ten += '\n· ... (' + (ids.length - 6) + ' mục nữa)';
+        if (!confirm('Cô sắp khoá ' + ids.length + ' mục với CẢ LỚP:\n\n' + ten +
+          '\n\nHọc sinh sẽ không vào được những mục đó nữa (chỉ tài khoản Admin vào được).\nĐồng ý khoá?')) {
+          al.checked = false; lockUi();
+          try { notify('Cô đã huỷ — chưa khoá mục nào cả.', 'warn'); } catch (e) { }
+          return;
+        }
+      }
       ids.forEach(function (id) {
         var L = lockEntry(id, true);
         if (!L) return;
