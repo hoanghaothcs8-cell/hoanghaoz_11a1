@@ -2824,6 +2824,13 @@
   .caro-cfg .caro-f { display:flex; flex-direction:column; gap:4px; }
   .caro-cfg .caro-f label { font-size:11px; color:#a1a1aa; }
   .caro-cfg .caro-f select { padding:8px 10px; border-radius:10px; border:1px solid #3a3350; background:#0f0d17; color:#f0ecf8; font-size:12.5px; }
+  /* Dot 20/10 (gop 6 che do -> 3 May/Tùy chỉnh/Rank): bang Tuy chinh co them o ten nguoi choi */
+  .caro-cfg .caro-2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:9px; }
+  .caro-cfg .caro-f input { padding:8px 10px; border-radius:10px; border:1px solid #3a3350; background:#0f0d17;
+    color:#f0ecf8; font-size:12.5px; min-width:0; }
+  .caro-cfg .caro-f input:focus { border-color:#a855f7; }
+  .caro-cfg .caro-names { display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:8px; }
+  .caro-cfg .caro-lv-lab { font-size:10.5px; font-weight:800; letter-spacing:.4px; text-transform:uppercase; color:#7c7490; }
   .caro-seats { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:7px; }
   .caro-seat { display:flex; align-items:center; gap:8px; min-width:0; padding:8px 10px; border-radius:11px;
     border:1px solid #2b2740; background:#0f0d17; }
@@ -15014,16 +15021,22 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
   refresh(false);
 </script>
 
-<!-- ================== MUC CARO — 6 che do ==================
+<!-- ================== MUC CARO — 3 che do: MAY / TUY CHINH / RANK ==================
      Script thuong, KHONG phai module: khoi nay khong import Firebase, moi luc doc/ghi
-     du lieu lop deu di qua window.caroNet (nam o module duoi). Bon choi khong can mang:
-     "Che do 1 dau voi may" (ban 50x50 / 75x75, thang 5 o, ba do kho DE/BINH THUONG/KHO,
-     engine bigBot o duoi) va "Che do 6" (2 nguoi cung mot thiet bi, ban 30x30).
-     Nam che do con lai (moi ban 3x3, 15x15, nhieu nguoi, leo hang, ban vo han) can
-     mang + tai khoan da gan Firebase; chung noi voi nhau qua window.caroNet va node
-     classroomCaro (quyen read/write auth != null trong Rules). Bang vàng do che do 1
-     thang may o do KHO cung nam trong classroomCaro/thangMay/$uid. Ten hai nguoi choi
-     va bang vàng luu trong try/catch de may chan bo nho van chay duoc. -->
+     du lieu lop deu di qua window.caroNet (nam o module duoi).
+       MAY       = dau voi may 3 do kho (de/binh/kho), engine bigBot, BAN TU MO RONG.
+       TUY CHINH = ban vo han + tu chon 2-5 nguoi va 3-10 o thang; choi cung mot may
+                   (mode 6, khong can mang) hoac moi nguoi mot thiet bi (mode 3 + voHan=1).
+       RANK      = mode 4, 15x15 thang 5, "Tim tran" ghep ngau nhien qua doi/den, diem
+                   nam trong users/$uid/caro + bang xep hang rieng.
+     So che do ben trong (mode/cheDo 1..6) GIU NGUYEN nhu cac dot tru de phong cu tren
+     Firebase van mo duoc; chi bo chon ben ngoai gop lai thanh 3 the. Ban khong con tran
+     75x75: growBoard() them 8 hang/cot khi co nuoc sat ben, toi GROW_MAX = 400x400.
+     Nam noi dung mang (moi ban, nhieu ghe, tim tran, chat) can mang + tai khoan da gan
+     Firebase, chung noi voi nhau qua window.caroNet va node classroomCaro (quyen
+     read/write auth != null trong Rules — khong can dan Rules moi for them truong voHan).
+     Bang vàng do tran may o do KHO ghi vao classroomCaro/thangMay/$uid. Goi y nuoc di
+     la `HINT` duoi day: chi may Admin, dung chinh bigBot, khong di qua mang. -->
 <script>
 (function () {
   'use strict';
@@ -15050,33 +15063,30 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     cup: '<path d="M7 4h10v4a5 5 0 0 1-10 0z"/><path d="M7 5.5H4.5a3 3 0 0 0 3 3M17 5.5h2.5a3 3 0 0 1-3 3"/><path d="M12 13v3.5M8.5 20h7M9.5 20c0-2 1-3.5 2.5-3.5s2.5 1.5 2.5 3.5"/>'
   };
 
-  /* Bo chon 6 che do dung theo thuyet minh. fn = ham choi ngay. */
+  /* BA CHE DO DUY NHAT (dot 20/10, theo co yeu cau gop 6 thanh 3):
+       MAY       = danh voi may, 3 do kho, BAN TU MO RONG (khong con tran 75x75)
+       TUY CHINH = ban vo han + tu chon so nguoi (2-5) va so o thang (3-10),
+                   choi cung mot may HOAC moi nguoi mot thiet bi (qua phong Firebase)
+       RANK      = leo hang 15x15 thang 5, tim tran ngau nhien hoac moi ban truc tiep
+     `n` chi la nhan hien len the; `mode` ben trong van dung so cu (1/3/4/5/6) phong
+     khi co phong cu luu tren Firebase van doc duoc. */
   var MODES = [
-    { n: 1, t: 'Caro đấu với máy (3 độ khó)', lock: 0,
-      d: 'Đánh với máy trên bàn 50×50 hoặc 75×75, thắng khi có 5 ô liên tiếp (ngang, dọc, chéo). Ba độ khó: Dễ — máy hay sơ hở; Bình thường — máy chặn nước thắng nhưng ít nhìn xa; Khó — máy đi trước và không bỏ lỡ nước nào. Bạn nào thắng được máy ở độ khó Khó thì tên vào bảng vàng của lớp. Ngoài ra vẫn giữ nút mời bạn đánh 3×3 trên hai thiết bị.',
-      tags: [['free', 'Đấu với máy: không cần mạng'], ['need', 'Mời bạn: cần mạng, 2 thiết bị'], ['chat', 'Chat trong trận']],
-      acts: [{ lab: 'Đấu với máy', ic: 'bot', fn: 'bot' }, { lab: 'Mời bạn trong lớp', ic: 'user', fn: 'p1' }] },
-    { n: 2, t: 'Caro 5 ô liên tiếp (2 người)', lock: 0,
-      d: 'Bàn 15×15, hai người X và O. Thắng khi có 5 ô liên tiếp thành một hàng ngang, dọc hoặc chéo. Mời bạn trong lớp như chế độ 1: mỗi người một thiết bị, cùng vào một phòng.',
-      tags: [['need', 'Cần mạng · 2 thiết bị'], ['chat', 'Chat trong trận']],
-      acts: [{ lab: 'Mời bạn trong lớp', ic: 'user', fn: 'p2' }] },
-    { n: 3, t: 'Caro tùy chỉnh (tối đa 5 người)', lock: 0,
-      d: 'Chủ phòng chọn số người (2–5) và cỡ bàn (20×20 hoặc 25×25). Ký hiệu theo thứ tự X, O, Y, Z, T. Điều kiện thắng: một hàng 6 hoặc 7 ô liên tiếp. Chủ phòng mời bạn vào phòng, thấy đủ người thì bấm "Bắt đầu".',
-      tags: [['need', 'Cần mạng · 2–5 thiết bị'], ['chat', 'Chat trong trận']],
-      acts: [{ lab: 'Tạo phòng & mời bạn', ic: 'room', fn: 'p3' }] },
-    { n: 4, t: 'Caro leo hạng', lock: 0,
-      d: 'Chỉ đánh 15×15 hai người, thắng khi 5 ô liên tiếp. Thắng 1 trận được +1 điểm hạng; điểm và hạng chỉ hiện trong mục CARO với bảng xếp hạng riêng.',
+    { n: 1, b: 'Máy', t: 'Đánh với máy · 3 độ khó', lock: 0,
+      d: 'Bạn đánh một mình với máy, chọn một trong ba độ khó: Dễ — máy hay sơ hở; Bình thường — máy chặn nước thắng nhưng ít nhìn xa; Khó — máy đi trước và không bỏ lỡ nước nào. Bàn cờ không còn giới hạn ở 75×75: đánh tới đâu bàn tự mở rộng tới đó, thắng khi có 5 ô liên tiếp. Không cần mạng. Ai thắng được máy ở độ khó Khó thì tên vào bảng vàng của lớp.',
+      tags: [['free', 'Không cần mạng'], ['free', 'Bàn tự mở rộng']],
+      acts: [{ lab: 'Chọn độ khó & chơi', ic: 'bot', fn: 'bot' }] },
+    { n: 2, b: 'Tùy chỉnh', t: 'Tùy chỉnh · bàn vô hạn', lock: 0,
+      d: 'Tự chọn luật chơi: số người (2–5, ký hiệu theo thứ tự X, O, Y, Z, T) và số ô liên tiếp để thắng (3–10 ô). Bàn cờ không giới hạn — tới đâu mở rộng tới đó, kéo để dời, thu phóng bằng chuột hoặc hai ngón tay. Chọn "Cùng một máy" để chơi tại chỗ (không cần mạng) hoặc "Mỗi người một thiết bị" để mời bạn trong lớp vào phòng chung.',
+      tags: [['free', 'Bàn tự mở rộng'], ['free', 'Cùng một máy: không cần mạng'], ['need', 'Nhiều thiết bị: cần mạng'], ['chat', 'Chat trong trận']],
+      acts: [{ lab: 'Thiết lập & chơi', ic: 'room', fn: 'p3' }] },
+    { n: 3, b: 'Rank', t: 'Leo hạng', lock: 0,
+      d: 'Trận xếp hạng: hai người, bàn 15×15, thắng khi 5 ô liên tiếp. Bấm "Tìm trận" là máy lớp ghép ngẫu nhiên hai bạn đang chờ với nhau; thắng được +1 điểm hạng. Điểm và bảng hạng chỉ nằm trong mục CARO, không cộng vào Tinh Thông hay Bảng xếp hạng lớp.',
       tags: [['need', 'Cần mạng'], ['chat', 'Chat trong trận']],
-      acts: [{ lab: 'Tìm trận (ghép ngẫu nhiên)', ic: 'search', fn: 'mm' }, { lab: 'Mời bạn trực tiếp', ic: 'user', fn: 'p4' }] },
-    { n: 5, t: 'Caro vô hạn', lock: 0,
-      d: 'Bàn rộng không giới hạn: tự mở thêm ô khi đánh gần biên, kéo để dời và thu phóng bằng chuột hay hai ngón tay. Thắng khi có 10 ô liên tiếp cùng ký hiệu.',
-      tags: [['need', 'Cần mạng · 2 thiết bị'], ['chat', 'Chat trong trận']],
-      acts: [{ lab: 'Mời bạn trong lớp', ic: 'user', fn: 'p5' }] },
-    { n: 6, t: 'Caro 1 máy (2 người cùng một thiết bị)', lock: 0,
-      d: 'Hai bạn ngồi cùng một máy, luân phiên đặt X rồi O trên cùng màn hình. Bàn 30×30, thắng khi 5 ô liên tiếp. Nhập tên, chọn ai đi trước. Không cần mạng.',
-      tags: [['free', 'Không cần mạng']],
-      acts: [{ lab: 'Chơi ngay', ic: 'play', fn: 'hot' }] }
+      acts: [{ lab: 'Tìm trận (ghép ngẫu nhiên)', ic: 'search', fn: 'mm' }, { lab: 'Mời bạn trực tiếp', ic: 'user', fn: 'p4' }] }
   ];
+  /* So che do trong may -> ten goi khi can noi voi nguoi dung (tran cu, phong cu) */
+  var MODE_NAME = { 1: 'Đánh với máy', 2: 'Mời bạn 15×15', 3: 'Tùy chỉnh', 4: 'Leo hạng', 5: 'Tùy chỉnh', 6: 'Tùy chỉnh (cùng một máy)' };
+  function modeName(m) { return MODE_NAME[Math.floor(Number(m))] || 'CARO'; }
 
   var cvs = null, ctx = null, ready = false, M = null;
 
@@ -15100,7 +15110,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
   function makeCard(m) {
     var d = document.createElement('div');
     d.className = 'caro-mode' + (m.lock ? ' lock' : '');
-    cardLabel(d, 's', 'Chế độ ' + m.n);
+    cardLabel(d, 's', m.b || ('Chế độ ' + m.n));
     cardLabel(d, 'h3', m.t);
     cardLabel(d, 'p', m.d);
     var tg = document.createElement('div'); tg.className = 'caro-tags';
@@ -15130,8 +15140,8 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     var d = document.createElement('div');
     d.className = 'caro-mode';
     cardLabel(d, 's', 'Trận đang dở');
-    cardLabel(d, 'h3', 'Chế độ ' + M.mode + ' · ' + txt(M.names[M.turn]) + ' tới lượt');
-    cardLabel(d, 'p', 'Bàn ' + M.size + '×' + M.size + ', đã đánh ' + M.moves + ' nước. Về đây thì bàn cờ vẫn nguyên.');
+    cardLabel(d, 'h3', modeName(M.mode) + ' · ' + txt(M.names[M.turn]) + ' tới lượt');
+    cardLabel(d, 'p', (M.grow ? 'Bàn vô hạn (đã mở tới ' + M.size + '×' + M.size + ')' : 'Bàn ' + M.size + '×' + M.size + '') + ', thắng ' + M.win + ' ô, đã đánh ' + M.moves + ' nước. Về đây thì bàn cờ vẫn nguyên.');
     var bt = document.createElement('div'); bt.className = 'caro-bts';
     var b = document.createElement('button'); b.type = 'button'; b.className = 'caro-b';
     var ic = svgIcon(I.play); if (ic) b.appendChild(ic);
@@ -15146,16 +15156,15 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     if (M && !M.over) box.appendChild(resumeCard());
     MODES.forEach(function (m) { box.appendChild(makeCard(m)); });
   }
+  /* 3 the = 3 nhan. `fn` cu (p1/p2/p5/hot) van con duong chay phong khi co the nao goi lai
+     tu ban cu luu trong bo nho trinh duyet, nhung khong the nao hien nua. */
   function act(m, a) {
     if (a.lock) { lockMsg(m); return; }
     if (a.fn === 'bot') openLevel();
-    else if (a.fn === 'hot') openSetup();
-    else if (a.fn === 'p1') openPick(1);
-    else if (a.fn === 'p2') openPick(2);
     else if (a.fn === 'p3') openCfg();
+    else if (a.fn === 'hot') openSetup();
     else if (a.fn === 'mm') findMatch();
-    else if (a.fn === 'p4') openPick(4);
-    else if (a.fn === 'p5') openPick(5);
+    else if (a.fn === 'p4' || a.fn === 'p1' || a.fn === 'p2' || a.fn === 'p5') openPick(a.fn === 'p4' ? 4 : a.fn === 'p5' ? 5 : a.fn === 'p2' ? 2 : 1);
   }
   /* Mot dong chu bao loi/cam xuc nam ngay tren dau muc CARO */
   function warnLine(s) {
@@ -15170,7 +15179,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
   }
   /* Nut khoa du phong (hien khong con che do nao khoa): chi bao nhe, khong loi console, khong treo */
   function lockMsg(m) {
-    var s = 'Chế độ "' + m.t + '" cần kết nối mạng và tài khoản lớp đã đăng nhập. Bên cạnh đó vẫn có "Đấu với máy" và "Chế độ 1 máy" không cần mạng.';
+    var s = 'Chế độ "' + m.t + '" cần kết nối mạng và tài khoản lớp đã đăng nhập. Bên cạnh đó vẫn có "Đánh với máy" và "Tùy chỉnh → Cùng một máy" chơi được ngay, không cần mạng.';
     warnLine(s); say(s, 'warn');
   }
 
@@ -15204,6 +15213,9 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
   /* ------------------- tran dau ------------------- */
   var MARKS = ['X', 'O', 'Y', 'Z', 'T'];
   var MARKC = ['#3ddc97', '#f472b6', '#38bdf8', '#fbbf24', '#a78bfa'];
+  var GROW0 = 30;      /* ban mo rong bat dau tu 30x30 — du rong cho mat nhin, nho de keo */
+  var GROW_STEP = 8;   /* moi lan sat ben them 8 hang/cot */
+  var GROW_MAX = 400;  /* tran cu the tren may chua gan bo nho: 400x400 o = ~160 KB, du dung */
   function startMatch(o) {
     if (!ensure()) return null;
     clearWarn();
@@ -15211,16 +15223,18 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     var np = Math.max(2, Math.min(5, Math.floor(Number(o.players) || (o.names && o.names.length) || 2)));
     var names = (o.names || ['Bạn 1', 'Bạn 2']).slice(0, np);
     while (names.length < np) names.push('Bạn ' + (names.length + 1));
-    var size = Math.max(3, Math.min(80, Math.floor(Number(o.size) || 15)));
+    var grow = (o.grow === undefined || o.grow === null) ? Number(o.mode) === 5 : !!o.grow;
+    var size = Math.max(3, Math.min(grow ? GROW_MAX : 80, Math.floor(Number(o.size) || (grow ? GROW0 : 15))));
+    var win = Math.max(3, Math.min(12, Math.floor(Number(o.win) || 5)));
     M = {
-      mode: o.mode, size: size, win: o.win, bot: !!o.bot, players: np, lv: o.lv || '',
+      mode: o.mode, size: size, win: win, bot: !!o.bot, players: np, lv: o.lv || '',
       cells: new Uint8Array(size * size),
       names: names, marks: MARKS.slice(0, np),
-      first: o.first | 0, turn: o.first | 0,
+      first: clamp(o.first | 0, 0, np - 1), turn: clamp(o.first | 0, 0, np - 1),
       over: false, winner: 0, reason: '', winCells: [], last: -1, moves: 0,
-      grow: Number(o.mode) === 5,
+      grow: grow, lab: o.lab || modeName(o.mode),
       view: { x: 0, y: 0, s: 20 },
-      lo: size <= 5 ? 44 : (size >= 40 ? 5 : 12), hi: size <= 5 ? 150 : 90,
+      lo: grow ? growLo(size) : (size <= 5 ? 44 : (size >= 40 ? 5 : 12)), hi: size <= 5 ? 150 : 90,
       gen: M ? M.gen + 1 : 1
     };
     showStage();
@@ -15235,14 +15249,16 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     var lab = o.net ? 'Thoát' : 'Đổi cài đặt';
     if (el('caroSetup2')) el('caroSetup2').textContent = lab;
     if (el('caroSetup3')) el('caroSetup3').textContent = lab;
-    fit(); hud(); paint();
+    /* O goi y cua nuoc tran truoc khong duoc lon sang tran nay (bang co moi, size moi) */
+    HINT.idx = -1; HINT.show = false; HINT.gen = -1; HINT.moves = -1;
+    fit(); hud(); paint(); hintNow(true);
     if (o.bot && M.turn === 1) queueBot();   // do Kho may di truoc -> goi ngay khi mo tran
     return M;
   }
   function restart() {
     if (!M) return;
     if (M.net) { netRematch(); return; }
-    startMatch({ mode: M.mode, size: M.size, win: M.win, bot: M.bot, lv: M.lv, names: M.names.slice(), first: M.first });
+    startMatch({ mode: M.mode, size: M.grow ? GROW0 : M.size, win: M.win, grow: M.grow, lab: M.lab, bot: M.bot, lv: M.lv, names: M.names.slice(), first: M.first });
   }
   function startHot() {
     if (!ensure()) return;
@@ -15254,18 +15270,19 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     saveNames(n1, n2);
     startMatch({ mode: 6, size: size, win: 5, bot: false, names: [n1, n2], first: first });
   }
-  /* "Doi cai dat": bo tran dang choi, mo lai bang cai dat (ten hai ban van con).
-     Tran online khong co cai dat rieng -> nut nay tro thanh "Thoat" roi phong choi. */
+  /* "Doi cai dat" = mo lai bang Tuy chinh voi dung luat cua tran dang choi (2-5 nguoi,
+     so o thang, ban vo han). Tran online khong co cai dat rieng -> nut nay la "Thoat". */
   function openSetup() {
     if (M && M.net) { netExit(); return; }
     if (!ensure()) return;
+    if (M) {
+      CUST.np = Math.max(2, Math.min(5, Math.floor(Number(M.players) || 2)));
+      CUST.win = Math.max(3, Math.min(10, Math.floor(Number(M.win) || 5)));
+      CUST.names = (M.names || []).slice(0, CUST.np).map(function (t) { return txt(t); });
+      custSave();
+    }
     M = null;
-    showStage();
-    var set = el('caroSet'), bd = el('caroBoard'), ov = el('caroOver');
-    if (set) { set.hidden = false; fillNames(); }
-    if (bd) bd.hidden = true;
-    if (ov) ov.hidden = true;
-    hud();
+    openCfg();
   }
 
   /* ------------------- luat choi ------------------- */
@@ -15296,13 +15313,19 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     if (M.net) return false;          // tran online: nuoc do applyRoom() lap lai tu Firebase, khong cho ghi tron
     var n = M.size;
     if (!(idx >= 0 && idx < n * n) || M.cells[idx]) return false;
-    M.cells[idx] = M.turn + 1;
+    var v = M.turn + 1, x = idx % n, y = Math.floor(idx / n);
+    /* Mo rong TRUOC khi ghi: size doi thi vi tri phang doi theo, ghi roi moi mo la lech o. */
+    if (M.grow) growAt(x, y);
+    n = M.size; idx = y * n + x;
+    M.cells[idx] = v;
     M.last = idx; M.moves++;
-    var w = winLine(idx % n, Math.floor(idx / n), M.turn + 1);
-    if (w) { M.over = true; M.winner = M.turn + 1; M.winCells = w; }
-    else if (M.moves >= n * n) { M.over = true; M.winner = 0; M.reason = 'hết ô trống'; }
-    else { M.turn = 1 - M.turn; if (M.bot) queueBot(); }
+    var w = winLine(x, y, v);
+    var g = Math.max(2, M.players);
+    if (w) { M.over = true; M.winner = v; M.winCells = w; }
+    else if (!M.grow && M.moves >= n * n) { M.over = true; M.winner = 0; M.reason = 'hết ô trống'; }
+    else { M.turn = (M.turn + 1) % g; if (M.bot) queueBot(); }   /* % g: cho phep 2-5 nguoi cung mot may */
     hud(); paint();
+    hintNow(false);                                              /* nuoc moi -> o mo tinh lai cho den luot minh */
     if (M.over) showOver();
     return true;
   }
@@ -15337,7 +15360,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       if (beat && M.lv === 'kho') goldAdd();
       s.textContent = M.lv === 'kho'
         ? (beat
-          ? 'Bạn vừa thắng máy ở độ khó Khó — tên bạn đã ghi vào bảng vàng của lớp (mở "Đấu với máy" để xem).'
+          ? 'Bạn vừa thắng máy ở độ khó Khó — tên bạn đã ghi vào bảng vàng của lớp (mở "Đánh với máy" để xem).'
           : 'Độ khó Khó: máy đi trước và không bỏ sót nước đôi nào. Bàn ' + M.size + '×' + M.size + ', chơi không cần mạng.')
         : 'Độ khó ' + ((LVS[M.lv] || {}).lab || '') + ' · bàn ' + M.size + '×' + M.size + ' · không cần mạng, không cộng điểm hạng.';
     } else if (M.net) {
@@ -15345,7 +15368,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
         ? 'Trận leo hạng: thắng được +1 điểm hạng (ghi vào hồ sơ của bạn). Bấm "Chơi lại" để sang ván mới — người đi trước tự đổi.'
         : 'Điểm CARO không cộng vào Tinh Thông hay Bảng xếp hạng lớp. Bấm "Chơi lại" để sang ván mới — lượt đi trước tự đổi.';
     } else {
-      s.textContent = 'Chế độ 1 máy không dùng mạng và không cộng điểm hạng.';
+      s.textContent = 'Chơi trên một máy · ' + Math.max(2, M.players) + ' người · thắng ' + M.win + ' ô liên tiếp · bàn tự mở rộng. Không cần mạng và không cộng điểm hạng.';
     }
     /* Khung ket thuc tran phai co duong ve: "Danh sách chế độ" (tran may + tran 1 may),
        "Đổi độ khó" chi co khi dau voi may, tran mang da co nut "Thoát" roi phong choi. */
@@ -15574,16 +15597,24 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
   }
 
   /* ------------------- GOI Y NUOC DI CHO ADMIN (chi may co) -------------------
-     Khi co em nao do "gạ" cô đánh CARO (tran moi ban = M.net), den luot co thi bo may
-     tinh manh nhat cua file nay (bigBot = may do Kho) tim giup mot nuoc va ve o do mong
-     manh tren ban. Khong gui bat cu thu gi len Firebase => ban kia khong thay gi ca.
+     Den luot co thi bo may tinh manh nhat cua file nay (bigBot = may do Kho) tim giup
+     mot nuoc va ve o do mong manh tren ban. Bat o CA HAI NOI: tran moi ban (M.net) va
+     tran dau voi may (M.bot) — vi co cung dang choi, chi khac ben kia la may.
+     Khong gui bat cu thu gi len Firebase => ban kia / may khong thay gi ca.
      Chi bat khi dang nhap bang tai khoan Admin (window.appIsAdmin) nen may hoc sinh
      du co muon cung khong hien. Tat/bat + chon do sau trong menu Admin > Goi y CARO. */
   var HINT_KEY = 'hoanghao_caro_hint';
-  var HINT = { on: 1, lv: 'kho', idx: -1, show: false, gen: -1, moves: -1 };
+  var HINT = { on: 1, lv: 'kho', idx: -1, show: false, gen: -1, moves: -1, mark: 1, pulse: 0 };
   function hintAllowed() {
     try { if (typeof window.appIsAdmin === 'function') return !!window.appIsAdmin(); } catch (e) { }
     try { return !!(typeof currentUser !== 'undefined' && currentUser && currentUser.role === 'admin'); } catch (e) { return false; }
+  }
+  /* Ky hieu ben CO dang di, 0 = khong phai luot co (tran hot-seat nhieu nguoi: khong goi y) */
+  function hintSeat() {
+    if (!M || M.over) return 0;
+    if (M.net) return (M.turn === (M.net.my || 1) - 1) ? (M.net.my || 1) : 0;
+    if (M.bot) return (M.turn === 0) ? 1 : 0;
+    return 0;
   }
   function hintRead() {
     try {
@@ -15606,11 +15637,28 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     hintNow(true);
     return { on: HINT.on, lv: HINT.lv, idx: HINT.idx, admin: hintAllowed() ? 1 : 0 };
   }
+  /* "Nhip tho": o mo to/minus cham de mat nhin ra ngay giua ban co day o.
+     Chi chay khi dang co o mo, tat self khi het tran -> khong lot CPU. */
+  var hintTimer = null, hintStep = 0;
+  function hintBreath() {
+    if (hintTimer) return;
+    hintTimer = setInterval(function () {
+      if (!HINT.show || !M || M.over) {
+        clearInterval(hintTimer); hintTimer = null; hintStep = 0; HINT.pulse = 0;
+        try { paint(); } catch (e) { }
+        return;
+      }
+      hintStep = (hintStep + 1) % 6;
+      HINT.pulse = [0, .4, .8, 1, .8, .4][hintStep];
+      try { paint(); } catch (e) { }
+    }, 320);
+  }
   /* bigBot luon tinh cho ben me = 2, you = 1 -> dao bang o day de dung cho bat ky ky hieu nao.
      Ban dao duoc dung rieng, bang that khong bi thay doi; try/finally tra lai cho du loi. */
   function hintIdx() {
-    if (!M || M.over || !M.net) return -1;
-    var me = M.net.my || 1, n = M.size, old = M.cells, i, v;
+    var me = hintSeat();
+    if (!M || M.over || !me) return -1;
+    var n = M.size, old = M.cells, i, v;
     var rc = new Uint8Array(n * n);
     for (i = 0; i < rc.length; i++) { v = old[i]; rc[i] = v ? (v === me ? 2 : 1) : 0; }
     M.cells = rc;
@@ -15618,10 +15666,11 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     try { out = bigBot(HINT.lv); } catch (e) { out = -1; }
     M.cells = old;
     if (!(out >= 0) || out >= old.length || old[out]) return -1;
+    HINT.mark = me;
     return out;
   }
   function hintNow(force) {
-    if (!M || !M.net || M.over || !HINT.on || !hintAllowed() || M.turn !== (M.net.my || 1) - 1) {
+    if (!M || (!M.net && !M.bot) || M.over || !HINT.on || !hintAllowed() || !hintSeat()) {
       if (HINT.show) { HINT.show = false; paint(); }
       HINT.moves = -1; HINT.gen = -1;
       return;
@@ -15633,6 +15682,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     if (!M || M.gen !== g || M.moves !== mv) return;          // ban da doi luc tinh -> bo luat
     HINT.idx = idx; HINT.show = idx >= 0; HINT.gen = g; HINT.moves = mv;
     paint();
+    if (HINT.show) hintBreath();
   }
   hintRead();
 
@@ -15712,24 +15762,14 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     cardLabel(t, 'span', L.lab);
     cardLabel(b, 'i', L.mo).style.fontStyle = 'normal';
     b.insertBefore(t, b.firstChild);
-    b.addEventListener('click', function () { startBotLv(k, lvPref.size); });
+    b.addEventListener('click', function () { startBotLv(k, GROW0); });
     return b;
   }
   function renderLevel() {
     var v = el('caroLv'); if (!v) return;
     v.hidden = false; v.innerHTML = '';
-    cardLabel(v, 'h3', 'Đấu với máy · bàn ' + lvPref.size + '×' + lvPref.size + ', thắng 5 ô liên tiếp');
-    cardLabel(v, 'p', 'Chọn cỡ bàn trước, rồi bấm một trong ba độ khó. Cả ba độ khó đều chơi được khi tắt mạng.');
-    var lab = cardLabel(v, 'div', 'Cỡ bàn'); lab.className = 'caro-lv-lab';
-    var row = document.createElement('div'); row.className = 'caro-lvs';
-    [50, 75].forEach(function (sz) {
-      var b = document.createElement('button');
-      b.type = 'button'; b.className = sz === lvPref.size ? 'on' : 'secondary';
-      b.textContent = sz + ' × ' + sz;
-      b.addEventListener('click', function () { lvPref.size = sz; saveLvPref(); renderLevel(); goldLoad(); });
-      row.appendChild(b);
-    });
-    v.appendChild(row);
+    cardLabel(v, 'h3', 'Đánh với máy · bàn không giới hạn, thắng 5 ô liên tiếp');
+    cardLabel(v, 'p', 'Bàn bắt đầu 30×30 và tự mở thêm ô mỗi khi bạn hoặc máy đánh sát mép — không còn bị chặn ở 50×50 hay 75×75. Chọn một trong ba độ khó; cả ba đều chơi được khi tắt mạng.');
     var lab2 = cardLabel(v, 'div', 'Độ khó'); lab2.className = 'caro-lv-lab';
     var box = document.createElement('div'); box.className = 'caro-lv3';
     ['de', 'binh', 'kho'].forEach(function (k) { box.appendChild(lvButton(k)); });
@@ -15746,11 +15786,10 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
   }
   function startBotLv(lv, size) {
     lv = LVS[lv] ? lv : 'kho';
-    size = Math.max(5, Math.min(80, Math.floor(Number(size)) || 50));
+    size = Math.max(9, Math.min(GROW_MAX, Math.floor(Number(size)) || GROW0));
     lvPref.lv = lv;
-    if (size === 50 || size === 75) lvPref.size = size;
     saveLvPref();
-    return startMatch({ mode: 1, size: size, win: 5, bot: true, lv: lv, names: ['Bạn', 'Máy'], first: LVS[lv].first });
+    return startMatch({ mode: 1, size: size, win: 5, grow: true, bot: true, lv: lv, names: ['Bạn', 'Máy'], first: LVS[lv].first });
   }
 
   /* ------------------- ve ban co + keo / phong to ------------------- */
@@ -15850,22 +15889,25 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       ctx.stroke();
     }
     /* O mo goi y nuoc di: chi hien tren MAY CO (HINT chi bat khi appIsAdmin()),
-       khong ghi len Firebase nen ban kia khong the biet. */
-    if (HINT.show && HINT.idx >= 0 && M.net && !M.over) {
+       khong ghi len Firebase nen ban kia khong the biet. Nhip tho lam cho de nhin ra
+       giua ban co day o, van mong de khong lon ban that. */
+    if (HINT.show && HINT.idx >= 0 && HINT.idx < M.cells.length && !M.over) {
       var hi = HINT.idx % n, hj = Math.floor(HINT.idx / n);
-      var hx = ox + hi * s, hy = oy + hj * s, hv = M.net.my || 1;
+      var hx = ox + hi * s, hy = oy + hj * s, hv = HINT.mark || 1;
+      var pu = HINT.pulse || 0;                                  /* 0..1 */
       var hmc = MARKC[(hv - 1 + MARKC.length) % MARKC.length];
       ctx.save();
-      ctx.globalAlpha = .09; ctx.fillStyle = hmc;
+      ctx.globalAlpha = .13 + .10 * pu; ctx.fillStyle = hmc;
       ctx.fillRect(hx, hy, s, s);
-      ctx.globalAlpha = .55; ctx.strokeStyle = hmc;
-      ctx.lineWidth = Math.max(1.1, s * .05);
+      ctx.globalAlpha = .55 + .40 * pu; ctx.strokeStyle = hmc;
+      ctx.lineWidth = Math.max(1.4, s * .07);
       if (s >= 10) ctx.setLineDash([Math.max(3, s * .16), Math.max(2, s * .11)]);
-      ctx.strokeRect(hx + s * .1, hy + s * .1, s * .8, s * .8);
+      ctx.strokeRect(hx + s * .08, hy + s * .08, s * .84, s * .84);
       ctx.setLineDash([]);
-      ctx.globalAlpha = .3; ctx.lineWidth = Math.max(1.4, s * .09); ctx.lineCap = 'round';
+      ctx.globalAlpha = .34 + .30 * pu; ctx.lineWidth = Math.max(1.6, s * .11); ctx.lineCap = 'round';
+      ctx.shadowColor = hmc; ctx.shadowBlur = Math.max(2, s * .35 * (.4 + pu));
       ctx.beginPath();
-      markPath(hv, hx + s / 2, hy + s / 2, s * .27, s * .3);
+      markPath(hv, hx + s / 2, hy + s / 2, s * .29, s * .32);
       ctx.stroke();
       ctx.restore();
       ctx.globalAlpha = 1;
@@ -15915,7 +15957,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
   }
   function netDown() {
     var s = 'CARO online cần node "classroomCaro" trong Firebase. Nếu Rules chưa cho node này thì chưa mời bạn được — ' +
-            'còn "Đấu với máy" và "Chế độ 1 máy" vẫn chơi bình thường, không cần mạng.';
+            'còn "Đánh với máy" và "Tùy chỉnh → Chơi trên một máy" vẫn chơi bình thường, không cần mạng.';
     warnLine(s); say(s, 'warn');
   }
   function netNoLogin() {
@@ -15952,11 +15994,12 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     pk.hidden = false;                                   // goi khi mo bang HOAC khi gui that bai -> luon phai nhin thay noi nay
     pk.innerHTML = '';
     var cd = [1, 2, 3, 4, 5].indexOf(NET.pick) >= 0 ? NET.pick : 1;
+    var cfg = NET.cfg || {}, gheMoi = Math.max(2, Math.min(5, Math.floor(Number(cfg.ghe) || 2)));
     var moTa = cd === 1 ? 'bàn 3×3, thắng 3 ô'
       : cd === 2 ? 'bàn 15×15, thắng 5 ô'
-      : cd === 3 ? ('bàn ' + ((NET.cfg && NET.cfg.size) || 20) + '×' + ((NET.cfg && NET.cfg.size) || 20) + ', thắng ' + ((NET.cfg && NET.cfg.win) || 6) + ' ô')
       : cd === 4 ? 'bàn 15×15, thắng 5 ô · trận leo hạng'
-      : 'bàn vô hạn, thắng 10 ô';
+      : (cd === 3 || cd === 5) ? ('bàn vô hạn — tự mở rộng, ' + (cd === 5 ? '2' : gheMoi) + ' người, thắng ' + (cfg.win || (cd === 5 ? 10 : 5)) + ' ô')
+      : 'bàn vô hạn, tự mở rộng';
     cardLabel(pk, 'h3', (NET.lobby ? 'Mời thêm bạn vào phòng · ' : 'Mời bạn cùng lớp · ') + moTa);
     cardLabel(pk, 'p', NET.lobby
       ? 'Chỉ thấy những bạn CHƯA nằm trong phòng. Ghế trống sẽ được điền theo thứ tự mời.'
@@ -15974,17 +16017,17 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       try { bad = (window.caroNet.hbBad ? window.caroNet.hbBad() : ''); } catch (e) { bad = ''; }
       try { cuaMinh = !!(window.caroNet.hbMine && window.caroNet.hbMine()); } catch (e) { cuaMinh = false; }
       if (!coKetNoi) {
-        cardLabel(pk, 'p', 'Máy này chưa mở được kết nối lớp (không đọc được kho dữ liệu chung), nên chưa mời được ai — kiểm tra đường truyền rồi bấm "Thử lại". Hai chế độ không cần mạng vẫn chơi được ngay.');
+        cardLabel(pk, 'p', 'Máy này chưa mở được kết nối lớp (không đọc được kho dữ liệu chung), nên chưa mời được ai — kiểm tra đường truyền rồi bấm "Thử lại". Hai cách không cần mạng vẫn chơi được ngay: "Đánh với máy", hoặc "Tùy chỉnh → Chơi trên một máy".');
       } else if (!uid) {
-        cardLabel(pk, 'p', 'Tài khoản đang dùng chưa gắn với tài khoản Firebase (mục danh sách lớp → liên kết tài khoản), nên lớp không biết bạn là ai và không mời được. Hai chế độ không cần mạng vẫn chơi được ngay.');
+        cardLabel(pk, 'p', 'Tài khoản đang dùng chưa gắn với tài khoản Firebase (mục danh sách lớp → liên kết tài khoản), nên lớp không biết bạn là ai và không mời được. Hai cách không cần mạng vẫn chơi được ngay: "Đánh với máy", hoặc "Tùy chỉnh → Chơi trên một máy".');
       } else if (bad === 'quyen') {
-        cardLabel(pk, 'p', 'Máy này chưa ghi được nhịp "đang mở web" lên lớp vì thiếu quyền — mục CARO online cần dán quyền (Rules) Firebase trước đã. Hai chế độ không cần mạng vẫn chơi được ngay.');
+        cardLabel(pk, 'p', 'Máy này chưa ghi được nhịp "đang mở web" lên lớp vì thiếu quyền — mục CARO online cần dán quyền (Rules) Firebase trước đã. Hai cách không cần mạng vẫn chơi được ngay: "Đánh với máy", hoặc "Tùy chỉnh → Chơi trên một máy".');
       } else if (NET.skip && NET.skip.length) {
         cardLabel(pk, 'p', 'Mọi người đang mở web lớp đã nằm trong phòng cả rồi. Bấm "Về sảnh chờ" để xem ghế, hoặc "Danh sách chế độ" để chơi kiểu khác.');
       } else if (cuaMinh) {
-        cardLabel(pk, 'p', 'Chỉ có mình tài khoản này đang mở web lớp. Muốn thử mời thì phải mở ở MÁY KHÁC và đăng nhập bằng tài khoản khác (mở thêm một tab trên cùng máy tính này thì tab đó vẫn đang dùng đúng tài khoản này, nên hai bên không thấy nhau). Hai chế độ không cần mạng vẫn chơi được ngay.');
+        cardLabel(pk, 'p', 'Chỉ có mình tài khoản này đang mở web lớp. Muốn thử mời thì phải mở ở MÁY KHÁC và đăng nhập bằng tài khoản khác (mở thêm một tab trên cùng máy tính này thì tab đó vẫn đang dùng đúng tài khoản này, nên hai bên không thấy nhau). Hai cách không cần mạng vẫn chơi được ngay: "Đánh với máy", hoặc "Tùy chỉnh → Chơi trên một máy".');
       } else {
-        cardLabel(pk, 'p', 'Chưa thấy bạn nào trực tuyến. Nhờ bạn mở web lớp và đăng nhập, rồi bấm "Thử lại". Hai chế độ không cần mạng vẫn chơi được ngay.');
+        cardLabel(pk, 'p', 'Chưa thấy bạn nào trực tuyến. Nhờ bạn mở web lớp và đăng nhập, rồi bấm "Thử lại". Hai cách không cần mạng vẫn chơi được ngay: "Đánh với máy", hoặc "Tùy chỉnh → Chơi trên một máy".');
       }
     } else {
       var box = document.createElement('div'); box.className = 'caro-mates';
@@ -16124,9 +16167,11 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       var ten = [], k;
       for (k = 0; k < seats.length; k++) if (seats[k].uid) ten.push(seats[k].ten || ('Bạn ' + (k + 1)));
       if (!ten.length) return;
-      var roomSize = clamp(Math.floor(Number(room.size) || 15), 3, 60);
+      var voHan = Number(room.voHan) === 1 || cd === 5;   /* ban vo han: mo rong theo danh sach nuoc */
+      var roomSize = clamp(Math.floor(Number(room.size) || 15), 3, GROW_MAX);
       if (startMatch({
         mode: cd, size: roomSize, win: Math.max(3, Math.floor(Number(room.win) || 5)),
+        grow: voHan, lab: cd === 4 ? 'Leo hạng' : (voHan ? 'Tùy chỉnh' : 'Mời bạn'),
         bot: false, net: true, first: 0, players: ten.length, names: ten
       })) {
         M.net = { id: id, my: mark, shown: false, room: null, counted: false, vai: -1 };
@@ -16142,17 +16187,30 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     if (mark) M.net.my = mark;
     applyRoom();
   }
-  /* Ban tu mo rong (che do 5): them 8 hang/cot khi co nuoc gan bien; o cu giu nguyen toa do. */
+  /* Ban tu mo rong (che do 5 cu + "Tùy chỉnh" + "Đánh với máy" bay gio): them 8 hang/cot khi
+     co nuoc gan ben; o cu giu nguyen toa do {x,y} nen hai may tam lai giong het nhau.
+     Khong con tran 60/75: mo toi GROW_MAX (400x400) thoi — khong ai danh den do, ma neu co
+     thi may van chay (nho den muc nhin du ca ban trong khung). */
+  function growLo(n) {
+    var W = Math.max(cw(), 420), H = Math.max(chh(), 300);
+    return clamp(Math.floor(Math.min(W, H) / n) - 1, 2, 12);
+  }
   function growBoard() {
-    if (!M || M.size >= 60) return;
-    var o = M.size, nu = o + 8, x, y;
+    if (!M || !M.grow || M.size >= GROW_MAX) return false;
+    var o = M.size, nu = Math.min(GROW_MAX, o + GROW_STEP), x, y;
+    if (nu === o) return false;
     var nc = new Uint8Array(nu * nu);
     for (y = 0; y < o; y++) for (x = 0; x < o; x++) nc[y * nu + x] = M.cells[y * o + x];
     M.cells = nc; M.size = nu;
+    if (M.last >= 0) M.last = Math.floor(M.last / o) * nu + (M.last % o);   /* vi tri phang doi theo size */
+    /* O goi y cung la chi so phang -> phai doi theo, neu khong no nhay sang o khac khi mo ban */
+    if (HINT.idx >= 0 && HINT.idx < o * o) HINT.idx = Math.floor(HINT.idx / o) * nu + (HINT.idx % o);
+    M.lo = Math.min(M.lo, growLo(nu));
+    return true;
   }
   function growAt(x, y) {
     if (!M || !M.grow) return;
-    while ((x >= M.size - 2 || y >= M.size - 2) && M.size < 60) growBoard();
+    while ((x >= M.size - 2 || y >= M.size - 2) && M.size < GROW_MAX) if (!growBoard()) break;
   }
   function applyRoom() {
     if (!M || !M.net) return;
@@ -16188,7 +16246,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       if (w) { if (!M.over) { M.over = true; M.winner = m; M.winCells = w; } }
     }
     if (lastXY) M.last = lastXY.y * M.size + lastXY.x;
-    if (!M.over && M.moves >= M.size * M.size) { M.over = true; M.winner = 0; M.reason = 'hết ô trống'; }
+    if (!M.over && !M.grow && M.moves >= M.size * M.size) { M.over = true; M.winner = 0; M.reason = 'hết ô trống'; }
     /* con lai bao nhieu nguoi chua roi tran */
     var song = [], k2;
     for (k2 = 0; k2 < np; k2++) {
@@ -16304,55 +16362,129 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     say('Đã ghép được bạn cùng chơi — vào trận.', 'ok');
   }
 
-  /* ------------------- che do 3: form cai dat + sanh cho ------------------- */
+  /* ------------------- TUY CHINH: ban vo han + so nguoi + so o thang -------------------
+     MOT bang dung cho ca hai kieu choi:
+       "Chơi trên một máy"  = hot-seat 2-5 nguoi, khong can mang (mode 6 cu)
+       "Mời bạn · mỗi người một máy" = phong che do 3 cu, gan them truong voHan=1 de
+          ca hai may cung mo rong ban theo dung danh sach nuoc (nuoc luu {x,y}).
+     Luot chon cuoi cung duoc luu lai, lan sau mo web van dung. Ten lay o bang nay chi dung
+     khi choi cung mot may; phong online thi ten lay tu tai khoan lop. */
+  var CUST_KEY = 'hoanghao_caro_cust';
+  var CUST = { np: 2, win: 5, names: [] };
+  try {
+    var cs = JSON.parse(localStorage.getItem(CUST_KEY) || 'null');
+    if (cs && typeof cs === 'object') {
+      if (Number(cs.np) >= 2 && Number(cs.np) <= 5) CUST.np = Math.floor(Number(cs.np));
+      if (Number(cs.win) >= 3 && Number(cs.win) <= 10) CUST.win = Math.floor(Number(cs.win));
+      if (Array.isArray(cs.names)) cs.names.slice(0, 5).forEach(function (t) {
+        var s = String(t == null ? '' : t).trim().slice(0, 14);
+        if (s) CUST.names.push(s);
+      });
+    }
+  } catch (e) { }
+  function custSave() { try { localStorage.setItem(CUST_KEY, JSON.stringify({ np: CUST.np, win: CUST.win, names: CUST.names })); } catch (e) { } }
+  function custName(i) { return CUST.names[i] || ('Bạn ' + (i + 1)); }
   function openCfg() {
     if (!ensure()) return;
-    if (!netOn()) { netDown(); return; }
-    if (!netUid()) { netNoLogin(); return; }
-    NET.pick = 3; NET.cfg = null; NET.mate = null; NET.moi = ''; NET.joined = 0;
-    NET.room = ''; NET.lobby = ''; NET.lobbyRoom = null; NET.skip = [];
+    NET.pick = 3; NET.mate = null; NET.moi = ''; NET.joined = 0; NET.skip = [];
+    if (!NET.lobby) { NET.room = ''; NET.cfg = null; }
     var st = el('caroStage'), mb = el('caroModes'), pk = el('caroPick');
     if (st) st.hidden = true;
     if (mb) mb.hidden = true;
     if (pk) pk.hidden = true;
     hideWait(); clearWarn();
-    var w = el('caroWait');
-    if (!w) return;
+    renderCfg();
+  }
+  function renderCfg() {
+    var w = el('caroWait'); if (!w) return;
     w.innerHTML = '';
     var box = document.createElement('div'); box.className = 'caro-cfg';
-    cardLabel(box, 'h3', 'Tạo phòng · chế độ 3 (tối đa 5 người)');
-    cardLabel(box, 'p', 'Chọn số người và cỡ bàn. Tạo xong sẽ vào sảnh chờ: mời từng bạn vào ghế trống, thấy đủ người thì bấm "Bắt đầu".');
+    cardLabel(box, 'h3', 'Tùy chỉnh · bàn vô hạn (không giới hạn 75×75)');
+    cardLabel(box, 'p', 'Cứ đánh sát mép là bàn tự mở thêm ô — muốn đánh bao lâu cũng có chỗ. Kéo bàn để dời, lăn chuột hoặc chụm hai ngón tay để thu phóng.');
+    var g2 = document.createElement('div'); g2.className = 'caro-2';
     var f1 = document.createElement('div'); f1.className = 'caro-f';
-    var l1 = document.createElement('label'); l1.textContent = 'Số người chơi';
+    var l1 = document.createElement('label'); l1.setAttribute('for', 'caroCfgN'); l1.textContent = 'Số người chơi';
     var s1 = document.createElement('select'); s1.id = 'caroCfgN';
-    [['2', '2 người — X và O'], ['3', '3 người — X, O, Y'], ['4', '4 người — X, O, Y, Z'], ['5', '5 người — X, O, Y, Z, T']].forEach(function (o) {
-      var op = document.createElement('option'); op.value = o[0]; op.textContent = o[1]; s1.appendChild(op);
-    });
-    f1.appendChild(l1); f1.appendChild(s1);
+    for (var k = 2; k <= 5; k++) {
+      var op = document.createElement('option');
+      op.value = String(k); op.textContent = k + ' người — ' + MARKS.slice(0, k).join(', ');
+      if (k === CUST.np) op.selected = true;
+      s1.appendChild(op);
+    }
+    f1.appendChild(l1); f1.appendChild(s1); g2.appendChild(f1);
     var f2 = document.createElement('div'); f2.className = 'caro-f';
-    var l2 = document.createElement('label'); l2.textContent = 'Bàn cờ';
-    var s2 = document.createElement('select'); s2.id = 'caroCfgB';
-    [['20', 'Bàn 20×20 — thắng khi 6 ô liên tiếp'], ['25', 'Bàn 25×25 — thắng khi 7 ô liên tiếp']].forEach(function (o) {
-      var op = document.createElement('option'); op.value = o[0]; op.textContent = o[1]; s2.appendChild(op);
-    });
-    f2.appendChild(l2); f2.appendChild(s2);
-    box.appendChild(f1); box.appendChild(f2);
+    var l2 = document.createElement('label'); l2.setAttribute('for', 'caroCfgW'); l2.textContent = 'Thắng khi có mấy ô liên tiếp';
+    var s2 = document.createElement('select'); s2.id = 'caroCfgW';
+    for (var q = 3; q <= 10; q++) {
+      var op2 = document.createElement('option');
+      op2.value = String(q); op2.textContent = q + ' ô liên tiếp';
+      if (q === CUST.win) op2.selected = true;
+      s2.appendChild(op2);
+    }
+    f2.appendChild(l2); f2.appendChild(s2); g2.appendChild(f2);
+    box.appendChild(g2);
+    var labN = cardLabel(box, 'div', 'Tên người chơi (chỉ dùng khi ngồi cùng một máy)'); labN.className = 'caro-lv-lab';
+    var nm = document.createElement('div'); nm.className = 'caro-names';
+    for (var i = 0; i < CUST.np; i++) {
+      var inp = document.createElement('input');
+      inp.type = 'text'; inp.maxLength = 14; inp.autocomplete = 'off';
+      inp.id = 'caroCName' + i; inp.placeholder = 'Bạn ' + (i + 1);
+      inp.value = CUST.names[i] || '';
+      nm.appendChild(inp);
+    }
+    box.appendChild(nm);
+    cardLabel(box, 'p', 'Phòng online lấy tên từ tài khoản lớp của từng bạn, nên không cần nhập ở đây. Ký hiệu theo thứ tự: X, O, Y, Z, T.');
     var row = document.createElement('div'); row.className = 'caro-bts';
-    var b1 = document.createElement('button'); b1.type = 'button'; b1.className = 'caro-b'; b1.textContent = 'Tạo phòng';
-    b1.addEventListener('click', cfgGo);
-    var b2 = document.createElement('button'); b2.type = 'button'; b2.className = 'secondary'; b2.textContent = 'Danh sách chế độ';
-    b2.addEventListener('click', showModes);
-    row.appendChild(b1); row.appendChild(b2);
+    var b1 = document.createElement('button'); b1.type = 'button'; b1.className = 'caro-b';
+    var ic1 = svgIcon(I.play); if (ic1) b1.appendChild(ic1);
+    cardLabel(b1, 'span', 'Chơi trên một máy');
+    b1.addEventListener('click', cfgLocal);
+    var b2 = document.createElement('button'); b2.type = 'button'; b2.className = 'caro-b';
+    var ic2 = svgIcon(I.user); if (ic2) b2.appendChild(ic2);
+    cardLabel(b2, 'span', 'Mời bạn · mỗi người một máy');
+    b2.addEventListener('click', cfgGo);
+    var b3 = document.createElement('button'); b3.type = 'button'; b3.className = 'secondary'; b3.textContent = 'Danh sách chế độ';
+    b3.addEventListener('click', showModes);
+    row.appendChild(b1); row.appendChild(b2); row.appendChild(b3);
     box.appendChild(row);
     w.appendChild(box);
     w.hidden = false;
+    s1.addEventListener('change', function () {
+      CUST.np = Math.max(2, Math.min(5, parseInt(s1.value, 10) || 2));
+      CUST.names = readNames(); custSave(); renderCfg();
+    });
+    s2.addEventListener('change', function () {
+      CUST.win = Math.max(3, Math.min(10, parseInt(s2.value, 10) || 5));
+      CUST.names = readNames(); custSave();
+    });
+  }
+  function readNames() {
+    var out = [];
+    for (var i = 0; i < 5; i++) {
+      var e = el('caroCName' + i);
+      if (e) out.push(String(e.value || '').trim().slice(0, 14));
+    }
+    while (out.length && !out[out.length - 1]) out.pop();
+    return out;
+  }
+  function cfgLocal() {
+    CUST.names = readNames();
+    CUST.np = Math.max(2, Math.min(5, CUST.np));
+    var names = [];
+    for (var i = 0; i < CUST.np; i++) names.push(custName(i));
+    custSave();
+    if (CUST.np === 2) saveNames(names[0], names[1]);
+    hideWait();
+    startMatch({ mode: 6, size: GROW0, grow: true, win: CUST.win, bot: false, players: CUST.np, names: names, first: 0 });
   }
   function cfgGo() {
-    var e1 = el('caroCfgN'), e2 = el('caroCfgB');
-    var np = parseInt((e1 && e1.value) || '2', 10); if (!(np >= 2 && np <= 5)) np = 2;
-    var size = parseInt((e2 && e2.value) || '20', 10); if (size !== 25) size = 20;
-    var win = size === 25 ? 7 : 6;
-    NET.cfg = { ghe: np, size: size, win: win };
+    if (!netOn()) { netDown(); return; }
+    if (!netUid()) { netNoLogin(); return; }
+    CUST.names = readNames(); custSave();
+    var np = Math.max(2, Math.min(5, CUST.np));
+    NET.pick = 3; NET.mate = null; NET.moi = ''; NET.joined = 0;
+    NET.room = ''; NET.lobby = ''; NET.lobbyRoom = null; NET.skip = [];
+    NET.cfg = { ghe: np, size: GROW0, win: CUST.win, voHan: 1 };
     renderWait('Đang tạo phòng chờ…');
     var p = null;
     try { p = window.caroNet.create('', 3, NET.cfg); } catch (e) { p = null; }
@@ -16376,15 +16508,16 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     if (!w || !r || !NET.lobby) { showModes(); return; }
     var seats = seatsOfRoom(r), ghe = roomGhe(r), me = netUid(), chu = txt(r.chu);
     var cd = [1, 2, 3, 4, 5].indexOf(Number(r.cheDo)) >= 0 ? Number(r.cheDo) : 1;
-    var moTa = cd === 3
-      ? ('bàn ' + (Number(r.size) || 20) + '×' + (Number(r.size) || 20) + ', thắng ' + (Number(r.win) || 6) + ' ô, ' + ghe + ' người')
-      : 'bàn ' + (Number(r.size) || 15) + '×' + (Number(r.size) || 15) + ', thắng ' + (Number(r.win) || 5) + ' ô';
+    var voHan = Number(r.voHan) === 1 || cd === 5;
+    var moTa = voHan
+      ? ('bàn vô hạn — tự mở rộng, ' + ghe + ' người, thắng ' + (Number(r.win) || 5) + ' ô')
+      : ('bàn ' + (Number(r.size) || 15) + '×' + (Number(r.size) || 15) + ', thắng ' + (Number(r.win) || 5) + ' ô' + (ghe > 2 ? ', ' + ghe + ' người' : ''));
     NET.skip = [];
     var da = 0, i;
     for (i = 0; i < seats.length; i++) if (seats[i].uid) { da++; if (seats[i].uid !== me) NET.skip.push(seats[i].uid); }
     w.innerHTML = '';
     var box = document.createElement('div'); box.className = 'caro-lobby';
-    cardLabel(box, 'h3', 'Sảnh chờ · chế độ ' + cd + ' · ' + moTa);
+    cardLabel(box, 'h3', 'Sảnh chờ · ' + moTa);
     var loi = '';
     if (chu === me) {
       loi = (cd === 3)
@@ -16792,10 +16925,16 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
   const CFG = {
     1: { size: 3, win: 3, ghe: 2, mo: 'bàn 3×3, thắng 3 ô' },
     2: { size: 15, win: 5, ghe: 2, mo: 'bàn 15×15, thắng 5 ô' },
-    3: { size: 20, win: 6, ghe: 2, mo: 'bàn tuỳ chỉnh, 2–5 người' },
+    3: { size: 30, win: 5, ghe: 2, mo: 'bàn vô hạn (tự mở rộng)' },
     4: { size: 15, win: 5, ghe: 2, mo: 'bàn 15×15, thắng 5 ô · leo hạng' },
-    5: { size: 25, win: 10, ghe: 2, mo: 'bàn vô hạn, thắng 10 ô' }
+    5: { size: 30, win: 10, ghe: 2, mo: 'bàn vô hạn (tự mở rộng)' }
   };
+  /* Loi moi ghi them so o thang vao noi dung de nguoi nhan biet ngay "Tùy chỉnh" cua ai. */
+  function moCd(cd, win) {
+    const c = CFG[cd] || CFG[1];
+    if (cd === 3 || cd === 5) return 'bàn vô hạn, thắng ' + (Math.max(3, Math.min(10, Math.floor(Number(win) || c.win)))) + ' ô';
+    return c.mo;
+  }
   /* Phong moi tu 2A chi co X/O; tu 2B phong ghi day cho (mang so ghé). Cach doc phai chiu ca hai. */
   function seatsOf(r) {
     const out = [];
@@ -16909,7 +17048,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       const cd = [1, 2, 3, 4, 5].indexOf(Number(m.cheDo)) >= 0 ? Number(m.cheDo) : 1;
       const ghe = Math.max(2, Math.min(5, Math.floor(Number(m.ghe) || 2)));
       out.push({
-        k: k, cd: cd, ghe: ghe, mo: (CFG[cd] || CFG[1]).mo,
+        k: k, cd: cd, ghe: ghe, mo: moCd(cd, m.win),
         tu: txt(m.tu), tuTen: txt(m.tuTen) || 'Bạn',
         toi: txt(m.toi), toiTen: txt(m.toiTen) || 'Bạn',
         phong: txt(m.phong), ts: Number(m.ts) || 0
@@ -17009,19 +17148,20 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     const ghe = Math.max(2, Math.min(5, Math.floor(Number(opt.ghe) || c.ghe) || 2));
     const size = Math.max(3, Math.min(60, Math.floor(Number(opt.size) || c.size) || 15));
     const win = Math.max(3, Math.min(10, Math.floor(Number(opt.win) || c.win) || 5));
+    const voHan = (Number(opt.voHan) === 1 || cd === 5 || cd === 3) ? 1 : 0;   /* 3 = Tuy chinh: ban tu mo rong */
     const ten = nameFor(v.uid, v.ten) || v.ten || 'Chủ phòng';
     const mateTen = nameFor(mateUid, (online[mateUid] && online[mateUid].ten)) || 'Bạn';
     const cho = [{ uid: v.uid, ten: ten }];
     for (let i = 1; i < ghe; i++) cho.push({ uid: '', ten: '' });
     const rr = await push(ref(db, ROOT + '/phong'), {
-      tao: Date.now(), chu: v.uid, chuTen: ten, cheDo: cd, size: size, win: win, ghe: ghe,
+      tao: Date.now(), chu: v.uid, chuTen: ten, cheDo: cd, size: size, win: win, ghe: ghe, voHan: voHan,
       hang: cd === 4 ? 1 : 0, vai: 0, luot: 0, dang: 0, cho: cho
     });
-    /* khong co ban duoc moi ngay (che do 3: tao phong roi moi tiep tu sảnh) -> chi tao phong */
+    /* khong co ban duoc moi ngay (phòng Tùy chỉnh: tao phong roi moi tiep tu sảnh) -> chi tao phong */
     if (!mateUid) { watchRoom(rr.key); return { room: rr.key, moi: '', toi: '', toiTen: '', cd: cd, size: size, win: win, ghe: ghe }; }
     const mr = await push(ref(db, ROOT + '/moi'), {
       tu: v.uid, tuTen: ten, toi: mateUid, toiTen: mateTen,
-      phong: rr.key, cheDo: cd, size: size, win: win, ghe: ghe, ts: Date.now()
+      phong: rr.key, cheDo: cd, size: size, win: win, ghe: ghe, voHan: voHan, ts: Date.now()
     });
     watchRoom(rr.key);
     return { room: rr.key, moi: mr.key, toi: mateUid, toiTen: mateTen, cd: cd, size: size, win: win, ghe: ghe };
@@ -17046,6 +17186,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
         tu: v.uid, tuTen: ten, toi: mateUid, toiTen: mateTen,
         phong: id, cheDo: cd, size: Math.floor(Number(d.size) || opt.size || CFG[cd].size),
         win: Math.floor(Number(d.win) || opt.win || CFG[cd].win),
+        voHan: Number(d.voHan) === 1 ? 1 : 0,
         ghe: gheOf(d), ts: Date.now()
       });
       return { room: id, moi: mr.key, toi: mateUid, toiTen: mateTen, cd: cd, ghe: gheOf(d) };
@@ -17644,7 +17785,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     <h4><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 3v18M3 9h18"/><circle cx="15.2" cy="15.2" r="2.6" stroke-dasharray="2.4 2"/></svg>Gợi ý nước đi CARO</h4>
     <label class="hz-check" style="margin:2px 0 6px;">
       <input type="checkbox" id="hzHintOn" onchange="adminWidget.hintSave()">
-      <span>Tới lượt cô trong trận có mời bạn là tự hiện <span class="hz-hint-sw"><i></i>ô mờ</span> ngay trên bàn, báo nên đánh ô nào</span>
+      <span>Tới lượt cô là tự hiện <span class="hz-hint-sw"><i></i>ô mờ</span> ngay trên bàn, báo nên đánh ô nào — áp dụng cả khi đánh với máy lẫn khi có em thách đấu</span>
     </label>
     <label class="hz-lb" for="hzHintLv">Máy gợi ý mạnh tới mức nào</label>
     <select id="hzHintLv" onchange="adminWidget.hintSave()">
@@ -17653,7 +17794,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       <option value="de">Dễ — đi ẩu, chỉ để xem cho vui</option>
     </select>
     <p class="hz-lock-sum" id="hzHintState"></p>
-    <p class="hz-hint">Ô mờ <strong>chỉ hiện trên máy cô</strong> (đang đăng nhập tài khoản Admin): máy tính CARO của app tự tìm nước, không gửi gì lên mạng nên em thách đấu không biết. Muốn cô cũng nhờ được khi chơi "Đấu với máy" thì khỏi bật — máy đã tự đánh hết rồi.</p>
+    <p class="hz-hint">Ô mờ <strong>chỉ hiện trên máy cô</strong> (đang đăng nhập tài khoản Admin): máy tính CARO của app tự tìm nước, không gửi gì lên mạng nên em thách đấu không biết. Ô hiện dạng mờ và thở nhẹ cho dễ nhìn giữa bàn cờ, nhưng không đè lên nước thật.</p>
   </div>
 
   <!-- Muc khi gas: panel do module khi gas ve vao #hzGasHost + cho quyen xem ngoai Admin -->
@@ -18530,7 +18671,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       var lab = g.lv === 'de' ? 'Dễ' : (g.lv === 'binh' ? 'Bình thường' : 'Khó');
       st.textContent = g.on
         ? ('Đang bật · máy ' + lab + ' · ' + (g.show ? 'ô mờ đang hiện trên bàn lúc này.'
-          : 'chưa tới lượt cô trong trận có mời bạn nên bàn đang sạch.'))
+          : 'chưa tới lượt cô (hoặc chưa vào trận) nên bàn đang sạch.'))
         : 'Đang tắt · tới lượt cô bàn cũng không hiện ô mờ nào.';
       if (g.on && !g.admin) st.textContent += ' (Máy này đang không đăng nhập Admin nên ô mờ chưa hiện.)';
     }
