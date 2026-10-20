@@ -1,0 +1,80 @@
+name: Dựng app Android (.apk)
+
+# Chạy mỗi khi có thay đổi trong thư mục android-app/ (hoặc bấm chạy tay ở tab Actions).
+on:
+  push:
+    paths:
+      - 'android-app/**'
+      - '.github/workflows/build-apk.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: dung-apk
+  cancel-in-progress: true
+
+jobs:
+  apk:
+    name: Máy của GitHub tự dựng và đăng file .apk
+    runs-on: ubuntu-latest
+    env:
+      GRADLE_VERSION: '8.9'
+    steps:
+      - name: Lấy mã nguồn
+        uses: actions/checkout@v4
+
+      - name: Cài Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Cài bộ Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          packages: 'platforms;android-34 build-tools;34.0.0'
+
+      - name: Tải công cụ dựng (Gradle)
+        run: |
+          set -e
+          curl -fsSL -o "$RUNNER_TEMP/gradle.zip" \
+            "https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip"
+          unzip -q "$RUNNER_TEMP/gradle.zip" -d "$RUNNER_TEMP/gradle"
+
+      - name: Dựng file .apk
+        run: |
+          set -e
+          cd android-app
+          "$RUNNER_TEMP/gradle/gradle-${GRADLE_VERSION}/bin/gradle" \
+            --no-daemon --console=plain --stacktrace \
+            -PappVersionCode="${GITHUB_RUN_NUMBER}" \
+            -PappVersionName="1.${GITHUB_RUN_NUMBER}" \
+            :app:assembleRelease
+
+      - name: Kiểm tra file vừa dựng
+        run: |
+          set -e
+          APK="$(find android-app/app/build/outputs/apk/release -name '*.apk' | head -1)"
+          test -s "$APK"
+          cp "$APK" "$RUNNER_TEMP/hoanghaoZ-11A1.apk"
+          ls -l "$RUNNER_TEMP/hoanghaoZ-11A1.apk"
+          echo "APK=$RUNNER_TEMP/hoanghaoZ-11A1.apk" >> "$GITHUB_ENV"
+
+      - name: Đăng lên Release (một đường link dùng mãi)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          TAG=android-app
+          TITLE="App Android cho lớp 11A1"
+          NOTES="Tải dòng 'hoanghaoZ-11A1.apk' ở dưới rồi mở trên máy Android (từ Android 8.0) để cài. Cùng một link này luôn là bản mới nhất; cài đè không mất dữ liệu đã lưu trong app."
+          if ! gh release view "$TAG" >/dev/null 2>&1; then
+            gh release create "$TAG" --title "$TITLE" --notes "$NOTES"
+          else
+            gh release edit "$TAG" --title "$TITLE" --notes "$NOTES"
+          fi
+          gh release upload "$TAG" "$APK" --clobber
+          echo "Tải app: https://github.com/${GITHUB_REPOSITORY}/releases/download/${TAG}/hoanghaoZ-11A1.apk" \
+            >> "$GITHUB_STEP_SUMMARY"

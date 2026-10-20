@@ -1,0 +1,61 @@
+// Ung dung hoanghaoZ 11A1 - vo Android mo dung trang cua lop dang chay.
+// App khong chua noi dung: mo trang https://hoanghaothcs8-cell.github.io/hoanghaoz_11a1/
+// -> co thay nang trang (them muc, sua loi) la app tu moi theo, khong can dung goi .apk lai.
+
+def appVersionCode = (project.findProperty('appVersionCode') ?: '1') as Integer
+def appVersionName = (project.findProperty('appVersionName') ?: '1.0') as String
+
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.hoanghaoz.lop11a1'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId 'com.hoanghaoz.lop11a1'
+        minSdk 26          // Android 8.0 tro len
+        targetSdk 34
+        versionCode appVersionCode
+        versionName appVersionName
+    }
+
+    // Chu ky nay nam trong thu mục de lap lai moi lan dung,
+    // nen lan cai sau de len lan truoc ma khong mat du lieu tren may hoc sinh.
+    signingConfigs {
+        release {
+            storeFile file('keystore/class.keystore')
+            storePassword 'android'
+            keyAlias 'classkey'
+            keyPassword 'android'
+            storeType 'JKS'
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    buildFeatures {
+        buildConfig false
+    }
+
+    lint {
+        abortOnError false
+        checkReleaseBuilds false
+    }
+}
+
+// Doc source UTF-8 de dong chu hien thi trong app ("May chua co mang"...) khong bi loi dau.
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
