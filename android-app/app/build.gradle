@@ -2,12 +2,14 @@
 // App khong chua noi dung: mo trang https://hoanghaothcs8-cell.github.io/hoanghaoz_11a1/
 // -> co thay nang trang (them muc, sua loi) la app tu moi theo, khong can dung goi .apk lai.
 
-def appVersionCode = (project.findProperty('appVersionCode') ?: '1') as Integer
-def appVersionName = (project.findProperty('appVersionName') ?: '1.0') as String
-
 plugins {
     id 'com.android.application'
 }
+
+// So phien ban app lay tu so luot dung cua may GitHub (tang dan moi lan),
+// neu dung tay thi mac dinh 1.
+def appVersionCode = (project.findProperty('appVersionCode') ?: '1') as Integer
+def appVersionName = (project.findProperty('appVersionName') ?: '1.0') as String
 
 android {
     namespace 'com.hoanghaoz.lop11a1'

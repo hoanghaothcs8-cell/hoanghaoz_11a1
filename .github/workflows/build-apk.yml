@@ -19,6 +19,9 @@ jobs:
   apk:
     name: Máy của GitHub tự dựng và đăng file .apk
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
     env:
       GRADLE_VERSION: '8.9'
     steps:
@@ -62,8 +65,6 @@ jobs:
 
       - name: Ghi log loi ra thong bao (chi khi truot)
         if: failure()
-        permissions:
-          issues: write
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
