@@ -252,6 +252,27 @@
   .input-control:focus { border-color:var(--primary) !important; box-shadow:0 0 0 3px rgba(168,85,247,.13) !important; }
   .post-img { border-color:#302b40; }
   .modal-overlay { background:rgba(0,0,0,.70); }
+
+  /* ===== CONG DANG NHAP: trang lop chi mo sau khi dang nhinp/dang ky =====
+     Lop .gate dat tai 2 noi: tren #authModal (te nhat la 1 o tren) va tren <html>
+     (bo sung khi JS chay).viet rieng tung cai de phong truong hop JS chet thi
+     CSS van khong cho an hop. */
+  html.hz-gate #authModal { display: flex !important; }
+  html.hz-gate #authModal .modal-close { display: none !important; }
+  html.hz-gate #authModal { z-index: 9000; }
+  #authModal .auth-gate-note { display: none; margin: 14px 0 0; padding: 10px 12px; border-radius: 10px;
+    background: rgba(168,85,247,.10); border: 1px solid rgba(192,132,252,.28);
+    color: #d8b4fe; font-size: 12px; line-height: 1.5; text-align: center; }
+  html.hz-gate #authModal .auth-gate-note { display: block; }
+  #authModal .auth-gate-note { display: flex; align-items: flex-start; gap: 8px; text-align: left; }
+  #authModal .auth-gate-note b { color:#f4effa; }
+  #authModal .auth-gate-note .hz-gate-ic { flex: 0 0 auto; width: 16px; height: 16px; margin-top: 1px; }
+  /* Khi con bi chan thi thu nui cua Admin cung an di (kha nhien hoc sinh khong co quyen). */
+  html.hz-gate #hzAdminBtn { display: none !important; }
+  /* Trang lop phía sau: lam mo nhat nhe de em thấy rõ là chưa vào được,
+     KHONG áp cho header/footer/modal (chung nam ngoai <main> nên van giu nguyen). */
+  html.hz-gate main { filter: blur(6px) saturate(.85); pointer-events: none; user-select: none; }
+
   .rank-table th { color:#a1a1aa; }
   .rank-table td, .user-table td { border-color:#2a2638; }
   .role-admin { background:rgba(239,68,68,.13); color:#fca5a5; }
@@ -3923,12 +3944,13 @@
 
 </main>
 
-<!-- MODAL ĐĂNG NHẬP / ĐĂNG KÝ -->
-<div class="modal-overlay" id="authModal">
+<!-- MODAL DANG NHAP / DANG KY — dong thoi la CONG cua trang lop (lop .gate):
+     khi chua dang nhap thi hop nay bat buoc, khong co nut ✕ va khong an duoc. -->
+<div class="modal-overlay gate" id="authModal">
   <div class="modal-box" style="max-width: 420px;">
     <div class="modal-header">
       <h3 id="authModalTitle">🔑 Đăng Nhập</h3>
-      <span class="modal-close" onclick="closeModal('authModal')">✕</span>
+      <span class="modal-close" id="authModalClose" onclick="closeModal('authModal')">✕</span>
     </div>
     
     <!-- FORM ĐĂNG NHẬP -->
@@ -3980,6 +4002,11 @@
         Đã có tài khoản? <a href="#" onclick="switchAuthForm('login')" style="color:var(--primary); font-weight:600; text-decoration: none;">Đăng nhập</a>
       </p>
     </div>
+
+    <p class="auth-gate-note">
+      <svg class="hz-gate-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="10.5" width="15" height="9.5" rx="2.5"/><path d="M8 10.5V7.8a4 4 0 0 1 8 0v2.7"/><path d="M12 14.4v2.1"/></svg>
+      Trang lớp chỉ mở sau khi em đăng nhập (hoặc đăng ký tài khoản mới). Chưa có tài khoản thì chạm chữ <b>Đăng ký ngay</b> ở dưới.
+    </p>
   </div>
 </div>
 
@@ -9145,6 +9172,142 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     }
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', closeHoanghaoSplash);
     else closeHoanghaoSplash();
+  })();
+</script>
+
+
+<script>
+  /* ===== CONG DANG NHAP (auth gate) =====
+     Mo web len -> het man logo chao la hop Dang Nhap / Dang Ky bat buoc xuat hien
+     va NGAM trang lop lai. Chi khi nao dang nhap that thi cong moi mo.
+     nguon tran thai: window.getClassroomCurrentUser() (ham bo app cu da xuat ra
+     window rieng cho AI) — nen cong nay KHONG ghi de bat ky ham cu nao. */
+  (function () {
+    var MODAL = 'authModal';
+    var opened = false;      // da lan mo hop (de kh "muc tuc" mo lai sau khi da mo)
+    var unlocked = false;    // da co luc dang nhap -> kh bao gio chan nua trong phien nay
+
+    function logged() {
+      try {
+        if (typeof window.getClassroomCurrentUser === 'function' && window.getClassroomCurrentUser()) return true;
+      } catch (e) { }
+      return false;
+    }
+    function gated() { return document.documentElement.classList.contains('hz-gate'); }
+
+    function sync() {
+      var m = document.getElementById(MODAL);
+      if (!m) return;
+      if (logged()) {
+        if (unlocked && !gated()) return;            // da mo va dang mo -> khong lam gi
+        unlocked = true;
+        document.documentElement.classList.remove('hz-gate');
+        m.classList.remove('gate');
+        m.classList.remove('active');
+        return;
+      }
+      unlocked = false;
+      document.documentElement.classList.add('hz-gate');
+      m.classList.add('gate');
+      if (!m.classList.contains('active')) {
+        // Ve dang form Dang Nhap (neu em do moi vao form Dang Ky thi giu nguyen).
+        var lf = document.getElementById('loginForm'), rf = document.getElementById('registerForm');
+        if (rf && rf.style.display !== 'none') { /* em dang dang ky -> de im */ }
+        else if (lf) lf.style.display = 'block';
+        m.classList.add('active');
+        var fu = document.getElementById('loginUsername');
+        if (fu && !opened) { try { fu.focus({ preventScroll: true }); } catch (e) { } }
+        opened = true;
+      }
+    }
+
+    /* Bấm vào nền tối / Esc / Enter / Space khi còn bị chặn: không được tắt hộp.
+       Esc và phím mở hộp KHÁC vẫn chạy bình thường (ta chỉ chặn khi authModal đang mở). */
+    document.addEventListener('click', function (e) {
+      if (!gated()) return;
+      var m = document.getElementById(MODAL);
+      if (!m || !m.classList.contains('active')) return;
+      if (e.target !== m) return;                    // chi khi cham dung phan nen toi
+      e.preventDefault(); e.stopPropagation();
+      if (typeof window.notify === 'function') window.notify('Bạn cần đăng nhập hoặc đăng ký để vào trang lớp.');
+    }, true);
+
+    document.addEventListener('keydown', function (e) {
+      if (!gated()) return;
+      if (e.key !== 'Escape' && e.key !== 'Enter' && e.key !== ' ' && e.key !== 'Spacebar') return;
+      var m = document.getElementById(MODAL);
+      if (!m || !m.classList.contains('active')) return;
+      // Enter/Space ben TRONG hop dang nhap van dung (em gu phim Enter de dang nhap).
+      var ae = document.activeElement;
+      if (e.key !== 'Escape' && ae && m.contains(ae)) return;
+      e.preventDefault(); e.stopImmediatePropagation();
+      if (typeof window.notify === 'function') window.notify('Bạn cần đăng nhập hoặc đăng ký để vào trang lớp.');
+    }, true);
+
+    /* Enter o o email/mat khau = bam nut Dang Nhap (ben trong thi khong bi chan o tren). */
+    function bindEnter(buttonId, ids) {
+      ids.forEach(function (id) {
+        var el = document.getElementById(id);
+        if (!el) return;
+        el.addEventListener('keydown', function (e) {
+          if (e.key !== 'Enter') return;
+          e.preventDefault();
+          var b = document.getElementById(buttonId);
+          if (b) b.click();
+        });
+      });
+    }
+
+    /* Nút Đăng Nhập chưa nối được Firebase (mất mạng / chặn script nguồn ngoài):
+       nói rõ nguyên nhân thay vì bấm rồi im re. */
+    function bindFallbackCheck() {
+      var b = document.getElementById('doLoginBtn');
+      if (!b) return;
+      b.addEventListener('click', function () {
+        setTimeout(function () {
+          if (logged()) return;
+          if (typeof b.onclick === 'function') return;   // Firebase đã nối -> để Firebase xử lý
+          if (typeof window.notify === 'function') {
+            window.notify('Máy này chưa mở được kết nối đăng nhập của lớp. Kiểm tra Internet rồi tải lại trang nhé.', 'err');
+          }
+        }, 1500);
+      });
+    }
+
+    function boot() {
+      bindFallbackCheck();
+      bindEnter('doLoginBtn', ['loginUsername', 'loginPassword']);
+      bindEnter('doRegisterBtn', ['regUsername', 'regFullName', 'regPassword', 'regConfirmPassword']);
+      // Mo hop SAU man logo chao (1,25s + 0,65s mot gian du) de logo van la cai dau tien.
+      var splash = document.getElementById('hoanghaoSplash');
+      var wait = splash ? 2100 : 0;
+      setTimeout(sync, wait);
+      //Firebase den tre / em dang ky xong / thoat tai khoan... -> theo doi nhe.
+      setInterval(sync, 400);
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+    else boot();
+
+    /* Cho kiem thu: goi __hzGateSync() de chay dung buoc mo/chan hop ngay lap tuc
+       (khong phai doi het man logo), __hzGateState() de doc ket qua. */
+    window.__hzGateSync = sync;
+    window.__hzGateState = function () {
+      var m = document.getElementById(MODAL);
+      var cs = m ? getComputedStyle(m) : null;
+      var ic = document.getElementById('authModalClose');
+      var n = document.querySelector('#authModal .auth-gate-note');
+      var a = document.getElementById('hzAdminBtn');
+      return {
+        gate: gated(),
+        unlocked: unlocked,
+        active: !!(m && m.classList.contains('active')),
+        shown: cs ? cs.display : '?',
+        zIndex: cs ? cs.zIndex : '?',
+        closeBtn: ic ? getComputedStyle(ic).display : '?',
+        note: n ? getComputedStyle(n).display : '?',
+        adminBtn: a ? getComputedStyle(a).display : '?'
+      };
+    };
   })();
 </script>
 
