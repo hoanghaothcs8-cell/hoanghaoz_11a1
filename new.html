@@ -2929,6 +2929,38 @@
     .caro-turn { flex:1 1 100%; text-align:left; order:5; }
   }
 
+  /* ============================================================
+     19. HOP DANG NHAP (20/10) — chi lam man Dang Nhap / Dang Ky.
+        Cac tab va trang lop GIU NGUYEN giao dien cu theo yeu cau cua co
+        (co bao khoi don chung "choi" qua). Vi vậy KHONG co khoi 19.1/19.2/19.3.
+     ============================================================ */
+
+  /* --- 19.4: hop Dang Nhap / Dang Ky --- */
+  #authModal .modal-box { padding:20px 20px 18px !important; }
+  #authModal .modal-header { margin-bottom:10px; padding-bottom:0 !important; border-bottom:none !important; }
+  .auth-head { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .auth-head-l { display:flex; align-items:center; gap:9px; min-width:0; }
+  .auth-head-ic { display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; flex:0 0 28px; border-radius:9px; background:rgba(168,85,247,.14); border:1px solid rgba(192,132,252,.20); color:#d8b4fe; }
+  .auth-head-ic svg { width:15px; height:15px; }
+  #authModalTitle { font-size:16px; font-weight:700; letter-spacing:.01em; }
+  .auth-seg { display:flex; gap:4px; padding:3px; margin:0 0 14px; border-radius:11px; background:rgba(255,255,255,.045); border:1px solid rgba(192,132,252,.12); }
+  .auth-seg-btn { flex:1 1 0; min-width:0; height:32px; padding:0 8px; border-radius:8px; font-size:13px; font-weight:700; letter-spacing:.01em; color:#a99dbd !important; background:transparent !important; border:0 !important; box-shadow:none !important; }
+  .auth-seg-btn:hover { color:#eadcff !important; background:rgba(168,85,247,.10) !important; }
+  .auth-seg-btn.on { color:#fff !important; background:linear-gradient(135deg,#7c3aed,#a855f7) !important; }
+  #authModal .form-group { margin-bottom:11px; }
+  #authModal .form-group:last-of-type { margin-bottom:14px; }
+  #authModal .form-group label { margin-bottom:5px; }
+  .toggle-password { background:transparent !important; border:0 !important; box-shadow:none !important; color:#8b8398; padding:0; display:inline-flex; align-items:center; justify-content:center; }
+  .toggle-password:hover { color:#d8b4fe; }
+  .toggle-password svg { width:18px; height:18px; display:block; }
+  #doLoginBtn, #doRegisterBtn { margin-top:2px; border-radius:12px !important; font-weight:700; letter-spacing:.01em; }
+  #authModal .auth-gate-note { margin-top:12px; padding:10px 12px !important; font-size:12px; line-height:1.5; gap:8px !important; background:rgba(168,85,247,.08); border-color:rgba(192,132,252,.18); }
+  html.hz-gate #authModal .auth-gate-note { display:flex; }
+  /* Chi trong hop Dang Nhap / Dang Ky: khi noi dung dai hon man hinh (Dang Ky tren
+     may thap) thi thay mot thanh cuoi mong de em biet con phai keo xuong.
+     Cac hop khac va cac tab GIU NGUYEN nhu cu. */
+  #authModal .modal-box { scrollbar-width:thin; scrollbar-color:rgba(168,85,247,.42) transparent; }
+
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; }
   }
@@ -3950,9 +3982,17 @@
      khi chua dang nhap thi hop nay bat buoc, khong co nut ✕ va khong an duoc. -->
 <div class="modal-overlay gate" id="authModal">
   <div class="modal-box" style="max-width: 420px;">
-    <div class="modal-header">
-      <h3 id="authModalTitle">🔑 Đăng Nhập</h3>
-      <span class="modal-close" id="authModalClose" onclick="closeModal('authModal')">✕</span>
+    <div class="modal-header auth-head">
+      <div class="auth-head-l">
+        <span class="auth-head-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="10.5" width="15" height="9.5" rx="2.5"/><path d="M8 10.5V7.8a4 4 0 0 1 8 0v2.7"/><path d="M12 14.4v2.1"/></svg></span>
+        <h3 id="authModalTitle">Đăng Nhập</h3>
+      </div>
+      <span class="modal-close" id="authModalClose" onclick="closeModal('authModal')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span>
+    </div>
+
+    <div class="auth-seg" role="tablist" aria-label="Chọn đăng nhập hoặc đăng ký">
+      <button type="button" class="auth-seg-btn" id="authSegLogin" onclick="switchAuthForm('login')">Đăng nhập</button>
+      <button type="button" class="auth-seg-btn" id="authSegRegister" onclick="switchAuthForm('register')">Đăng ký</button>
     </div>
     
     <!-- FORM ĐĂNG NHẬP -->
@@ -3965,14 +4005,11 @@
         <label>Mật khẩu</label>
         <div class="password-wrapper">
           <input type="password" class="input-control" id="loginPassword" placeholder="******" autocomplete="off">
-          <button type="button" class="toggle-password" onclick="togglePasswordVisibility('loginPassword', this)">👁️</button>
+          <button type="button" class="toggle-password" onclick="togglePasswordVisibility('loginPassword', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12S6 5.9 12 5.9 21.5 12 21.5 12 18 18.1 12 18.1 2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="3"/></svg></button>
         </div>
       </div>
       <button id="doLoginBtn" style="width: 100%; height: 44px; justify-content: center; font-size: 15px;">Đăng Nhập</button>
       <p style="font-size: 12px; text-align: center; margin-top: 10px;"><a href="#" id="forgotPasswordLink" style="color:var(--primary); font-weight:600; text-decoration:none;">Quên mật khẩu?</a></p>
-      <p style="font-size: 13px; text-align: center; margin-top: 16px; color: var(--text-muted);">
-        Chưa có tài khoản? <a href="#" onclick="switchAuthForm('register')" style="color:var(--primary); font-weight:600; text-decoration: none;">Đăng ký ngay</a>
-      </p>
     </div>
 
     <!-- FORM ĐĂNG KÝ -->
@@ -3989,25 +4026,22 @@
         <label>Mật khẩu</label>
         <div class="password-wrapper">
           <input type="password" class="input-control" id="regPassword" placeholder="******" autocomplete="off">
-          <button type="button" class="toggle-password" onclick="togglePasswordVisibility('regPassword', this)">👁️</button>
+          <button type="button" class="toggle-password" onclick="togglePasswordVisibility('regPassword', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12S6 5.9 12 5.9 21.5 12 21.5 12 18 18.1 12 18.1 2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="3"/></svg></button>
         </div>
       </div>
       <div class="form-group">
         <label>Xác nhận mật khẩu</label>
         <div class="password-wrapper">
           <input type="password" class="input-control" id="regConfirmPassword" placeholder="******" autocomplete="off">
-          <button type="button" class="toggle-password" onclick="togglePasswordVisibility('regConfirmPassword', this)">👁️</button>
+          <button type="button" class="toggle-password" onclick="togglePasswordVisibility('regConfirmPassword', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12S6 5.9 12 5.9 21.5 12 21.5 12 18 18.1 12 18.1 2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="3"/></svg></button>
         </div>
       </div>
       <button id="doRegisterBtn" class="green" style="width: 100%; height: 44px; justify-content: center; font-size: 15px;">Đăng Ký Tài Khoản</button>
-      <p style="font-size: 13px; text-align: center; margin-top: 16px; color: var(--text-muted);">
-        Đã có tài khoản? <a href="#" onclick="switchAuthForm('login')" style="color:var(--primary); font-weight:600; text-decoration: none;">Đăng nhập</a>
-      </p>
     </div>
 
     <p class="auth-gate-note">
       <svg class="hz-gate-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="10.5" width="15" height="9.5" rx="2.5"/><path d="M8 10.5V7.8a4 4 0 0 1 8 0v2.7"/><path d="M12 14.4v2.1"/></svg>
-      Trang lớp chỉ mở sau khi em đăng nhập (hoặc đăng ký tài khoản mới). Chưa có tài khoản thì chạm chữ <b>Đăng ký ngay</b> ở dưới.
+      <span>Trang lớp chỉ mở sau khi em đăng nhập. Chưa có tài khoản thì chạm <b>Đăng ký</b> ở trên để tạo mới.</span>
     </p>
   </div>
 </div>
@@ -5715,15 +5749,16 @@
     }
   };
 
+  /* Icon mat (SVG noi tieng, khong dung emoji): 2 trang thai — hien / an mat khau */
+  const HZ_EYE_ON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l18 18"/><path d="M10.6 6.1A9.9 9.9 0 0 1 12 6c6 0 9.5 6 9.5 6a17.4 17.4 0 0 1-3.4 4.05"/><path d="M6.35 7.85A16.9 16.9 0 0 0 2.5 12S6 18 12 18a9.7 9.7 0 0 0 3.55-.68"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>';
+  const HZ_EYE_OFF = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12S6 5.9 12 5.9 21.5 12 21.5 12 18 18.1 12 18.1 2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="3"/></svg>';
+
   function togglePasswordVisibility(inputId, btn) {
     const input = document.getElementById(inputId);
-    if (input.type === "password") {
-      input.type = "text";
-      btn.textContent = "🙈";
-    } else {
-      input.type = "password";
-      btn.textContent = "👁️";
-    }
+    const reveal = input.type === "password";
+    input.type = reveal ? "text" : "password";
+    btn.dataset.on = reveal ? "1" : "0";
+    btn.innerHTML = reveal ? HZ_EYE_ON : HZ_EYE_OFF;
   }
 
   function renderAuthBar() {
@@ -5764,15 +5799,14 @@
   }
 
   function switchAuthForm(mode) {
-    if (mode === 'login') {
-      document.getElementById('authModalTitle').textContent = '🔑 Đăng Nhập';
-      document.getElementById('loginForm').style.display = 'block';
-      document.getElementById('registerForm').style.display = 'none';
-    } else {
-      document.getElementById('authModalTitle').textContent = '📝 Đăng Ký Tài Khoản';
-      document.getElementById('loginForm').style.display = 'none';
-      document.getElementById('registerForm').style.display = 'block';
-    }
+    const login = mode === 'login';
+    document.getElementById('authModalTitle').textContent = login ? 'Đăng Nhập' : 'Đăng Ký Tài Khoản';
+    document.getElementById('loginForm').style.display = login ? 'block' : 'none';
+    document.getElementById('registerForm').style.display = login ? 'none' : 'block';
+    // Gach dinh dang "Đăng nhập / Đăng ký" o dau hop — chi lop CSS, khong lien quan dang nhap.
+    const sl = document.getElementById('authSegLogin'), sr = document.getElementById('authSegRegister');
+    if (sl) sl.classList.toggle('on', login);
+    if (sr) sr.classList.toggle('on', !login);
   }
 
   // Đã gỡ bỏ hệ thống đăng nhập/đăng ký cũ (lưu bằng localStorage) để tránh xung đột
@@ -9197,9 +9231,21 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     }
     function gated() { return document.documentElement.classList.contains('hz-gate'); }
 
+    /* Gach "Đăng nhập / Đăng ký" dau hop: bat theo form dang hien.
+       Can vi khi mo hop lan dau, chinh cong nay hien form Dang Nhap ma khong
+       goi switchAuthForm (ham do chi chay khi em bam vao gach). */
+    function syncSeg() {
+      var rf = document.getElementById('registerForm');
+      var reg = !!(rf && rf.style.display !== 'none');
+      var sl = document.getElementById('authSegLogin'), sr = document.getElementById('authSegRegister');
+      if (sl) sl.classList.toggle('on', !reg);
+      if (sr) sr.classList.toggle('on', reg);
+    }
+
     function sync() {
       var m = document.getElementById(MODAL);
       if (!m) return;
+      syncSeg();
       if (logged()) {
         if (unlocked && !gated()) return;            // da mo va dang mo -> khong lam gi
         unlocked = true;
