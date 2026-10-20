@@ -42,18 +42,46 @@ jobs:
           curl -fsSL -o "$RUNNER_TEMP/gradle.zip" \
             "https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip"
           unzip -q "$RUNNER_TEMP/gradle.zip" -d "$RUNNER_TEMP/gradle"
+          echo "JAVA_HOME=$JAVA_HOME"
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          java -version
 
       - name: Dựng file .apk
+        shell: bash
         run: |
-          set -e
+          set -eo pipefail
+          # Chi duong dan cho co so dung (chi ghi trong may dung, khong luu vao repo)
+          echo "sdk.dir=$ANDROID_HOME" > android-app/local.properties
+          echo "org.gradle.java.home=$JAVA_HOME" >> android-app/gradle.properties
           cd android-app
           "$RUNNER_TEMP/gradle/gradle-${GRADLE_VERSION}/bin/gradle" \
             --no-daemon --console=plain --stacktrace \
             -PappVersionCode="${GITHUB_RUN_NUMBER}" \
             -PappVersionName="1.${GITHUB_RUN_NUMBER}" \
-            :app:assembleRelease
+            :app:assembleRelease 2>&1 | tee "$RUNNER_TEMP/build.log"
 
-      - name: Kiểm tra file vừa dựng
+      - name: Ghi log loi ra thong bao (chi khi truot)
+        if: failure()
+        permissions:
+          issues: write
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          set -e
+          LOG="$RUNNER_TEMP/build.log"
+          {
+            echo "May dung APK truot o luot #${GITHUB_RUN_NUMBER}. Day la 160 dong cuoi cua log:"
+            echo
+            echo '```'
+            [ -s "$LOG" ] && tail -160 "$LOG" || echo "(khong co log: buoc dung chep xong truoc khi chay)"
+            echo '```'
+          } > "$RUNNER_TEMP/err.md"
+          gh issue create \
+            --title "App Android: luot dung #${GITHUB_RUN_NUMBER} bi truot" \
+            --body-file "$RUNNER_TEMP/err.md"
+
+      - name: Kiềm tra file vừa dựng
         run: |
           set -e
           APK="$(find android-app/app/build/outputs/apk/release -name '*.apk' | head -1)"
