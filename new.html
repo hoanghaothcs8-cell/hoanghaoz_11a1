@@ -10669,9 +10669,13 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
    dinh ben TRONG tab Trial: 1 chuyen mach "Bai tap / Kien thuc" + 4 tang
    (Mon > Chuong > Danh sach muc > Khong doc).
 
-   CHI THEM MOI: khong sua ham/tab cu, khong doi id cu, khong nhung noi dung
-   vao app — moi chuong tai rieng tu kien-thuc/<chuong>.html tren may chu,
-   danh sach muc nam trong kien-thuc/manifest.json (~40 KB).
+   CHI THEM MOI: khong sua ham/tab cu, khong doi id cu. Tren web, moi chuong
+   tai rieng tu kien-thuc/<chuong>.html tren may chu, danh sach muc nam trong
+   kien-thuc/manifest.json (~40 KB).
+
+   Ban mo truc tiep (file://): doc kho tu window.__HZK_LOCAL, do tep
+   kien-thuc-data.js nam canh new.html nap vao. Ban mot tep thi khoi can tep
+   do vi du lieu da duoc nhung thang vao cuoi tep.
 
    Muon them bai: them/sua .md trong Kien-thuc-Trial, chay hz-kienthuc.js
    (cong kien-thuc/ ra), roi tai kien-thuc/ + new.html len lop.
@@ -10680,7 +10684,8 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
   'use strict';
 
   var DIR = 'kien-thuc/';
-  var K = { on: false, si: null, ci: null, ei: null, man: null, files: {}, busy: false, err: false };
+  var LOCAL_SRC = 'kien-thuc-data.js';
+  var K = { on: false, si: null, ci: null, ei: null, man: null, files: {}, busy: false, err: false, localP: null };
 
   function el(id) { return document.getElementById(id); }
   function esc(v) {
@@ -10712,6 +10717,34 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     return Object.keys(g).sort().join(' · ');
   }
 
+  /* ------------------------- Nguon noi dung (2 kieu) ---------------------- */
+  function isLocalFile() { return location.protocol === 'file:'; }
+  function localData() { return window.__HZK_LOCAL || null; }
+
+  /* Ban mo truc tiep: nap kien-thuc-data.js nam canh new.html.
+     Ban mot tep: window.__HZK_LOCAL da duoc nhung san, khong can tep nay. */
+  function loadLocalData() {
+    if (localData()) return Promise.resolve(localData());
+    if (K.localP) return K.localP;
+    K.localP = new Promise(function (resolve, reject) {
+      var s = document.createElement('script');
+      s.src = LOCAL_SRC;
+      s.onload = function () {
+        var d = localData();
+        if (d && d.manifest && d.chapters) resolve(d);
+        else { K.localP = null; reject(new Error('local-data')); }
+      };
+      s.onerror = function () { K.localP = null; reject(new Error('local-data')); };
+      (document.head || document.documentElement).appendChild(s);
+    });
+    return K.localP;
+  }
+
+  function localChapter(file) {
+    var d = localData();
+    return (d && d.chapters && d.chapters[file]) || null;
+  }
+
   /* ------------------------------- Hien thi ------------------------------- */
   function level(which) {
     ['Subjects', 'Chapters', 'Entries', 'Reader'].forEach(function (k) {
@@ -10737,9 +10770,10 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
   }
 
   function failBox(txt) {
-    return '<div class="hzk-empty"><b>' + esc(txt) + '</b>' +
-      'Kho Kiến thức tải nội dung từ máy chủ nên cần có mạng (đăng nhập và các mục khác của app vẫn dùng bình thường khi mất mạng). ' +
-      'Kiểm tra kết nối rồi bấm thử lại.<br><br>' +
+    var note = isLocalFile()
+      ? 'Bản này đang mở trực tiếp trong máy nên kho cần tệp <b>kien-thuc-data.js</b> nằm cạnh new.html (bản một tệp thì nội dung đã nhúng sẵn). Kiểm tra tệp đó, hoặc mở bằng địa chỉ web của lớp.'
+      : 'Kho Kiến thức tải nội dung từ máy chủ nên cần có mạng (đăng nhập và các mục khác của app vẫn dùng bình thường khi mất mạng). Kiểm tra kết nối rồi bấm thử lại.';
+    return '<div class="hzk-empty"><b>' + esc(txt) + '</b>' + note + '<br><br>' +
       '<button class="hzk-nav" type="button" data-hzk-retry="1">Thử lại</button></div>';
   }
 
@@ -10834,12 +10868,41 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
   }
 
   /* ------------------------------- Tai lieu ------------------------------- */
+  function getManifest() {
+    if (isLocalFile()) return loadLocalData().then(function (d) { return d.manifest; });
+    return fetch(DIR + 'manifest.json', { cache: 'no-store' })
+      .then(function (r) { if (!r.ok) throw new Error('http'); return r.json(); })
+      .catch(function (e) {
+        var d = localData();
+        if (d && d.manifest) return d.manifest;
+        throw e;
+      });
+  }
+
+  function getChapterText(file) {
+    if (isLocalFile()) {
+      var t0 = localChapter(file);
+      if (t0) return Promise.resolve(t0);
+      return loadLocalData().then(function () {
+        var t = localChapter(file);
+        if (!t) throw new Error('local-chapter');
+        return t;
+      });
+    }
+    return fetch(DIR + file + '.html', { cache: 'no-store' })
+      .then(function (r) { if (!r.ok) throw new Error('http'); return r.text(); })
+      .catch(function (e) {
+        var t = localChapter(file);
+        if (t) return t;
+        throw e;
+      });
+  }
+
   function loadManifest() {
     if (K.busy || K.man) return;
     K.busy = true; K.err = false;
     renderSubjects();
-    fetch(DIR + 'manifest.json', { cache: 'no-store' })
-      .then(function (r) { if (!r.ok) throw new Error('http'); return r.json(); })
+    getManifest()
       .then(function (j) {
         K.busy = false; K.man = j;
         if (K.ei !== null && K.si !== null && K.ci !== null) openEntry(K.ei);
@@ -10857,8 +10920,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     if (K.files[c.file]) { paintEntry(); return; }
     var box = el('hzkRead');
     if (box) box.innerHTML = '<div class="hzk-empty"><b>Đang tải nội dung…</b>' + esc(c.title) + '</div>';
-    fetch(DIR + c.file + '.html', { cache: 'no-store' })
-      .then(function (r) { if (!r.ok) throw new Error('http'); return r.text(); })
+    getChapterText(c.file)
       .then(function (t) {
         var host = document.createElement('div');
         host.innerHTML = t;
