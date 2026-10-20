@@ -16,6 +16,9 @@ const CACHE_HOSTS = [
 
 function cacheable(url) {
   if (url.protocol !== 'http:' && url.protocol !== 'https:') return false;
+  /* Kho Kien thuc (kien-thuc/*.html) phai luon lay ban moi: co sua noi dung
+     la hoc sinh thay ngay, khong bi ban luu tam cu om. */
+  if (url.pathname.indexOf('/kien-thuc/') !== -1) return false;
   const h = url.hostname;
   if (h.endsWith('firebaseio.com') || h.endsWith('firebasedatabase.app')) return false;
   if (h === 'generativelanguage.googleapis.com') return false;

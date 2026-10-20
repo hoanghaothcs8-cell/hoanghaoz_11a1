@@ -1,0 +1,1584 @@
+{
+ "v": 1,
+ "updated": "2026-10-20",
+ "note": "Kho cong thuc co giai thich — sach Ket noi tri thuc, lop 10 va 11.",
+ "subjects": [
+  {
+   "id": "toan",
+   "name": "Toán",
+   "desc": "Hàm số lượng giác, dãy số – cấp số cộng – cấp số nhân, mẫu số liệu ghép nhóm.",
+   "chapters": [
+    {
+     "file": "toan-11-chuong-1",
+     "grade": "11",
+     "title": "CHƯƠNG 1: HÀM SỐ LƯỢNG GIÁC VÀ PHƯƠNG TRÌNH LƯỢNG GIÁC",
+     "n": 12,
+     "entries": [
+      {
+       "id": "kt-1-1",
+       "num": "1.1",
+       "title": "ĐỔI ĐỘ SANG RADIAN VÀ NGƯỢC LẠI",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-2",
+       "num": "1.2",
+       "title": "ĐỊNH NGHĨA CÁC GIÁ TRỊ LƯỢNG GIÁC TRÊN ĐƯỜNG TRÒN LƯỢNG GIÁC",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-3",
+       "num": "1.3",
+       "title": "BẢNG GIÁ TRỊ LƯỢNG GIÁC CỦA CÁC CUNG ĐẶC BIỆT",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-4",
+       "num": "1.4",
+       "title": "CÔNG THỨC CỘNG",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-5",
+       "num": "1.5",
+       "title": "CUNG VÀ GÓC CÓ LIÊN QUAN ĐẶC BIỆT (ĐỐI – BÙ – PHỤ – HƠN KÉM π)",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-6",
+       "num": "1.6",
+       "title": "CÔNG THỨC NHÂN ĐÔI",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-7",
+       "num": "1.7",
+       "title": "CÔNG THỨC HẠ BẬC VÀ THEO t = tan(a/2)",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-8",
+       "num": "1.8",
+       "title": "BIẾN ĐỔI TÍCH ↔ TỔNG",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-9",
+       "num": "1.9",
+       "title": "TÍNH CHẤT CÁC HÀM SỐ LƯỢNG GIÁC",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-10",
+       "num": "1.10",
+       "title": "PHƯƠNG TRÌNH LƯỢNG GIÁC CƠ BẢN",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-11",
+       "num": "1.11",
+       "title": "PHƯƠNG TRÌNH BẬC NHẤT, BẬC HAI THEO MỘT HÀM LƯỢNG GIÁC",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-12",
+       "num": "1.12",
+       "title": "PHƯƠNG TRÌNH a·sin x + b·cos x = c",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-tail-13",
+       "num": "",
+       "title": "BẢNG TÓM TẮT CHƯƠNG 1 — TOÁN 11",
+       "kind": "tong hop"
+      }
+     ]
+    },
+    {
+     "file": "toan-11-chuong-2",
+     "grade": "11",
+     "title": "CHƯƠNG 2: DÃY SỐ. CẤP SỐ CỘNG VÀ CẤP SỐ NHÂN",
+     "n": 13,
+     "entries": [
+      {
+       "id": "kt-2-1",
+       "num": "2.1",
+       "title": "DÃY SỐ LÀ GÌ. BA CÁCH CHO MỘT DÃY SỐ",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-2",
+       "num": "2.2",
+       "title": "TỪ CÔNG THỨC TRUY HỒI SANG CÔNG THỨC TỔNG QUÁT (ĐOÁN SỐ HẠNG)",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-3",
+       "num": "2.3",
+       "title": "DÃY SỐ TĂNG, DÃY SỐ GIẢM",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-4",
+       "num": "2.4",
+       "title": "DÃY SỐ BỊ CHẶN",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-5",
+       "num": "2.5",
+       "title": "BIỂU DIỄN HÌNH HỌC CỦA DÃY SỐ",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-6",
+       "num": "2.6",
+       "title": "CẤP SỐ CỘNG: ĐỊNH NGHĨA",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-7",
+       "num": "2.7",
+       "title": "CẤP SỐ CỘNG: SỐ HẠNG TỔNG QUÁT",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-8",
+       "num": "2.8",
+       "title": "CẤP SỐ CỘNG: TÍNH CHẤT BA SỐ HẠNG LIÊN TIẾP",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-9",
+       "num": "2.9",
+       "title": "CẤP SỐ CỘNG: TỔNG N SỐ HẠNG ĐẦU",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-10",
+       "num": "2.10",
+       "title": "CẤP SỐ NHÂN: ĐỊNH NGHĨA",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-11",
+       "num": "2.11",
+       "title": "CẤP SỐ NHÂN: SỐ HẠNG TỔNG QUÁT",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-12",
+       "num": "2.12",
+       "title": "CẤP SỐ NHÂN: TÍNH CHẤT BA SỐ HẠNG LIÊN TIẾP",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-13",
+       "num": "2.13",
+       "title": "CẤP SỐ NHÂN: TỔNG N SỐ HẠNG ĐẦU",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-tail-14",
+       "num": "",
+       "title": "BẢNG TÓM TẮT TOÀN CHƯƠNG 2",
+       "kind": "tong hop"
+      }
+     ]
+    },
+    {
+     "file": "toan-11-chuong-3",
+     "grade": "11",
+     "title": "CHƯƠNG 3: CÁC SỐ ĐẶC TRƯNG ĐO XU THẾ TRUNG TÂM CỦA MẪU SỐ LIỆU GHÉP NHÓM",
+     "n": 9,
+     "entries": [
+      {
+       "id": "kt-3-1",
+       "num": "3.1",
+       "title": "TỪ SỐ LIỆU THÔ SANG MẪU SỐ LIỆU GHÉP NHÓM",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-3-2",
+       "num": "3.2",
+       "title": "SỐ TRUNG BÌNH CỦA MẪU GHÉP NHÓM (x̄)",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-3-3",
+       "num": "3.3",
+       "title": "TRUNG VỊ CỦA MẪU GHÉP NHÓM (M_e)",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-3-4",
+       "num": "3.4",
+       "title": "TỨ PHÂN VỊ CỦA MẪU GHÉP NHÓM (Q₁, Q₂, Q₃)",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-3-5",
+       "num": "3.5",
+       "title": "MỐT CỦA MẪU GHÉP NHÓM (M_o)",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-3-6",
+       "num": "3.6",
+       "title": "KHOẢNG BIẾN THIÊN CỦA MẪU GHÉP NHÓM",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-3-7",
+       "num": "3.7",
+       "title": "CHỌN SỐ ĐẶC TRƯNG ĐỂ MÔ TẢ MẪU SỐ LIỆU",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-3-8",
+       "num": "3.8",
+       "title": "BÀI TOÁN NGƯỢC: TẦN SỐ CHƯA BIẾT, SỐ ĐẶC TRƯNG CHO TRƯỚC",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-3-9",
+       "num": "3.9",
+       "title": "ĐỌC MẪU GHÉP NHÓM TỪ BIỂU ĐỒ TẦN SỐ (HISTOGRAM)",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-tail-10",
+       "num": "",
+       "title": "BẢNG TÓM TẮT TOÀN CHƯƠNG 3 (đúng kí hiệu Kết nối tri thức)",
+       "kind": "tong hop"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ly",
+   "name": "Vật lí",
+   "desc": "Dao động, sóng, điện trường, dòng điện – mạch điện.",
+   "chapters": [
+    {
+     "file": "vat-li-11-chuong-1",
+     "grade": "11",
+     "title": "CHƯƠNG 1: DAO ĐỘNG",
+     "n": 8,
+     "entries": [
+      {
+       "id": "kt-1-1",
+       "num": "1.1",
+       "title": "PHƯƠNG TRÌNH DAO ĐỘNG ĐIỀU HÒA: x = A cos(ωt + φ)",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-2",
+       "num": "1.2",
+       "title": "CHU KÌ, TẦN SỐ, TẦN SỐ GÓC VÀ SO SÁNH PHA CỦA HAI DAO ĐỘNG",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-3",
+       "num": "1.3",
+       "title": "MÔ TẢ DAO ĐỘNG ĐIỀU HÒA BẰNG ĐỒ THỊ VÀ BẢNG SỐ",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-4",
+       "num": "1.4",
+       "title": "VẬN TỐC VÀ GIA TỐC TRONG DAO ĐỘNG ĐIỀU HÒA",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-5",
+       "num": "1.5",
+       "title": "BÀI TOÁN TỔNG HỢP VỀ DAO ĐỘNG ĐIỀU HÒA (quãng đường, số dao động, tốc độ trung bình)",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-6",
+       "num": "1.6",
+       "title": "ĐỘNG NĂNG, THẾ NĂNG VÀ SỰ CHUYỂN HÓA NĂNG LƯỢNG TRONG DAO ĐỘNG ĐIỀU HÒA",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-7",
+       "num": "1.7",
+       "title": "DAO ĐỘNG TẮT DẦN, DAO ĐỘNG CƯỠNG BỨC VÀ HIỆN TƯỢNG CỘNG HƯỞNG",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-8",
+       "num": "1.8",
+       "title": "BÀI TẬP VỀ SỰ CHUYỂN HÓA NĂNG LƯỢNG",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-tail-9",
+       "num": "",
+       "title": "BẢNG TÓM TẮT TOÀN CHƯƠNG 1 — DAO ĐỘNG",
+       "kind": "tong hop"
+      }
+     ]
+    },
+    {
+     "file": "vat-li-11-chuong-2",
+     "grade": "11",
+     "title": "CHƯƠNG 2: SÓNG",
+     "n": 9,
+     "entries": [
+      {
+       "id": "kt-2-1",
+       "num": "2.1",
+       "title": "MÔ TẢ SÓNG: CÁC ĐẠI LƯỢNG CỦA SÓNG CƠ",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-2",
+       "num": "2.2",
+       "title": "SÓNG NGANG, SÓNG DỌC VÀ SỰ TRUYỀN NĂNG LƯỢNG CỦA SÓNG CƠ",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-3",
+       "num": "2.3",
+       "title": "SÓNG ÂM: TẦN SỐ, CAO ĐỘ, CƯỜNG ĐỘ ÂM VÀ ÂM SẮC",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-4",
+       "num": "2.4",
+       "title": "SÓNG ĐIỆN TỪ",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-5",
+       "num": "2.5",
+       "title": "GIAO THOA SÓNG: ĐIỀU KIỆN VÀ VỊ TRÍ CỰC ĐẠI / CỰC TIỂU",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-6",
+       "num": "2.6",
+       "title": "GIAO THOA VỚI ÁNH SÁNG: KHOẢNG VÂN i",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-7",
+       "num": "2.7",
+       "title": "SÓNG DỪNG: ĐIỀU KIỆN TRÊN DÂY ĐÀN VÀ ỐNG HƠ",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-8",
+       "num": "2.8",
+       "title": "THỰC HÀNH: ĐO TẦN SỐ SÓNG ÂM (Bài 10) VÀ ĐO TỐC ĐỘ TRUYỀN ÂM (Bài 15)",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-9",
+       "num": "2.9",
+       "title": "BÀI TẬP TỔNG HỢP VỀ SÓNG (Bài 14)",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-tail-10",
+       "num": "",
+       "title": "BẢNG TÓM TẮT TOÀN CHƯƠNG 2 — SÓNG",
+       "kind": "tong hop"
+      }
+     ]
+    },
+    {
+     "file": "vat-li-11-chuong-3",
+     "grade": "11",
+     "title": "CHƯƠNG 3: ĐIỆN TRƯỜNG",
+     "n": 8,
+     "entries": [
+      {
+       "id": "kt-3-1",
+       "num": "3.1",
+       "title": "ĐỊNH LUẬT CU-LÔNG: LỰC TƯƠNG TÁC GIỮA HAI ĐIỆN TÍCH",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-3-2",
+       "num": "3.2",
+       "title": "CƯỜNG ĐỘ ĐIỆN TRƯỜNG E = F/q VÀ NGUYÊN LÍ CHỒNG CHẤT",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-3-3",
+       "num": "3.3",
+       "title": "ĐIỆN TRƯỜNG CỦA ĐIỆN TÍCH ĐIỂM VÀ ĐƯỜNG SỨC ĐIỆN TRƯỜNG",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-3-4",
+       "num": "3.4",
+       "title": "ĐIỆN TRƯỜNG ĐỀU VÀ HỆ THỨC E = U/d",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-3-5",
+       "num": "3.5",
+       "title": "CÔNG CỦA LỰC ĐIỆN VÀ THẾ NĂNG ĐIỆN",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-3-6",
+       "num": "3.6",
+       "title": "ĐIỆN THẾ, HIỆU ĐIỆN THẾ VÀ LIÊN HỆ VỚI CƯỜNG ĐỘ ĐIỆN TRƯỜNG",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-3-7",
+       "num": "3.7",
+       "title": "TỤ ĐIỆN: ĐIỆN DUNG, ĐIỆN TÍCH VÀ NĂNG LƯỢNG",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-3-8",
+       "num": "3.8",
+       "title": "GHÉP TỤ: NỐI TIẾP VÀ SONG SONG",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-tail-9",
+       "num": "",
+       "title": "BẢNG TÓM TẮT TOÀN CHƯƠNG 3",
+       "kind": "tong hop"
+      }
+     ]
+    },
+    {
+     "file": "vat-li-11-chuong-4",
+     "grade": "11",
+     "title": "CHƯƠNG 4: DÒNG ĐIỆN – MẠCH ĐIỆN",
+     "n": 9,
+     "entries": [
+      {
+       "id": "kt-4-1",
+       "num": "4.1",
+       "title": "CƯỜNG ĐỘ DÒNG ĐIỆN",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-4-2",
+       "num": "4.2",
+       "title": "ĐIỆN TRỞ VÀ ĐỊNH LUẬT OHM CHO ĐOẠN MẠCH",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-4-3",
+       "num": "4.3",
+       "title": "ĐIỆN TRỞ CỦA VẬT DẪN HÌNH TRỤ; ẢNH HƯỞNG CỦA NHIỆT ĐỘ",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-4-4",
+       "num": "4.4",
+       "title": "MẠCH ĐIỆN TRỞ GHÉP NỐI TIẾP VÀ SONG SONG",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-4-5",
+       "num": "4.5",
+       "title": "NGUỒN ĐIỆN; SUẤT ĐIỆN ĐỘNG; ĐỊNH LUẬT OHM CHO TOÀN MẠCH",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-4-6",
+       "num": "4.6",
+       "title": "ĐIỆN NĂNG VÀ CÔNG SUẤT ĐIỆN CỦA ĐOẠN MẠCH",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-4-7",
+       "num": "4.7",
+       "title": "ĐỊNH LUẬT JUN – LENZ: NHIỆT LƯỢNG TOẢ RA TRÊN DÂY DẪN",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-4-8",
+       "num": "4.8",
+       "title": "THỰC HÀNH (BÀI 26): XÁC ĐỊNH SUẤT ĐIỆN ĐỘNG VÀ ĐIỆN TRỞ TRONG CỦA PIN",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-4-9",
+       "num": "4.9",
+       "title": "BÀI TẬP TỔNG HỢP TOÀN CHƯƠNG",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-tail-10",
+       "num": "",
+       "title": "BẢNG TÓM TẮT TOÀN CHƯƠNG 4 — DÒNG ĐIỆN, MẠCH ĐIỆN",
+       "kind": "tong hop"
+      },
+      {
+       "id": "kt-tail-11",
+       "num": "",
+       "title": "PHẠM VI SÁCH (đối chiếu KNTT, Vật lí 11)",
+       "kind": "tong hop"
+      },
+      {
+       "id": "kt-tail-12",
+       "num": "",
+       "title": "CÒN THIẾU / CẦN CÔ ĐỐI CHIẾU BẢN IN",
+       "kind": "tong hop"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "hoa",
+   "name": "Hóa học",
+   "desc": "Cân bằng hoá học, nitrogen – sulfur, đại cương hoá học hữu cơ (PTHH có điều kiện, hiện tượng).",
+   "chapters": [
+    {
+     "file": "hoa-11-chuong-1",
+     "grade": "11",
+     "title": "CHƯƠNG 1: CÂN BẰNG HOÁ HỌC",
+     "n": 13,
+     "entries": [
+      {
+       "id": "kt-1-1",
+       "num": "1.1",
+       "title": "PHẢN ỨNG THUẬN NGHỊCH VÀ CÂN BẰNG HOÁ HỌC",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-2",
+       "num": "1.2",
+       "title": "HẰNG SỐ CÂN BẰNG K (biểu thức và cách viết)",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-3",
+       "num": "1.3",
+       "title": "Ý NGHĨA CỦA GIÁ TRỊ K (dự đoán chiều và mức độ phản ứng)",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-4",
+       "num": "1.4",
+       "title": "NGUYÊN LÍ LE CHATELIER (chuyển dịch cân bằng hoá học)",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-5",
+       "num": "1.5",
+       "title": "SỰ ĐIỆN LI VÀ PHƯƠNG TRÌNH ĐIỆN LI",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-6",
+       "num": "1.6",
+       "title": "CHẤT ĐIỆN LI MẠNH, CHẤT ĐIỆN LI YẾU VÀ ĐỘ ĐIỆN LI α",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-7",
+       "num": "1.7",
+       "title": "AXIT, BAZƠ, CHẤT LƯỠNG TÍNH (thuyết Brønsted – Lowry)",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-8",
+       "num": "1.8",
+       "title": "TÍCH SỐ ION CỦA NƯỚC K_w VÀ pK_w",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-9",
+       "num": "1.9",
+       "title": "pH CỦA DUNG DỊCH; CHẤT CHỈ THỊ VÀ MÁY ĐO pH",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-10",
+       "num": "1.10",
+       "title": "HẰNG SỐ AXIT K_a, HẰNG SỐ BAZƠ K_b",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-11",
+       "num": "1.11",
+       "title": "PHẢN ỨNG TRAO ĐỔI ION TRONG DUNG DỊCH; PHƯƠNG TRÌNH ION",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-12",
+       "num": "1.12",
+       "title": "THUỶ PHÂN ION: XÁC ĐỊNH MÔI TRƯỜNG ACID / BASE CỦA DUNG DỊCH MUỐI",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-13",
+       "num": "1.13",
+       "title": "CHUẨN ĐỘ ACID – BASE (XÁC ĐỊNH NỒNG ĐỘ)",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-tail-14",
+       "num": "",
+       "title": "ÔN TẬP (từ HOÁ 10) — CÁC YẾU TỐ ẢNH HƯỞNG ĐẾN TỐC ĐỘ PHẢN ỨNG",
+       "kind": "tong hop"
+      },
+      {
+       "id": "kt-tail-15",
+       "num": "",
+       "title": "BẢNG TÓM TẮT TOÀN CHƯƠNG 1",
+       "kind": "tong hop"
+      }
+     ]
+    },
+    {
+     "file": "hoa-11-chuong-2",
+     "grade": "11",
+     "title": "CHƯƠNG 2: NITROGEN – SULFUR",
+     "n": 17,
+     "entries": [
+      {
+       "id": "kt-tail-1",
+       "num": "",
+       "title": "PHẦN A — NITROGEN",
+       "kind": "tong hop"
+      },
+      {
+       "id": "kt-2-1",
+       "num": "2.1",
+       "title": "VỊ TRÍ, CẤU HÌNH ELECTRON VÀ SỰ ĐA DẠNG SỐ OXI HOÁ CỦA NITROGEN",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-2",
+       "num": "2.2",
+       "title": "NITROGEN PHẢN ỨNG VỚI OXI VÀ VỚI KIM LOẠI (TÍNH TRƠ Ở ĐIỀU KIỆN THƯỜNG)",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-3",
+       "num": "2.3",
+       "title": "AMONIAC: TÍNH BASE YẾU (PHẢN ỨNG VỚI NƯỚC, AXIT, MUỐI)",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-4",
+       "num": "2.4",
+       "title": "AMONIAC: TÍNH KHỬ (PHẢN ỨNG VỚI OXI VÀ CLORINE)",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-5",
+       "num": "2.5",
+       "title": "ĐIỀU CHẾ VÀ ỨNG DỤNG AMONIAC (LIÊN HỆ CÂN BẰNG HOÁ HỌC CHƯƠNG 1)",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-6",
+       "num": "2.6",
+       "title": "MUỐI AMONI: TÍNH CHẤT VÀ PHẢN ỨNG NHIỆT PHÂN",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-7",
+       "num": "2.7",
+       "title": "AXIT NITRIC: TÍNH AXIT VÀ TÍNH OXI HOÁ MẠNH VỚI KIM LOẠI",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-8",
+       "num": "2.8",
+       "title": "KĨ THUẬT LẬP PHƯƠNG TRÌNH VÀ CÔNG THỨC TÍNH NHANH CHO HNO₃",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-9",
+       "num": "2.9",
+       "title": "AXIT NITRIC VỚI PHI KIM VÀ HỢP CHẤT",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-10",
+       "num": "2.10",
+       "title": "MUỐI NITRAT: NHIỆT PHÂN VÀ ỨNG DỤNG",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-tail-12",
+       "num": "",
+       "title": "PHẦN B — SULFUR",
+       "kind": "tong hop"
+      },
+      {
+       "id": "kt-2-11",
+       "num": "2.11",
+       "title": "LƯU HUỲNH: CẤU TẠO, DẠNG THÙ HÌNH VÀ TÍNH CHẤT HOÁ HỌC",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-12",
+       "num": "2.12",
+       "title": "HYDRO SULFIDE (H₂S) VÀ MUỐI SULFIDE",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-13",
+       "num": "2.13",
+       "title": "SULFUR DIOXIDE (SO₂): ACID OXIDE, VỪA KHỬ VỪA OXI HOÁ",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-14",
+       "num": "2.14",
+       "title": "AXIT SUNFUARIC LOÃNG: TÍNH AXIT MẠNH",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-15",
+       "num": "2.15",
+       "title": "AXIT SUNFUARIC ĐẶC NÓNG: TÍNH OXI HOÁ MẠNH VÀ TÍNH HÁO NƯỚC",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-16",
+       "num": "2.16",
+       "title": "MUỐI SUNFAT VÀ CÁCH NHẬN BIẾT ION SO₄²⁻",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-17",
+       "num": "2.17",
+       "title": "ĐIỀU CHẾ SO₂, SO₃ VÀ H₂SO₄; SƠ ĐỒ CHUYỂN HOÁ CỦA LƯU HUỲNH",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-tail-20",
+       "num": "",
+       "title": "BẢNG TÓM TẮT TOÀN CHƯƠNG 2",
+       "kind": "tong hop"
+      }
+     ]
+    },
+    {
+     "file": "hoa-11-chuong-3",
+     "grade": "11",
+     "title": "CHƯƠNG 3: ĐẠI CƯƠNG VỀ HOÁ HỌC HỮU CƠ",
+     "n": 9,
+     "entries": [
+      {
+       "id": "kt-3-1",
+       "num": "3.1",
+       "title": "HỢP CHẤT HỮU CƠ VÀ HOÁ HỌC HỮU CƠ",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-3-2",
+       "num": "3.2",
+       "title": "PHÂN LOẠI VÀ NHÓM CHỨC HỢP CHẤT HỮU CƠ",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-3-3",
+       "num": "3.3",
+       "title": "PHỔ HỒNG NGOẠI (IR) VÀ PHỔ KHỐI LƯỢNG (MS)",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-3-4",
+       "num": "3.4",
+       "title": "PHƯƠNG PHÁP TÁCH BIỆT VÀ TINH CHẾ HỢP CHẤT HỮU CƠ",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-3-5",
+       "num": "3.5",
+       "title": "CÔNG THỨC TỔNG QUÁT, CÔNG THỨC ĐƠN GIẢN NHẤT",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-3-6",
+       "num": "3.6",
+       "title": "LẬP CTPT TỪ SỐ LIỆU PHÂN TÍCH ĐỊNH LƯỢNG + PHÂN TỬ KHỐI",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-3-7",
+       "num": "3.7",
+       "title": "THUYẾT CẤU TẠO HOÁ HỌC",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-3-8",
+       "num": "3.8",
+       "title": "CÔNG THỨC CẤU TẠO VÀ CÁC CÁCH BIỂU DIỄN",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-3-9",
+       "num": "3.9",
+       "title": "ĐỒNG ĐẲNG VÀ ĐỒNG PHÂN",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-tail-10",
+       "num": "",
+       "title": "BẢNG TÓM TẮT TOÀN CHƯƠNG 3",
+       "kind": "tong hop"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "sinh",
+   "name": "Sinh học",
+   "desc": "Trao đổi chất và chuyển hoá năng lượng, cảm ứng, sinh trưởng và phát triển.",
+   "chapters": [
+    {
+     "file": "sinh-11-chuong-1",
+     "grade": "11",
+     "title": "CHƯƠNG 1: TRAO ĐỔI CHẤT VÀ CHUYỂN HOÁ NĂNG LƯỢNG Ở SINH VẬT",
+     "n": 14,
+     "entries": [
+      {
+       "id": "kt-1-1",
+       "num": "1.1",
+       "title": "TRAO ĐỔI CHẤT VÀ CHUYỂN HOÁ NĂNG LƯỢNG: BỐN ĐẶC ĐIỂM CỦA CƠ THỂ SỐNG",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-2",
+       "num": "1.2",
+       "title": "TRAO ĐỔI NƯỚC Ở THỰC VẬT: HẤP THỤ, VẬN CHUYỂN, THOÁT HƠI NƯỚC",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-3",
+       "num": "1.3",
+       "title": "DINH DƯỠNG KHOÁNG Ở THỰC VẬT",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-4",
+       "num": "1.4",
+       "title": "QUANG HỢP: KHÁI NIỆM VÀ PHƯƠNG TRÌNH TỔNG QUÁT",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-5",
+       "num": "1.5",
+       "title": "CÁC YẾU TỐ ẢNH HƯỞNG ĐẾN QUANG HỢP; ĐIỂM BÙ VÀ ĐIỂM BÃO HOÀ",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-6",
+       "num": "1.6",
+       "title": "THỰC VẬT C3, C4 VÀ CAM",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-7",
+       "num": "1.7",
+       "title": "HÔ HẤP Ở THỰC VẬT",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-8",
+       "num": "1.8",
+       "title": "BẢO QUẢN NÔNG SẢN (ỨNG DỤNG SỐ LIỆU HÔ HẤP)",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-9",
+       "num": "1.9",
+       "title": "DINH DƯỠNG VÀ TIÊU HOÁ Ở ĐỘNG VẬT",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-10",
+       "num": "1.10",
+       "title": "TIÊU HOÁ Ở ĐỘNG VẬT ĂN THỰC VẬT VÀ ĂN THỊT",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-11",
+       "num": "1.11",
+       "title": "HÔ HẤP Ở ĐỘNG VẬT",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-12",
+       "num": "1.12",
+       "title": "TUẦN HOÀN Ở ĐỘNG VẬT",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-13",
+       "num": "1.13",
+       "title": "MIỄN DỊCH Ở NGƯỜI VÀ ĐỘNG VẬT",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-14",
+       "num": "1.14",
+       "title": "BÀI TIẾT VÀ CÂN BẰNG NỘI MÔI",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-tail-15",
+       "num": "",
+       "title": "BẢNG TÓM TẮT TOÀN CHƯƠNG 1",
+       "kind": "tong hop"
+      }
+     ]
+    },
+    {
+     "file": "sinh-11-chuong-2",
+     "grade": "11",
+     "title": "CHƯƠNG 2: CẢM ỨNG Ở SINH VẬT",
+     "n": 10,
+     "entries": [
+      {
+       "id": "kt-2-1",
+       "num": "2.1",
+       "title": "CẢM ỨNG LÀ GÌ; BỐN GIAI ĐOẠN CỦA MỘT HÀNH VI CẢM ỨNG",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-2",
+       "num": "2.2",
+       "title": "HƯỚNG ĐỘNG: NĂM KIỂU VÀ DẤU (+)/(−)",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-3",
+       "num": "2.3",
+       "title": "ỨNG ĐỘNG: ỨNG ĐỘNG SINH TRƯỞNG VÀ ỨNG ĐỘNG KHÔNG SINH TRƯỞNG",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-4",
+       "num": "2.4",
+       "title": "ỨNG DỤNG CẢM ỨNG Ở THỰC VẬT TRONG TRỒNG TRỌT",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-5",
+       "num": "2.5",
+       "title": "CẢM ỨNG Ở ĐỘNG VẬT: BỐN MỨC TỔ CHỨC HỆ THẦN KINH",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-6",
+       "num": "2.6",
+       "title": "PHẢN XẠ, CUNG PHẢN XẠ, VÒNG PHẢN XẠ",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-7",
+       "num": "2.7",
+       "title": "ĐIỆN THẾ HOẠT ĐỘNG VÀ DẪN TRUYỀN XUNG TRÊN SỢI THẦN KINH",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-8",
+       "num": "2.8",
+       "title": "TẬP TÍNH: TẬP TÍNH BẨM SINH VÀ TẬP TÍNH HỌC ĐƯỢC",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-9",
+       "num": "2.9",
+       "title": "CÁC HÌNH THỨC HỌC TẬP Ở ĐỘNG VẬT",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-10",
+       "num": "2.10",
+       "title": "ỨNG DỤNG TẬP TÍNH TRONG ĐỜI SỐNG VÀ SẢN XUẤT",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-tail-11",
+       "num": "",
+       "title": "BẢNG TÓM TẮT TOÀN CHƯƠNG 2",
+       "kind": "tong hop"
+      }
+     ]
+    },
+    {
+     "file": "sinh-11-chuong-3",
+     "grade": "11",
+     "title": "CHƯƠNG 3: SINH TRƯỞNG VÀ PHÁT TRIỂN Ở SINH VẬT",
+     "n": 11,
+     "entries": [
+      {
+       "id": "kt-3-1",
+       "num": "3.1",
+       "title": "SINH TRƯỞNG VÀ PHÁT TRIỂN: HAI KHÁI NIỆM, BA DẤU HIỆU",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-3-2",
+       "num": "3.2",
+       "title": "VÒNG ĐỜI VÀ TUỔI THỌ",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-3-3",
+       "num": "3.3",
+       "title": "MÔ PHÂN SINH; SINH TRƯỞNG SƠ CẤP VÀ THỨ CẤP",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-3-4",
+       "num": "3.4",
+       "title": "CÁC YẾU TỐ ẢNH HƯỞNG ĐẾN SINH TRƯỞNG Ở THỰC VẬT",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-3-5",
+       "num": "3.5",
+       "title": "HORMONE THỰC VẬT: HAI NHÓM VÀ CÁC TƯƠNG QUAN",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-3-6",
+       "num": "3.6",
+       "title": "QUANG CHU KÌ: BA NHÓM CÂY RA HOA",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-3-7",
+       "num": "3.7",
+       "title": "XUÂN HOÁ; CÁC GIAI ĐOẠN PHÁT TRIỂN Ở CÂY CÓ HOA",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-3-8",
+       "num": "3.8",
+       "title": "ỨNG DỤNG Ở THỰC VẬT VÀ BÀI 21 THỰC HÀNH",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-3-9",
+       "num": "3.9",
+       "title": "Ở ĐỘNG VẬT: GIAI ĐOẠN PHÔI VÀ GIAI ĐOẠN HẬU PHÔI",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-3-10",
+       "num": "3.10",
+       "title": "BIẾN THÁI: BA KIỂU PHÁT TRIỂN Ở ĐỘNG VẬT",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-3-11",
+       "num": "3.11",
+       "title": "HOOCMÔN (HORMONE) VÀ CÁC YẾU TỐ ẢNH HƯỞNG Ở ĐỘNG VẬT",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-tail-12",
+       "num": "",
+       "title": "BẢNG TÓM TẮT TOÀN CHƯƠNG 3",
+       "kind": "tong hop"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "anh",
+   "name": "Tiếng Anh",
+   "desc": "Ngữ pháp từng unit + khung viết (leaflet, letter, article, proposal, essay).",
+   "chapters": [
+    {
+     "file": "tieng-anh-11-unit-1-5",
+     "grade": "11",
+     "title": "UNIT 1 → 5 (A long and healthy life → Global warming)",
+     "n": 8,
+     "entries": [
+      {
+       "id": "kt-1-1",
+       "num": "1.1",
+       "title": "PAST SIMPLE vs PRESENT PERFECT (Unit 1)",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-2",
+       "num": "1.2",
+       "title": "MUST / HAVE TO / SHOULD (Unit 2)",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-3",
+       "num": "1.3",
+       "title": "STATE VERBS & LINKING VERBS (Unit 3)",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-4",
+       "num": "1.4",
+       "title": "GERUNDS AS SUBJECT AND OBJECT (Unit 4)",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-5",
+       "num": "1.5",
+       "title": "PARTICIPLE CLAUSES: V-ing và V3 RÚT GỌN (Unit 5)",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-6",
+       "num": "1.6",
+       "title": "KHUNG BÀI VIẾT UNIT 1 → 3 (short message, opinion, article)",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-7",
+       "num": "1.7",
+       "title": "KHUNG BÀI VIẾT UNIT 4 → 5 (proposal, leaflet)",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-8",
+       "num": "1.8",
+       "title": "PHÁT ÂM: CONNECTED SPEECH (Unit 1 → 5)",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-tail-9",
+       "num": "",
+       "title": "BẢNG TÓM TẮT TIẾNG ANH 11 — UNIT 1 → 5",
+       "kind": "tong hop"
+      },
+      {
+       "id": "kt-tail-10",
+       "num": "",
+       "title": "PHẠM VI SÁCH",
+       "kind": "tong hop"
+      },
+      {
+       "id": "kt-tail-11",
+       "num": "",
+       "title": "CÒN THIẾU / CẦN CÔ ĐỐI CHIẾU BẢN IN",
+       "kind": "tong hop"
+      }
+     ]
+    },
+    {
+     "file": "tieng-anh-11-unit-6-10",
+     "grade": "11",
+     "title": "UNIT 6 → 10 (Preserving our heritage → The ecosystem)",
+     "n": 8,
+     "entries": [
+      {
+       "id": "kt-6-1",
+       "num": "6.1",
+       "title": "TO-INFINITIVE CLAUSES (Unit 6 — Preserving our heritage) ✅",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-6-2",
+       "num": "6.2",
+       "title": "PERFECT GERUND & PERFECT PARTICIPLE CLAUSES (Unit 7 — Education options for school-leavers) ✅",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-6-3",
+       "num": "6.3",
+       "title": "CLEFT SENTENCES (Unit 8 — Becoming independent) ✅",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-6-4",
+       "num": "6.4",
+       "title": "LINKING WORDS AND PHRASES (Unit 9 — Social issues) ✅",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-6-5",
+       "num": "6.5",
+       "title": "COMPOUND NOUNS (Unit 10 — The ecosystem) ✅",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-6-6",
+       "num": "6.6",
+       "title": "NGỮ ĐIỆU (PRONUNCIATION) UNIT 6 → 10 ✅",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-6-7",
+       "num": "6.7",
+       "title": "KHUNG BÀI VIẾT: LEAFLET (U6) VÀ FORMAL REQUEST LETTER (U7) ✅",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-6-8",
+       "num": "6.8",
+       "title": "KHUNG BÀI VIẾT: ARTICLE (U8), PROPOSAL (U9), OPINION ESSAY (U10) ✅",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-tail-9",
+       "num": "",
+       "title": "BẢNG TÓM TẮT — TIẾNG ANH 11, UNIT 6 → 10",
+       "kind": "tong hop"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "su",
+   "name": "Lịch sử",
+   "desc": "Cách mạng tư sản, chủ nghĩa xã hội, Đông Nam Á, cải cách Việt Nam, Biển Đông — mốc và số liệu.",
+   "chapters": [
+    {
+     "file": "lich-su-11-chude-1-2",
+     "grade": "11",
+     "title": "CHỦ ĐỀ 1 và CHỦ ĐỀ 2",
+     "n": 6,
+     "entries": [
+      {
+       "id": "kt-1-1",
+       "num": "1.1",
+       "title": "CÁCH MẠNG TƯ SẢN: KHÁI NIỆM, NGUYÊN NHÂN, KẾT CỤC (Bài 1)",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-2",
+       "num": "1.2",
+       "title": "SỰ XÁC LẬP VÀ PHÁT TRIỂN CỦA CHỦ NGHĨA TƯ BẢN (Bài 2)",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-3",
+       "num": "1.3",
+       "title": "CÁCH MẠNG THÁNG MƯỜI NGA VÀ SỰ HÌNH THÀNH LIÊN BANG Xô VIẾT (Bài 3)",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-4",
+       "num": "1.4",
+       "title": "CHỦ NGHĨA XÃ HỘI SAU 1945: TỪ HỆ THỐNG THẾ GIỚI ĐẾN BIẾN ĐỘNG Ở LIÊN XÔ (Bài 4)",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-5",
+       "num": "1.5",
+       "title": "KỸ NĂNG LÀM BÀI CHỦ ĐỀ 1 VÀ 2: NIÊN BIỂU, SO SÁNH, KHAI THÁC SỐ LIỆU",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-6",
+       "num": "1.6",
+       "title": "BÀI TẬP TỔNG HỢP CHỦ ĐỀ 1 – 2",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-tail-7",
+       "num": "",
+       "title": "BẢNG MỐC VÀ SỐ LIỆU PHẢI NHỚ — CHỦ ĐỀ 1 – 2",
+       "kind": "tong hop"
+      },
+      {
+       "id": "kt-tail-8",
+       "num": "",
+       "title": "PHẠM VI SÁCH (đối chiếu KNTT, Lịch sử 11)",
+       "kind": "tong hop"
+      },
+      {
+       "id": "kt-tail-9",
+       "num": "",
+       "title": "CÒN THIẾU / CẦN CÔ ĐỐI CHIẾU BẢN IN",
+       "kind": "tong hop"
+      }
+     ]
+    },
+    {
+     "file": "lich-su-11-chude-3-4",
+     "grade": "11",
+     "title": "CHỦ ĐỀ 3 và CHỦ ĐỀ 4",
+     "n": 8,
+     "entries": [
+      {
+       "id": "kt-3-1",
+       "num": "3.1",
+       "title": "CHỦ NGHĨA THỰC DÂN XÂM LƯỢC ĐÔNG NAM Á (Bài 5)",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-3-2",
+       "num": "3.2",
+       "title": "HÀNH TRÌNH ĐI ĐẾN ĐỘC LẬP DÂN TỘC Ở ĐÔNG NAM Á (Bài 6)",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-3-3",
+       "num": "3.3",
+       "title": "KỸ NĂNG: LẬP BẢNG \"NƯỚC – CHÍNH QUỐC – NĂM ĐỘC LẬP\" VÀ TRẢ LỜI CÂU HỎI LƯỢC ĐỒ",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-3-4",
+       "num": "3.4",
+       "title": "LIÊN HỆ VIỆT NAM: VÌ SAO ĐỘC LẬP CỦA VIỆT NAM GẮN VỚI KHU VỰC",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-4-1",
+       "num": "4.1",
+       "title": "PHÂN LOẠI: CHIẾN TRANH BẢO VỆ TỔ QUỐC VÀ CHIẾN TRANH GIẢI PHÓNG DÂN TỘC (Bài 7)",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-4-2",
+       "num": "4.2",
+       "title": "BA CUỘC KHÁNG CHIẾN CHỐNG MÔNG – NGUYÊN VÀ NGHỆ THUẬT QUÂN SỰ (Bài 7)",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-4-3",
+       "num": "4.3",
+       "title": "HAI CHIẾN THẮNG NĂM 1785 VÀ 1789: CHỐNG XIÊM VÀ CHỐNG THANH (Bài 7 – Bài 8)",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-4-4",
+       "num": "4.4",
+       "title": "BA CUỘC KHÔNG THÀNH CÔNG VÀ BÀI HỌC (179 TCN, 1406–1407, 1858–1884) (Bài 7)",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-tail-9",
+       "num": "",
+       "title": "BẢNG MỐC VÀ SỐ LIỆU PHẢI NHỚ — CHỦ ĐỀ 3 – 4",
+       "kind": "tong hop"
+      },
+      {
+       "id": "kt-tail-10",
+       "num": "",
+       "title": "PHẠM VI SÁCH (đối chiếu KNTT, Lịch sử 11)",
+       "kind": "tong hop"
+      },
+      {
+       "id": "kt-tail-11",
+       "num": "",
+       "title": "CÒN THIẾU / CẦN CÔ ĐỐI CHIẾU BẢN IN",
+       "kind": "tong hop"
+      }
+     ]
+    },
+    {
+     "file": "lich-su-11-chude-5-6",
+     "grade": "11",
+     "title": "CHỦ ĐỀ 5 VÀ CHỦ ĐỀ 6 (Bài 9 → 13)",
+     "n": 6,
+     "entries": [
+      {
+       "id": "kt-5-1",
+       "num": "5.1",
+       "title": "CUỘC CẢI CÁCH CỦA HỒ QUÝ LY VÀ TRIỀU HỒ (Bài 9, tr.60–63) ✅",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-5-2",
+       "num": "5.2",
+       "title": "CUỘC CẢI CÁCH CỦA LÊ THÁNH TÔNG (THẾ KỈ XV) (Bài 10, tr.64–68) ✅",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-5-3",
+       "num": "5.3",
+       "title": "CUỘC CẢI CÁCH CỦA MINH MẠNG (NỬA ĐẦU THẾ KỈ XIX) (Bài 11, tr.69–72) ✅",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-6-1",
+       "num": "6.1",
+       "title": "VỊ TRÍ VÀ TẦM QUAN TRỌNG CỦA BIỂN ĐÔNG (Bài 12, tr.73–79) ✅",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-6-2",
+       "num": "6.2",
+       "title": "BẰNG CHỨNG LỊCH SỬ: NHÀ NƯỚC VIỆT NAM VÀ HAI QUẦN ĐẢO (Bài 13, tr.80–85) ✅",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-6-3",
+       "num": "6.3",
+       "title": "BẰNG CHỨNG PHÁP LÍ VÀ HOẠT ĐỘNG BẢO VỆ CHỦ QUYỀN (Bài 13, tr.86–89) ✅",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-tail-7",
+       "num": "",
+       "title": "BẢNG MỐC VÀ SỐ LIỆU PHẢI NHỚ — CHỦ ĐỀ 5 – 6",
+       "kind": "tong hop"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "dia",
+   "name": "Địa lí",
+   "desc": "Kinh tế – xã hội thế giới, khu vực và quốc gia, kỹ năng chọn – vẽ biểu đồ.",
+   "chapters": [
+    {
+     "file": "dia-li-11-khu-vuc-quoc-gia",
+     "grade": "11",
+     "title": "PHẦN HAI: MỘT SỐ VẤN ĐỀ VỀ KHU VỰC VÀ QUỐC GIA (Bài 6 → 31)",
+     "n": 11,
+     "entries": [
+      {
+       "id": "kt-2-1",
+       "num": "2.1",
+       "title": "MĨ LATINH: SỐ LIỆU GỐC VÀ CÁCH DÙNG (Bài 6–8, tr.22–40) ✅",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-2",
+       "num": "2.2",
+       "title": "LIÊN MINH CHÂU ÂU: MỐC HÌNH THÀNH VÀ SỐ LIỆU (Bài 9–10, tr.37–45) ✅",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-3",
+       "num": "2.3",
+       "title": "ĐÔNG NAM Á: TỔNG QUAN VÀ CỘNG ĐỒNG ASEAN (Bài 11–14, tr.46–70) ✅",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-4",
+       "num": "2.4",
+       "title": "TÂY NAM Á: DẦU MỎ VÀ HỆ QUẢ (Bài 15–17, tr.67–84) ✅",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-5",
+       "num": "2.5",
+       "title": "HOA KỲ: KINH TẾ LỚN NHẤT THẾ GIỚI (Bài 18–19, tr.81–99) ✅",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-6",
+       "num": "2.6",
+       "title": "LIÊN BANG NGA: NƯỚC RỘNG, DÂN THƯA (Bài 20–22, tr.97–117) ✅",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-9",
+       "num": "2.9",
+       "title": "Ô-XTRÂY-LI-A: NỀN KINH TẾ TRI THỨC GIỮA BÁN CẦU NAM (Bài 29, tr.150) ✅",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-10",
+       "num": "2.10",
+       "title": "CỘNG HOÀ NAM PHI: ĐIỂM SÁNG CHÂU PHI (Bài 30–31, tr.152–166) ✅",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-11",
+       "num": "2.11",
+       "title": "KỸ NĂNG CHỌN VÀ VẼ BIỂU ĐỒ (rút từ phần Luyện tập của sách) ✅",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-tail-10",
+       "num": "",
+       "title": "BẢNG SỐ LIỆU ĐẦU MỖI VÙNG / QUỐC GIA (năm 2020) — ĐỌC NHANH",
+       "kind": "tong hop"
+      },
+      {
+       "id": "kt-tail-11",
+       "num": "",
+       "title": "BẢNG TÓM TẮT — PHẦN HAI ĐỊA LÍ 11",
+       "kind": "tong hop"
+      },
+      {
+       "id": "kt-2-7",
+       "num": "2.7",
+       "title": "NHẬT BẢN: TỪ ĐỔ NÁT ĐẾN CƯỜNG QUỐC KINH TẾ (Bài 23–25, tr.114–134) ✅",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-2-8",
+       "num": "2.8",
+       "title": "TRUNG QUỐC: TĂNG TRƯỞNG NHANH NHẤT THẾ GIỚI (Bài 26–28, tr.131–150) ✅",
+       "kind": "muc"
+      }
+     ]
+    },
+    {
+     "file": "dia-li-11-phan-mot",
+     "grade": "11",
+     "title": "PHẦN MỘT: MỘT SỐ VẤN ĐỀ VỀ KINH TẾ – XÃ HỘI THẾ GIỚI (Bài 1 → 5)",
+     "n": 7,
+     "entries": [
+      {
+       "id": "kt-1-1",
+       "num": "1.1",
+       "title": "GNI TRÊN ĐẦU NGƯỜI (Bài 1, tr.5) ✅",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-2",
+       "num": "1.2",
+       "title": "CƠ CẤU KINH THEO NGÀNH / CƠ CẤU GDP (Bài 1, tr.5) ✅",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-3",
+       "num": "1.3",
+       "title": "CHỈ SỐ PHÁT TRIỂN CON NGƯỜI HDI (Bài 1, tr.5) ✅",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-4",
+       "num": "1.4",
+       "title": "TOÀN CẦU HOÁ VÀ KHU VỰC HOÁ (Bài 2, tr.9) ✅",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-5",
+       "num": "1.5",
+       "title": "MỘT SỐ TỔ CHỨC QUỐC TẾ, KHU VỰC VÀ AN NINH TOÀN CẦU (Bài 4, tr.14; Bài 3 thực hành tr.13) ✅",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-6",
+       "num": "1.6",
+       "title": "BIỂU HIỆN CỦA KINH TẾ TRI THỨC (Bài 5, tr.20) ✅",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-1-7",
+       "num": "1.7",
+       "title": "QUY ƯỚC TRÌNH BÀY SỐ LIỆU VÀ KỸ NĂNG ĐỌC BẢNG (dùng cho cả 31 bài) ✅",
+       "kind": "muc"
+      },
+      {
+       "id": "kt-tail-8",
+       "num": "",
+       "title": "BẢNG TÓM TẮT — PHẦN MỘT ĐỊA LÍ 11",
+       "kind": "tong hop"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

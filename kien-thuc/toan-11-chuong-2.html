@@ -1,0 +1,252 @@
+<div class="kt-src">(Sách Kết nối tri thức — Bài 5: Dãy số · Bài 6: Cấp số cộng · Bài 7: Cấp số nhân)<br>Kí hiệu dùng chung: n ∈ ℕ*, tức n = 1, 2, 3, … ; dãy số viết là (u_n). &quot;Điều kiện&quot; ghi ngay sau công thức — thiếu điều kiện là bài giải bị trừ điểm.</div>
+<div class="kt-entry" id="kt-2-1"><div class="kt-entry-h"><span class="kt-num">2.1</span><span class="kt-t">DÃY SỐ LÀ GÌ. BA CÁCH CHO MỘT DÃY SỐ</span></div><div class="kt-body"><p class="kt-label" data-step="1">1. CÔNG THỨC</p>
+<ul class="kt-ul"><li>Dãy số (vô hạn) là một hàm số u xác định trên ℕ*: mỗi số tự nhiên n ↦ u(n), viết gọn là u_n và gọi là SỐ HẠNG THỨ N của dãy.</li></ul>
+<p>Dãy được viết: u_1, u_2, u_3, … , u_n, …  (chữ u_n với n chạy từ 1 là đủ để mô tả cả dãy).</p>
+<ul class="kt-ul"><li>Dãy số hữu hạn: hàm số u xác định trên tập {1, 2, 3, …, m}; viết u_1, u_2, …, u_m (có đúng m số hạng).</li><li>Cách 1 — cho bằng CÔNG THỨC TỔNG QUÁT: u_n = f(n).</li><li>Cách 2 — cho bằng CÔNG THỨC TRUY HỒI: cho biết u_1 và hệ thức tính u_{n+1} theo u_n.</li><li>Cách 3 — cho bằng MÔ TẢ: liệt kê quy luật tạo ra từng số hạng bằng lời.</li><li>Điều kiện: với cách truy hồi PHẢI có số hạng đầu (hay vài số hạng đầu) thì mới tính được các số hạng sau.</li></ul>
+<p class="kt-label" data-step="2">2. Ý NGHĨA</p>
+<p>Dãy số là &quot;hàm số nhưng biến chỉ nhận giá trị nguyên dương&quot;. Mọi bài toán đếm theo bước (tiền gửi từng năm, số vi khuẩn từng giờ, quãng đường từng giây…) đều là một dãy số. Nhận ra đúng cách cho dãy quyết định cách tính số hạng thứ k: thay n = k (công thức tổng quát) hay phải lần lượt tính từ u_1 (truy hồi).</p>
+<p class="kt-label" data-step="3">3. CÁCH CHỨNG MINH / GIẢI THÍCH</p>
+<ul class="kt-ul"><li>Vì dãy số là hàm số có tập xác định ℕ*, mọi khái niệm hàm số (giá trị, đồ thị, tăng/giảm) chuyển sang dãy số nhưng chỉ xét tại n nguyên dương.</li><li>Công thức truy hồi là một &quot;dây chuyền&quot;: không có u_1 thì không khởi động được, vì mỗi số hạng chỉ tính được khi đã có số hạng ngay trước nó.</li></ul>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 1</span> (cơ bản): Cho u_n = (2n − 1)/n. Viết 5 số hạng đầu.</p>
+<p>u_1 = 1/1 = 1;  u_2 = 3/2;  u_3 = 5/4;  u_4 = 7/4;  u_5 = 9/5.</p>
+<p>Dãy: 1; 3/2; 5/4; 7/4; 9/5; …</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 2</span> (vận dụng): Cho u_1 = 2 và u_{n+1} = 3u_n + 1. Viết 4 số hạng đầu.</p>
+<p>u_2 = 3·2 + 1 = 7;  u_3 = 3·7 + 1 = 22;  u_4 = 3·22 + 1 = 67.</p>
+<p>Dãy: 2; 7; 22; 67.</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 3</span> (nâng cao): Dãy Fibôxî (Fibonacci): F_1 = F_2 = 1, F_{n+2} = F_{n+1} + F_n. Tính F_8.</p>
+<p>F_3 = 2, F_4 = 3, F_5 = 5, F_6 = 8, F_7 = 13, F_8 = 21.</p>
+<p>(Dãy này cho bằng truy hồi nên KHÔNG rút ra được &quot;số hạng thứ 8&quot; ngay bằng cách thay n = 8 — phải lần.)</p>
+<p class="kt-label" data-step="7">7. GHI CHÚ SAI LẦM</p>
+<ul class="kt-ul"><li>Nghĩ rằng u_n vừa là &quot;số hạng thứ n&quot; vừa là &quot;cả dãy&quot; — kí hiệu cả dãy là (u_n), còn một số hạng thì viết u_n, không có ngoặc.</li><li>Bắt đầu đánh số từ n = 0 khi sách quy ước n = 1 → mọi kết quả lệch một số hạng.</li><li>Với công thức truy hồi mà quên cho u_1 ⇒ không tính được bất cứ số hạng nào.</li><li>Nhầm dãy hữu hạn 1, 2, …, m với tập hợp {1, 2, …, m}: dãy CÓ thứ tự và CÓ thể lặp lại giá trị.</li></ul></div></div>
+<div class="kt-entry" id="kt-2-2"><div class="kt-entry-h"><span class="kt-num">2.2</span><span class="kt-t">TỪ CÔNG THỨC TRUY HỒI SANG CÔNG THỨC TỔNG QUÁT (ĐOÁN SỐ HẠNG)</span></div><div class="kt-body"><p class="kt-label" data-step="1">1. CÔNG THỨC</p>
+<ul class="kt-ul"><li>Cách làm chuẩn: tính vài số hạng đầu → nhận ra quy luật → viết dự đoán u_n = f(n) → THỬ LẠI xem f có thỏa hệ thức truy hồi và đúng với số hạng đầu hay không.</li><li>Với hai dạng hay gặp:</li></ul>
+<p>u_{n+1} = u_n + d  ⇒  u_n = u_1 + (n − 1)d          (cấp số cộng — xem 2.6, 2.7)</p>
+<p>u_{n+1} = q·u_n    ⇒  u_n = u_1 · q^{n−1}            (cấp số nhân — xem 2.10, 2.11)</p>
+<ul class="kt-ul"><li>Điều kiện: chỉ kết luận công thức tổng quát khi đã kiểm tra nó thỏa MỌI n ∈ ℕ*, không phải chỉ vài n.</li></ul>
+<p class="kt-label" data-step="2">2. Ý NGHĨA</p>
+<p>Công thức tổng quát cho phép tính thẳng số hạng thứ 100 hay thứ 2026 mà không cần lần 100 bước. Đây là lí do sách giới thiệu cấp số cộng và cấp số nhân: hai &quot;máy rút gọn&quot; của công thức truy hồi.</p>
+<p class="kt-label" data-step="3">3. CÁCH CHỨNG MINH / GIẢI THÍCH</p>
+<ul class="kt-ul"><li>Với u_{n+1} = u_n + d: ghi liên tiếp</li></ul>
+<p>u_2 = u_1 + d</p>
+<p>u_3 = u_2 + d = u_1 + 2d</p>
+<p>u_4 = u_3 + d = u_1 + 3d</p>
+<p>… Muốn có u_n phải cộng d đúng (n − 1) lần ⇒ u_n = u_1 + (n − 1)d.</p>
+<ul class="kt-ul"><li>Với u_{n+1} = q·u_n: nhân q đúng (n − 1) lần ⇒ u_n = u_1 · q^{n−1}.</li></ul>
+<p>(Đây chính là chứng minh bằng quy nạp: giả sử đúng với n, chứng minh đúng với n + 1 — SGK dùng cách này để &quot;chứng minh công thức&quot; ở các bài tiếp theo.)</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 1</span> (cơ bản): Cho u_1 = 4, u_{n+1} = u_n + 5. Dự đoán rồi chứng minh u_n.</p>
+<p>4; 9; 14; 19… ⇒ u_n = 5n − 1.</p>
+<p>Kiểm tra: u_{n+1} − u_n = [5(n+1) − 1] − (5n − 1) = 5 ✓ và u_1 = 4 ✓.</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 2</span> (vận dụng): Cho u_1 = 1, u_{n+1} = u_n/(1 + u_n). Viết 4 số hạng đầu và dự đoán u_n.</p>
+<p>u_2 = 1/2, u_3 = (1/2)/(3/2) = 1/3, u_4 = (1/3)/(4/3) = 1/4 ⇒ dự đoán u_n = 1/n.</p>
+<p>Kiểm tra: u_{n+1} = (1/n)/(1 + 1/n) = (1/n)/((n+1)/n) = 1/(n+1) ✓.</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 3</span> (nâng cao): Một bạn viết u_1 = 1, u_{n+1} = 2u_n và kết luận u_n = 2^n. Sai ở đâu?</p>
+<p>Dãy là 1, 2, 4, 8… tức u_n = 2^{n−1}. Công thức 2^n cho u_1 = 2 ≠ 1.</p>
+<p>Số mũ là (n − 1) vì phải nhân 2 đúng (n − 1) lần, xuất phát từ u_1 chứ không phải từ 1.</p>
+<p class="kt-label" data-step="7">7. GHI CHÚ SAI LẦM</p>
+<ul class="kt-ul"><li>Lỗi kinh điển: nhớ nhầm u_n = u_1 + nd (thừa một bước nhảy) và u_n = u_1·q^n (thừa một nhân tử). Mẹo: thay n = 1 vào — phải trả lại đúng u_1.</li><li>Dự đoán từ 2–3 số hạng mà chưa thử lại ⇒ có thể trúng vài n đầu, sai từ n sau đó.</li></ul></div></div>
+<div class="kt-entry" id="kt-2-3"><div class="kt-entry-h"><span class="kt-num">2.3</span><span class="kt-t">DÃY SỐ TĂNG, DÃY SỐ GIẢM</span></div><div class="kt-body"><p class="kt-label" data-step="1">1. CÔNG THỨC</p>
+<ul class="kt-ul"><li>Dãy (u_n) TĂNG (dãy tăng) ⇔ u_{n+1} &gt; u_n với mọi n ∈ ℕ*.</li><li>Dãy (u_n) GIẢM (dãy giảm) ⇔ u_{n+1} &lt; u_n với mọi n ∈ ℕ*.</li><li>Dãy không đổi ⇔ u_{n+1} = u_n với mọi n. (Dãy không đổi vừa không tăng vừa không giảm theo định nghĩa chặt ở trên.)</li><li>Hai cách xét:</li></ul>
+<p>– Cách chính trong SGK: xét hiệu T = u_{n+1} − u_n.  T &gt; 0 ∀n ⇒ tăng;  T &lt; 0 ∀n ⇒ giảm.</p>
+<p>– Cách bổ trợ (khi biết chắc mọi số hạng đều dương): xét Q = u_{n+1}/u_n.  Q &gt; 1 ∀n ⇒ tăng;  Q &lt; 1 ∀n ⇒ giảm.</p>
+<ul class="kt-ul"><li>Điều kiện: cách xét tỉ số Q CHỈ dùng được khi các số hạng cùng dương; và phải đúng với MỌI n ≥ 1, chỉ cần một n vi phạm là dãy không tăng (không giảm).</li></ul>
+<p class="kt-label" data-step="2">2. Ý NGHĨA</p>
+<p>Biết dãy tăng hay giảm cho biết giá trị nhỏ nhất/lớn nhất nằm ở đâu (dãy tăng thì nhỏ nhất là u_1; dãy giảm thì lớn nhất là u_1). Đây là bước chuẩn bị cho giới hạn và cho bài toán &quot;số hạng đầu tiên lớn hơn (nhỏ hơn) một ngưỡng cho trước&quot;.</p>
+<p class="kt-label" data-step="3">3. CÁCH CHỨNG MINH / GIẢI THÍCH</p>
+<ul class="kt-ul"><li>Tính hiệu u_{n+1} − u_n rồi RÚT GỌN về một biểu thức chỉ còn n, sau đó xét dấu biểu thức đó trên ℕ* (tìm tử, mẫu, lượng liên hợp nếu có căn).</li><li>Ví dụ cấu trúc: u_n = n/(n+1) ⇒ u_{n+1} − u_n = (n+1)/(n+2) − n/(n+1) = [(n+1)² − n(n+2)]/[(n+1)(n+2)] = 1/[(n+1)(n+2)] &gt; 0.</li></ul>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 1</span> (cơ bản): Xét (u_n) với u_n = 3n + 5.</p>
+<p>u_{n+1} − u_n = 3(n+1) + 5 − (3n + 5) = 3 &gt; 0 ⇒ dãy tăng.</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 2</span> (vận dụng): Xét (u_n) với u_n = 2/n.</p>
+<p>u_{n+1} − u_n = 2/(n+1) − 2/n = −2/[n(n+1)] &lt; 0 ⇒ dãy giảm.</p>
+<p>Kiểm tra tỉ số: u_{n+1}/u_n = n/(n+1) &lt; 1 ⇒ cũng kết luận giảm ✓.</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 3</span> (nâng cao): Xét (u_n) với u_n = n/2^n. Dãy có giảm không?</p>
+<p>u_{n+1}/u_n = (n+1)/2^{n+1} · 2^n/n = (n+1)/(2n).</p>
+<p>(n+1)/(2n) &lt; 1 ⇔ n + 1 &lt; 2n ⇔ n &gt; 1.</p>
+<p>Nhưng u_1 = 1/2 và u_2 = 2/4 = 1/2 bằng nhau ⇒ dãy KHÔNG giảm trên ℕ*, chỉ giảm từ n = 2 trở đi (u_2 = u_3? không: u_3 = 3/8 &lt; 1/2 ✓).</p>
+<p>Kết luận đúng: từ số hạng thứ 2 trở đi dãy giảm, cả dãy không phải dãy giảm.</p>
+<p class="kt-label" data-step="7">7. GHI CHÚ SAI LẦM</p>
+<ul class="kt-ul"><li>Kết luận &quot;dãy giảm&quot; khi mới chứng được u_{n+1} &lt; u_n với n ≥ 2 — phải đúng từ n = 1.</li><li>Dùng tỉ số u_{n+1}/u_n cho dãy có số hạng âm hoặc bằng 0 (chia sai chiều, chia cho 0).</li><li>Nghầm &quot;dãy không đổi&quot; (u_n = c) là dãy tăng.</li><li>Quên rằng u_n = (−1)^n vừa có số hạng dương vừa có số hạng âm ⇒ không tăng, không giảm.</li></ul></div></div>
+<div class="kt-entry" id="kt-2-4"><div class="kt-entry-h"><span class="kt-num">2.4</span><span class="kt-t">DÃY SỐ BỊ CHẶN</span></div><div class="kt-body"><p class="kt-label" data-step="1">1. CÔNG THỨC</p>
+<ul class="kt-ul"><li>(u_n) BỊ CHẶN TRÊN ⇔ tồn tại số M sao cho u_n ≤ M với mọi n ∈ ℕ*.</li><li>(u_n) BỊ CHẶN DƯỚI ⇔ tồn tại số m sao cho u_n ≥ m với mọi n ∈ ℕ*.</li><li>(u_n) BỊ CHẶN ⇔ vừa bị chặn trên vừa bị chặn dưới ⇔ tồn tại C &gt; 0 sao cho |u_n| ≤ C với mọi n.</li><li>Điều kiện: các số M, m, C chỉ cần TỒN TẠI, không cần là giá trị nhỏ nhất/lớn nhất; và phải đúng với mọi n.</li></ul>
+<p class="kt-label" data-step="2">2. Ý NGHĨA</p>
+<p>Bị chặn là &quot;dãy không phóng ra vô cùng&quot;. Kết hợp với tăng/giảm nó cho một thông tin rất mạnh: dãy tăng và bị chặn trên (hoặc giảm và bị chặn dưới) thì CÓ giới hạn — ý tưởng này sẽ dùng ngay ở Chương 5. Trong Chương 2, nó dùng để chứng minh một dãy không thể vượt qua một ngưỡng nào đó.</p>
+<p class="kt-label" data-step="3">3. CÁCH CHỨNG MINH / GIẢI THÍCH</p>
+<ul class="kt-ul"><li>Cách 1: biến đổi u_n về dạng &quot;hằng số ± biểu thức không âm&quot;. Ví dụ u_n = 1 + 1/n; vì 1/n &gt; 0 và 1/n ≤ 1 với mọi n ≥ 1 nên 1 &lt; u_n ≤ 2 ⇒ chặn cả hai phía.</li><li>Cách 2: dùng tính tăng/giảm. Dãy tăng ⇒ u_n ≥ u_1 (chặn dưới); dãy giảm ⇒ u_n ≤ u_1 (chặn trên). Ghép thêm một chặn nữa là bị chặn.</li><li>Cách 3: chặn thô. Với n ≥ 1, nếu chứng minh được |u_n| ≤ C thì kết luận luôn, không cần C tốt nhất.</li></ul>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 1</span> (cơ bản): Chứng minh (u_n) với u_n = (n + 1)/n bị chặn.</p>
+<p>u_n = 1 + 1/n. Với n ≥ 1: 0 &lt; 1/n ≤ 1 ⇒ 1 &lt; u_n ≤ 2. Chặn dưới bởi 1, chặn trên bởi 2 ⇒ bị chặn.</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 2</span> (vận dụng): Chứng minh (u_n) với u_n = 3 − 2/n bị chặn và tăng.</p>
+<p>Tăng: u_{n+1} − u_n = −2/(n+1) + 2/n = 2/[n(n+1)] &gt; 0 ⇒ tăng ⇒ u_n ≥ u_1 = 1.</p>
+<p>Chặn trên: 2/n &gt; 0 ⇒ u_n &lt; 3. Vậy 1 ≤ u_n &lt; 3 ⇒ bị chặn.</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 3</span> (nâng cao): Chứng minh (u_n) với u_n = n² không bị chặn; còn v_n = n/(n² + 1) bị chặn.</p>
+<p>n²: giả sử tồn tại M với n² ≤ M ∀n; chọn n &gt; √M thì n² &gt; M ⇒ vô lý ⇒ không bị chặn trên.</p>
+<p>v_n: với n = 1, v_1 = 1/2; với n ≥ 2, v_n = n/(n²+1) &lt; n/n² = 1/n ≤ 1/2. Mà v_n &gt; 0 ⇒ 0 &lt; v_n ≤ 1/2 ⇒ bị chặn.</p>
+<p class="kt-label" data-step="7">7. GHI CHÚ SAI LẦM</p>
+<ul class="kt-ul"><li>Nói &quot;u_n ≤ 2 với mọi n&quot; rồi kết luận 2 là giá trị lớn nhất — ở đây u_1 = 2 mới là giá trị lớn nhất, còn 2 chỉ là MẪU CHẶN trên; M không duy nhất.</li><li>Quên phải xét mọi n: chặn đúng với n ≥ 2 nhưng vi phạm ở n = 1 thì dãy VẪN có thể bị chặn (chỉ cần lấy M = max{u_1, …}), nhưng phải chứng minh được điều đó.</li><li>Nhầm &quot;bị chặn&quot; với &quot;có giới hạn&quot;. Dãy 1, −1, 1, −1, … bị chặn (|u_n| = 1) nhưng không có giới hạn.</li></ul></div></div>
+<div class="kt-entry" id="kt-2-5"><div class="kt-entry-h"><span class="kt-num">2.5</span><span class="kt-t">BIỂU DIỄN HÌNH HỌC CỦA DÃY SỐ</span></div><div class="kt-body"><p class="kt-label" data-step="1">1. CÔNG THỨC</p>
+<ul class="kt-ul"><li>Mỗi số hạng u_n được biểu diễn bằng một ĐIỂM M(n; u_n) trong mặt phẳng tọa độ Oxy.</li><li>Tập hợp các điểm M(1; u_1), M(2; u_2), …, M(n; u_n), … là biểu diễn hình học của dãy (u_n).</li><li>Điều kiện: hoành độ chỉ lấy số nguyên dương ⇒ KHÔNG được nối các điểm thành đường cong liền mạch (trừ khi đề bài yêu cầu minh hoạ thêm hàm số chứa nó).</li></ul>
+<p class="kt-label" data-step="2">2. Ý NGHĨA</p>
+<p>Nhìn hình sẽ thấy ngay dãy tăng (điểm leo dần), giảm (điểm tụt dần), dao động (điểm xen kẽ trên dưới), hay &quot;tốc độ tăng&quot; của dãy. Đây là cầu nối giữa dãy số và hàm số: dãy (u_n) là một hàm số liên tục (chẳng hạn f(x) = 3x + 5) bị cắt lại chỉ lấy các hoành độ nguyên dương.</p>
+<p class="kt-label" data-step="3">3. CÁCH CHỨNG MINH / GIẢI THÍCH</p>
+<ul class="kt-ul"><li>Vì tập xác định là ℕ* nên đồ thị chỉ gồm các điểm rời nhau; mỗi hoành độ n xuất hiện đúng một lần ⇒ mỗi đường thẳng đứng x = n cắt &quot;đồ thị&quot; tại đúng một điểm.</li><li>Dãy tăng ⇔ dãy điểm đi lên khi sang phải; dãy giảm ⇔ đi xuống; dãy không đổi ⇔ nằm trên đường thẳng y = c.</li></ul>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 1</span> (cơ bản): Biểu diễn dãy u_n = 2n − 1.</p>
+<p>Các điểm (1; 1), (2; 3), (3; 5), (4; 7), … — tất cả nằm trên đường thẳng y = 2x − 1 nhưng chỉ lấy hoành độ nguyên dương; dãy tăng.</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 2</span> (vận dụng): Biểu diễn dãy u_n = (−1)^n.</p>
+<p>Các điểm (1; −1), (2; 1), (3; −1), (4; 1), … — hai hàng điểm xen kẽ trên hai đường y = 1 và y = −1 ⇒ nhìn hình kết luận ngay: không tăng, không giảm, bị chặn.</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 3</span> (nâng cao): Cho dãy u_n = 1/n. Điểm nào là điểm cao nhất? Giải thích ý nghĩa.</p>
+<p>Các điểm (1; 1), (2; 1/2), (3; 1/3), … giảm dần và dần bám lấy trục hoành. Điểm cao nhất là M_1(1; 1) ⇒ giá trị lớn nhất của dãy là u_1 = 1, dãy bị chặn dưới bởi 0. Hình vẽ &quot;gợi&quot; giới hạn bằng 0 (Chứng minh giới hạn sẽ học ở Chương 5).</p>
+<p class="kt-label" data-step="7">7. GHI CHÚ SAI LẦM</p>
+<ul class="kt-ul"><li>Nối các điểm thành đường cong rồi đọc giá trị tại hoành độ không nguyên — dãy số không có số hạng ở đó.</li><li>Vẽ điểm ở hoành độ 0 hoặc âm ⇒ ra ngoài tập xác định ℕ*.</li><li>Nói &quot;đồ thị dãy số cắt trục tung tại u_1&quot; — sai, trục tung x = 0 không thuộc tập xác định.</li></ul></div></div>
+<div class="kt-entry" id="kt-2-6"><div class="kt-entry-h"><span class="kt-num">2.6</span><span class="kt-t">CẤP SỐ CỘNG: ĐỊNH NGHĨA</span></div><div class="kt-body"><p class="kt-label" data-step="1">1. CÔNG THỨC</p>
+<ul class="kt-ul"><li>(u_n) là một cấp số cộng (CSC) ⇔ u_{n+1} = u_n + d với mọi n ∈ ℕ*.</li></ul>
+<p>Số d không đổi gọi là CÔNG SAI.</p>
+<ul class="kt-ul"><li>Cách viết tương đương: u_{n+1} − u_n = d  (∀n ∈ ℕ*),  hay  d = u_{n+1} − u_n.</li><li>Điều kiện: hiệu của hai số hạng liên tiếp phải KHÔNG ĐỔI và phải xét với mọi n, không chỉ vài số hạng đầu.</li></ul>
+<p class="kt-label" data-step="2">2. Ý NGHĨA</p>
+<p>CSC là mô hình của mọi quá trình tăng (giảm) ĐỀU theo bước discrete: mỗi bước thêm đúng một lượng d. Ví dụ: quãng đường đi được mỗi giờ thêm 5 km, mức lương mỗi năm thêm 800 nghìn, dãy số lẻ 1, 3, 5, …</p>
+<p class="kt-label" data-step="3">3. CÁCH CHỨNG MINH / GIẢI THÍCH</p>
+<ul class="kt-ul"><li>Để chứng minh một dãy là CSC: tính d_n = u_{n+1} − u_n bằng biểu thức rút gọn, nếu d_n là một hằng số không phụ thuộc n ⇒ dãy là CSC với công sai d đó.</li><li>Để chứng minh một dãy KHÔNG là CSC: chỉ cần tìm HAI cặp số hạng liên tiếp có hiệu khác nhau (phản ví dụ).</li></ul>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 1</span> (cơ bản): Dãy 3; 7; 11; 15; 19; … có phải CSC không?</p>
+<p>7 − 3 = 11 − 7 = 15 − 11 = 19 − 15 = 4 ⇒ CSC với u_1 = 3, d = 4.</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 2</span> (vận dụng): Chứng minh dãy u_n = 5n − 8 là CSC.</p>
+<p>u_{n+1} − u_n = 5(n+1) − 8 − (5n − 8) = 5 (không đổi) ⇒ CSC với công sai d = 5 và u_1 = −3.</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 3</span> (nâng cao): Dãy 1; 4; 9; 16; 25; … (u_n = n²) có phải CSC không?</p>
+<p>4 − 1 = 3 nhưng 9 − 4 = 5 ≠ 3 ⇒ hiệu không không đổi ⇒ KHÔNG là CSC.</p>
+<p>(Nhận xét mở rộng: ở CSC thật, hiệu của hai số hạng liên tiếp bằng hằng số; với u_n = n² hiệu bằng 2n + 1 vẫn phụ thuộc n.)</p>
+<p class="kt-label" data-step="7">7. GHI CHÚ SAI LẦM</p>
+<ul class="kt-ul"><li>Chỉ kiểm tra 2–3 hiệu đầu rồi kết luận CSC.</li><li>Công sai có thể ÂM (dãy giảm đều), có thể bằng 0 (dãy không đổi cũng là CSC với d = 0) — đừng mặc định d &gt; 0.</li><li>Viết nhầm định nghĩa thành u_n = u_{n+1} + d (đảo chiều).</li></ul></div></div>
+<div class="kt-entry" id="kt-2-7"><div class="kt-entry-h"><span class="kt-num">2.7</span><span class="kt-t">CẤP SỐ CỘNG: SỐ HẠNG TỔNG QUÁT</span></div><div class="kt-body"><p class="kt-label" data-step="1">1. CÔNG THỨC</p>
+<ul class="kt-ul"><li>u_n = u_1 + (n − 1)d       (∀n ≥ 2; cũng đúng với n = 1)</li><li>Suy ra:  d = (u_n − u_1)/(n − 1)   (n ≥ 2)</li><li>Tổng quát hoá:  u_n = u_k + (n − k)d   (biết một số hạng bất kỳ u_k, không cần u_1; điều kiện n ≠ k)</li><li>Điều kiện: n là số nguyên dương; công thức dùng tỉ số (u_n − u_1)/(n − 1) yêu cầu n ≥ 2.</li></ul>
+<p class="kt-label" data-step="2">2. Ý NGHĨA</p>
+<p>Cho phép tính thẳng số hạng thứ n mà không cần lần hết các số hạng trước, và là công cụ giải bài toán ngược: biết hai số hạng bất kỳ ⇒ tìm được u_1 và d ⇒ xác định trọn cả dãy.</p>
+<p class="kt-label" data-step="3">3. CÁCH CHỨNG MINH / GIẢI THÍCH (quy nạp — SGK dùng cách này)</p>
+<ul class="kt-ul"><li>Bước cơ sở: n = 1 ⇒ vế phải = u_1 + 0·d = u_1 ✓.</li><li>Bước quy nạp: giả sử u_n = u_1 + (n − 1)d đúng. Khi đó</li></ul>
+<p>u_{n+1} = u_n + d = [u_1 + (n − 1)d] + d = u_1 + n·d = u_1 + [(n+1) − 1]d ✓.</p>
+<ul class="kt-ul"><li>Vậy đúng với mọi n ∈ ℕ*.</li></ul>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 1</span> (cơ bản): CSC có u_1 = 5, d = −3. Tính u_20.</p>
+<p>u_20 = 5 + 19·(−3) = 5 − 57 = −52.</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 2</span> (vận dụng): CSC biết u_5 = 17 và u_11 = 47. Tìm u_1, d và công thức tổng quát.</p>
+<p>u_11 = u_5 + (11 − 5)d ⇒ 47 = 17 + 6d ⇒ d = 5.</p>
+<p>u_1 = u_5 − 4d = 17 − 20 = −3. Vậy u_n = −3 + (n − 1)·5 = 5n − 8  (thử: u_11 = 55 − 8 = 47 ✓).</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 3</span> (nâng cao): CSC có u_1 = 150, d = −7. Số hạng thứ bao nhiêu là số hạng ÂM ĐẦU TIÊN?</p>
+<p>u_n = 150 − 7(n − 1) &lt; 0 ⇔ 7(n − 1) &gt; 150 ⇔ n − 1 &gt; 21,43 ⇔ n ≥ 23.</p>
+<p>Kiểm tra: u_22 = 150 − 7·21 = 3 (dương), u_23 = 150 − 7·22 = −4 (âm) ⇒ số hạng âm đầu tiên là u_23.</p>
+<p class="kt-label" data-step="7">7. GHI CHÚ SAI LẦM</p>
+<ul class="kt-ul"><li>Quên −1: viết u_n = u_1 + nd. Mẹo: thay n = 1, phải ra đúng u_1.</li><li>Chia nhầm (u_n − u_1)/n thay vì /(n − 1).</li><li>Bài toán &quot;số hạng đầu tiên thỏa điều kiện&quot;: giải bất phương trình ra n &gt; 21,43 rồi trả lời n = 21 — phải LẤY SỐ NGUYÊN NHỎ NHẤT THỎA MÃN (n = 22 là chưa thỏa) ⇒ ở trên là 23. Luôn thử lại bằng cách tính u_22, u_23.</li></ul></div></div>
+<div class="kt-entry" id="kt-2-8"><div class="kt-entry-h"><span class="kt-num">2.8</span><span class="kt-t">CẤP SỐ CỘNG: TÍNH CHẤT BA SỐ HẠNG LIÊN TIẾP</span></div><div class="kt-body"><p class="kt-label" data-step="1">1. CÔNG THỨC</p>
+<ul class="kt-ul"><li>Với CSC, ba số hạng liên tiếp u_{k−1}, u_k, u_{k+1} (k ≥ 2) thỏa:</li></ul>
+<p>u_k = (u_{k−1} + u_{k+1})/2     ⇔     2u_k = u_{k−1} + u_{k+1}</p>
+<ul class="kt-ul"><li>Nói cách khác: số hạng ở giữa là TRUNG BÌNH CỘNG của hai số hạng kề nó.</li><li>Điều kiện: k ≥ 2 (để u_{k−1} tồn tại); ngược lại, nếu ba số thỏa 2b = a + c thì chúng là ba số hạng liên tiếp của một CSC có d = b − a.</li></ul>
+<p class="kt-label" data-step="2">2. Ý NGHĨA</p>
+<p>Đây là dấu hiệu nhận biết nhanh và là cách &quot;giấu số&quot; cực mạnh: khi đề cho ba số hạng liên tiếp, đặt chúng là a − d, a, a + d thì tổng mất d, tính toán gọn hơn nhiều so với đặt a, a + d, a + 2d.</p>
+<p class="kt-label" data-step="3">3. CÁCH CHỨNG MINH / GIẢI THÍCH</p>
+<ul class="kt-ul"><li>u_{k−1} = u_1 + (k − 2)d và u_{k+1} = u_1 + kd.</li><li>Cộng lại: u_{k−1} + u_{k+1} = 2u_1 + (2k − 2)d = 2[u_1 + (k − 1)d] = 2u_k. ∎</li></ul>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 1</span> (cơ bản): Tìm x để 3; x; 11 là ba số hạng liên tiếp của một CSC.</p>
+<p>2x = 3 + 11 = 14 ⇒ x = 7 (khi đó d = 4 và 3, 7, 11 ✓).</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 2</span> (vận dụng): Ba số hạng liên tiếp của CSC có tổng bằng 33 và tích bằng 1287. Tìm chúng.</p>
+<p>Đặt a − d, a, a + d. Tổng: 3a = 33 ⇒ a = 11.</p>
+<p>Tích: (11 − d)·11·(11 + d) = 11(121 − d²) = 1287 ⇒ 121 − d² = 117 ⇒ d² = 4 ⇒ d = ±2.</p>
+<p>Bộ ba: 9; 11; 13 (d = 2) hoặc 13; 11; 9 (d = −2).</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 3</span> (nâng cao): Cho ba số a, b, c theo thứ tự đó lập thành CSC và a + b + c = 6, a² + c² = 26 − 2b². Chứng minh b = 2 rồi tìm a, c.</p>
+<p>a + c = 2b ⇒ 3b = 6 ⇒ b = 2, a + c = 4.</p>
+<p>26 − 2b² = 26 − 8 = 18 ⇒ a² + c² = 18. Từ (a + c)² = a² + 2ac + c² ⇒ 16 = 18 + 2ac ⇒ ac = −1.</p>
+<p>a, c là nghiệm X² − 4X − 1 = 0 ⇒ X = 2 ± √5. Bộ ba: 2 − √5; 2; 2 + √5.</p>
+<p class="kt-label" data-step="7">7. GHI CHÚ SAI LẦM</p>
+<ul class="kt-ul"><li>Nhầm tính chất này với tính chất của CẤP SỐ NHÂN (u_k² = u_{k−1}·u_{k+1}) — xem 2.12.</li><li>Khi đặt ba số liên tiếp theo thứ tự a, a + d, a + 2d rồi lại quên rằng d có thể âm.</li><li>Bài toán &quot;ba số lập thành CSC theo một thứ tự nào đó&quot;: phải xét các hoán vị, không được mặc định thứ tự đề cho.</li></ul></div></div>
+<div class="kt-entry" id="kt-2-9"><div class="kt-entry-h"><span class="kt-num">2.9</span><span class="kt-t">CẤP SỐ CỘNG: TỔNG N SỐ HẠNG ĐẦU</span></div><div class="kt-body"><p class="kt-label" data-step="1">1. CÔNG THỨC</p>
+<ul class="kt-ul"><li>S_n = u_1 + u_2 + … + u_n = n(u_1 + u_n)/2</li><li>Thay u_n = u_1 + (n − 1)d:</li></ul>
+<p>S_n = [2u_1 + (n − 1)d]·n/2  =  n·u_1 + n(n − 1)d/2</p>
+<ul class="kt-ul"><li>Điều kiện: n là SỐ HẠNG ĐẦU TIÊN được cộng (từ u_1 đến u_n). Muốn tổng từ u_p đến u_q thì lấy S_q − S_{p−1}.</li></ul>
+<p class="kt-label" data-step="2">2. Ý NGHĨA</p>
+<p>Biến một phép cộng dài thành một phép nhân: chỉ cần biết số lượng số hạng và tổng của số hạng đầu với số hạng cuối. Đây là công thức Gauss (cộng 1 đến 100 trong vài giây) và là nền để mô tả tổng/quãng đường của quá trình đều.</p>
+<p class="kt-label" data-step="3">3. CÁCH CHỨNG MINH / GIẢI THÍCH</p>
+<ul class="kt-ul"><li>Viết S_n theo chiều thuận và chiều nghịch:</li></ul>
+<p>S_n = u_1 + u_2 + … + u_n</p>
+<p>S_n = u_n + u_{n−1} + … + u_1</p>
+<ul class="kt-ul"><li>Cộng vế theo vế: mỗi cột là u_1 + u_n, có n cột ⇒ 2S_n = n(u_1 + u_n) ⇒ S_n = n(u_1 + u_n)/2. ∎</li></ul>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 1</span> (cơ bản): Tính 1 + 2 + 3 + … + 100.</p>
+<p>CSC với u_1 = 1, u_100 = 100, n = 100 ⇒ S = 100·(1 + 100)/2 = 50·101 = 5050.</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 2</span> (vận dụng): CSC có u_1 = −3, d = 5. Tính S_20.</p>
+<p>S_20 = 20·[2·(−3) + 19·5]/2 = 10·(−6 + 95) = 10·89 = 890.</p>
+<p>Kiểm tra cách khác: u_20 = −3 + 95 = 92 ⇒ S_20 = 20·(−3 + 92)/2 = 10·89 = 890 ✓.</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 3</span> (nâng cao): Tính tổng tất cả các số tự nhiên từ 2 đến 101 chia cho 3 dư 2.</p>
+<p>Dãy: 2; 5; 8; …; 101 là CSC với u_1 = 2, d = 3.</p>
+<p>Tìm n: 101 = 2 + (n − 1)·3 ⇒ n − 1 = 99/3 = 33 ⇒ n = 34 (ĐẾM ĐỦ 34 số).</p>
+<p>S_34 = 34·(2 + 101)/2 = 17·103 = 1751.</p>
+<p class="kt-label" data-step="7">7. GHI CHÚ SAI LẦM</p>
+<ul class="kt-ul"><li>Lỗi hay gặp nhất: ĐẾM SAI SỐ HẠNG. Từ 2 đến 101 cách nhau 3 đơn vị có (101 − 2)/3 = 33 KHOẢNG, tức 34 số hạng — thiếu mất 1.</li><li>Dùng n(u_1 + u_n)/2 với n = hiệu hai chỉ số mà chưa cộng 1.</li><li>Quên điều kiện &quot;từ u_1&quot; khi đề hỏi tổng từ u_5 đến u_20 (phải lấy S_20 − S_4).</li><li>Chia nhầm n/2 rồi quên nhân n: viết S = n(u_1 + u_n)/2 thành S = n(u_1 + u_n) hoặc (u_1 + u_n)/2.</li></ul></div></div>
+<div class="kt-entry" id="kt-2-10"><div class="kt-entry-h"><span class="kt-num">2.10</span><span class="kt-t">CẤP SỐ NHÂN: ĐỊNH NGHĨA</span></div><div class="kt-body"><p class="kt-label" data-step="1">1. CÔNG THỨC</p>
+<ul class="kt-ul"><li>(u_n) là một cấp số nhân (CSR) ⇔ u_{n+1} = u_n·q với mọi n ∈ ℕ*.</li></ul>
+<p>Số q không đổi gọi là CÔNG BỘI.</p>
+<ul class="kt-ul"><li>Cách viết tương đương (khi các số hạng khác 0): q = u_{n+1}/u_n.</li><li>Điều kiện: theo cách dùng tỉ số thì các u_n phải khác 0; thương của hai số hạng liên tiếp phải KHÔNG ĐỔI với mọi n.</li></ul>
+<p class="kt-label" data-step="2">2. Ý NGHĨA</p>
+<p>CSR là mô hình của mọi quá trình tăng (giảm) THEO TỈ LỆ: mỗi bước nhân đúng q lần — số vi khuẩn nhân đôi mỗi giờ, lãi suất ngân hàng tính theo năm, độ phóng đại mỗi lần nhân bản, nồng độ giảm đi sau mỗi chu kỳ lọc. Khác biệt cốt lõi với CSC: ở CSC người ta CỘNG thêm, ở CSR người ta NHÂN lên, nên CSR &quot;bùng nổ&quot; nhanh hơn rất nhiều.</p>
+<p class="kt-label" data-step="3">3. CÁCH CHỨNG MINH / GIẢI THÍCH</p>
+<ul class="kt-ul"><li>Chứng minh là CSR: tính u_{n+1}/u_n (hoặc u_{n+1} − u_n·… không dùng được) rồi rút gọn; nếu ra hằng số q không phụ thuộc n ⇒ CSR.</li><li>Chứng minh KHÔNG là CSR: tìm hai cặp liên tiếp có thương khác nhau.</li></ul>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 1</span> (cơ bản): Dãy 2; 6; 18; 54; … có phải CSR không?</p>
+<p>6/2 = 18/6 = 54/18 = 3 ⇒ CSR với u_1 = 2, q = 3.</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 2</span> (vận dụng): Chứng minh dãy u_n = 5·2^{n−1} là CSR và chỉ ra công bội.</p>
+<p>u_{n+1}/u_n = 5·2^n/(5·2^{n−1}) = 2 (không đổi) ⇒ CSR với q = 2, u_1 = 5.</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 3</span> (nâng cao): Dãy 1; 2; 4; 9; … có phải CSR không? Dãy 2; 4; 8; 16; … thì sao?</p>
+<p>2/1 = 4/2 = 2 nhưng 9/4 = 2,25 ≠ 2 ⇒ dãy thứ nhất KHÔNG là CSR.</p>
+<p>4/2 = 8/4 = 16/8 = 2 ⇒ dãy thứ hai là CSR với q = 2.</p>
+<p class="kt-label" data-step="7">7. GHI CHÚ SAI LẦM</p>
+<ul class="kt-ul"><li>Công bội có thể ÂM: 3; −6; 12; −24; … là CSR với q = −2 (dãy dao động dấu). Cũng có thể q = 0 hoặc 0 &lt; q &lt; 1 (dãy giảm nhanh).</li><li>Nhầm với CSC: 2; 4; 6; 8 là CSC (d = 2) chứ không phải CSR.</li><li>Nếu u_1 = 0 và dùng định nghĩa u_{n+1} = q·u_n thì mọi số hạng đều bằng 0 — không xét theo cách &quot;thương&quot; vì chia cho 0.</li></ul></div></div>
+<div class="kt-entry" id="kt-2-11"><div class="kt-entry-h"><span class="kt-num">2.11</span><span class="kt-t">CẤP SỐ NHÂN: SỐ HẠNG TỔNG QUÁT</span></div><div class="kt-body"><p class="kt-label" data-step="1">1. CÔNG THỨC</p>
+<ul class="kt-ul"><li>u_n = u_1 · q^{n−1}       (∀n ≥ 2; cũng đúng với n = 1)</li><li>Suy ra:  q^{n−k} = u_n/u_k   (n ≠ k),  và  u_n = u_k · q^{n−k}</li><li>Điều kiện: u_k ≠ 0 khi dùng làm mẫu; số mũ là (n − 1) vì xuất phát từ u_1.</li></ul>
+<p class="kt-label" data-step="2">2. Ý NGHĨA</p>
+<p>Tính thẳng số hạng thứ n của quá trình nhân bản; và cho phép &quot;nhảy&quot; từ một số hạng đã biết tới bất kỳ số hạng nào mà không cần biết u_1 (chỉ cần biết số bước nhảy n − k).</p>
+<p class="kt-label" data-step="3">3. CÁCH CHỨNG MINH / GIẢI THÍCH (quy nạp)</p>
+<ul class="kt-ul"><li>n = 1: u_1·q^0 = u_1 ✓.</li><li>Giả sử u_n = u_1·q^{n−1}. Khi đó u_{n+1} = q·u_n = q·u_1·q^{n−1} = u_1·q^n = u_1·q^{(n+1)−1} ✓. ∎</li></ul>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 1</span> (cơ bản): CSR có u_1 = 5, q = 2. Tính u_10.</p>
+<p>u_10 = 5·2^9 = 5·512 = 2560.</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 2</span> (vận dụng): Trong một ống nghiệm có 10^4 vi khuẩn, mỗi giờ số lượng nhân 3 lần. Hỏi số vi khuẩn ở giờ thứ 5?</p>
+<p>Coi lúc ban đầu (giờ 0) là u_1 = 10^4, q = 3 ⇒ giờ thứ 5 là u_6 = 10^4·3^5 = 10^4·243 = 2,43·10^6 con.</p>
+<p>(Nếu đề đánh số giờ 0 là u_0 thì cùng một đáp số viết thành u_5 = 10^4·3^5. Điểm mấu chốt: ĐẾM XEM ĐÃ NHÂN BAO NHIÊU LẦN — 5 lần — rồi lấy u_1·q^5, đừng máy móc thay số mũ n − 1.)</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 3</span> (nâng cao): CSR biết u_2 = 12 và u_5 = 324. Tìm q, u_1 và công thức tổng quát.</p>
+<p>u_5/u_2 = q^3 ⇒ q^3 = 324/12 = 27 ⇒ q = 3.</p>
+<p>u_1 = u_2/q = 12/3 = 4 ⇒ u_n = 4·3^{n−1} (thử: u_5 = 4·81 = 324 ✓).</p>
+<p class="kt-label" data-step="7">7. GHI CHÚ SAI LẦM</p>
+<ul class="kt-ul"><li>Viết u_n = u_1·q^n (thừa một nhân tử q) — thay n = 1 để kiểm tra ngay.</li><li>Khi khai căn từ q^n = A: với n chẵn thì q = ±ⁿ√A ⇒ có THỂ HAI CÔNG BỘI, đừng bỏ một; với n lẻ thì q có đúng một giá trị.</li><li>Bỏ quên q âm hoặc q = 1 (dãy không đổi cũng là CSR với q = 1).</li></ul></div></div>
+<div class="kt-entry" id="kt-2-12"><div class="kt-entry-h"><span class="kt-num">2.12</span><span class="kt-t">CẤP SỐ NHÂN: TÍNH CHẤT BA SỐ HẠNG LIÊN TIẾP</span></div><div class="kt-body"><p class="kt-label" data-step="1">1. CÔNG THỨC</p>
+<ul class="kt-ul"><li>Với CSR, ba số hạng liên tiếp u_{k−1}, u_k, u_{k+1} (k ≥ 2) thỏa:</li></ul>
+<p>u_k² = u_{k−1} · u_{k+1}</p>
+<p>⇔ |u_k| = √(u_{k−1}·u_{k+1})</p>
+<ul class="kt-ul"><li>Điều kiện: k ≥ 2; và u_{k−1}·u_{k+1} ≥ 0 (tự động đúng vì tích bằng u_k² ≥ 0). Nếu u_k = 0 thì cả hai số kề cũng bằng 0.</li></ul>
+<p class="kt-label" data-step="2">2. Ý NGHĨA</p>
+<p>&quot;Trung bình nhân&quot; của hai số kề nhau. Là dấu hiệu nhận biết nhanh và là cách đặt ẩn cực gọn: ba số hạng liên tiếp của CSR nên đặt a/q, a, aq (k ≥ 2) hoặc a, aq, aq² — tích của ba số khi đó bằng a³, sạch hơn rất nhiều.</p>
+<p class="kt-label" data-step="3">3. CÁCH CHỨNG MINH / GIẢI THÍCH</p>
+<ul class="kt-ul"><li>u_{k−1} = u_1·q^{k−2},  u_{k+1} = u_1·q^k.</li><li>Nhân lại: u_{k−1}·u_{k+1} = u_1²·q^{2k−2} = (u_1·q^{k−1})² = u_k². ∎</li></ul>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 1</span> (cơ bản): Tìm x để 2; x; 8 là ba số hạng liên tiếp của một CSR.</p>
+<p>x² = 2·8 = 16 ⇒ x = 4 (q = 2) hoặc x = −4 (q = −2). Có HAI đáp số.</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 2</span> (vận dụng): Ba số hạng liên tiếp của CSR có tổng 13 và tích 27. Tìm chúng.</p>
+<p>Đặt a/q, a, aq. Tích: a³ = 27 ⇒ a = 3.</p>
+<p>Tổng: 3(1/q + 1 + q) = 13 ⇒ 1/q + q = 10/3 ⇒ 3q² − 10q + 3 = 0 ⇒ q = 3 hoặc q = 1/3.</p>
+<p>Bộ ba: 1; 3; 9 (q = 3) hoặc 9; 3; 1 (q = 1/3).</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 3</span> (nâng cao): Ba số hạng liên tiếp của một CSR có tổng bằng 7 và tổng bình phương bằng 21. Tìm ba số đó.</p>
+<p>Gọi ba số là a/q, a, aq (a = u_2, theo 2.12). Đặt t = q + 1/q (t ≥ 2 hoặc t ≤ −2).</p>
+<p>Tổng:  a(t + 1) = 7.</p>
+<p>Bình phương: a²(q² + 1 + 1/q²) = a²(t² − 2 + 1) = a²(t² − 1) = 21.</p>
+<p>Từ a = 7/(t + 1): 49(t² − 1)/(t + 1)² = 21 ⇔ 49(t − 1)/(t + 1) = 21 ⇔ 28t = 70 ⇔ t = 2,5.</p>
+<p>q + 1/q = 2,5 ⇔ q² − 2,5q + 1 = 0 ⇔ q = 2 hoặc q = 1/2;  a = 7/3,5 = 2.</p>
+<p>Ba số: 1; 2; 4 (q = 2) hoặc 4; 2; 1 (q = 1/2). Thử lại: 1 + 2 + 4 = 7 ✓; 1 + 4 + 16 = 21 ✓.</p>
+<p class="kt-label" data-step="7">7. GHI CHÚ SAI LẦM</p>
+<ul class="kt-ul"><li>Lấy căn rồi chỉ viết u_k = +√(u_{k−1}u_{k+1}) ⇒ mất nghiệm âm (như VÍ DỤ 1, x = −4 vẫn hợp lệ).</li><li>Nhầm tính chất CSR (bình phương = tích hai số kề) với CSC (gấp đôi = tổng hai số kề).</li><li>Áp dụng khi các số hạng KHÔNG liên tiếp: công thức chỉ đúng cho ba số CẠNH NHAU.</li></ul></div></div>
+<div class="kt-entry" id="kt-2-13"><div class="kt-entry-h"><span class="kt-num">2.13</span><span class="kt-t">CẤP SỐ NHÂN: TỔNG N SỐ HẠNG ĐẦU</span></div><div class="kt-body"><p class="kt-label" data-step="1">1. CÔNG THỨC</p>
+<ul class="kt-ul"><li>S_n = u_1 + u_2 + … + u_n = u_1(q^n − 1)/(q − 1)   (điều kiện q ≠ 1)</li></ul>
+<p>Viết tương đương khi 0 &lt; q &lt; 1:  S_n = u_1(1 − q^n)/(1 − q).</p>
+<ul class="kt-ul"><li>Nếu q = 1 thì S_n = n·u_1.</li><li>Trong công thức, q^n là CÔNG BỘI MŨ N (bằng u_{n+1}/u_1) — KHÔNG phải số mũ n − 1 như ở số hạng tổng quát.</li><li>Điều kiện: tách riêng trường hợp q = 1 trước khi dùng phân thức (mẫu bằng 0).</li></ul>
+<p class="kt-label" data-step="2">2. Ý NGHĨA</p>
+<p>Cho biết &quot;tổng tích luỹ&quot; của một quá trình nhân bản/tài chính: tổng số tiền sau n kỳ, tổng quãng đường của chuỗi tăng theo tỉ lệ, tổng các số hạng của một chuỗi nhân. Mũ n (không phải n − 1) là điểm khiến công thức hay bị sai nhất.</p>
+<p class="kt-label" data-step="3">3. CÁCH CHỨNG MINH / GIẢI THÍCH</p>
+<ul class="kt-ul"><li>Viết S_n = u_1 + u_1q + u_1q² + … + u_1q^{n−1}.</li><li>Nhân hai vế cho q: qS_n = u_1q + u_1q² + … + u_1q^n.</li><li>Trừ vế theo vế: S_n − qS_n = u_1 − u_1q^n  ⇒  S_n(1 − q) = u_1(1 − q^n).</li><li>Vì q ≠ 1 nên chia được: S_n = u_1(1 − q^n)/(1 − q) = u_1(q^n − 1)/(q − 1). ∎</li></ul>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 1</span> (cơ bản): Tính 1 + 2 + 4 + 8 + … + 2^9.</p>
+<p>u_1 = 1, q = 2, n = 10 (có 10 số hạng, từ 2^0 đến 2^9).</p>
+<p>S_10 = 1·(2^10 − 1)/(2 − 1) = 1024 − 1 = 1023.</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 2</span> (vận dụng): CSR có u_1 = 3, q = 1/2. Tính S_10 (làm tròn đến chữ số thập phân thứ ba).</p>
+<p>S_10 = 3·[1 − (1/2)^10]/(1 − 1/2) = 3·(1 − 1/1024)/(1/2) = 6·1023/1024 = 6138/1024 = 3069/512 ≈ 5,994.</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 3</span> (nâng cao): Tìm số nguyên dương n nhỏ nhất để 1 + 3 + 3² + … + 3^{n−1} &gt; 1000.</p>
+<p>S_n = 1·(3^n − 1)/(3 − 1) = (3^n − 1)/2.</p>
+<p>(3^n − 1)/2 &gt; 1000 ⇔ 3^n &gt; 2001.</p>
+<p>3^6 = 729 &lt; 2001;  3^7 = 2187 &gt; 2001 ⇒ n = 7 (kiểm tra: S_7 = (2187 − 1)/2 = 1093 &gt; 1000 ✓).</p>
+<p class="kt-label" data-step="7">7. GHI CHÚ SAI LẦM</p>
+<ul class="kt-ul"><li>Dùng q^{n−1} trong công thức tổng ⇒ sai số; phải là q^n (mẹo: với n = 1 công thức phải cho S_1 = u_1: u_1(q^1 − 1)/(q − 1) = u_1 ✓).</li><li>Quên xét q = 1 (hoặc q = −1: khi đó q^n = ±1, công thức vẫn dùng được vì q ≠ 1).</li><li>Đếm sai n khi số hạng cuối viết dạng lũy thừa: 1 + 2 + … + 2^9 có n = 10 chứ không phải 9.</li><li>Nhân/sub sai dấu khi suy ra công thức: S_n(1 − q) = u_1(1 − q^n), nếu đổi cả tử và mẫu thành (q^n − 1)/(q − 1) thì hai dấu phải đổi CÙNG nhau.</li></ul></div></div>
+<div class="kt-entry kt-tail" id="kt-tail-14"><div class="kt-entry-h"><span class="kt-num">Σ</span><span class="kt-t">BẢNG TÓM TẮT TOÀN CHƯƠNG 2</span></div><div class="kt-body"><div class="kt-tbwrap"><table class="kt-tb"><thead><tr><th>Nội dung</th><th>Dãy số thường</th><th>Cấp số cộng (CSC)</th><th>Cấp số nhân (CSR)</th></tr></thead><tbody><tr><td>Định nghĩa</td><td>u_n = f(n) hoặc u_{n+1} = F(u_n)</td><td>u_{n+1} = u_n + d</td><td>u_{n+1} = u_n·q</td></tr><tr><td>Số hạng tổng quát</td><td>tùy dãy</td><td>u_n = u_1 + (n − 1)d</td><td>u_n = u_1·q^{n−1}</td></tr><tr><td>Qua số hạng bất kỳ</td><td>—</td><td>u_n = u_k + (n − k)d</td><td>u_n = u_k·q^{n−k}</td></tr><tr><td>Bước nhảy</td><td>—</td><td>d (cộng, có thể âm / bằng 0)</td><td>q (nhân, có thể âm, = 0, = 1)</td></tr><tr><td>Ba số hạng liên tiếp</td><td>—</td><td>2u_k = u_{k−1} + u_{k+1}</td><td>u_k² = u_{k−1}·u_{k+1}</td></tr><tr><td>Tổng n số hạng đầu</td><td>cộng trực tiếp</td><td>S_n = n(u_1 + u_n)/2 = n[2u_1 + (n − 1)d]/2</td><td>S_n = u_1(q^n − 1)/(q − 1), q ≠ 1;  S_n = n·u_1 nếu q = 1</td></tr><tr><td>Tăng/giảm</td><td>u_{n+1} − u_n (hoặc u_{n+1}/u_n nếu dương)</td><td>tăng ⇔ d &gt; 0; giảm ⇔ d &lt; 0</td><td>phụ thuộc dấu u_1 và q (q &gt; 1 thì tăng nhanh nếu u_1 &gt; 0)</td></tr><tr><td>Bị chặn</td><td>∃C:</td><td>u_n</td><td>≤ C ∀n</td><td>chỉ bị chặn khi d = 0</td><td>bị chặn khi</td><td>q</td><td>≤ 1 (và u_1 hữu hạn)</td></tr><tr><td>Hay sai nhất</td><td>thiếu u_1 ở dãy truy hồi</td><td>u_1 + nd (thừa d) và đếm sai n</td><td>u_1·q^n và q^{n−1} trong tổng; quên q = 1</td></tr></tbody></table></div>
+<p>Ghi chú ĐÃ XÁC MINH (đối chiếu sách giáo khoa + nhiều nguồn): khái niệm &quot;cấp số nhân LÙI VÔ HẠN&quot; và công thức S = u₁/(1 − q) (|q| &lt; 1) KHÔNG thuộc Chương 2 của Kết nối tri thức 11 — sách để ở <b>Bài 15 &quot;Giới hạn của dãy số&quot;, Chương 5</b> (SGK tr. 107–108), kèm bài tập viết số thập phân vô hạn tuần hoàn thành phân số. Vì vậy mục này KHÔNG nằm trong chương 2; sẽ được viết ở tệp Chương 5 khi làm tới chương đó.</p></div></div>

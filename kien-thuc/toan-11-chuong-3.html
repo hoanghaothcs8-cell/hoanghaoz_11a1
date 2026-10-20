@@ -1,0 +1,188 @@
+<div class="kt-src">(Sách Kết nối tri thức — Bài 8: Mẫu số liệu ghép nhóm · Bài 9: Các số đặc trưng đo xu thế trung tâm)<br>KÍ HIỆU CỦA SÁCH (đọc kỹ trước khi dùng, vì mỗi bộ sách dùng một kiểu):<br>• Mẫu gồm k nhóm: [a₁; a₂), [a₂; a₃), …, [a_k; a_{k+1}). Nhóm TUỲ Ý ĐÓNG TRÁI — MỞ PHẢI (giá trị đúng bằng a_{i+1} rơi sang nhóm kế tiếp).<br>• m_i = TẦN SỐ của nhóm thứ i (số số liệu rơi vào nhóm đó). Cỡ mẫu n = m₁ + m₂ + … + m_k.<br>• x_i = GIÁ TRỊ ĐẠI DIỆN của nhóm thứ i:  x_i = (a_i + a_{i+1})/2  (giữa nhóm).<br>• h = a_{i+1} − a_i = độ dài nhóm (khi các nhóm bằng nhau thì h không đổi).<br>• Các số đặc trưng: x̄ (số trung bình), M_e (trung vị), Q₁, Q₂, Q₃ (tứ phân vị), M_o (mốt).<br>• SÁCH KHÔNG dùng chữ &quot;tần số tích luỹ&quot; và KHÔNG dùng kí hiệu C hay h trong công thức trung vị — luôn viết tổng m₁ + … + m_{p−1}.<br>• SÁCH KHÔNG đưa &quot;phương sai&quot; và &quot;độ lệch chuẩn&quot; vào chương này (chương chỉ có 4 số: trung bình, trung vị, tứ phân vị, mốt). Đừng chép công thức s², s từ sách khác sang.<br>BỘ SỐ LIỆU DÙNG CHUNG CHO CÁC VÍ DỤ (thời gian chạy 800 m, đơn vị giây, của 40 học sinh):<br>Nhóm:      [80;90)  [90;100)  [100;110)  [110;120)  [120;130)<br>Tần số m:     6        10         14          7          3        ⇒ n = 40<br>ĐTĐD x_i:     85       95        105        115        125<br>Cộng dồn:     6        16         30         37         40<br>Độ dài nhóm h = 10 (năm nhóm bằng nhau).</div>
+<div class="kt-entry" id="kt-3-1"><div class="kt-entry-h"><span class="kt-num">3.1</span><span class="kt-t">TỪ SỐ LIỆU THÔ SANG MẪU SỐ LIỆU GHÉP NHÓM</span></div><div class="kt-body"><p class="kt-label" data-step="1">1. CÔNG THỨC</p>
+<ul class="kt-ul"><li>Các bước:</li></ul>
+<p>B1. Tìm GIÁ TRỊ LỚN NHẤT và NHỎ NHẤT của số liệu thô ⇒ khoảng biến thiên = max − min.</p>
+<p>B2. Chọn SỐ NHÓM (thường 4–6 nhóm) và ĐỘ DÀI NHÓM h = (max − min)/số nhóm, làm TRÒN LÊN cho thuận tay.</p>
+<p>B3. Viết các nhóm theo quy ước [a₁; a₂), [a₂; a₃), …, [a_k; a_{k+1}) với a₁ ≤ min và a_{k+1} &gt; max.</p>
+<p>B4. ĐẾM tần số m_i (số giá trị rơi vào nhóm i); KIỂM TRA m₁ + m₂ + … + m_k = n.</p>
+<p>B5. Tính giá trị đại diện x_i = (a_i + a_{i+1})/2.</p>
+<ul class="kt-ul"><li>Điều kiện: các nhóm KHÔNG ĐÈ LÊN NHAU, phủ hết dữ liệu; mỗi giá trị phải rơi vào ĐÚNG MỘT nhóm.</li></ul>
+<p class="kt-label" data-step="2">2. Ý NGHĨA</p>
+<p>Khi số liệu quá nhiều (cả lớp, cả khối) thì bảng &quot;từng giá trị một&quot; vô dụng. Ghép nhóm biến 40 con số thành 5 dòng gọn, đủ để vẽ biểu đồ và tính các số đặc trưng — đánh đổi là MẤT thông tin chi tiết trong từng nhóm, nên từ đó mọi tính toán đều dùng GIÁ TRỊ ĐẠI DIỆN (xấp xỉ).</p>
+<p class="kt-label" data-step="3">3. CÁCH CHỨNG MINH / GIẢI THÍCH</p>
+<ul class="kt-ul"><li>Giá trị đại diện là trung điểm nhóm: giả định các giá trị trong nhóm phân bố đều nên trung bình của nhóm xấp xỉ trung điểm — đó là lý do x_i xuất hiện trong mọi công thức ở Bài 9.</li><li>Quy ước đóng–mở bảo đảm không có giá trị nào bị đếm hai lần (đặc biệt giá trị trùng đầu mút).</li></ul>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 1</span> (cơ bản): Điểm thi môn Thể dục (thang 10) của 20 học sinh:</p>
+<p>6, 7, 5, 8, 6, 7, 9, 6, 5, 7, 8, 6, 7, 4, 9, 6, 7, 8, 5, 6.</p>
+<p>Đếm từng giá trị trước: 4 xuất hiện 1 lần; 5 → 3 lần; 6 → 6 lần; 7 → 5 lần; 8 → 3 lần; 9 → 2 lần (tổng 1 + 3 + 6 + 5 + 3 + 2 = 20 ✓).</p>
+<p>Ghép 5 nhóm độ dài 1, quy ước ĐÓNG TRÁI — MỞ PHẢI, riêng nhóm cuối đóng cả phải để chứa giá trị lớn nhất:</p>
+<p>[4;5) → 1 (điểm 4)          [5;6) → 3 (điểm 5)        [6;7) → 6 (điểm 6)</p>
+<p>[7;8) → 5 (điểm 7)          [8;9] → 3 + 2 = 5 (điểm 8 và 9)</p>
+<p>Kiểm tra Σ m_i = 1 + 3 + 6 + 5 + 5 = 20 = n ✓. Giá trị đại diện: 4,5; 5,5; 6,5; 7,5; 8,5.</p>
+<p>Số trung bình: (1·4,5 + 3·5,5 + 6·6,5 + 5·7,5 + 5·8,5)/20 = (4,5 + 16,5 + 39 + 37,5 + 42,5)/20 = 140/20 = 7,0.</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 2</span> (vận dụng): Chiều cao (cm) của 30 học sinh có giá trị nhỏ nhất 148 và lớn nhất 175. Hãy đề xuất cách ghép nhóm hợp lí.</p>
+<p>Khoảng biến thiên = 175 − 148 = 27. Chọn 5 nhóm ⇒ h = 27/5 = 5,4, làm tròn lên 6. Bắt đầu từ 148: [148;154), [154;160), [160;166), [166;172), [172;178) ⇒ 178 &gt; 175 nên phủ hết dữ liệu ✓. Giá trị đại diện: 151; 157; 163; 169; 175.</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 3</span> (nâng cao): Một bạn ghép nhóm điểm (thang 10) thành [0;2), [2;4), [4;6), [6;8), [8;10) rồi nhận được tổng tần số là 39 trong khi lớp có 40 học sinh. Em đó đã bỏ sót trường hợp nào?</p>
+<p>Giá trị 10 (điểm tuyệt đối). Nhóm cuối [8;10) MỞ ở phải ⇒ 10 KHÔNG thuộc nhóm nào. Cách sửa: viết nhóm cuối là [8;10] (đóng cả hai đầu) hoặc [8;10,5). Đây là lỗi kinh điển khi max đúng bằng đầu mút phải.</p>
+<p class="kt-label" data-step="7">7. GHI CHÚ SAI LẦM</p>
+<ul class="kt-ul"><li>Chọn độ dài nhóm rồi quên kiểm tra a_{k+1} &gt; max ⇒ mất dữ liệu.</li><li>Đếm giá trị trùng đầu mút vào cả hai nhóm ⇒ tổng tần số lớn hơn n.</li><li>Dùng [a_i; a_{i+1}] (đóng hai đầu) cho mọi nhóm — trùng nhau ở đầu mút.</li><li>Quên kiểm tra Σm_i = n ở bước cuối; đây là bước duy nhất bắt được lỗi đếm.</li></ul></div></div>
+<div class="kt-entry" id="kt-3-2"><div class="kt-entry-h"><span class="kt-num">3.2</span><span class="kt-t">SỐ TRUNG BÌNH CỦA MẪU GHÉP NHÓM (x̄)</span></div><div class="kt-body"><p class="kt-label" data-step="1">1. CÔNG THỨC</p>
+<ul class="kt-ul"><li>x̄ = (m₁x₁ + m₂x₂ + … + m_k x_k) / n , với n = m₁ + m₂ + … + m_k và x_i = (a_i + a_{i+1})/2.</li><li>Viết gọn:  x̄ = (1/n)·Σ m_i x_i.</li><li>Điều kiện: x̄ của mẫu GHÉP NHÓM là giá trị XẤP XỈ (vì dùng giá trị đại diện), và chỉ tính được khi đã biết đủ tần số các nhóm.</li></ul>
+<p class="kt-label" data-step="2">2. Ý NGHĨA</p>
+<p>Là &quot;điểm cân bằng&quot; của dãy số liệu, dùng để so sánh nhanh hai tập số liệu (hai lớp, hai vụ mùa, hai năm). Vì nhân tần số nên nhóm nào đông hơn sẽ &quot;kéo&quot; số trung bình về phía nó — đó là khác biệt cốt lõi so với trung bình của các giá trị đại diện (không trọng số).</p>
+<p class="kt-label" data-step="3">3. CÁCH CHỨNG MINH / GIẢI THÍCH</p>
+<ul class="kt-ul"><li>Trong nhóm i có m_i giá trị, thay vì cộng từng giá trị thật (không biết), sách thay bằng m_i lần giá trị đại diện x_i ⇒ tổng cả mẫu ≈ Σ m_i x_i.</li><li>Chia cho n số đo ⇒ trung bình. Đây là trung bình trọng số: mỗi giá trị đại diện &quot;đượcWeighting&quot; đúng bằng số lần nó xuất hiện.</li></ul>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 1</span> (cơ bản): Tính x̄ của bộ số liệu 40 học sinh (đầu tệp).</p>
+<p>Σ m_i x_i = 6·85 + 10·95 + 14·105 + 7·115 + 3·125 = 510 + 950 + 1470 + 805 + 375 = 4110.</p>
+<p>x̄ = 4110/40 = 102,75 (giây).</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 2</span> (vận dụng): Một bạn tính &quot;trung bình các giá trị đại diện&quot; cho cùng bộ số liệu: (85 + 95 + 105 + 115 + 125)/5 = 105. Vì sao kết quả khác 102,75?</p>
+<p>Vì bạn đó coi 5 nhóm ĐÔNG NHƯ NHAU. Nhóm [100;110) có tới 14 người, nhóm [120;130) chỉ 3 người ⇒ trung bình đúng phải là 102,75. KẾT LUẬN: phải NHÂN TẦN SỐ, không cộng suông các x_i.</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 3</span> (nâng cao): Khối 11 có hai lớp. 11A: 32 HS, x̄ = 102,5 s. 11B: 28 HS, x̄ = 104,0 s. Tính số trung bình của cả khối.</p>
+<p>KHÔNG được lấy (102,5 + 104,0)/2. Phải trở về tổng: 32·102,5 + 28·104,0 = 3280 + 2912 = 6192; n = 60.</p>
+<p>x̄_khối = 6192/60 = 103,2 (giây).</p>
+<p>(Công thức suy ra từ 3.2: x̄ = (n₁x̄₁ + n₂x̄₂)/(n₁ + n₂).)</p>
+<p class="kt-label" data-step="7">7. GHI CHÚ SAI LẦM</p>
+<ul class="kt-ul"><li>Quên nhân tần số (lỗi phổ biến nhất — xem Ví dụ 2).</li><li>Lấy a_i (đầu mút nhóm) thay vì x_i (giữa nhóm).</li><li>Chia cho k (số nhóm) thay vì cho n (cỡ mẫu).</li><li>Trung bình hai số trung bình của hai lớp ⇒ sai trừ khi hai lớp bằng số học sinh.</li><li>Nói x̄ của mẫu ghép nhóm là giá trị CHÍNH XÁC — sách nhấn mạnh đó là số gần đúng.</li></ul></div></div>
+<div class="kt-entry" id="kt-3-3"><div class="kt-entry-h"><span class="kt-num">3.3</span><span class="kt-t">TRUNG VỊ CỦA MẪU GHÉP NHÓM (M_e)</span></div><div class="kt-body"><p class="kt-label" data-step="1">1. CÔNG THỨC</p>
+<ul class="kt-ul"><li>Tìm NHÓM CHỨA TRUNG VỊ (gọi là nhóm thứ p): nhóm đầu tiên mà tổng cộng dồn đạt tới n/2, tức</li></ul>
+<p>m₁ + … + m_{p−1} &lt; n/2 ≤ m₁ + … + m_p.</p>
+<ul class="kt-ul"><li>Khi đó:  M_e = a_p + [n/2 − (m₁ + … + m_{p−1})] / m_p · (a_{p+1} − a_p)</li><li>Quy ước: nếu p = 1 thì m₁ + … + m_{p−1} = 0.</li><li>Nếu chỉ có HAI nhóm (k = 2): M_e = a₂ (đầu mút chung của hai nhóm).</li><li>Điều kiện: số liệu phải đã sắp xếp theo thứ tự tăng dần trước khi ghép nhóm; công thức giả định các giá trị phân bố ĐỀU trong nhóm p.</li></ul>
+<p class="kt-label" data-step="2">2. Ý NGHĨA</p>
+<p>Trung vị &quot;chia đôi&quot; dãy: một nửa số học sinh chạy nhanh hơn M_e, một nửa chậm hơn. Ưu thế lớn nhất là KHÔNG BỊ các giá trị cực đại/cực tiểu kéo lệch, nên khi số liệu có ngoại lệ (một em chạy 300 s vì đi bộ) thì M_e mô tả &quot;mức chung&quot; tốt hơn x̄.</p>
+<p class="kt-label" data-step="3">3. CÁCH CHỨNG MINH / GIẢI THÍCH</p>
+<ul class="kt-ul"><li>Trong nhóm p có m_p giá trị trải đều trên đoạn dài (a_{p+1} − a_p). Ta cần giá trị mà &quot;tính đến đó&quot; đã đủ n/2 số liệu; nhóm p đã có (m₁ + … + m_{p−1}) số ở phía trước, nên còn thiếu</li></ul>
+<p>n/2 − (m₁ + … + m_{p−1}) số nữa.</p>
+<ul class="kt-ul"><li>Tỉ lệ số còn thiếu so với cả nhóm = [n/2 − (m₁ + … + m_{p−1})]/m_p; áp tỉ lệ đó lên ĐỘ DÀI đoạn (a_{p+1} − a_p) rồi cộng vào đầu mút trái a_p ⇒ ra vị trí chia đôi. Đây là nội suy tuyến tính.</li></ul>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 1</span> (cơ bản): Bộ số liệu 40 học sinh (đầu tệp). Tìm M_e.</p>
+<p>n/2 = 20. Cộng dồn: 6 (→90), 16 (→100), 30 (→110). Vì 16 &lt; 20 ≤ 30 ⇒ p = 3, nhóm [100;110).</p>
+<p>M_e = 100 + (20 − 16)/14 · 10 = 100 + 40/14 ≈ 102,86 (giây).</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 2</span> (vận dụng): Tìm Q₁ và Q₃ bằng chính công thức trung vị (chỉ thay n/2 bằng n/4 và 3n/4) — xem mục 3.4. Ở đây hãy giải thích ý nghĩa câu: &quot;Trung vị 102,86 s nhưng số trung bình 102,75 s, kết luận gì?&quot;</p>
+<p>Hai số gần nhau ⇒ phân bố khá ĐỐI XỨNG, không có ngoại lệ kéo lệch; khi đó x̄ và M_e đều dùng được để mô tả &quot;mức chung&quot; của lớp.</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 3</span> (nâng cao): Một mẫu ghép nhóm có n = 50 với m₁ = 10, m₂ = 12, m₃ = 15, m₄ = 8, m₅ = 5 và các nhóm [10;20), [20;30), [30;40), [40;50), [50;60).</p>
+<p>n/2 = 25. Cộng dồn: 10, 22, 37 ⇒ 22 &lt; 25 ≤ 37 ⇒ p = 3, nhóm [30;40).</p>
+<p>M_e = 30 + (25 − 22)/15 · 10 = 30 + 30/15 = 32.</p>
+<p>Kiểm tra tính hợp lý: 32 nằm trong [30;40) ✓. Nếu vội lấy &quot;nhóm 3&quot; rồi trả lời 35 (điểm giữa nhóm) là sai — phải nội suy đúng công thức.</p>
+<p class="kt-label" data-step="7">7. GHI CHÚ SAI LẦM</p>
+<ul class="kt-ul"><li>Quên CỘNG DỒN, đem so n/2 với từng m_i riêng rẻ (nhầm 3.3 với &quot;nhóm có tần số lớn nhất&quot; của mốt).</li><li>Dùng sai (a_{p+1} − a_p): lấy cả mẫu trừ đi, hoặc lấy độ dài của nhóm khác.</li><li>Với p = 1 mà không áp quy ước tổng trước = 0 (hay viết lộn xộn, dẫn tới số trừ âm).</li><li>Nghĩ M_e = &quot;giá trị đại diện của nhóm chứa trung vị&quot; ⇒ mất phần nội suy, kết quả thô và thường bị trừ điểm ở câu hỏi kiểm tra.</li><li>Mẫu GHÉP NHÓM luôn cho M_e gần đúng; đừng so sánh với trung vị của mẫu chưa ghép nhóm rồi kết luận &quot;sai số&quot; là lỗi tính.</li></ul></div></div>
+<div class="kt-entry" id="kt-3-4"><div class="kt-entry-h"><span class="kt-num">3.4</span><span class="kt-t">TỨ PHÂN VỊ CỦA MẪU GHÉP NHÓM (Q₁, Q₂, Q₃)</span></div><div class="kt-body"><p class="kt-label" data-step="1">1. CÔNG THỨC</p>
+<ul class="kt-ul"><li>Q₁ (tứ phân vị thứ nhất): tìm nhóm p sao cho m₁ + … + m_{p−1} &lt; n/4 ≤ m₁ + … + m_p, rồi</li></ul>
+<p>Q₁ = a_p + [n/4 − (m₁ + … + m_{p−1})] / m_p · (a_{p+1} − a_p)</p>
+<ul class="kt-ul"><li>Q₂ = M_e (trung vị — dùng n/2).</li><li>Q₃: tìm nhóm p sao cho m₁ + … + m_{p−1} &lt; 3n/4 ≤ m₁ + … + m_p, rồi</li></ul>
+<p>Q₃ = a_p + [3n/4 − (m₁ + … + m_{p−1})] / m_p · (a_{p+1} − a_p)</p>
+<ul class="kt-ul"><li>Điều kiện: số liệu đã sắp xếp; công thức nội suy trong nhóm chứa tứ phân vị; nếu có đúng HAI nhóm thì sách quy ước Q₁ = Q₂ = Q₃ = a₂ (đầu mút chung).</li></ul>
+<p class="kt-label" data-step="2">2. Ý NGHĨA</p>
+<p>Ba tứ phân vị cắt dãy thành 4 phần bằng nhau, mỗi phần 25% số liệu. Nhìn Q₁ và Q₃ biết ngay &quot;nửa giữa&quot; của lớp nằm trong khoảng nào (trải từ Q₁ đến Q₃), tức mức độ TẬP TRUNG hay PHÂN TÁN của đa số — thông tin mà chỉ riêng số trung bình không cho.</p>
+<p class="kt-label" data-step="3">3. CÁCH CHỨNG MINH / GIẢI THÍCH</p>
+<ul class="kt-ul"><li>Hoàn toàn cùng logic với trung vị: thay mục tiêu &quot;đủ n/2 số liệu&quot; bằng &quot;đủ n/4&quot; (cho 25% đầu) hoặc &quot;đủ 3n/4&quot; (cho 75% đầu), rồi nội suy tuyến tính trong nhóm chứa vị trí đó.</li><li>Bất đẳng thức luôn có: Q₁ ≤ Q₂ ≤ Q₃.</li></ul>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 1</span> (cơ bản): Tính Q₁ của bộ số liệu 40 học sinh.</p>
+<p>n/4 = 10. Cộng dồn: 6 (→90), 16 (→100) ⇒ 6 &lt; 10 ≤ 16 ⇒ p = 2, nhóm [90;100).</p>
+<p>Q₁ = 90 + (10 − 6)/10 · 10 = 90 + 4 = 94 (giây).</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 2</span> (vận dụng): Tính Q₃ của bộ số liệu 40 học sinh.</p>
+<p>3n/4 = 30. Cộng dồn: 6, 16, 30 ⇒ 16 &lt; 30 ≤ 30 ⇒ p = 3, nhóm [100;110) (đúng đầu mút phải của nhóm).</p>
+<p>Q₃ = 100 + (30 − 16)/14 · 10 = 100 + 140/14 = 110 (giây).</p>
+<p class="kt-ans"><b>Kết luận:</b> 75% học sinh chạy hết 800 m trong 110 s trở xuống.</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 3</span> (nâng cao): Với bộ số liệu trên, hãy đọc ý nghĩa cả ba con số: Q₁ = 94; Q₂ = M_e ≈ 102,9; Q₃ = 110; đồng thời tính Q₃ − Q₁ = 16.</p>
+<p>Có 25% học sinh chạy nhanh hơn 94 s; 50% nằm trong khoảng 94–110 s (tức &quot;nửa giữa&quot; trải trên 16 s); 25% chậm hơn 110 s. So sánh với một lớp khác có cùng x̄ nhưng Q₃ − Q₁ = 30 s ⇒ lớp này ĐỒNG ĐỀU hơn rõ rệt, dù số trung bình bằng nhau — đây là lý do sách luôn cho &quot;nửa giữa&quot; để so sánh mức phân tán.</p>
+<p class="kt-label" data-step="7">7. GHI CHÚ SAI LẦM</p>
+<ul class="kt-ul"><li>Dùng n/4 và 3n/4 rồi LẤY Luôn nhóm đầu tiên có cộng dồn &gt; n/4 mà không kiểm tra bất đẳng thức trái (&lt;) ⇒ chọn sai nhóm khi n/4 trùng đúng đầu mút cộng dồn.</li><li>Nhầm Q₂ với &quot;giá trị giữa của bảng&quot; hay nhầm tứ phân vị với trung bình cộng của hai nhóm.</li><li>Quên trường hợp chỉ có 2 nhóm ⇒ sách quy ước Q₁ = Q₂ = Q₃ = a₂.</li><li>Nói &quot;Q₃ là số lớn nhất&quot; — sai, Q₃ chỉ là mốc 75%.</li></ul></div></div>
+<div class="kt-entry" id="kt-3-5"><div class="kt-entry-h"><span class="kt-num">3.5</span><span class="kt-t">MỐT CỦA MẪU GHÉP NHÓM (M_o)</span></div><div class="kt-body"><p class="kt-label" data-step="1">1. CÔNG THỨC</p>
+<ul class="kt-ul"><li>Nhóm chứa mốt là nhóm j có TẦN SỐ LỚN NHẤT (m_j = max).</li><li>Khi các nhóm có độ dài bằng nhau (đều bằng h):</li></ul>
+<p>M_o = a_j + (m_j − m_{j−1}) / [(m_j − m_{j−1}) + (m_j − m_{j+1})] · h</p>
+<p>với quy ước m₀ = 0 và m_{k+1} = 0.</p>
+<ul class="kt-ul"><li>Điều kiện: công thức chỉ dùng được khi CÁC NHÓM BẰNG NHAU về độ dài; với mẫu chưa ghép nhóm thì mốt là giá trị xuất hiện nhiều nhất (có thể có 2, 3 mốt hoặc không có mốt).</li></ul>
+<p class="kt-label" data-step="2">2. Ý NGHĨA</p>
+<p>Mốt trả lời câu hỏi &quot;số nào ĐÔNG NHẤT&quot;, tức mức phổ biến — câu hỏi mà số trung bình và trung vị không trả lời được (ví dụ cỡ giày bán chạy nhất, điểm số nhiều em đạt nhất, khoảng thời gian có nhiều học sinh nhất). Trong kinh doanh và trong điều tra thực tế, mốt thường là con số có ích nhất.</p>
+<p class="kt-label" data-step="3">3. CÁCH CHỨNG MINH / GIẢI THÍCH</p>
+<ul class="kt-ul"><li>Vẽ biểu đồ tần số (histogram) rồi nối đỉnh các cột liền kề: đường gấp khúc cắt đỉnh cột cao nhất tại một hoành độ; hoành độ đó chính là M_o.</li><li>Từ hai tam giác đồng dạng ở hai bên cột cao nhất, suy ra đoạn cần cộng vào a_j là</li></ul>
+<p>(m_j − m_{j−1})/[(m_j − m_{j−1}) + (m_j − m_{j+1})] · h — tức mốt bị ĐẨY về phía cột cao hơn trong hai cột kề.</p>
+<ul class="kt-ul"><li>Vì vậy nếu cột bên trái thấp hơn cột bên phải (m_j − m_{j−1} &gt; m_j − m_{j+1}) thì M_o nằm bên PHẢI trung điểm của nhóm.</li></ul>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 1</span> (cơ bản): Tìm mốt của bộ số liệu 40 học sinh.</p>
+<p>Tần số lớn nhất: m₃ = 14 ⇒ nhóm j = 3, [100;110), h = 10, m₂ = 10, m₄ = 7.</p>
+<p>M_o = 100 + (14 − 10)/[(14 − 10) + (14 − 7)] · 10 = 100 + 4/(4 + 7)·10 = 100 + 40/11 ≈ 103,64 (giây).</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 2</span> (vận dụng): Ở Ví dụ 1, trung điểm của nhóm chứa mốt là 105 nhưng M_o ≈ 103,64 NHỎ hơn 105. Giải thích để không phải tính vẫn đoán được chiều lệch.</p>
+<p>Cột kề bên trái (m₂ = 10) CAO HƠN cột kề bên phải (m₄ = 7) ⇒ phần tử số (m_j − m_{j−1} = 4) NHỎ hơn phần mẫu còn lại (4 + 7 = 11) ⇒ phân số &lt; ½ ⇒ mốt bị KÉO về phía trái trung điểm.</p>
+<p>Quy tắc nhớ nhanh khi làm trắc nghiệm: mốt luôn lệch về phía CỘT KỀ CAO HƠN trong hai cột kề nhóm có tần số lớn nhất; hai cột kề bằng nhau thì mốt đúng bằng trung điểm.</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 3</span> (nâng cao): Mẫu có 4 nhóm độ dài 5: [10;15), [15;20), [20;25), [25;30) với tần số 4, 9, 12, 2. Tính mốt và chỉ ra điểm đặc biệt nếu nhóm có tần số lớn nhất là nhóm CUỐI.</p>
+<p>m₃ = 12 lớn nhất ⇒ j = 3; m₂ = 9, m₄ = 2, h = 5.</p>
+<p>M_o = 20 + (12 − 9)/[(12 − 9) + (12 − 2)]·5 = 20 + 3/(3 + 10)·5 = 20 + 15/13 ≈ 21,15.</p>
+<p>Nếu nhóm lớn nhất là nhóm cuối (j = k) thì phải dùng quy ước m_{k+1} = 0:</p>
+<p>M_o = a_k + (m_k − m_{k−1})/[(m_k − m_{k−1}) + m_k]·h. Quên m_{k+1} = 0 là sai cả mẫu số.</p>
+<p class="kt-label" data-step="7">7. GHI CHÚ SAI LẦM</p>
+<ul class="kt-ul"><li>Trả lời mốt = chính nhóm [100;110) hoặc = tần số 14 — mốt phải là MỘT SỐ (giá trị), không phải nhóm hay tần số.</li><li>Áp dụng công thức khi các nhóm KHÔNG bằng độ dài ⇒ sai, sách chỉ định nghĩa cho trường hợp bằng nhau.</li><li>Lấy nhóm có tần số lớn nhất mà không xét rằng hai nhóm có thể cùng tần số lớn nhất (mẫu chưa ghép nhóm có thể có 2 mốt; với mẫu ghép nhóm thì chọn theo bảng và nêu nhận xét).</li><li>Quên quy ước m₀ = 0 khi j = 1.</li></ul></div></div>
+<div class="kt-entry" id="kt-3-6"><div class="kt-entry-h"><span class="kt-num">3.6</span><span class="kt-t">KHOẢNG BIẾN THIÊN CỦA MẪU GHÉP NHÓM</span></div><div class="kt-body"><p class="kt-label" data-step="1">1. CÔNG THỨC</p>
+<ul class="kt-ul"><li>Khoảng biến thiên = giá trị lớn nhất − giá trị nhỏ nhất của mẫu.</li><li>Với mẫu GHÉP NHÓM, sách dùng đầu mút của các nhóm:  R = a_{k+1} − a₁ (nhóm cuối − nhóm đầu), và nói đây là số GẦN ĐÚNG vì chỉ biết dữ liệu nằm trong hai khoảng đó.</li><li>Điều kiện: R chỉ đo &quot;biên ngoài cùng&quot;; nó KHÔNG phải một trong 4 số đặc trưng đo xu thế trung tâm (trung bình, trung vị, tứ phân vị, mốt) nên không được dùng để mô tả &quot;mức chung&quot;, chỉ để mô tả độ TRẢI.</li></ul>
+<p class="kt-label" data-step="2">2. Ý NGHĨA</p>
+<p>Cho biết toàn bộ dữ liệu nằm trong một dải rộng bao nhiêu — cần thiết khi xét phạm vi an toàn (thời gian chạy chậm nhất − nhanh nhất, biên độ nhiệt trong ngày, chênh lệch điểm giữa hai em).</p>
+<p class="kt-label" data-step="3">3. CÁCH CHỨNG MINH / GIẢI THÍCH</p>
+<ul class="kt-ul"><li>Trong mẫu ghép nhóm, số nhỏ nhất chắc chắn ≥ a₁ và số lớn nhất chắc chắn ≤ a_{k+1}, nên hiệu a_{k+1} − a₁ là một CHẶN TRÊN cho khoảng biến thiên thật; hiệu của các giá trị đại diện (x_k − x₁) thì nhỏ hơn và bỏ sót hai nửa nhóm ngoài cùng ⇒ sách dùng đầu mút.</li></ul>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 1</span> (cơ bản): Bộ số liệu 40 học sinh: R = 130 − 80 = 50 (giây).</p>
+<p>Interpretation: em chậm nhất và em nhanh nhất cách nhau tới 50 s, dù số trung bình chỉ 102,75 s.</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 2</span> (vận dụng): Cùng bộ số liệu, một bạn tính R = 125 − 85 = 40 (dùng giá trị đại diện). Sai ở đâu?</p>
+<p>Sai: 85 và 125 là ĐIỂM GIỮA nhóm, không phải biên. Dữ liệu thật có thể trải tới 80 và 130 ⇒ phải dùng a₁ = 80 và a₅₊₁ = 130 ⇒ R = 50.</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 3</span> (nâng cao): Hai lớp cùng có khoảng biến thiên 50 s. Lớp A có Q₃ − Q₁ = 16 s, lớp B có Q₃ − Q₁ = 30 s. Nhận xét.</p>
+<p>Khoảng biến thiên chỉ nhìn hai đầu, dễ bị &quot;đánh lừa&quot; bởi một vài em quá nhanh/quá chậm. &quot;Nửa giữa&quot; của lớp A chỉ trải 16 s ⇒ A đồng đều hơn B (30 s) mặc dù R bằng nhau. Kết luận thực tế cho cô giáo: lớp A dễ dạy chung một nhịp, lớp B cần chia nhóm trình độ.</p>
+<p class="kt-label" data-step="7">7. GHI CHÚ SAI LẦM</p>
+<ul class="kt-ul"><li>Dùng giá trị đại diện để tính R.</li><li>Coi R là &quot;số đo xu thế trung tâm&quot; — nó là số đo ĐỘ PHÂN TÁN.</li><li>Nói R của mẫu ghép nhóm chính xác như mẫu chưa ghép nhóm — phải nói gần đúng.</li><li>Nhầm R với Q₃ − Q₁ (khoảng tứ phân vị) — hai cái khác nhau, và bản Kết nối tri thức lớp 11 chỉ dùng bộ 4 số ở Chương 3.</li></ul></div></div>
+<div class="kt-entry" id="kt-3-7"><div class="kt-entry-h"><span class="kt-num">3.7</span><span class="kt-t">CHỌN SỐ ĐẶC TRƯNG ĐỂ MÔ TẢ MẪU SỐ LIỆU</span></div><div class="kt-body"><p class="kt-label" data-step="1">1. CÔNG THỨC (quy tắc thực hành, không phải công thức tính)</p>
+<ul class="kt-ul"><li>Có ngoại lệ rất lớn/rất nhỏ, hoặc mẫu skewed (lệch nhiều về một phía) ⇒ nên dùng TRUNG VỊ M_e.</li><li>Số liệu đối xứng, không có giá trị bất thường ⇒ x̄ dùng tốt và tận dụng được mọi giá trị.</li><li>Cần biết &quot;cái nào phổ biến nhất&quot; (cỡ hàng, điểm số nhiều em đạt, khung giờ đông nhất) ⇒ dùng MỐT M_o.</li><li>Cần so sánh mức ĐỒNG ĐỀU của hai mẫu ⇒ dùng bộ tứ phân vị (Q₁, Q₃) và khoảng biến thiên, không chỉ nhìn số trung bình.</li><li>Điều kiện: luôn nói rõ số liệu là mẫu GHÉP NHÓM ⇒ mọi số đặc trưng đều là số gần đúng.</li></ul>
+<p class="kt-label" data-step="2">2. Ý NGHĨA</p>
+<p>Cùng một bảng số liệu, chọn sai số đặc trưng sẽ kết luận sai — đây là mục đích thật sự của chương: biết &quot;con số nào đang nói gì&quot; thay vì chỉ biết bấm máy.</p>
+<p class="kt-label" data-step="3">3. CÁCH CHỨNG MINH / GIẢI THÍCH</p>
+<ul class="kt-ul"><li>x̄ bị KÉO bằng toàn bộ phần thừa của giá trị ngoại lệ (vì cộng hết rồi chia); M_e chỉ cần biết có bao nhiêu số đứng trước nó nên gần như không đổi khi ngoại lệ đổi.</li><li>Minh hoạ bằng một mẫu thật: thu nhập (triệu đồng/tháng) của 10 người:</li></ul>
+<p>5, 6, 6, 7, 7, 8, 8, 9, 10, 100.</p>
+<p>x̄ = 166/10 = 16,6 nhưng 9/10 người dưới 16,6 ⇒ con số 16,6 mô tả sai.</p>
+<p>M_e = (7 + 8)/2 = 7,5 ⇒ đúng &quot;người giữa&quot; của nhóm.</p>
+<p>M_o = 6 và 8 (hai mốt) ⇒ &quot;mức phổ biến&quot; nằm quanh 6–8 triệu.</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 1</span> (cơ bản): Bảng điểm của một lớp có 45 em điểm 5–8 và 1 em điểm 1. Nên dùng số nào để báo cáo &quot;mức điểm chung&quot;? Vì sao?</p>
+<p>Dùng trung vị (hoặc mốt) vì điểm 1 là ngoại lệ kéo x̄ xuống; số trung bình lúc đó nhỏ hơn tới 45/46 số liệu của lớp.</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 2</span> (vận dụng): Cửa hàng giày cần quyết định nhập cỡ nào nhiều nhất. Nên dùng số đặc trưng nào?</p>
+<p>Mốt — vì câu hỏi là &quot;cỡ nào bán chạy nhất&quot;, không phải &quot;cỡ trung bình&quot;. Trung bình của cỡ 37 và 41 là 39 nhưng cỡ 39 có thể chẳng bán được bao nhiêu.</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 3</span> (nâng cao): Hai lớp 11A và 11B cùng x̄ = 102,8 s ở nội dung 800 m, cùng R = 50 s. Biết 11A: Q₁ = 94, Q₃ = 110; 11B: Q₁ = 88, Q₃ = 118. Lớp nào có &quot;nửa giữa&quot; đồng đều hơn và vì sao phải nhìn tứ phân vị?</p>
+<p>11A có Q₃ − Q₁ = 16 s, 11B có 30 s ⇒ 11A đồng đều hơn ở vùng giữa. R bằng nhau nên không phân biệt được; chỉ tứ phân vị mới cho thấy 11B trải rộng hơn — tức hai con số trung bình bằng nhau KHÔNG có nghĩa hai lớp giống nhau.</p>
+<p class="kt-label" data-step="7">7. GHI CHÚ SAI LẦM</p>
+<ul class="kt-ul"><li>Báo cáo chỉ mỗi x̄ rồi kết luận hai nhóm &quot;như nhau&quot;.</li><li>Dùng x̄ khi có ngoại lệ rồi cho rằng &quot;trung bình gian dối&quot; và chuyển sang… số lớn nhất (sai hướng).</li><li>Quên mẫu ghép nhóm ⇒ nói &quot;chính xác&quot;.</li><li>Trộn khái niệm: mốt của MẪU GHÉP NHÓM là một số nội suy trong nhóm, không phải &quot;nhóm đông nhất&quot;; mốt của mẫu CHƯA ghép nhóm mới là giá trị lặp nhiều nhất.</li></ul></div></div>
+<div class="kt-entry" id="kt-3-8"><div class="kt-entry-h"><span class="kt-num">3.8</span><span class="kt-t">BÀI TOÁN NGƯỢC: TẦN SỐ CHƯA BIẾT, SỐ ĐẶC TRƯNG CHO TRƯỚC</span></div><div class="kt-body"><p class="kt-label" data-step="1">1. CÔNG THỨC</p>
+<ul class="kt-ul"><li>Ba phương trình thường dùng để &quot;giải ngược&quot;:</li></ul>
+<p>(i) Σ m_i = n  (đủ tần số thì tổng phải bằng cỡ mẫu);</p>
+<p>(ii) x̄ = (Σ m_i x_i)/n  (biết x̄ ⇒ biết Σ m_i x_i);</p>
+<p>(iii) Bất đẳng thức chọn nhóm của trung vị: m₁ + … + m_{p−1} &lt; n/2 ≤ m₁ + … + m_p (biết M_e và nhóm p ⇒ chặn được tổng tần số phía trước).</p>
+<ul class="kt-ul"><li>Từ (i) và (ii) lập hệ hai ẩn, giải như hệ bậc nhất.</li><li>Điều kiện: nghiệm phải là SỐ NGUYÊN KHÔNG ÂM và ≤ n; nếu ra số thập phân thì hoặc đọc đề sai, hoặc dữ liệu đề không hợp lí (biết x̄ làm tròn).</li></ul>
+<p class="kt-label" data-step="2">2. Ý NGHĨA</p>
+<p>Đây là dạng bài &quot;khó nhất chương&quot; trong kiểm tra: học sinh không chỉ tính mà phải hiểu cấu trúc công thức đủ để đảo ngược. Nó cũng dùng cho tình huống thật: lớp có 2 em chưa được điểm, hãy khôi phục tần số từ số trung bình đã công bố.</p>
+<p class="kt-label" data-step="3">3. CÁCH CHỨNG MINH / GIẢI THÍCH</p>
+<ul class="kt-ul"><li>Công thức x̄ là ĐẲNG THỨC tuyến tính theo các ẩn m_i (với x_i đã biết) ⇒ ghép với phương trình tổng tần số được hệ hai phương trình bậc nhất hai ẩn — cách giải hoàn toàn giống hệ ở lớp 9, chỉ khác là các số liệu đến từ bảng ghép nhóm.</li></ul>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 1</span> (cơ bản): Thời gian tự học mỗi tuần (giờ) của 20 học sinh được ghép 4 nhóm độ dài 5: [0;5), [5;10), [10;15), [15;20) với tần số 2, x, y, 3. Biết x + y = 15 (đúng theo tổng 20). Phương trình nào dưới đây ĐÚNG để tìm x, y nếu x̄ = 10?</p>
+<p>Giá trị đại diện: 2,5; 7,5; 12,5; 17,5.</p>
+<p>Σ m_i x_i = 2·2,5 + 7,5x + 12,5y + 3·17,5 = 5 + 7,5x + 12,5y + 52,5.</p>
+<p>x̄ = 10 ⇒ Σ m_i x_i = 20·10 = 200 ⇒ 7,5x + 12,5y = 142,5.</p>
+<p>Cùng x + y = 15 ⇒ x = 15 − y ⇒ 7,5(15 − y) + 12,5y = 142,5 ⇒ 112,5 + 5y = 142,5 ⇒ y = 6 ⇒ x = 9.</p>
+<p>Thử lại: 2 + 9 + 6 + 3 = 20 ✓; Σ = 5 + 67,5 + 75 + 52,5 = 200 ⇒ x̄ = 10 ✓.</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 2</span> (vận dụng): Cùng bảng trên nhưng đề chỉ cho M_e = 10 (đúng đầu mút chung). Kết luận gì về x, y?</p>
+<p>n/2 = 10 và M_e = 10 = a₃ (đầu mút chung nhóm 1 và 2) ⇒ nhóm chứa trung vị là nhóm 2 [5;10) với điều kiện</p>
+<p>m₁ &lt; 10 ≤ m₁ + m₂ ⇒ 2 &lt; 10 ≤ 2 + x ⇒ x ≥ 8. Kết hợp x + y = 15 ⇒ x ∈ {8, 9, 10, …, 15} (còn chưa chốt) — bài toán cho trung vị chỉ đưa ra MIỀN, không ra giá trị; muốn ra giá trị phải có thêm dữ kiện (thường là x̄).</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 3</span> (nâng cao): Mẫu có 3 nhóm độ dài 10: [10;20), [20;30), [30;40) với tần số a, 12, b. Biết cỡ mẫu n = 30 và x̄ = 23. Tìm a, b rồi tính trung vị.</p>
+<p>x_i = 15; 25; 35.  (i) a + 12 + b = 30 ⇒ a + b = 18.</p>
+<p>(ii) Σ m_i x_i = n·x̄ = 30·23 = 690 ⇒ 15a + 12·25 + 35b = 690 ⇒ 15a + 35b = 390 ⇒ 3a + 7b = 78.</p>
+<p>Thế a = 18 − b: 54 − 3b + 7b = 78 ⇒ 4b = 24 ⇒ b = 6 ⇒ a = 12. Thử lại: 12 + 12 + 6 = 30 ✓; (180 + 300 + 210)/30 = 23 ✓.</p>
+<p>Trung vị: n/2 = 15; cộng dồn 12, 24 ⇒ 12 &lt; 15 ≤ 24 ⇒ p = 2, nhóm [20;30).</p>
+<p>M_e = 20 + (15 − 12)/12 · 10 = 20 + 2,5 = 22,5.</p>
+<p>PHẢN VÍ DỤ về điều kiện nghiệm nguyên: nếu đề cho x̄ = 24 thì 3a + 7b = 84 ⇒ 54 + 4b = 84 ⇒ b = 7,5 — KHÔNG nguyên. Kết luận đúng là &quot;dữ liệu của đề không hợp lệ (x̄ chắc chắn đã làm tròn)&quot;, chứ không được trả lời b = 7,5.</p>
+<p class="kt-label" data-step="7">7. GHI CHÚ SAI LẦM</p>
+<ul class="kt-ul"><li>Dùng x_i = a_i (đầu mút) khi lập phương trình ⇒ hệ ra nghiệm sai.</li><li>Quên ràng buộc &quot;m_i nguyên, không âm&quot; — nghiệm ra số thập phân là tín hiệu sai, không phải đáp số.</li><li>Chia cho k (3 nhóm) thay vì cho n (30 học sinh) khi dùng x̄.</li><li>Nghĩ trung vị cho phép tìm chính xác từng tần số ⇒ chỉ cho BẤT ĐẲNG THỨC (xem Ví dụ 2).</li></ul></div></div>
+<div class="kt-entry" id="kt-3-9"><div class="kt-entry-h"><span class="kt-num">3.9</span><span class="kt-t">ĐỌC MẪU GHÉP NHÓM TỪ BIỂU ĐỒ TẦN SỐ (HISTOGRAM)</span></div><div class="kt-body"><p class="kt-label" data-step="1">1. CÔNG THỨC</p>
+<ul class="kt-ul"><li>Biểu đồ tần số của mẫu ghép nhóm: các HÌNH CHỮ NHẬT liền kề nhau, đáy đúng bằng độ dài nhóm, chiều cao tỉ lệ với tần số m_i (đường gấp khúc nối đỉnh các cột gọi là đường nhiều tần số).</li><li>Đọc bảng từ biểu đồ: a_i từ vạch trên trục hoành, m_i từ chiều cao cột (đọc theo lưới ô vuông) ⇒ n = Σ m_i, x_i = giữa hai vạch.</li><li>Điều kiện: khi các nhóm không bằng độ dài, chiều cao cột phải quy về TỈ LỆ (mật độ), không được so sánh &quot;cột nào cao hơn thì đông hơn&quot;.</li></ul>
+<p class="kt-label" data-step="2">2. Ý NGHĨA</p>
+<p>Trong đề thi, dữ liệu thường cho bằng biểu đồ chứ không cho bảng; ai đọc đúng biểu đồ thì mới tính được x̄, M_e, M_o. Hình còn cho thấy ngay dạng phân bố (đối xứng, lệch phải, lệch trái, có bao nhiêu đỉnh) — từ đó biết nên chọn số đặc trưng nào (mục 3.7).</p>
+<p class="kt-label" data-step="3">3. CÁCH CHỨNG MINH / GIẢI THÍCH</p>
+<ul class="kt-ul"><li>Diện tích mỗi cột = độ dài nhóm × chiều cao = m_i·h; vì các nhóm bằng nhau nên diện tích tỉ lệ thuận tần số. Tổng diện tích = n·h — cách nhìn này dùng để &quot;chia theo diện tích&quot; khi nội suy trung vị: trung vị là hoành độ chia TỔNG DIỆN TÍCH thành hai nửa bằng nhau.</li><li>Từ đó thấy bản chất công thức M_e: tìm điểm mà phần diện tích bên trái đủ n/2 &quot;đơn vị&quot; — cùng một nội dung với công thức ở 3.3, chỉ nhìn bằng hình.</li></ul>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 1</span> (cơ bản): Một biểu đồ có 4 cột liên tiếp trên trục [10;20), [20;30), [30;40), [40;50) với chiều cao 5, 10, 12, 3 (tần số). Hãy viết lại bảng và tính x̄.</p>
+<p>x_i = 15, 25, 35, 45; n = 30.</p>
+<p>Σ m_i x_i = 75 + 250 + 420 + 135 = 880 ⇒ x̄ = 880/30 ≈ 29,33.</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 2</span> (vận dụng): Với biểu đồ trên, tìm nhóm chứa trung vị rồi tính M_e.</p>
+<p>n/2 = 15; cộng dồn 5, 15 ⇒ 5 &lt; 15 ≤ 15 ⇒ p = 2, nhóm [20;30).</p>
+<p>M_e = 20 + (15 − 5)/10 · 10 = 30? Kiểm tra: (15 − 5)/10 = 1 ⇒ M_e = 20 + 10 = 30 — đúng đầu mút phải của nhóm 2, hợp lí vì cộng dồn 15 chạm đúng mép nhóm 3.</p>
+<p class="kt-eg"><span class="kt-egtag">VÍ DỤ 3</span> (nâng cao): Cùng biểu đồ đó, dùng cách &quot;chia diện tích&quot;: tổng diện tích = (5 + 10 + 12 + 3)·10 = 300, nửa là 150. Cột 1 có diện tích 50, cột 2 có 100 ⇒ cộng 2 cột = 150 đúng nửa ⇒ hoành độ chia đôi diện tích là mép phải cột 2 = 30 ⇒ M_e = 30, trùng kết quả công thức ✓.</p>
+<p>Hãy giải thích vì sao hai cách luôn cho cùng một số: vì diện tích tính theo đơn vị cột = 10·m_i nên &quot;đủ 150 diện tích&quot; tương đương &quot;đủ n/2 = 15 tần số&quot;, và phần còn thiếu của cột được chia theo TỈ LỆ chiều dài — chính là nội suy tuyến tính.</p>
+<p class="kt-label" data-step="7">7. GHI CHÚ SAI LẦM</p>
+<ul class="kt-ul"><li>Đọc chiều cao cột theo ô vuông nhưng quên kiểm tra đơn vị trục (có trục ghi tần suất % ⇒ phải đổi về tần số trước khi dùng công thức).</li><li>Với các nhóm KHÔNG bằng độ dài mà vẫn so sánh chiều cao ⇒ kết luận sai nhóm có mốt.</li><li>Nghĩ biểu đồ tần số = biểu đồ cột rời (có khe hở): mẫu GHÉP NHÓM vẽ các cột DÍNH LIỀN nhau, khác với biểu đồ cột của mẫu chưa ghép nhóm.</li></ul></div></div>
+<div class="kt-entry kt-tail" id="kt-tail-10"><div class="kt-entry-h"><span class="kt-num">Σ</span><span class="kt-t">BẢNG TÓM TẮT TOÀN CHƯƠNG 3 (đúng kí hiệu Kết nối tri thức)</span></div><div class="kt-body"><div class="kt-tbwrap"><table class="kt-tb"><thead><tr><th>Số đặc trưng</th><th>Công thức (nhóm i: [a_i; a_{i+1}), tần số m_i, x_i = (a_i + a_{i+1})/2)</th><th>Chú ý khi dùng</th></tr></thead><tbody><tr><td>Cỡ mẫu</td><td>n = m₁ + m₂ + … + m_k</td><td>luôn kiểm tra trước khi tính</td></tr><tr><td>Giá trị đại diện</td><td>x_i = (a_i + a_{i+1})/2</td><td>mọi công thức bên dưới đều dùng x_i</td></tr><tr><td>Số trung bình</td><td>x̄ = (m₁x₁ + … + m_k x_k)/n</td><td>NHÂN tần số; giá trị gần đúng</td></tr><tr><td>Trung vị</td><td>M_e = a_p + [n/2 − (m₁ + … + m_{p−1})]/m_p · (a_{p+1} − a_p)</td><td>p là nhóm đầu tiên có cộng dồn ≥ n/2; p = 1 thì tổng trước = 0; k = 2 thì M_e = a₂</td></tr><tr><td>Tứ phân vị</td><td>Q₁ dùng n/4; Q₃ dùng 3n/4 (cùng công thức nội suy); Q₂ = M_e</td><td>k = 2 thì Q₁ = Q₂ = Q₃ = a₂</td></tr><tr><td>Mốt</td><td>M_o = a_j + (m_j − m_{j−1})/[(m_j − m_{j−1}) + (m_j − m_{j+1})] · h</td><td>nhóm j có m lớn nhất; chỉ khi các nhóm BẰNG độ dài; m₀ = m_{k+1} = 0</td></tr><tr><td>Khoảng biến thiên</td><td>a_{k+1} − a₁ (gần đúng)</td><td>số đo ĐỘ TRẢI, không phải xu thế trung tâm</td></tr><tr><td>Bài toán ngược</td><td>Σ m_i = n ; Σ m_i x_i = n·x̄ ; bất đẳng thức chọn nhóm</td><td>nghiệm phải nguyên, không âm</td></tr></tbody></table></div>
+<p>Đã xác minh: Chương 3 của bản Kết nối tri thức chỉ có Bài 8 (mẫu số liệu ghép nhóm) và Bài 9 (các số đặc trưng), và KHÔNG có phương sai – độ lệch chuẩn. Nếu cô cần phần đó để dạy nâng cao, nó thuộc Toán 12 (bộ này) hoặc Chương 8 của bộ Chân trời sáng tạo lớp 11 — tôi sẽ viết riêng và ghi rõ &quot;ngoài Chương 3&quot; chứ không gộp vào.</p></div></div>

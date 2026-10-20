@@ -1489,6 +1489,73 @@
   }
 
   /* ============================================================
+     14b. KIEN THUC — kho cong thuc co giai thich (sach Ket noi tri
+          thuc, lop 10 - 11). Nam TRONG tab Trial: them 1 chuyen mach
+          "Bai tap / Kien thuc" va 4 tang rieng, tai noi dung tung
+          chuong tu may chu (kien-thuc/*.html) nen app khong phong to.
+          CHI THEM MOI — khong sua rule nao o tren, khong doi id cu.
+          ============================================================ */
+  #trialTab.hzk-on #trialLevelSubjects,
+  #trialTab.hzk-on #trialLevelGrades,
+  #trialTab.hzk-on #trialLevelLessons,
+  #trialTab.hzk-on .trial-tip { display:none !important; }
+  #trialTab:not(.hzk-on) .hzk-level { display:none !important; }
+
+  .hzk-seg { display:inline-flex; gap:6px; padding:5px; margin:0 0 14px; border:1px solid var(--hz-line); border-radius:14px; background:rgba(255,255,255,.04); }
+  button.hzk-seg { display:inline-flex; align-items:center; gap:7px; padding:8px 16px !important; border:1px solid transparent !important; border-radius:10px !important; background:transparent !important; box-shadow:none !important; color:#a99dbd !important; font-size:12px; font-weight:800; letter-spacing:.02em; }
+  button.hzk-seg:hover { color:#fdba74 !important; background:rgba(251,146,60,.1) !important; }
+  button.hzk-seg.on { background:linear-gradient(135deg,#ea580c,#fb923c) !important; color:#fff !important; box-shadow:0 8px 18px rgba(251,146,60,.2) !important; }
+  button.hzk-seg svg { width:15px; height:15px; stroke:currentColor; fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+  .hzk-tip { color:var(--text-muted); font-size:11.5px; line-height:1.6; margin:-6px 0 14px; }
+  .hzk-crumb { display:flex; align-items:center; gap:8px; flex-wrap:wrap; min-width:0; font-size:11px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:#6f677f; margin:0; }
+  .hzk-crumb .here { color:var(--hz-tab); }
+  .hzk-crumb .sep { color:#3f3b52; }
+  #trialTab:not(.hzk-on) #hzkCrumb { display:none !important; }
+  .hzk-crumb button { padding:0 !important; border:0 !important; border-radius:0 !important; background:transparent !important; box-shadow:none !important; color:#8d84a0; font-size:11px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; }
+  .hzk-crumb button:hover { background:transparent !important; color:#fdba74 !important; transform:none; }
+  .hzk-empty { padding:22px; text-align:center; color:#8d84a0; font-size:12.5px; line-height:1.7; border:1px dashed rgba(192,132,252,.22); border-radius:14px; }
+  .hzk-empty b { display:block; margin-bottom:6px; color:#f3e8ff; font-size:13px; }
+  .hzk-read-top { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:12px; }
+  .hzk-read-name { font-size:10.5px; font-weight:900; letter-spacing:.1em; text-transform:uppercase; color:#8d84a0; flex:1; min-width:0; }
+  @media (max-width:620px) { .hzk-read-name { display:none; } .hzk-read-top { gap:6px; } }
+  button.hzk-nav { padding:7px 12px !important; border:1px solid rgba(255,255,255,.1) !important; border-radius:999px !important; background:rgba(255,255,255,.04) !important; box-shadow:none !important; color:#a99dbd !important; font-size:11px; font-weight:800; letter-spacing:.04em; white-space:nowrap; }
+  button.hzk-nav:hover { background:rgba(251,146,60,.14) !important; border-color:rgba(251,146,60,.4) !important; color:#fdba74 !important; }
+  button.hzk-nav:disabled { opacity:.35; cursor:not-allowed; }
+  .hzk-read { max-height:min(74vh,760px); overflow:auto; scrollbar-width:thin; -webkit-overflow-scrolling:touch; padding:16px 18px; border:1px solid var(--hz-line); border-radius:14px; background:rgba(10,7,18,.55); }
+  .hzk-read .kt-entry + .kt-entry { margin-top:18px; padding-top:18px; border-top:1px solid rgba(192,132,252,.14); }
+
+  /* ---- noi dung mot muc (lop tao boi hz-kienthuc.js) ---- */
+  .kt-src { margin:0 0 10px; font-size:11px; line-height:1.65; color:#8d84a0; }
+  .kt-entry-h { display:flex; align-items:flex-start; gap:10px; margin:0 0 14px; padding-bottom:10px; border-bottom:1px solid rgba(192,132,252,.16); }
+  .kt-num { flex:0 0 auto; min-width:46px; text-align:center; padding:4px 9px; border-radius:9px; font-size:12px; font-weight:900; letter-spacing:.02em; color:#fdba74; background:rgba(251,146,60,.14); border:1px solid rgba(251,146,60,.3); }
+  .kt-t { font-size:14.5px; font-weight:800; line-height:1.45; color:#f3e8ff; }
+  .kt-body p { margin:0 0 9px; font-size:13px; line-height:1.72; color:#d8cfe6; }
+  .kt-body b { color:#f3e8ff; }
+  .kt-label { margin:17px 0 7px !important; font-size:10.5px !important; font-weight:900 !important; letter-spacing:.14em; text-transform:uppercase; line-height:1.5; color:#fdba74 !important; }
+  .kt-label[data-step="4"] { margin-top:20px !important; color:#a5b4fc !important; }
+  .kt-label[data-step="7"] { color:#f0abfc !important; }
+  .kt-eg { margin:0 0 7px !important; padding:11px 13px; border-left:3px solid rgba(165,180,252,.55); border-radius:0 11px 11px 0; background:rgba(129,140,248,.07); font-size:12.5px !important; font-weight:700; line-height:1.65; color:#e4e9ff !important; }
+  .kt-egtag { display:inline-block; margin-right:6px; padding:2px 8px; border-radius:999px; font-size:10px; font-weight:900; letter-spacing:.06em; color:#0f0a16; background:#a5b4fc; }
+  .kt-ul { margin:0 0 11px; padding-left:19px; }
+  .kt-ul li { margin:0 0 6px; font-size:13px; line-height:1.7; color:#d4cbe2; }
+  .kt-ans, .kt-key, .kt-note { margin:0 0 9px !important; padding:9px 12px; border-radius:11px; font-size:12.5px !important; line-height:1.7; }
+  .kt-ans { background:rgba(34,197,94,.07); border:1px solid rgba(34,197,94,.2); color:#bbf7d0 !important; }
+  .kt-key { background:rgba(251,191,36,.07); border:1px solid rgba(251,191,36,.24); color:#fde68a !important; }
+  .kt-note { background:rgba(192,132,252,.07); border:1px solid rgba(192,132,252,.2); color:#e2d7f5 !important; }
+  .kt-tbwrap { margin:0 0 12px; overflow-x:auto; scrollbar-width:thin; }
+  .kt-tb { width:100%; border-collapse:collapse; font-size:12px; }
+  .kt-tb th, .kt-tb td { padding:7px 9px; border:1px solid rgba(192,132,252,.18); text-align:left; vertical-align:top; color:#cfc5dd; line-height:1.55; }
+  .kt-tb th { background:rgba(251,146,60,.1); font-size:10.5px; font-weight:900; letter-spacing:.04em; text-transform:uppercase; white-space:nowrap; color:#fdba74 !important; }
+  .kt-tb tbody tr:nth-child(even) td { background:rgba(255,255,255,.02); }
+  .kt-entry.kt-tail .kt-num { color:#a5b4fc; background:rgba(129,140,248,.14); border-color:rgba(129,140,248,.3); }
+  @media (max-width:640px) {
+    .hzk-seg { display:flex; width:100%; }
+    button.hzk-seg { flex:1; justify-content:center; padding:8px 10px !important; }
+    .hzk-read { padding:13px 13px; }
+    .kt-body p, .kt-ul li { font-size:12.5px; }
+  }
+
+  /* ============================================================
      15. GAME — lang que pixel 2D (canvas) + HUD chi so
          CHI THEM MOI, khong ghi de quy tac o tren.
      ============================================================ */
@@ -3177,8 +3244,15 @@
       <div class="trial-head">
         <h2 style="font-size: 16px;">TRIAL</h2>
         <div class="trial-crumb" id="trialCrumb"><span class="here">Trial</span></div>
+        <div class="hzk-crumb" id="hzkCrumb"></div>
       </div>
       <div class="trial-tip">Chọn môn &rarr; chọn khối &rarr; mở bài tập. Bấm &ldquo;Chưa làm / Đã làm&rdquo; để đánh dấu tiến độ; trạng thái được lưu ngay trên máy bạn, không gửi đi đâu.</div>
+
+      <!-- CHUYEN MACH (them moi): Bai tap / Kien thuc -->
+      <div class="hzk-seg" id="hzkSeg">
+        <button class="hzk-seg on" type="button" id="hzkSegBai"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 3.5h8L18.5 7.5v13H6.5z"/><path d="M14 3.5v4h4"/><path d="M9 12h6M9 15.5h6M9 19h3.5"/></svg><span>Bài tập</span></button>
+        <button class="hzk-seg" type="button" id="hzkSegKien"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6.6C10.6 5.1 8.4 4.3 5 4.3v13.4c3.4 0 5.6.8 7 2.3 1.4-1.5 3.6-2.3 7-2.3V4.3c-3.4 0-5.6.8-7 2.3z"/><path d="M12 6.6v13.4"/></svg><span>Kiến thức</span></button>
+      </div>
 
       <!-- Tang 1: Danh sach mon -->
       <div class="trial-level active" id="trialLevelSubjects">
@@ -3198,6 +3272,38 @@
           <select id="trialGradeFilter" class="input-control trial-filter" onchange="trialSetFilter(this.value)"></select>
         </div>
         <div class="trial-list" id="trialLessons"></div>
+      </div>
+
+      <!-- ============ KHO KIEN THUC (them moi, 4 tang) ============ -->
+      <!-- Tang K1: Danh sach mon -->
+      <div class="trial-level hzk-level" id="hzkLevelSubjects">
+        <div class="hzk-tip">Kho công thức có giải thích theo sách <b>Kết nối tri thức</b>: mỗi mục đủ 7 phần (công thức &middot; ý nghĩa &middot; cách chứng minh &middot; 3 ví dụ từ cơ bản đến nâng cao &middot; ghi chú sai lầm). Nội dung tải theo từng chương nên cần có mạng; đang offline thì mở mục đã đọc lần trước.</div>
+        <div class="trial-grid" id="hzkSubjects"></div>
+      </div>
+
+      <!-- Tang K2: Danh sach chuong -->
+      <div class="trial-level hzk-level" id="hzkLevelChapters">
+        <div class="trial-back"><button class="trial-ghost" type="button" id="hzkBackSubjects">&#8592; Quay lại danh sách môn</button></div>
+        <div class="trial-grid" id="hzkChapters"></div>
+      </div>
+
+      <!-- Tang K3: Danh sach muc trong chuong -->
+      <div class="trial-level hzk-level" id="hzkLevelEntries">
+        <div class="trial-toolbar">
+          <button class="trial-ghost" type="button" id="hzkBackChapters">&#8592; Quay lại danh sách chương</button>
+        </div>
+        <div class="trial-list" id="hzkEntries"></div>
+      </div>
+
+      <!-- Tang K4: Khong doc noi dung -->
+      <div class="trial-level hzk-level" id="hzkLevelReader">
+        <div class="hzk-read-top">
+          <button class="hzk-nav" type="button" id="hzkBackEntries">&#8592; Danh sách mục</button>
+          <span class="hzk-read-name" id="hzkReadName"></span>
+          <button class="hzk-nav" type="button" id="hzkPrev">&#8592; Mục trước</button>
+          <button class="hzk-nav" type="button" id="hzkNext">Mục sau &#8594;</button>
+        </div>
+        <div class="hzk-read" id="hzkRead"></div>
       </div>
     </div>
   </div>
@@ -10556,6 +10662,278 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
   document.addEventListener('DOMContentLoaded', function () {
     if (el('trialTab') && el('trialSubjects') && !el('trialSubjects').innerHTML) renderSubjects();
   });
+})();
+
+/* ==========================================================================
+   KIEN THUC — kho cong thuc co giai thich (sach Ket noi tri thuc, lop 10-11),
+   dinh ben TRONG tab Trial: 1 chuyen mach "Bai tap / Kien thuc" + 4 tang
+   (Mon > Chuong > Danh sach muc > Khong doc).
+
+   CHI THEM MOI: khong sua ham/tab cu, khong doi id cu, khong nhung noi dung
+   vao app — moi chuong tai rieng tu kien-thuc/<chuong>.html tren may chu,
+   danh sach muc nam trong kien-thuc/manifest.json (~40 KB).
+
+   Muon them bai: them/sua .md trong Kien-thuc-Trial, chay hz-kienthuc.js
+   (cong kien-thuc/ ra), roi tai kien-thuc/ + new.html len lop.
+   ========================================================================== */
+(function () {
+  'use strict';
+
+  var DIR = 'kien-thuc/';
+  var K = { on: false, si: null, ci: null, ei: null, man: null, files: {}, busy: false, err: false };
+
+  function el(id) { return document.getElementById(id); }
+  function esc(v) {
+    if (typeof window.escapeHtml === 'function') return window.escapeHtml(v);
+    return String(v).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function ico(p) { return '<svg viewBox="0 0 24 24" aria-hidden="true">' + p + '</svg>'; }
+
+  var ICO = {
+    toan:  ico('<path d="M4 6h5M6.5 3.5v5M4 12h5M4.5 17l4.5 4.5M9 17 4.5 21.5"/><path d="M19.5 5.5H15l4.5 6.5L15 19h4.5"/>'),
+    ly:    ico('<circle cx="12" cy="12" r="1.7"/><ellipse cx="12" cy="12" rx="9.2" ry="3.6"/><ellipse cx="12" cy="12" rx="9.2" ry="3.6" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="9.2" ry="3.6" transform="rotate(120 12 12)"/>'),
+    hoa:   ico('<path d="M9 3h6M10 3v5.2L4.9 16.9A3 3 0 0 0 7.6 21.5h8.8a3 3 0 0 0 2.7-4.6L14 8.2V3"/><path d="M7.4 14.2h9.2"/>'),
+    sinh:  ico('<path d="M20.5 3.5C12 3.5 6.5 7.6 6.5 14a5 5 0 0 0 5 5c6.4 0 9-5.4 9-15.5z"/><path d="M6 21c2.4-5.3 6-9 11-11.5"/>'),
+    anh:   ico('<path d="M4 5.5h16v10.5H12l-4.5 4V16H4z"/><path d="M8 9h8M8 12h5"/>'),
+    van:   ico('<path d="M14.6 4.4 19.6 9.4 8.9 20.1H3.9v-5z"/><path d="M12.9 6.1 17.9 11.1"/><path d="M4 3.5h5"/>'),
+    su:    ico('<path d="M3.4 19.6h17.2M5.2 19.6V9.4M9.6 19.6V9.4M14.4 19.6V9.4M18.8 19.6V9.4M3 9.4h18L12 3.4z"/>'),
+    dia:   ico('<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.3 2.4 3.5 5.3 3.5 8.5s-1.2 6.1-3.5 8.5c-2.3-2.4-3.5-5.3-3.5-8.5S9.7 5.9 12 3.5z"/>'),
+    book:  ico('<path d="M12 6.6C10.6 5.1 8.4 4.3 5 4.3v13.4c3.4 0 5.6.8 7 2.3 1.4-1.5 3.6-2.3 7-2.3V4.3c-3.4 0-5.6.8-7 2.3z"/><path d="M12 6.6v13.4"/>'),
+    cap:   ico('<path d="M12 3.5 21 8l-9 4.5L3 8z"/><path d="M6.5 10.4V15c0 1.7 2.5 3 5.5 3s5.5-1.3 5.5-3v-4.6M21 8.6v4.9"/>')
+  };
+
+  function sub() { return K.man && K.man.subjects[K.si]; }
+  function chap() { var s = sub(); return s && s.chapters[K.ci]; }
+  function mucCount(c) { return c.entries.filter(function (e) { return e.kind === 'muc'; }).length; }
+  function grades(s) {
+    var g = {}; s.chapters.forEach(function (c) { g[c.grade] = 1; });
+    return Object.keys(g).sort().join(' · ');
+  }
+
+  /* ------------------------------- Hien thi ------------------------------- */
+  function level(which) {
+    ['Subjects', 'Chapters', 'Entries', 'Reader'].forEach(function (k) {
+      var n = el('hzkLevel' + k);
+      if (n) n.classList.toggle('active', k === which);
+    });
+  }
+
+  function crumb() {
+    var c = el('hzkCrumb');
+    if (!c) return;
+    if (!K.on) { c.innerHTML = ''; return; }
+    if (!K.man) { c.innerHTML = '<span class="here">Kiến thức</span>'; return; }
+    if (K.si === null) { c.innerHTML = '<span class="here">Kiến thức</span>'; return; }
+    var s = sub(), h = '<button type="button" data-hzk-go="subjects">Kiến thức</button><span class="sep">&rsaquo;</span>';
+    if (K.ci === null) { c.innerHTML = h + '<span class="here">' + esc(s.name) + '</span>'; return; }
+    var ch = chap();
+    h += '<button type="button" data-hzk-go="chapters">' + esc(s.name) + '</button><span class="sep">&rsaquo;</span>';
+    if (K.ei === null) { c.innerHTML = h + '<span class="here">' + esc(ch.title) + '</span>'; return; }
+    h += '<button type="button" data-hzk-go="entries">' + esc(ch.title) + '</button><span class="sep">&rsaquo;</span>';
+    var e = ch.entries[K.ei];
+    c.innerHTML = h + '<span class="here">' + esc((e.num ? e.num + ' — ' : '') + e.title) + '</span>';
+  }
+
+  function failBox(txt) {
+    return '<div class="hzk-empty"><b>' + esc(txt) + '</b>' +
+      'Kho Kiến thức tải nội dung từ máy chủ nên cần có mạng (đăng nhập và các mục khác của app vẫn dùng bình thường khi mất mạng). ' +
+      'Kiểm tra kết nối rồi bấm thử lại.<br><br>' +
+      '<button class="hzk-nav" type="button" data-hzk-retry="1">Thử lại</button></div>';
+  }
+
+  function renderSubjects() {
+    var box = el('hzkSubjects');
+    if (!box) return;
+    if (K.err) { box.innerHTML = failBox('Máy chưa mở được kho Kiến thức'); return; }
+    if (!K.man) { box.innerHTML = '<div class="hzk-empty"><b>Đang mở kho Kiến thức…</b>Lần mở đầu cần tải danh sách chương.</div>'; return; }
+    box.innerHTML = K.man.subjects.map(function (s, si) {
+      var muc = s.chapters.reduce(function (n, c) { return n + mucCount(c); }, 0);
+      return '<button class="trial-card" type="button" data-hzk-sub="' + si + '">' +
+        '<span class="trial-card-ico">' + (ICO[s.id] || ICO.book) + '</span>' +
+        '<span class="trial-card-name">' + esc(s.name) + '</span>' +
+        '<span class="trial-card-sub">' + s.chapters.length + ' chương · ' + muc + ' mục</span>' +
+        '<p>' + esc(s.desc || 'Mỗi mục đủ 7 phần: công thức, ý nghĩa, cách chứng minh, 3 ví dụ, ghi chú sai lầm.') + '</p>' +
+        '<span class="trial-card-foot"><span class="trial-pill">Lớp ' + esc(grades(s)) + '</span></span>' +
+      '</button>';
+    }).join('');
+  }
+
+  function tailTag(t) {
+    if (/^BẢNG/.test(t)) return 'Bảng tổng hợp';
+    if (/^PHẦN/.test(t)) return 'Phần';
+    if (/^ÔN TẬP/.test(t)) return 'Ôn tập';
+    return 'Ghi chú';
+  }
+
+  function renderChapters() {
+    var box = el('hzkChapters'), s = sub();
+    if (!box || !s) return;
+    box.innerHTML = s.chapters.map(function (c, ci) {
+      var short = c.title.split(':')[0];
+      var rest = c.title.length > short.length ? c.title.slice(short.length + 1).trim() : '';
+      var hasSum = c.entries.some(function (e) {
+        return e.kind !== 'muc' && /^(BẢNG|ÔN TẬP)/.test(e.title);
+      });
+      return '<button class="trial-card" type="button" data-hzk-chap="' + ci + '">' +
+        '<span class="trial-card-ico">' + ICO.book + '</span>' +
+        '<span class="trial-card-name">' + esc(short) + '</span>' +
+        '<span class="trial-card-sub">Lớp ' + esc(c.grade) + ' · ' + mucCount(c) + ' mục</span>' +
+        '<p>' + esc(rest || s.name + ' ' + c.grade) + '</p>' +
+        '<span class="trial-card-foot"><span class="trial-pill">' + (hasSum ? 'Có bảng tóm tắt' : 'Công thức + ví dụ') + '</span></span>' +
+      '</button>';
+    }).join('');
+  }
+
+  function renderEntries() {
+    var box = el('hzkEntries'), c = chap();
+    if (!box || !c) return;
+    box.innerHTML = c.entries.map(function (e, ei) {
+      var tag = e.kind === 'muc'
+        ? '<span class="trial-tag gr">' + esc(e.num) + '</span>'
+        : '<span class="trial-tag lt">' + esc(tailTag(e.title)) + '</span>';
+      return '<div class="trial-row"><div class="trial-row-main">' +
+        '<span class="trial-row-title">' + esc(e.title) + '</span>' +
+        '<span class="trial-row-meta">' + tag + '</span></div>' +
+        '<div class="trial-actions"><button class="trial-open" type="button" data-hzk-entry="' + ei + '">Đọc</button></div>' +
+        '</div>';
+    }).join('');
+  }
+
+  function paintEntry() {
+    var c = chap(), box = el('hzkRead');
+    if (!c || !box) return;
+    var e = c.entries[K.ei];
+    if (!e) { K.ei = null; level('Entries'); renderEntries(); crumb(); return; }
+    var name = el('hzkReadName'); if (name) name.textContent = c.title;
+    var host = K.files[c.file];
+    if (!host) return;
+    var src = host.querySelector('[id="' + e.id + '"]');
+    box.innerHTML = '';
+    if (!src) { box.innerHTML = '<div class="hzk-empty"><b>Mục này chưa có trong tệp chương</b>Kho bị lệch danh sách — cô chạy lại máy đóng gói (hz-kienthuc.js) rồi tải tệp mới lên lớp là hết.</div>'; }
+    else {
+      var node = src.cloneNode(true);
+      node.removeAttribute('id');
+      box.appendChild(node);
+    }
+    var p = el('hzkPrev'), n = el('hzkNext');
+    if (p) p.disabled = K.ei <= 0;
+    if (n) n.disabled = K.ei >= c.entries.length - 1;
+    box.scrollTop = 0;
+    crumb();
+  }
+
+  function showByState() {
+    if (!K.man) { if (!K.busy) loadManifest(); renderSubjects(); level('Subjects'); crumb(); return; }
+    if (K.si === null) { renderSubjects(); level('Subjects'); }
+    else if (K.ci === null) { renderChapters(); level('Chapters'); }
+    else if (K.ei === null) { renderEntries(); level('Entries'); }
+    else { level('Reader'); paintEntry(); }
+    crumb();
+  }
+
+  /* ------------------------------- Tai lieu ------------------------------- */
+  function loadManifest() {
+    if (K.busy || K.man) return;
+    K.busy = true; K.err = false;
+    renderSubjects();
+    fetch(DIR + 'manifest.json', { cache: 'no-store' })
+      .then(function (r) { if (!r.ok) throw new Error('http'); return r.json(); })
+      .then(function (j) {
+        K.busy = false; K.man = j;
+        if (K.ei !== null && K.si !== null && K.ci !== null) openEntry(K.ei);
+        else if (K.si !== null || K.ci !== null) showByState();
+        else renderSubjects();
+        crumb();
+      })
+      .catch(function () { K.busy = false; K.err = true; renderSubjects(); });
+  }
+
+  function openEntry(ei) {
+    var c = chap();
+    if (!c) return;
+    K.ei = ei; level('Reader'); crumb();
+    if (K.files[c.file]) { paintEntry(); return; }
+    var box = el('hzkRead');
+    if (box) box.innerHTML = '<div class="hzk-empty"><b>Đang tải nội dung…</b>' + esc(c.title) + '</div>';
+    fetch(DIR + c.file + '.html', { cache: 'no-store' })
+      .then(function (r) { if (!r.ok) throw new Error('http'); return r.text(); })
+      .then(function (t) {
+        var host = document.createElement('div');
+        host.innerHTML = t;
+        K.files[c.file] = host;
+        paintEntry();
+      })
+      .catch(function () { if (box) box.innerHTML = failBox('Máy chưa tải được chương này'); });
+  }
+
+  function stepEntry(d) {
+    var c = chap();
+    if (!c) return;
+    var nx = K.ei + d;
+    if (nx < 0 || nx >= c.entries.length) return;
+    openEntry(nx);
+  }
+
+  /* ------------------------------ Dieu huong ------------------------------ */
+  function setMode(kien) {
+    K.on = !!kien;
+    var tab = el('trialTab');
+    if (tab) tab.classList.toggle('hzk-on', K.on);
+    var b = el('hzkSegBai'), k = el('hzkSegKien');
+    if (b) b.classList.toggle('on', !K.on);
+    if (k) k.classList.toggle('on', K.on);
+    if (K.on) {
+      loadManifest();
+      if (K.ei !== null && K.man) openEntry(K.ei);
+      else showByState();
+    }
+    else if (typeof window.trialShowSubjects === 'function') window.trialShowSubjects();
+  }
+
+  window.hzkGo = function (si, ci, ei) {
+    K.si = si === undefined ? null : si;
+    K.ci = ci === undefined ? null : ci;
+    K.ei = ei === undefined ? null : ei;
+    if (!K.on) setMode(true);
+    else if (K.ei !== null) openEntry(K.ei);
+    else showByState();
+  };
+
+  function bind() {
+    var tab = el('trialTab');
+    if (!tab || !el('hzkSeg')) return;
+    var bai = el('hzkSegBai'), kien = el('hzkSegKien');
+    if (bai) bai.addEventListener('click', function () { setMode(false); });
+    if (kien) kien.addEventListener('click', function () { setMode(true); });
+    var bs = el('hzkBackSubjects'), bc = el('hzkBackChapters'), be = el('hzkBackEntries');
+    if (bs) bs.addEventListener('click', function () { K.si = null; K.ci = null; K.ei = null; showByState(); });
+    if (bc) bc.addEventListener('click', function () { K.ci = null; K.ei = null; showByState(); });
+    if (be) be.addEventListener('click', function () { K.ei = null; showByState(); });
+    var p = el('hzkPrev'), n = el('hzkNext');
+    if (p) p.addEventListener('click', function () { stepEntry(-1); });
+    if (n) n.addEventListener('click', function () { stepEntry(1); });
+    tab.addEventListener('click', function (ev) {
+      var t = ev.target;
+      if (!t || !t.closest) return;
+      var hit = t.closest('[data-hzk-sub],[data-hzk-chap],[data-hzk-entry],[data-hzk-go],[data-hzk-retry]');
+      if (!hit) return;
+      if (hit.hasAttribute('data-hzk-sub')) { K.si = +hit.getAttribute('data-hzk-sub'); K.ci = null; K.ei = null; showByState(); }
+      else if (hit.hasAttribute('data-hzk-chap')) { K.ci = +hit.getAttribute('data-hzk-chap'); K.ei = null; showByState(); }
+      else if (hit.hasAttribute('data-hzk-entry')) openEntry(+hit.getAttribute('data-hzk-entry'));
+      else if (hit.hasAttribute('data-hzk-retry')) { K.err = false; if (!K.man) loadManifest(); else openEntry(K.ei); }
+      else {
+        var where = hit.getAttribute('data-hzk-go');
+        if (where === 'subjects') { K.si = null; K.ci = null; K.ei = null; showByState(); }
+        if (where === 'chapters') { K.ci = null; K.ei = null; showByState(); }
+        if (where === 'entries') { K.ei = null; showByState(); }
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind);
+  else bind();
 })();
 </script>
 
