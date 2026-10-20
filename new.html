@@ -1163,13 +1163,15 @@
     --hz-glow: 0 10px 28px rgba(0,0,0,.30);
   }
 
-  /* --- 1. Nen: thanh cuoi, vung chon text, focus ban phim --- */
-  html { scrollbar-color:#6d28d9 #07050d; scrollbar-width:thin; }
-  ::-webkit-scrollbar { width:11px; height:11px; }
-  ::-webkit-scrollbar-track { background:#07050d; }
-  ::-webkit-scrollbar-thumb { background:linear-gradient(180deg,#6d28d9,#a855f7); border:3px solid #07050d; border-radius:99px; }
-  ::-webkit-scrollbar-thumb:hover { background:linear-gradient(180deg,#8b5cf6,#d8b4fe); }
-  ::-webkit-scrollbar-corner { background:#07050d; }
+  /* --- 1. Nen: thanh cuoi DA AN theo yeu cau co (20/10) — van cuon duoc, chi kh con thay thanh.
+     KHONG dung !important de nhung noi co thanh rieng (vang trong menu game) van giu nguyen. --- */
+  html { scrollbar-width:none; }
+  ::-webkit-scrollbar { width:0; height:0; }
+  ::-webkit-scrollbar-track { background:transparent; }
+  ::-webkit-scrollbar-thumb { background:transparent; border:0; }
+  ::-webkit-scrollbar-thumb:hover { background:transparent; }
+  ::-webkit-scrollbar-button { display:none; width:0; height:0; }
+  ::-webkit-scrollbar-corner { background:transparent; }
   ::selection { background:rgba(168,85,247,.38); color:#fff; text-shadow:none; }
   :focus-visible { outline:none; box-shadow:0 0 0 2px #0a0713, 0 0 0 4px rgba(192,132,252,.8) !important; }
   input[type="checkbox"], input[type="radio"] { accent-color:#a855f7; }
