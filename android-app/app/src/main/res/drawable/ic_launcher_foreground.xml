@@ -1,32 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Hinh trong icon: ban co caro 4 duong + 1 quan X (vang) + 1 quan O (xanh).
-     Viet bang toa do, khong dung anh nen khong the bi vo khi doi may. -->
+<!-- Hinh trong icon: chu "HKT" dang net co ban, mau vang cam tren nen toi.
+     Viet bang toa do thuan (khong dung font, khong dung anh) nen khong the bi
+     vo khi doi may dung va luon sac net o moi lon icon. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
 
-    <!-- luong co -->
+    <!-- H: hai net doc + mot net ngang giua -->
     <path
         android:fillColor="#00000000"
-        android:strokeColor="#E2E8F0"
-        android:strokeWidth="3"
+        android:strokeColor="#FBBF24"
+        android:strokeWidth="5.5"
         android:strokeLineCap="round"
-        android:pathData="M32,36h44M32,50h44M32,64h44M32,78h44M36,32v46M50,32v46M64,32v46M78,32v46" />
+        android:pathData="M26,43v24M41,43v24M26,55h15" />
 
-    <!-- quan X -->
+    <!-- K: net doc + hai cheo -->
     <path
         android:fillColor="#00000000"
-        android:strokeColor="#F59E0B"
-        android:strokeWidth="6"
+        android:strokeColor="#FBBF24"
+        android:strokeWidth="5.5"
         android:strokeLineCap="round"
-        android:pathData="M39,41l10,10M49,41l-10,10" />
+        android:pathData="M50,43v24M64,43L50,55M50,55L64,67" />
 
-    <!-- quan O -->
+    <!-- T: thanh ngang dau + truoc doc -->
     <path
         android:fillColor="#00000000"
-        android:strokeColor="#38BDF8"
-        android:strokeWidth="6"
-        android:pathData="M68,68m-9,0a9,9 0,1 1,18 0a9,9 0,1 1,-18 0" />
+        android:strokeColor="#FBBF24"
+        android:strokeWidth="5.5"
+        android:strokeLineCap="round"
+        android:pathData="M71,43h18M80,43v24" />
 </vector>
