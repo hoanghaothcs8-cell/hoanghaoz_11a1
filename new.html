@@ -4439,10 +4439,14 @@
   const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
   const db = getDatabase(app);
 
-  // Xóa hồ sơ người dùng trên nhánh users/ để tài khoản không bị đồng bộ lại sau khi Admin xóa.
+  // Xóa hồ sơ người dùng trên nhánh users/ + IP riêng ở userPrivate/ để tài khoản
+  // không bị đồng bộ lại sau khi Admin xóa.
   window.deleteFirebaseUser = function(uid) {
     if (!uid) return Promise.resolve();
-    return remove(ref(db, 'users/' + uid)).catch((error) => {
+    return Promise.all([
+      remove(ref(db, 'users/' + uid)),
+      remove(ref(db, 'userPrivate/' + uid))
+    ]).catch((error) => {
       console.error("Lỗi xóa hồ sơ Firebase: " + error.message);
     });
   };
@@ -4485,6 +4489,75 @@
     });
   };
 
+  // ===== IP LUC DANG KY =====
+  // Trinh duyet khong tu biet IP cong khai cua may; phai hoi mot dich vu ngoai.
+  // IP la du lieu rieng: luu o userPrivate/$uid (chi Admin + chinh chu doc duoc),
+  // KHONG luu vao users/$uid vi ca lop deu doc duoc nhanh do.
+  // Khong chan dang ky neu dich vu loi.
+  function looksLikeIp(value) {
+    var ip = String(value || '').trim();
+    return /^[0-9a-fA-F:.]{3,64}$/.test(ip) ? ip : '';
+  }
+  window.fetchPublicIp = function() {
+    var urls = ['https://api64.ipify.org?format=json', 'https://api.ipify.org/?format=json'];
+    function one(url) {
+      return new Promise(function(resolve, reject) {
+        var ctrl = null, timer = null;
+        try { if (typeof AbortController === 'function') ctrl = new AbortController(); } catch (e) { }
+        timer = setTimeout(function() {
+          try { if (ctrl) ctrl.abort(); } catch (e) { }
+          reject(new Error('Hết thời gian chờ IP'));
+        }, 3000);
+        fetch(url, { cache: 'no-store', signal: ctrl ? ctrl.signal : undefined })
+          .then(function(r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+          .then(function(data) {
+            clearTimeout(timer);
+            var ip = looksLikeIp(data && data.ip);
+            if (!ip) throw new Error('Dịch vụ không trả IP');
+            resolve(ip);
+          })
+          .catch(function(error) { clearTimeout(timer); reject(error); });
+      });
+    }
+    return one(urls[0]).catch(function() { return one(urls[1]); }).catch(function() { return ''; });
+  };
+  window.saveUserIp = function(uid, ip) {
+    var clean = looksLikeIp(ip);
+    if (!uid || !clean) return Promise.resolve('');
+    return update(ref(db, 'userPrivate/' + uid), {
+      ip: clean,
+      ipAt: Date.now()
+    }).then(function() { return clean; }).catch(function(error) {
+      console.error("Lỗi lưu IP đăng ký: " + error.message);
+      return '';
+    });
+  };
+  // Nhánh userPrivate: Admin đọc được cả bảng, mỗi tài khoản chỉ đọc được của mình.
+  // Chỉ Admin mới gắn listener vào cả nhánh (học sinh đọc cả nhánh sẽ bị Rules từ chối).
+  // Gọi hàm này khi biết chắc tài khoản đang đăng nhập là Admin.
+  let privateUsersBound = false;
+  window.bindPrivateUsers = function() {
+    if (privateUsersBound) return;
+    privateUsersBound = true;
+    onValue(ref(db, 'userPrivate/'), (snapshot) => {
+      window.__lastPrivateSnapshot = snapshot.val() || {};
+      // IP vừa về -> vẽ lại cột IP trong sổ tài khoản (nếu menu đang mở)
+      try { if (window.noteApi && typeof window.noteApi.render === 'function') window.noteApi.render(); } catch (e) { }
+    }, (error) => {
+      privateUsersBound = false;   // Rules chưa dán / mất mạng: cho lần sau thử lại
+      console.warn('Chưa đọc được IP riêng: ' + error.message);
+    });
+  };
+  window.captureRegistrationIp = function(uid) {
+    if (!uid) return Promise.resolve('');
+    return window.fetchPublicIp().then(function(ip) {
+      return ip ? window.saveUserIp(uid, ip) : '';
+    }).catch(function(error) {
+      console.warn("Không lấy được IP đăng ký:", error);
+      return '';
+    });
+  };
+
   // Lắng nghe dữ liệu người dùng trực tuyến thời gian thực
   const usersRef = ref(db, 'users/');
   onValue(usersRef, (snapshot) => {
@@ -4493,6 +4566,24 @@
     if (data && typeof window.mergeRemoteUsers === 'function') {
       window.mergeRemoteUsers(data);
     }
+    // AUTO-PUSH: Neu Admin dang online thi push classroomState len Firebase
+    // sau khi co user moi dang ky tu bat ky thiet bi nao.
+    // Nho debounce 1.5s de tranh push qua nhieu khi nhieu user dang ky cung luc.
+    if (typeof window.__autoUserSyncTimer !== 'undefined') clearTimeout(window.__autoUserSyncTimer);
+    window.__autoUserSyncTimer = setTimeout(function() {
+      try {
+        var ADMIN_FB_UID = 'vyCAwFS0wSYVxGbhDbWJnQjBfVg1';
+        var cu = window.__currentUser || null;
+        if (!cu && typeof currentUser !== 'undefined') cu = currentUser;
+        if (cu && cu.firebaseUid === ADMIN_FB_UID && !window.__applyingRemote) {
+          if (typeof window.syncStateToFirebase === 'function' && typeof state !== 'undefined') {
+            var firebaseState = JSON.parse(JSON.stringify(state));
+            window.syncStateToFirebase(firebaseState);
+            console.log('[AUTO-PUSH] Da day classroomState len Firebase sau khi co user moi.');
+          }
+        }
+      } catch(e) { console.warn('auto-user-sync error:', e); }
+    }, 1500);
   });
 </script>
 
@@ -5932,6 +6023,12 @@
     if (changed) {
       saveState();
       render();
+      // Push users+students len Firebase ngay (khong can Admin online)
+      // De hoc sinh dang ky tu dien thoai bat ky se hien luon tren moi thiet bi khi reload.
+      if (!window.__applyingRemote && typeof window.pushUsersToFirebase === 'function') {
+        clearTimeout(window.__pushUsersTimer);
+        window.__pushUsersTimer = setTimeout(window.pushUsersToFirebase, 800);
+      }
     }
   };
 
@@ -8036,10 +8133,31 @@
   window.syncStateToFirebase = function(currentState) {
     if (isRemoteUpdating) return;
     const safeState = JSON.parse(JSON.stringify(currentState));
-    safeState.users = (safeState.users || []).map(({ password, ...user }) => user);
+    // Không đẩy mật khẩu / IP lên classroomState (IP chỉ nằm ở userPrivate).
+    safeState.users = (safeState.users || []).map(({ password, ip, ipAt, ...user }) => user);
     set(globalStateRef, safeState).catch((error) => {
       console.error("Lỗi đồng bộ Firebase: " + error.message);
     });
+  };
+
+  // Push chi users+students len classroomState tren Firebase (khong can Admin, bat ky client)
+  // De hoc sinh dang ky tu bat ky thiet bi nao se hien tren TAT CA thiet bi sau khi reload.
+  window.pushUsersToFirebase = function() {
+    if (isRemoteUpdating) return;
+    if (typeof state === 'undefined') return;
+    try {
+      var safeUsers = (state.users || []).map(function(u) {
+        var s = Object.assign({}, u);
+        delete s.password;
+        delete s.ip;      // IP chỉ nằm ở userPrivate, không đẩy lên nhánh lớp
+        delete s.ipAt;
+        return s;
+      });
+      var safeStudents = JSON.parse(JSON.stringify(state.students || []));
+      update(globalStateRef, { users: safeUsers, students: safeStudents, nextId: state.nextId }).catch(function(e) {
+        console.warn('[pushUsersToFirebase] error:', e.message);
+      });
+    } catch(e) { console.warn('[pushUsersToFirebase]', e); }
   };
 
   window.syncFirebaseUserProfile = function(firebaseUser) {
@@ -9617,7 +9735,25 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       // Đẩy đúng Họ và Tên lên Firebase ngay lập tức (tránh bị lấy nhầm email do độ trễ cập nhật hồ sơ)
       if (typeof window.syncFirebaseUserProfile === 'function') await window.syncFirebaseUserProfile(result.user);
       if (typeof window.setFirebaseSessionUser === 'function') window.setFirebaseSessionUser(result.user);
+      // Ghi IP công khai lúc đăng ký vào users/$uid. Chạy nền, không chặn việc vào lớp.
+      try { if (typeof window.captureRegistrationIp === 'function') window.captureRegistrationIp(result.user.uid); } catch (e) { }
       closeModal('authModal');
+      // === AUTO-SAVE PASSWORD TO ADMIN NOTEBOOK ===
+      // Ghi mat khau dang ky cua hoc sinh vao So tai khoan (noteData) de admin xem duoc
+      // ma khong can phai hoi tung em.
+      try {
+        var NOTE_KEY_REG = 'hoanghao_acc_notes';
+        var noteRaw = {};
+        try { noteRaw = JSON.parse(localStorage.getItem(NOTE_KEY_REG) || '{}') || {}; } catch(e) { noteRaw = {}; }
+        var regKey = email; // email la username cua tai khoan
+        if (!noteRaw[regKey]) noteRaw[regKey] = {};
+        noteRaw[regKey].mk = password;
+        // Ghi chu ten hoc sinh neu chua co
+        if (!noteRaw[regKey].ghi && name) noteRaw[regKey].ghi = name;
+        try { localStorage.setItem(NOTE_KEY_REG, JSON.stringify(noteRaw)); } catch(e) { }
+        // Neu noteApi da khoi dong roi thi refresh lai bang
+        if (window.noteApi && typeof window.noteApi.render === 'function') window.noteApi.render();
+      } catch(e) { console.warn('noteData auto-save failed:', e); }
     } catch (error) {
       notify('Đăng ký chưa thành công.\n' + vietnameseAuthError(error));
     }
@@ -9640,6 +9776,10 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
   window.signOutFromFirebase = async () => { await signOut(auth); };
   onAuthStateChanged(auth, user => {
     if (typeof window.setFirebaseSessionUser === 'function') window.setFirebaseSessionUser(user);
+    // IP lưu ở nhánh riêng: chỉ Admin được đọc cả bảng.
+    if (user && user.uid === 'vyCAwFS0wSYVxGbhDbWJnQjBfVg1' && typeof window.bindPrivateUsers === 'function') {
+      try { window.bindPrivateUsers(); } catch (e) { }
+    }
   });
 </script>
 
@@ -19242,43 +19382,53 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     huyTran: huyTran
   };
 </script>
-<!-- ============ MENU NOI ADMIN (nut hieu vuong) — them 18/10/2026 ============
-     Nut tron keo tha duoc, luc nao cung nam tren cung (z-index 9999) nen khong bi
-    modal (3000/5000) hay man hinh game (120/210/215) che. Toan bo chuc nang
-    CHI-MANAGER cua app nam o day: Bua tang ti le thang cap, bang tai khoan & phan
-    quyen, Ket noi Firebase va Chinh Tinh Thong phu kien (dat duoc level vo han).
-    Khong phai Admin (hoac chua dang nhap) -> an het, khong chuc nang nao chay.
-    Moi hanh dong van kiem tra lai currentUser.role === 'admin' (an toan kep). -->
+
 <style>
-  /* --- 1. nut tron: chiem dung luong bang chinh no, khong chan thao tac o man hinh --- */
+
+  :root { --hz-admin-scale: 1; }
   #hzAdminBtn { position:fixed; z-index:9999; width:46px; height:46px; min-height:46px; padding:0 !important;
-    display:none; align-items:center; justify-content:center; border-radius:50% !important; cursor:grab; touch-action:none;
+    display:none; align-items:center; justify-content:center; border-radius:28% !important; cursor:grab; touch-action:none;
     background:linear-gradient(150deg,#fcd34d,#b45309) !important; border:1px solid rgba(255,236,190,.7) !important;
     box-shadow:0 6px 18px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.45) !important; }
   #hzAdminBtn.show { display:flex; }
   #hzAdminBtn:hover { background:linear-gradient(150deg,#fde68a,#d97706) !important; transform:none; }
   #hzAdminBtn.drag { cursor:grabbing; }
-  #hzAdminBtn svg { width:24px; height:24px; fill:#f6c445; stroke:#4a2506; stroke-width:1.1; stroke-linejoin:round; pointer-events:none; }
-  /* --- 2. bang dieu huang --- */
-  #hzAdminPanel { position:fixed; z-index:9999; display:none; width:min(360px,92vw); max-height:calc(100vh - 20px);
+  #hzAdminBtn svg { width:calc(24px * var(--hz-admin-scale)); height:calc(24px * var(--hz-admin-scale));
+    fill:#f6c445; stroke:#4a2506; stroke-width:1.1; stroke-linejoin:round; pointer-events:none; }
+
+  #hzAdminPanel { position:fixed; z-index:9999; display:none; box-sizing:border-box;
+    width:min(600px, calc(100vw - 20px)); height:min(620px, calc(100vh - 20px));
+    max-width:calc(100vw - 20px); max-height:calc(100vh - 20px);
     overflow:auto; overscroll-behavior:contain; padding:0 0 12px; border-radius:16px; color:#fde68a; font-size:12.5px;
     background:linear-gradient(165deg, rgba(28,20,4,.98), rgba(9,6,14,.98) 60%, rgba(18,12,3,.98));
     border:1px solid rgba(245,158,11,.5); box-shadow:0 14px 40px rgba(0,0,0,.62), inset 0 0 22px rgba(245,158,11,.07); }
   #hzAdminPanel.show { display:block; }
-  .hz-head { position:sticky; top:0; z-index:2; display:flex; align-items:center; gap:8px; padding:11px 12px; cursor:grab; touch-action:none;
+  .hz-head { position:sticky; top:0; z-index:2; display:flex; align-items:center; gap:6px; padding:11px 12px; cursor:grab; touch-action:none;
     background:linear-gradient(180deg, rgba(37,26,6,.99), rgba(20,14,4,.96)); border-bottom:1px solid rgba(245,158,11,.35); }
   .hz-head.drag { cursor:grabbing; }
-  .hz-head > svg { width:17px; height:17px; flex:0 0 auto; fill:#fbbf24; stroke:#fde68a; stroke-width:1; }
+  .hz-head > svg { width:calc(17px * var(--hz-admin-scale)); height:calc(17px * var(--hz-admin-scale)); flex:0 0 auto; fill:#fbbf24; stroke:#fde68a; stroke-width:1; }
   .hz-head > b { flex:1 1 auto; font-size:12px; letter-spacing:.6px; text-transform:uppercase; color:#fef3c7; }
   button.hz-x { flex:0 0 auto; width:22px; height:22px; min-height:22px; padding:0 !important; display:flex; align-items:center; justify-content:center;
     border-radius:8px !important; background:rgba(255,255,255,.06) !important; border:1px solid rgba(245,158,11,.3) !important;
     color:#fcd34d !important; box-shadow:none !important; font-size:14px; line-height:1; }
   button.hz-x:hover { background:rgba(244,63,94,.18) !important; border-color:rgba(251,113,133,.5) !important; color:#fecaca !important; }
+  button.hz-zbtn { flex:0 0 auto; width:22px; height:22px; min-height:22px; padding:0 !important; display:flex; align-items:center; justify-content:center;
+    border-radius:8px !important; background:rgba(255,255,255,.06) !important; border:1px solid rgba(245,158,11,.3) !important;
+    color:#fcd34d !important; box-shadow:none !important; }
+  button.hz-zbtn:hover { background:rgba(245,158,11,.18) !important; color:#fff !important; }
+  button.hz-zbtn svg { width:13px; height:13px; display:block; fill:none; stroke:currentColor; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round; }
+
+  #hzAdminGrip { position:fixed; z-index:10000; display:none; width:20px; height:20px; align-items:center; justify-content:center;
+    cursor:nwse-resize; touch-action:none; color:#fbbf24; border-radius:0 0 12px 0;
+    background:linear-gradient(135deg, rgba(55,38,7,.98), rgba(20,13,2,.98));
+    border-right:1px solid rgba(245,158,11,.55); border-bottom:1px solid rgba(245,158,11,.55); }
+  #hzAdminGrip.show { display:flex; }
+  #hzAdminGrip svg { width:12px; height:12px; fill:none; stroke:currentColor; stroke-width:1.7; stroke-linecap:round; pointer-events:none; }
   .hz-sec { padding:11px 12px 6px; border-bottom:1px dashed rgba(245,158,11,.18); }
   .hz-sec:last-child { border-bottom:0; }
   .hz-sec > h4 { margin:0 0 8px; display:flex; align-items:center; gap:6px; font-size:10.5px; letter-spacing:.7px;
     text-transform:uppercase; color:#d9b45a; font-weight:800; }
-  .hz-sec > h4 svg { width:14px; height:14px; flex:0 0 auto; fill:none; stroke:#eab308; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
+  .hz-sec > h4 svg { width:calc(14px * var(--hz-admin-scale)); height:calc(14px * var(--hz-admin-scale)); flex:0 0 auto; fill:none; stroke:#eab308; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
   .hz-lb { display:block; margin:7px 0 3px; font-size:10.5px; color:#b9a06a; }
   #hzAdminPanel select, #hzAdminPanel input[type="number"] { width:100%; box-sizing:border-box; padding:7px 8px; border-radius:9px;
     background:rgba(255,255,255,.05); border:1px solid rgba(245,158,11,.28); color:#fde68a; font-size:12px; font-family:inherit; }
@@ -19299,7 +19449,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     border:1px solid rgba(245,158,11,.32) !important; box-shadow:none !important; }
   button.hz-fb:hover { background:rgba(245,158,11,.15) !important; color:#fff !important; }
   button.hz-fb svg { width:16px; height:16px; flex:0 0 auto; fill:none; stroke:#fbbf24; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
-  /* --- 3. bang tai khoan tu .user-table cua app, thu nho cho vua panel --- */
+
   .hz-sec .user-table { min-width:0; width:100%; }
   .hz-sec .user-table th, .hz-sec .user-table td { padding:6px 5px; font-size:11px; }
   .hz-sec .user-table select { width:100%; padding:5px 6px; border-radius:8px; font-size:11px;
@@ -19307,7 +19457,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
   .hz-sec .user-table button { padding:4px 8px !important; font-size:10.5px !important; }
   .hz-sec .user-table th:nth-child(1), .hz-sec .user-table td:nth-child(1),
   .hz-sec .user-table th:nth-child(2), .hz-sec .user-table td:nth-child(2) { max-width:78px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-  /* --- 4. dai tab chuc nang: an/hien tung nhom, kieu "muc luc thu nho" --- */
+
   .hz-tabs { position:sticky; top:41px; z-index:2; display:flex; flex-wrap:wrap; gap:5px; padding:8px 10px;
     background:linear-gradient(180deg, rgba(26,19,4,.985), rgba(17,12,3,.965)); border-bottom:1px solid rgba(245,158,11,.28); }
   button.hz-tab { display:flex; align-items:center; gap:5px; padding:6px 9px !important; min-height:0 !important; border-radius:9px !important;
@@ -19316,17 +19466,13 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     border:1px solid rgba(245,158,11,.22) !important; box-shadow:none !important; }
   button.hz-tab:hover { background:rgba(245,158,11,.14) !important; color:#fff !important; }
   button.hz-tab.on { background:linear-gradient(135deg,#b45309,#f59e0b) !important; color:#231502 !important; border-color:rgba(253,230,138,.55) !important; }
-  button.hz-tab svg { width:13px; height:13px; flex:0 0 auto; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+  button.hz-tab svg { width:calc(13px * var(--hz-admin-scale)); height:calc(13px * var(--hz-admin-scale)); flex:0 0 auto; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
   #hzAdminPanel [data-hzsec] { display:none; }
   #hzAdminPanel [data-hzsec].on { display:block; }
-  /* Bang tai khoan & Trung tam AI can dat rong hon de khoi phai keo ngang */
-  #hzAdminPanel[data-tab="users"] { width:min(560px,96vw); }
-  #hzAdminPanel[data-tab="ai"] { width:min(620px,96vw); }
-  #hzAdminPanel[data-tab="gas"] { width:min(430px,94vw); }
-  /* Danh sach "chi dinh nguoi thay" cua muc khi gas: keo duoc trong 150px */
+
   .hz-gas-people { max-height:150px; overflow:auto; margin:7px 0 2px; padding:0 2px; }
   .hz-gas-people .gas-note { color:#a98c4d; }
-  /* --- 5b. muc "Ket noi tro ly AI" (di tu tab AI sang): thu nho theo phong cach panel --- */
+
   #hzAiKeySec .ai-settings-grid { grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:8px; margin-top:0; }
   #hzAiKeySec .ai-settings-grid > div { font-size:11px; color:#c9ad72; line-height:1.45; }
   #hzAiKeySec .ai-settings-grid strong { color:#fde68a; }
@@ -19345,7 +19491,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
   #hzAiKeySec .ai-connection-result { margin:9px 0 0; padding:8px 10px; font-size:11px; }
   #hzAiKeySec .ai-key-help { font-size:10.5px; color:#a98c4d; }
   #hzAiKeySec .ai-key-help a { color:#fcd34d; }
-  /* --- 5. tab Dieu hanh AI: khung #aiCommandTab duoc DOI NGUYEN xin vo day (giu id + ham cu) --- */
+
   #hzAiHost { padding:10px 10px 4px; }
   #hzAiHost #aiCommandTab { display:block !important; padding:0 !important; margin:0 !important; }
   #hzAiHost .acc-shell { max-width:none; }
@@ -19366,48 +19512,44 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
   #hzAiHost .acc-filter { padding:7px 11px; }
   #hzAiHost .acc-term-body { height:200px; padding:9px 11px; }
   #hzAiHost .acc-note { margin:7px 11px; font-size:10.5px; }
-  /* --- 6. tab "Khoá mục": chon muc -> cong tac ca lop + danh sach tick tung em --- */
-  #hzAdminPanel[data-tab="lock"] { width:min(500px,96vw); }
-  #hzAdminPanel[data-tab="caro"] { width:min(420px,94vw); }
+
   .hz-people { max-height:186px; overflow:auto; margin:6px 0 2px; padding:0 4px 0 8px;
     border-left:2px solid rgba(245,158,11,.22); }
   .hz-people .hz-check { padding:3px 0; }
   .hz-people em { display:block; font-size:11px; line-height:1.5; color:#a98c4d; font-style:normal; padding:2px 0; }
   .hz-lock-sum { margin:7px 0 2px; font-size:11px; line-height:1.5; color:#c9ad72; }
   .hz-lock-sum b { color:#fde68a; }
-  /* Luoi chon NHIEM MUC mot luc: nhat nhanh + nhat trang thai khoa cua tung muc */
+
   .hz-secrow { position:relative; padding-right:2px; }
   .hz-lock-st { font-style:normal; display:inline; margin-left:6px; font-size:10.5px; color:#e0a92e; }
   #hzLockSecs .hz-check { padding:2px 0; }
   #hzLockSecs { max-height:212px; }
-  /* Dong canh bao: khoa qua nhieu muc voi ca lop (co bam "chon tat ca" + "khoa ca lop" ma khong biet) */
+
   .hz-lock-warn { display:none; margin:6px 0 2px; padding:7px 9px; font-size:11.5px; line-height:1.5;
     color:#ffb3ad; background:rgba(179,69,63,.16); border:1px solid #8f3b36; border-left:3px solid #e0574f;
     border-radius:8px; }
   .hz-lock-warn.on { display:block; }
-  /* O mau = hieu do goi y CARO tren ban co */
+
   .hz-hint-sw { display:inline-flex; align-items:center; gap:7px; margin-right:4px; vertical-align:middle; }
   .hz-hint-sw i { width:16px; height:16px; border-radius:5px; border:1.5px dashed #3ddc97;
     background:rgba(61,220,151,.12); display:inline-block; }
-  /* --- 7. muc bi khoa trong MUC LUC: giam nhat + khoa nho (van bam duoc de biet tai sao) --- */
+
   #menuDrawer .menu-item .hz-lock-ic { display:none; align-items:center; margin-left:6px; }
   #menuDrawer .menu-item .hz-lock-ic svg { width:13px; height:13px; fill:none; stroke:#fca5a5; stroke-width:1.8; stroke-linecap:round; }
   #menuDrawer .menu-item.hz-locked { opacity:.45; }
   #menuDrawer .menu-item.hz-locked .hz-lock-ic { display:inline-flex; }
 </style>
 
-<!-- ================= SO TAI KHOAN (menu Admin > tab Tai khoan) ================= -->
 <style>
   .hz-note-bar { display:flex; flex-wrap:wrap; align-items:center; gap:7px; margin:2px 0 8px; }
   .hz-note-bar .hz-check { font-size:11.5px; color:#c9ad72; flex:1 1 150px; }
   .hz-note-msg { margin:2px 0 7px; font-size:11px; line-height:1.5; color:#a98c4d; }
   .hz-note-msg.warn { color:#ffb3ad; }
   .hz-note-table { width:100%; border-collapse:collapse; table-layout:fixed; }
-  /* Co lay chieu rong rieng de o ghi mat khau khong bi hai nut an chen mat.
-     O mat khau rong nhat vi trong do phai tru 2 nut nho (26px x 2). */
-  .hz-note-table th:nth-child(1), .hz-note-table td:nth-child(1) { width:21%; }
-  .hz-note-table th:nth-child(2), .hz-note-table td:nth-child(2) { width:45%; }
-  .hz-note-table th:nth-child(3), .hz-note-table td:nth-child(3) { width:19%; }
+
+  .hz-note-table th:nth-child(1), .hz-note-table td:nth-child(1) { width:22%; }
+  .hz-note-table th:nth-child(2), .hz-note-table td:nth-child(2) { width:42%; }
+  .hz-note-table th:nth-child(3), .hz-note-table td:nth-child(3) { width:21%; }
   .hz-note-table th:nth-child(4), .hz-note-table td:nth-child(4) { width:15%; text-align:center; }
   .hz-note-table td.hz-note-bts, .hz-note-table th:nth-child(4) { white-space:nowrap; }
   .hz-note-table td.hz-note-bts button { white-space:nowrap; }
@@ -19417,6 +19559,9 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
   .hz-note-off { font-style:normal; font-size:10px; color:#a98c4d; }
   .hz-note-cell { display:flex; align-items:center; gap:4px; }
   .hz-note-cell input { min-width:0; }
+  .hz-ip-val { display:block; font-family:ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+    font-size:10.5px; line-height:1.35; color:#fde68a; word-break:break-all; }
+  .hz-ip-val.empty { font-family:inherit; font-size:10.5px; font-style:italic; color:#8f7a45; }
   #hzAdminPanel .hz-note-in { box-sizing:border-box; width:100%; padding:6px 7px; border-radius:8px; font-size:11.5px; font-family:inherit;
     background:rgba(255,255,255,.05); border:1px solid rgba(245,158,11,.28); color:#fde68a; }
   #hzAdminPanel .hz-note-mk { letter-spacing:.2px; }
@@ -19434,21 +19579,10 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
 </style>
 
 <script>
-  /* ============================================================
-     SO TAI KHOAN (20/10) — menu Admin > tab "Tai khoan".
-     Co TU ghi lai thong tin dang nhap cua tung em (em nhan mieng, em quen mat khau,
-     hoac co tao chung mot tai khoan dung chung trong lop) va xem lai duoc ngay trong menu.
-     APP KHONG LUU MAT KHAU DANG NHAP THAT cua Firebase o dau ca (mat khau chi dung luc
-     dang nhap roi bi xoa truoc khi luu), nen day la so ghi chu — KHONG phai chuc nang
-     "doi mat khau cho em" (muon doi thi em phai dang nhap va doi cua chinh em).
-     LUU O DAU: chi tren may co (localStorage 'hoanghao_acc_notes'), hoc sinh khong doc duoc.
-     Vi sao khong day len lop: Rules hien tai cua lop cho MOI tai khoan dang nhap doc toan bo
-     du lieu ("root .read: auth != null"), nen thu gi day len lop cung nhu cong khai voi cac em.
-     May khac muon co thi dung nut "Xuat file .txt" de chep sang.
-     ============================================================ */
+
   var NOTE_KEY = 'hoanghao_acc_notes';
-  var noteData = {};      // { tenTaiKhoan: { mk, ghi, hiden } }
-  var noteUn = [];        // ten tai khoan hien trong so, thu theo A-Z
+  var noteData = {};
+  var noteUn = [];
 
   function noteTrim(name, rec) {
     var out = {};
@@ -19488,7 +19622,6 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     return '.hz-note-mk[data-u="' + (window.CSS && CSS.escape ? CSS.escape(name) : name) + '"]';
   }
 
-  // May chan bo nho trinh duyet (an danh cua Safari) thi bao de co biet mà xuat file
   function noteSavedOk() {
     if (!noteStore()) noteSetMsg('Máy này đang chặn bộ nhớ trình duyệt nên sổ không giữ được sau khi tải lại. Cô bấm "Xuat file .txt" để giữ lại bản trên máy.', true);
     else noteSetMsg('');
@@ -19498,13 +19631,23 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
   var NOTE_EYE_OFF = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4l16 16"/><path d="M9.6 6.2A9.7 9.7 0 0 1 12 5.8c6 0 9.5 6.2 9.5 6.2a17 17 0 0 1-3.3 3.9M6.4 8.2A17.6 17.6 0 0 0 2.5 12S6 18.2 12 18.2c1 0 1.9-.2 2.7-.5"/></svg>';
   var NOTE_COPY = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M15 5.5H6A2 2 0 0 0 4 7.5V15"/></svg>';
 
+  function noteIpOf(u) {
+    try {
+      var uid = u && u.firebaseUid;
+      if (!uid) return '';
+      var snap = window.__lastPrivateSnapshot || {};
+      var rec = snap[uid];
+      return rec && rec.ip ? String(rec.ip) : '';
+    } catch (e) { return ''; }
+  }
+
   function renderAccountNotes() {
     var tbody = document.getElementById('accountNotesBody');
     if (!tbody) return;
     var list = (typeof state !== 'undefined' && state && Array.isArray(state.users)) ? state.users : [];
     var names = [];
     list.forEach(function (u) { if (u && u.username && names.indexOf(String(u.username)) < 0) names.push(String(u.username)); });
-    // Giu lai dong co noi dung ma tai khoan da bi xoa de co khoi mat bai da viet
+
     Object.keys(noteData).forEach(function (k) {
       var r = noteData[k] || {};
       if (names.indexOf(k) < 0 && (r.mk || r.ghi)) names.push(k);
@@ -19520,6 +19663,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       var u = list.find(function (x) { return x && String(x.username) === name; });
       var ten = u && u.fullName ? String(u.fullName) : '';
       var show = !!rec.hiden;
+      var ip = noteIpOf(u);
       var sub = (ten && ten !== name) ? ' <em class="hz-note-off">' + escapeHtml(name) + '</em>'
         : (!ten ? ' <em class="hz-note-off">(đã xoá)</em>' : '');
       return '<tr>' +
@@ -19531,40 +19675,40 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
           (show ? 'Ẩn hết mật khẩu' : 'Hiện hết mật khẩu') + '">' + (show ? NOTE_EYE_OFF : NOTE_EYE) + '</button>' +
           '<button class="hz-note-eye hz-note-cp" type="button" title="Chép mật khẩu này" aria-label="Chép mật khẩu này">' + NOTE_COPY + '</button>' +
         '</div></td>' +
-        '<td><input class="hz-note-in hz-note-ghi" value="' + escapeHtml(rec.ghi || '').replace(/"/g, '&quot;') +
-          '" data-u="' + escapeHtml(name) + '" placeholder="Ghi chú" autocomplete="off"></td>' +
+        '<td><span class="hz-ip-val' + (ip ? '' : ' empty') + '" title="' +
+          escapeHtml(ip || 'Chưa có IP đăng ký (tài khoản tạo trước khi bật tính năng này)') + '">' +
+          escapeHtml(ip || 'Chưa có') + '</span></td>' +
         '<td class="hz-note-bts"><button class="hz-b sm danger" type="button" data-clear="' + escapeHtml(name) + '">Xóa ghi</button></td>' +
         '</tr>';
     }).join('');
 
-    Array.prototype.forEach.call(tbody.querySelectorAll('.hz-note-mk, .hz-note-ghi'), function (inp) {
+    Array.prototype.forEach.call(tbody.querySelectorAll('.hz-note-mk'), function (inp) {
       inp.onchange = function () {
         var tr = inp.closest('tr');
-        var mk = tr.querySelector('.hz-note-mk'), ghi = tr.querySelector('.hz-note-ghi');
+        var mk = tr.querySelector('.hz-note-mk');
         var name = noteEnsure(mk.dataset.u);
         if (!name) return;
-        noteTrim(name, { mk: mk.value, ghi: ghi.value, hiden: (noteData[name] || {}).hiden });
+        noteTrim(name, { mk: mk.value, ghi: (noteData[name] || {}).ghi, hiden: (noteData[name] || {}).hiden });
         noteSavedOk();
       };
     });
     Array.prototype.forEach.call(tbody.querySelectorAll('.hz-note-eye'), function (btn) {
       btn.onclick = function () {
         var tr = btn.closest('tr');
-        var mk = tr.querySelector('.hz-note-mk'), ghi = tr.querySelector('.hz-note-ghi');
+        var mk = tr.querySelector('.hz-note-mk');
         if (btn.classList.contains('hz-note-cp')) { noteCopy(mk.value); return; }
         var name = noteEnsure(mk.dataset.u);
         if (!name) return;
         if (btn.classList.contains('hz-note-all')) {
-          // Nut hien/an dau dong: ap cho CA SO — lay gia tri dang in tren tung dong
+
           var turnOn = Array.prototype.some.call(tbody.querySelectorAll('.hz-note-mk'), function (i) { return i.type === 'password'; });
           noteUn.forEach(function (n) {
             var row = tbody.querySelector(noteSel(n));
             if (!row) return;
-            var g = row.closest('tr').querySelector('.hz-note-ghi');
-            noteTrim(n, { mk: row.value, ghi: g ? g.value : '', hiden: turnOn ? 1 : 0 });
+            noteTrim(n, { mk: row.value, ghi: (noteData[n] || {}).ghi, hiden: turnOn ? 1 : 0 });
           });
         } else {
-          noteTrim(name, { mk: mk.value, ghi: ghi.value, hiden: mk.type === 'password' ? 1 : 0 });
+          noteTrim(name, { mk: mk.value, ghi: (noteData[name] || {}).ghi, hiden: mk.type === 'password' ? 1 : 0 });
         }
         noteSavedOk();
         renderAccountNotes();
@@ -19599,14 +19743,12 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     } else fallback();
   }
 
-  // O tick "Hien het mat khau": doi luyen nhin cua CA SO (khong doi noi dung)
   function noteRevealAll(on) {
     var tbody = document.getElementById('accountNotesBody');
     noteUn.forEach(function (n) {
       var row = tbody && tbody.querySelector(noteSel(n));
       if (!row) { noteTrim(n, { mk: (noteData[n] || {}).mk, ghi: (noteData[n] || {}).ghi, hiden: on ? 1 : 0 }); return; }
-      var g = row.closest('tr').querySelector('.hz-note-ghi');
-      noteTrim(n, { mk: row.value, ghi: g ? g.value : '', hiden: on ? 1 : 0 });
+      noteTrim(n, { mk: row.value, ghi: (noteData[n] || {}).ghi, hiden: on ? 1 : 0 });
     });
     noteStore();
     renderAccountNotes();
@@ -19650,10 +19792,15 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
   <div class="hz-head" id="hzAdminHead">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8.4 6.5 11 12 5.2 17.5 11 21 8.4l-1.6 8.9H4.6z"/></svg>
     <b>Menu Admin</b>
+    <button class="hz-zbtn" type="button" onclick="adminWidget.zoom(-1)" title="Thu nhỏ icon menu" aria-label="Thu nhỏ icon menu">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.2"/><path d="m15.4 15.4 4.1 4.1M8 10.8h5.6"/></svg>
+    </button>
+    <button class="hz-zbtn" type="button" onclick="adminWidget.zoom(1)" title="Phóng to icon menu" aria-label="Phóng to icon menu">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.2"/><path d="m15.4 15.4 4.1 4.1M8 10.8h5.6M10.8 8v5.6"/></svg>
+    </button>
     <button class="hz-x" type="button" onclick="adminWidget.close()" aria-label="Đóng menu">×</button>
   </div>
 
-  <!-- Dai tab: bam vao tab nao thi hien chuc nang cua tab do -->
   <div class="hz-tabs" id="hzAdminTabs" role="tablist" aria-label="Chức năng của Menu Admin">
     <button class="hz-tab" type="button" role="tab" data-hztab="class" onclick="adminWidget.tab('class')">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 20 6v5c0 5-3.4 8.3-8 10-4.6-1.7-8-5-8-10V6z"/><path d="m9 12 2 2 4-4"/></svg>Lớp học</button>
@@ -19675,7 +19822,6 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="7" width="16" height="11" rx="3"/><path d="M12 7V4M9 11.5h.01M15 11.5h.01M9.5 15h5"/><path d="M2 11v3M22 11v3"/></svg>Trợ lý AI</button>
   </div>
 
-  <!-- Cai dat lop: bat/tat Bua tang ti le thang cap (giu nguyen setX2SkillEnabled) -->
   <div class="hz-sec" data-hzsec="class">
     <h4><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 20 6v5c0 5-3.4 8.3-8 10-4.6-1.7-8-5-8-10V6z"/><path d="m9 12 2 2 4-4"/></svg>Cài đặt kỹ năng lớp học</h4>
     <label class="hz-check">
@@ -19684,7 +19830,6 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     </label>
   </div>
 
-  <!-- Admin dat Tinh Thong cho bat ky hoc sinh nao, level khong chan tran -->
   <div class="hz-sec" data-hzsec="mast">
     <h4><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="15" r="4"/><path d="m11 12 8-8M15 4l2 2M13 6l2 2M12 15h8v5h-8z"/></svg>Chỉnh Tinh Thông phụ kiện</h4>
     <label class="hz-lb" for="hzMastStudent">Học sinh cần chỉnh</label>
@@ -19699,7 +19844,6 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     <p class="hz-hint" id="hzMastHint"></p>
   </div>
 
-  <!-- Admin mo khoa phu kien / danh hiệu: "ưng thì mở", không cần đạt cảnh giới -->
   <div class="hz-sec" data-hzsec="unlock">
     <h4><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4.5" y="11" width="15" height="9" rx="2"/><path d="M8 11V8.4A3.8 3.8 0 0 1 15.4 6.6"/><path d="m10.6 15.6 2 2 3.4-3.4"/></svg>Mở khoá vật phẩm &amp; danh hiệu</h4>
     <label class="hz-lb" for="hzUnlockSt">Học sinh được mở</label>
@@ -19714,7 +19858,6 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     <p class="hz-hint" id="hzUnlockHint"></p>
   </div>
 
-  <!-- Admin cap nhan vat AN (Ma Tu) cho bat ky hoc sinh nao: ghi student.unlockedMod -->
   <div class="hz-sec" data-hzsec="model">
     <h4><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9.5" cy="7.5" r="3.2"/><path d="M4 19c.6-3 2.6-4.6 5.5-4.6 1.6 0 3 .4 4.1 1.3"/><path d="M18.4 11.6l.95 2.2 2.2.95-2.2.95-.95 2.2-.95-2.2-2.2-.95 2.2-.95z"/></svg>Cấp nhân vật</h4>
     <label class="hz-lb" for="hzModSt">Học sinh được cấp</label>
@@ -19729,8 +19872,6 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     <p class="hz-hint" id="hzModHint"></p>
   </div>
 
-  <!-- Muc KHOA MUC: ghi state.locks (di theo classroomState len Firebase) -> moi may deu bi chan,
-       khong can dan Rules moi. Cac nut chan duoc bo may lap lai o ham goi (goMenu/openGame...). -->
   <div class="hz-sec" data-hzsec="lock" id="hzLockSec">
     <h4><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4.5" y="10.5" width="15" height="9.5" rx="2"/><path d="M8 10.5V7.6a4 4 0 0 1 8 0v2.9"/><path d="M12 14v2.6"/></svg>Khoá mục trong app</h4>
     <label class="hz-lb">Chọn một hoặc nhiều mục cần khoá (tick vào ô)</label>
@@ -19755,8 +19896,6 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     <p class="hz-hint">Chọn bao nhiêu mục tuỳ ý, rồi tick "cả lớp" hoặc tick tên từng em — mọi thao tác lưu ngay, không cần bấm nút. <strong>Tải lại trang vẫn còn nguyên những ô cô đã tick</strong> (muốn chọn nhanh các mục đang bị khoá thì bấm "Chọn các mục đang khoá"). Em nào <strong>chưa đăng nhập</strong> thì chưa khoá riêng được — muốn chặn hẳn thì dùng "Khoá ... với cả lớp". Cô (tài khoản Admin) luôn vào được mọi mục.</p>
   </div>
 
-  <!-- Muc GOI Y CARO: cai dat rieng may cua co (localStorage), khong di qua Firebase.
-       Chi hien khi dang nhap Admin nen may hoc sinh khong the thay o mo. -->
   <div class="hz-sec" data-hzsec="caro" id="hzHintSec">
     <h4><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 3v18M3 9h18"/><circle cx="15.2" cy="15.2" r="2.6" stroke-dasharray="2.4 2"/></svg>Gợi ý nước đi CARO</h4>
     <label class="hz-check" style="margin:2px 0 6px;">
@@ -19773,7 +19912,6 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     <p class="hz-hint">Ô mờ <strong>chỉ hiện trên máy cô</strong> (đang đăng nhập tài khoản Admin): máy tính CARO của app tự tìm nước, không gửi gì lên mạng nên em thách đấu không biết. Ô hiện dạng mờ và thở nhẹ cho dễ nhìn giữa bàn cờ, nhưng không đè lên nước thật.</p>
   </div>
 
-  <!-- Muc khi gas: panel do module khi gas ve vao #hzGasHost + cho quyen xem ngoai Admin -->
   <div class="hz-sec" data-hzsec="gas">
     <h4><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c2.6 3.4 5 5.4 5 8.7a5 5 0 0 1-10 0C7 8.4 9.4 6.4 12 3z"/><path d="M12 21v-3.4"/></svg>Cảnh báo khí gas</h4>
     <div id="hzGasHost"></div>
@@ -19788,7 +19926,6 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     <p class="hz-hint" id="hzGasHint"></p>
   </div>
 
-  <!-- Muc "Ket noi Firebase" (di tu sidebar sang, giu nguyen id + ham cu) -->
   <div class="hz-sec" data-hzsec="class">
     <h4><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18a4.5 4.5 0 0 1-.4-9 5.5 5.5 0 0 1 10.7-1.2A4 4 0 0 1 17.5 18z"/><path d="m9.5 12.5 2 2 3.5-3.5"/></svg>Kết nối Firebase</h4>
     <button class="hz-fb" id="firebaseConnectBtn" type="button" onclick="manageFirebaseApiKey()">
@@ -19797,7 +19934,6 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     </button>
   </div>
 
-  <!-- Bang tai khoan & phan quyen (giu nguyen #userTableBody + changeUserRole/deleteUser) -->
   <div class="hz-sec" data-hzsec="users">
     <h4><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3.5 19c.7-3 2.5-4.5 5.5-4.5s4.8 1.5 5.5 4.5M16 11a3 3 0 1 0-1.5-5.6M16 14.5c2.4.1 3.9 1.6 4.5 4.5"/></svg>Bảng tài khoản &amp; phân quyền</h4>
     <p class="hz-hint" style="margin:0 0 8px;">Bạn là người quản trị tối cao: đổi quyền hoặc xóa tài khoản khác (không xóa được chính mình).</p>
@@ -19808,11 +19944,9 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       <tbody id="userTableBody"></tbody>
     </table>
 
-    <!-- So tai khoan (20/10): cho co GHI LAI thong tin dang nhap cua tung em va xem lai.
-         Day la so ghi chu cua co — app khong luu (va khong doi duoc) mat khau dang nhap that. -->
     <div class="hz-note-wrap">
       <h4 class="hz-note-h4"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4.5" y="4.5" width="15" height="15" rx="4"/><path d="M9.5 10.5h5M9.5 14h3.2"/></svg>Sổ tài khoản của cô</h4>
-      <p class="hz-hint" style="margin:0 0 6px;">Cô tự ghi lại tài khoản / mật khẩu của từng em để nhớ (kể cả tài khoản cô tạo cho em). Trang lớp <strong>không lưu mật khẩu đăng nhập thật</strong> ở bất kỳ đâu, nên đây chỉ là sổ ghi — không đổi được mật khẩu của em từ đây.</p>
+      <p class="hz-hint" style="margin:0 0 6px;">Cột <strong>IP lúc đăng ký</strong> tự ghi khi em bấm Đăng ký (nhờ dịch vụ ngoài đọc địa chỉ mạng). IP nằm ở nhánh riêng, <strong>chỉ màn Quản trị của cô đọc được</strong> — máy học sinh không đọc được. Nhiều em dùng chung WiFi lớp có thể ra cùng một IP; tài khoản tạo trước khi bật tính năng này sẽ để trống. Cột mật khẩu vẫn là sổ cô tự ghi — trang lớp không gửi mật khẩu thật lên Firebase.</p>
       <div class="hz-note-bar">
         <label class="hz-check"><input type="checkbox" id="hzNoteReveal" onchange="noteApi.reveal(this.checked)"><span>Hiện hết mật khẩu</span></label>
         <button class="hz-b sm ghost" type="button" onclick="noteApi.exportTxt()">Xuất file .txt</button>
@@ -19820,15 +19954,13 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       <p class="hz-note-msg" id="hzNoteMsg" role="status" aria-live="polite"></p>
       <table class="hz-note-table">
         <thead>
-          <tr><th>Tài khoản</th><th>Mật khẩu cô ghi</th><th>Ghi chú</th><th>Xóa</th></tr>
+          <tr><th>Tài khoản</th><th>Mật khẩu cô ghi</th><th>IP lúc đăng ký</th><th>Xóa</th></tr>
         </thead>
         <tbody id="accountNotesBody"></tbody>
       </table>
     </div>
   </div>
 
-  <!-- Cai ket noi AI: di tu tab "Tro ly AI lop hoc" sang (giu nguyen moi id + listener cu).
-       Key luu tren may nay va day cho ca lop qua classroomState -> hoc sinh hoi bai duoc ma khong thay key. -->
   <div class="hz-sec" data-hzsec="ai" id="hzAiKeySec">
     <h4><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.6 4.2L18 9l-4.4 1.8L12 15l-1.6-4.2L6 9l4.4-1.8z"/><path d="M18 15l.9 2.1L21 18l-2.1.9L18 21l-.9-2.1L15 18l2.1-.9z"/></svg>Kết nối trợ lý AI</h4>
     <div class="ai-settings-grid">
@@ -19850,29 +19982,32 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     <div class="ai-key-help">Lấy key tại <a id="aiProviderKeyLink" href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Google AI Studio</a>, dán vào ô trên rồi bấm “Lưu key”. Câu hỏi và tệp gửi lên trợ lý AI sẽ được gửi tới Google Gemini; tránh gửi thông tin riêng tư. Nếu chạm hạn mức miễn phí, hãy thử lại sau khi hạn mức được làm mới.</div>
   </div>
 
-  <!-- Tab Dieu hanh AI: JS doi nguyen khung "aiCommandTab" cua app vo day luc mo trang -->
   <div id="hzAiHost" data-hzsec="ai" role="tabpanel" aria-label="Trung tâm Điều hành AI"></div>
 </div>
 
+<div id="hzAdminGrip" title="Kéo để đổi chiều rộng và chiều cao menu" aria-label="Kéo để đổi kích thước menu">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6M10 20 20 10M14 22 22 14"/></svg>
+</div>
+
 <script>
-  /* ==================HANH VI MENU NOI ADMIN ==================
-     O cung <script> block nay (cuoi file) nen goi duoc ham cua app (render,
-     renderAdminUserManagement, notify) va cau noi window.gameAdmin* cua bo may game. */
+
   (function () {
     'use strict';
-    var POS_KEY = 'hoanghao_admin_widget_pos';    // "x,y" — nut keo tha giu nguyen cho
-    var OPEN_KEY = 'hoanghao_admin_widget_open';  // nho mo/dong panel sau khi tai lai
-    var TAB_KEY = 'hoanghao_admin_widget_tab';    // nho dang dung chuc nang nao
+    var POS_KEY = 'hoanghao_admin_widget_pos';
+    var OPEN_KEY = 'hoanghao_admin_widget_open';
+    var TAB_KEY = 'hoanghao_admin_widget_tab';
+    var SIZE_KEY = 'hoanghao_admin_widget_size';
+    var SCALE_KEY = 'hoanghao_admin_widget_scale';
     var TABS = ['class', 'users', 'mast', 'unlock', 'model', 'lock', 'caro', 'gas', 'ai'];
     var curTab = 'class';
-    var BTN = 46, PAD = 8, MAX_LEVEL = 999999;    // MAX_LEVEL = gia nut "Tối đa" ghi vao
-    var btn, head, panel, pos = { x: 0, y: 0 }, adminSeen = null;
+    var BTN = 46, PAD = 8, MAX_LEVEL = 999999;
+    var btn, head, panel, grip, pos = { x: 0, y: 0 }, adminSeen = null;
+    var panelSize = { w: 600, h: 620 }, uiScale = 1;
 
     function isAdmin() { try { return !!currentUser && currentUser.role === 'admin'; } catch (e) { return false; } }
     function adminName() { try { return currentUser ? (currentUser.fullName || currentUser.username || 'Admin') : 'Admin'; } catch (e) { return 'Admin'; } }
     function num(v, dflt) { v = Number(v); return isFinite(v) ? v : dflt; }
 
-    /* --------------------- vi tri + keo tha --------------------- */
     function clampPos(x, y) {
       var maxX = Math.max(PAD, window.innerWidth - BTN - PAD);
       var maxY = Math.max(PAD, window.innerHeight - BTN - PAD);
@@ -19887,10 +20022,52 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       pos = p;
     }
     function savePos() { try { localStorage.setItem(POS_KEY, pos.x + ',' + pos.y); } catch (e) { } }
-    function place() { btn.style.left = pos.x + 'px'; btn.style.top = pos.y + 'px'; }
-    /* Panel keo theo nut nhung luon nam trong man hinh (do rong/thuc te roi moi tinh) */
+    function place() { if (!btn) return; btn.style.left = pos.x + 'px'; btn.style.top = pos.y + 'px'; }
+
+    function panelLimits() {
+      var maxW = Math.max(280, window.innerWidth - PAD * 2);
+      var maxH = Math.max(260, window.innerHeight - PAD * 2);
+      return { minW: Math.min(340, maxW), minH: Math.min(300, maxH), maxW: maxW, maxH: maxH };
+    }
+    function clampPanelSize(w, h) {
+      var lim = panelLimits();
+      return {
+        w: Math.max(lim.minW, Math.min(lim.maxW, Math.round(num(w, 600)))),
+        h: Math.max(lim.minH, Math.min(lim.maxH, Math.round(num(h, 620))))
+      };
+    }
+    function applyPanelSize() {
+      if (!panel) return;
+      var f = clampPanelSize(panelSize.w, panelSize.h);
+      panel.style.width = f.w + 'px';
+      panel.style.height = f.h + 'px';
+
+      panelSize.w = f.w; panelSize.h = f.h;
+    }
+    function loadPanelSize() {
+      var w = 600, h = 620;
+      try {
+        var raw = localStorage.getItem(SIZE_KEY);
+        if (raw) {
+          var a = String(raw).toLowerCase().split('x');
+          w = num(a[0], w); h = num(a[1], h);
+        }
+      } catch (e) { }
+      var f = clampPanelSize(w, h);
+      panelSize = { w: f.w, h: f.h };
+      applyPanelSize();
+    }
+    function savePanelSize() { try { localStorage.setItem(SIZE_KEY, panelSize.w + 'x' + panelSize.h); } catch (e) { } }
+    function placeGrip() {
+      if (!grip || !panel || !isOpen()) return;
+      var r = panel.getBoundingClientRect();
+      if (!r.width) return;
+      grip.style.left = Math.round(r.right - 20) + 'px';
+      grip.style.top = Math.round(r.bottom - 20) + 'px';
+    }
+
     function placePanel() {
-      var r = panel.getBoundingClientRect(), w = r.width || 340, h = r.height || 260;
+      var r = panel.getBoundingClientRect(), w = r.width || panelSize.w, h = r.height || panelSize.h;
       var left = pos.x + BTN + 10;
       if (left + w > window.innerWidth - PAD) left = pos.x - w - 10;
       if (left < PAD) left = Math.max(PAD, window.innerWidth - w - PAD);
@@ -19898,14 +20075,51 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       if (top + h > window.innerHeight - PAD) top = Math.max(PAD, window.innerHeight - PAD - h);
       panel.style.left = Math.round(left) + 'px';
       panel.style.top = Math.round(top) + 'px';
+      placeGrip();
     }
     function isOpen() { return panel.classList.contains('show'); }
-    function open() { panel.classList.add('show'); btn.classList.add('show'); try { localStorage.setItem(OPEN_KEY, '1'); } catch (e) { } refreshTables(); applyTab(); }
-    function close() { panel.classList.remove('show'); try { localStorage.setItem(OPEN_KEY, '0'); } catch (e) { } }
-    function toggle() { isOpen() ? close() : open(); }
-    window.adminWidget = { close: close, open: open, toggle: toggle, tab: setTab, mastUi: function () { mastUi(); }, applyMast: applyMast, maxMast: maxMast, unlockUi: function () { unlockUi(); }, doUnlock: doUnlock, unlockAll: unlockAll, modelUi: function () { modelUi(); }, doModel: doModel, grantAllModels: grantAllModels, lockUi: function () { lockUi(); }, lockAll: lockAll, lockOpen: lockOpen, lockOpenAll: lockOpenAll, lockSelAll: lockSelAll, lockSelLocked: lockSelLocked, lockSecTick: lockSecTick, hintUi: function () { hintUi(); }, hintSave: hintSave, gasUi: function () { gasUi(); }, gasSave: gasSave };
+    function open() {
+      applyPanelSize();
+      panel.classList.add('show'); btn.classList.add('show');
+      if (grip) grip.classList.add('show');
+      try { localStorage.setItem(OPEN_KEY, '1'); } catch (e) { }
+      refreshTables(); applyTab();
+    }
+    function close() {
+      panel.classList.remove('show');
+      if (grip) grip.classList.remove('show');
+      try { localStorage.setItem(OPEN_KEY, '0'); } catch (e) { }
+    }
 
-    /* --------------------- chon chuc nang hien trong panel (kieu muc luc thu nho) --------------------- */
+    function applyScale() {
+      uiScale = Math.round(Math.max(0.8, Math.min(1.5, num(uiScale, 1))) * 10) / 10;
+      try { document.documentElement.style.setProperty('--hz-admin-scale', String(uiScale)); } catch (e) { }
+      BTN = Math.round(46 * uiScale);
+      if (btn) {
+        btn.style.width = BTN + 'px';
+        btn.style.height = BTN + 'px';
+        btn.style.minHeight = BTN + 'px';
+      }
+      pos = clampPos(pos.x, pos.y);
+      place();
+      stickyTabs();
+      if (isOpen()) placePanel();
+    }
+    function loadScale() {
+      var v = 1;
+      try { v = Number(localStorage.getItem(SCALE_KEY) || '1'); } catch (e) { }
+      uiScale = isFinite(v) && v ? v : 1;
+      applyScale();
+    }
+    function zoomMenu(dir) {
+      if (!isAdmin()) return;
+      uiScale = Math.round((uiScale + (dir > 0 ? 0.1 : -0.1)) * 10) / 10;
+      applyScale();
+      try { localStorage.setItem(SCALE_KEY, String(uiScale)); } catch (e) { }
+    }
+    function toggle() { isOpen() ? close() : open(); }
+    window.adminWidget = { close: close, open: open, toggle: toggle, tab: setTab, zoom: zoomMenu, mastUi: function () { mastUi(); }, applyMast: applyMast, maxMast: maxMast, unlockUi: function () { unlockUi(); }, doUnlock: doUnlock, unlockAll: unlockAll, modelUi: function () { modelUi(); }, doModel: doModel, grantAllModels: grantAllModels, lockUi: function () { lockUi(); }, lockAll: lockAll, lockOpen: lockOpen, lockOpenAll: lockOpenAll, lockSelAll: lockSelAll, lockSelLocked: lockSelLocked, lockSecTick: lockSecTick, hintUi: function () { hintUi(); }, hintSave: hintSave, gasUi: function () { gasUi(); }, gasSave: gasSave };
+
     function setTab(id) {
       if (TABS.indexOf(id) < 0) return;
       curTab = id;
@@ -19922,9 +20136,9 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
         tabs[i].setAttribute('aria-selected', on ? 'true' : 'false');
       }
       panel.setAttribute('data-tab', curTab);
-      try { localStorage.setItem(TAB_KEY, curTab); } catch (e) { }   // nho tab dang dung sau khi tai lai
+      try { localStorage.setItem(TAB_KEY, curTab); } catch (e) { }
       if (curTab === 'ai') {
-        // Trung tam AI o day thi khong qua goMenu() nua -> tu nap nhat du lieu nhu tab cu van lam
+
         try { if (typeof window.aiCommandCenterOpen === 'function') window.aiCommandCenterOpen(); } catch (e) { }
       } else if (curTab === 'users') {
         try { if (typeof renderAdminUserManagement === 'function') renderAdminUserManagement(); } catch (e) { }
@@ -19934,25 +20148,23 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       stickyTabs();
       placePanel();
     }
-    /* Dai tab dinh ngay duoi thanh tieu de, nen phai do chieu cao that cua thanh do */
+
     function stickyTabs() {
       var bar = el('hzAdminTabs');
       if (bar && head && head.offsetHeight) bar.style.top = head.offsetHeight + 'px';
     }
-    /* Di chuyen node that cua tab AI vo panel: giu nguyen toan bo id + listener cua app cu */
+
     function embedAi() {
       var host = el('hzAiHost'), ai = document.getElementById('aiCommandTab');
       if (!host || !ai || ai.parentNode === host) return;
       host.appendChild(ai);
     }
 
-    /* Keo tha = Pointer Events (du cho chuot lan cham tay). Di chuyen >4px la keo,
-       khong phai bam -> bam moi mo/dong panel. */
     function bindDrag(handle, isHead) {
       var down = false, moved = false, sx = 0, sy = 0, ox = 0, oy = 0;
       handle.addEventListener('pointerdown', function (e) {
         if (!isAdmin() || (e.pointerType === 'mouse' && e.button !== 0 && e.button !== undefined)) return;
-        // Keo tu thanh tieu de: bam len nut/chon ben trong (nut dong, o chon...) thi khong keo
+
         if (isHead && e.target && e.target.closest && e.target.closest('button,select,input')) return;
         down = true; moved = false; sx = e.clientX; sy = e.clientY; ox = pos.x; oy = pos.y;
         handle.classList.add('drag'); e.preventDefault();
@@ -19976,21 +20188,57 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       handle.addEventListener('pointercancel', function () { down = false; handle.classList.remove('drag'); });
     }
 
-    /* --------------------- chi hien khi la Admin --------------------- */
+    function bindResize() {
+      if (!grip) return;
+      var down = false, sx = 0, sy = 0, ow = 0, oh = 0, left = 0, top = 0;
+      grip.addEventListener('pointerdown', function (e) {
+        if (!isAdmin() || (e.pointerType === 'mouse' && e.button !== 0 && e.button !== undefined)) return;
+        down = true; sx = e.clientX; sy = e.clientY;
+        var r = panel.getBoundingClientRect();
+        ow = r.width; oh = r.height; left = r.left; top = r.top;
+        try { grip.setPointerCapture(e.pointerId); } catch (_) { }
+        e.preventDefault();
+        try { document.documentElement.style.userSelect = 'none'; } catch (_) { }
+      });
+      grip.addEventListener('pointermove', function (e) {
+        if (!down) return;
+        var lim = panelLimits();
+
+        var maxW = Math.max(lim.minW, Math.min(lim.maxW, window.innerWidth - left - PAD));
+        var maxH = Math.max(lim.minH, Math.min(lim.maxH, window.innerHeight - top - PAD));
+        panelSize.w = Math.max(lim.minW, Math.min(maxW, Math.round(ow + e.clientX - sx)));
+        panelSize.h = Math.max(lim.minH, Math.min(maxH, Math.round(oh + e.clientY - sy)));
+        applyPanelSize();
+        placePanel();
+      });
+      grip.addEventListener('pointerup', function (e) {
+        if (!down) return;
+        down = false;
+        try { grip.releasePointerCapture(e.pointerId); } catch (_) { }
+        try { document.documentElement.style.userSelect = ''; } catch (_) { }
+        savePanelSize();
+        placePanel();
+      });
+      grip.addEventListener('pointercancel', function () {
+        down = false;
+        try { document.documentElement.style.userSelect = ''; } catch (_) { }
+      });
+    }
+
     function sync() {
       var ok = isAdmin();
-      // Nut "Canh bao khi gas" trong muc luc theo QUYEN XEM do Admin dat (cong khai / chi dinh),
-      // khong theo vai tro -> phai chay ca khi nguoi xem khong phai Admin.
+
       try { if (window.gasBus && typeof window.gasBus.syncMenu === 'function') window.gasBus.syncMenu(); } catch (e) { }
-      // Khoa muc: MAY NAO CUNG phai chay (hat gach muc bi khoa + doi nguoi ra khoi bi khoa)
+
       try { enforce(); } catch (e) { }
       if (!ok) {
         if (adminSeen !== false) {
           adminSeen = false;
           btn.classList.remove('show'); panel.classList.remove('show');
-          // Khong phai Admin: xa het noi dung cu (bang tai khoan, danh sach Tinh Thong) khoi DOM
+          if (grip) grip.classList.remove('show');
+
           var tb = el('userTableBody'); if (tb) tb.innerHTML = '';
-          // So tai khoan cua co: rua sach khoi DOM khi nguoi xem khong con la Admin
+
           var nb = el('accountNotesBody'), nr = el('hzNoteReveal');
           if (nb) nb.innerHTML = '';
           if (nr) nr.checked = false;
@@ -20001,18 +20249,17 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
           if (us) us.innerHTML = ''; if (ui) ui.innerHTML = ''; if (uh) uh.textContent = '';
           var ms = el('hzModSt'), mp = el('hzModPick'), mh = el('hzModHint');
           if (ms) ms.innerHTML = ''; if (mp) mp.innerHTML = ''; if (mh) mh.textContent = '';
-          // Khoa muc + goi y CARO la do cua rieng Admin: khong de lai ten duoc trong DOM
+
           var lps = el('hzLockSecs'), lpp = el('hzLockPeople'), lsum = el('hzLockSum'), lal = el('hzLockAll');
           if (lps) lps.innerHTML = ''; if (lpp) lpp.innerHTML = ''; if (lsum) lsum.textContent = '';
           if (lal) { lal.checked = false; lal.disabled = false; }
-          /* secSel GIU NGUYEN: luc boot may chua kip nhan dien Admin (currentUser con null) nen
-             xa o day la lam mat danh sach muc co da tick truoc do. No chi chua id muc, khong co ten ai. */
+
           var hon = el('hzHintOn'), hlv = el('hzHintLv'), hst = el('hzHintState');
           if (hon) hon.checked = false; if (hlv) hlv.value = 'kho'; if (hst) hst.textContent = '';
           var gh = el('hzGasHost'), gp = el('hzGasPeople');
           if (gh) gh.innerHTML = ''; if (gp) gp.innerHTML = '';
           var ghi = el('hzGasHint'); if (ghi) ghi.textContent = '';
-          // Muc "Ket noi tro ly AI" cung o trong panel: khong de key len DOM khi nguoi xem khong phai Admin
+
           var ka = el('aiKeyInput'), kr = el('aiConnectionResult');
           if (ka) { ka.value = ''; ka.disabled = true; }
           if (kr) { kr.textContent = ''; kr.className = 'ai-connection-result'; }
@@ -20027,7 +20274,6 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       }
     }
 
-    /* --------------------- 2. chuc nang cu cua tab Quan ly quyen --------------------- */
     function refreshTables() {
       try { if (typeof renderAdminUserManagement === 'function') renderAdminUserManagement(); } catch (e) { }
       mastUi();
@@ -20037,7 +20283,6 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       hintUi();
     }
 
-    /* --------------------- 3. Chinh Tinh Thong phu kien --------------------- */
     function el(id) { return document.getElementById(id); }
     function fill(sel, items, keep, emptyText) {
       if (!sel) return;
@@ -20050,7 +20295,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       });
       sel.innerHTML = html;
     }
-    /* Danh sach = ca lop (ghi duoc cho em chua vao game) + moi tien trinh khach tren may nay */
+
     function studentItems() {
       var out = [], seen = {}, keys = [];
       try { keys = (typeof window.gameAdminSaveKeys === 'function') ? window.gameAdminSaveKeys() : []; } catch (e) { keys = []; }
@@ -20113,10 +20358,6 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       applyMast();
     }
 
-    /* --------------------- 4. Mo khoa vat pham / danh hieu ("ung thi mo") ---------------------
-       Ghi vao student.unlockedCos (bo id 'a5', 't7'...) cua ho so trong state -> saveState()
-       luu va dong bo Firebase nhu moi truong khac, em do dung may nao cung thay mon da mo.
-       Chi ap duoc cho HOC SINH CO HO SO: tai khoan "khach" trong game van bi chan trang bi. */
     function cosDefs() {
       try { return (typeof COSMETICS === 'undefined' || !COSMETICS) ? null : COSMETICS; } catch (e) { return null; }
     }
@@ -20204,9 +20445,6 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       unlockUi();
     }
 
-    /* --------------------- 5. Cap nhan vat (Ma Tu la nhan vat an) ---------------------
-       Ghi vao student.unlockedMod (id 'ma') cung cach voi unlockedCos: saveState() luu va
-       dong bo Firebase, em do dung may nao mo game cung thay nhan vat cua minh. */
     function modelDefs() {
       var list = [];
       try { list = (typeof window.gameAdminModelList === 'function') ? window.gameAdminModelList() : []; } catch (e) { list = []; }
@@ -20222,7 +20460,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       st.unlockedMod = ids;
       try { saveState(); } catch (e) { }
       try { if (typeof render === 'function') render(); } catch (e) { }
-      // Cap nhat ngay bang Tao hinh neu em do dang choi tren chinh may nay
+
       try { if (typeof window.gameAdminModelsChanged === 'function') window.gameAdminModelsChanged(); } catch (e) { }
     }
     function modelUi() {
@@ -20267,14 +20505,11 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       modelUi();
     }
 
-    /* --------------------- 6. Khi gas: ve panel + cho quyen xem ---------------------
-       Toan bo so lieu va cach ve nam trong module khi gas (window.gasBus). O day chi
-       gian no vao #hzGasHost va lay ket qua bam nut ve luu len Firebase. */
     function gasBus() { return (window.gasBus && typeof window.gasBus === 'object') ? window.gasBus : null; }
     function gasUi() {
       if (!isAdmin()) return;
       var g = gasBus(); if (!g) return;
-      try { g.floatOpen(el('hzGasHost')); } catch (e) { }                 // mo panel ve so lieu
+      try { g.floatOpen(el('hzGasHost')); } catch (e) { }
       try { g.visibilityUi(el('hzGasSee'), el('hzGasPeople'), el('hzGasHint')); } catch (e) { }
       placePanel();
     }
@@ -20291,16 +20526,9 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
         Promise.resolve(g.saveVisibility(sel ? sel.value : 'private', keys))
           .catch(function () { notify('Không lưu được quyền xem — xem dòng báo đỏ cuối mục.', 'err'); });
       } catch (e) { notify('Không lưu được quyền xem.', 'err'); }
-      setTimeout(function () { try { gasUi(); } catch (e) { } }, 1500);   // ve lai bang sau khi luu
+      setTimeout(function () { try { gasUi(); } catch (e) { } }, 1500);
     }
 
-    /* --------------------- 7. KHOA MUC (ca lop / tung em) ---------------------
-       Du lieu: state.locks = { '<tabId>': { all:1, u:{ '<username>':1 } } }.
-       State di theo classroomState len Firebase (saveState tu day len luc Admin luu) va may
-       hoc sinh nhan lai tron ven qua reloadAppFromFirebase -> KHONG can dan Rules moi.
-       Chan that lam o HAM GOI (goMenu / openGame / openTrial / openBackgroundModal) nen
-       du em do bam trong MUC LUC, bam the Tong quan lop, hay loi goi tu cho khac cung
-       khong vao duoc. Admin (tai khoan role=admin) luon vao duoc het. */
     var SECS = [
       { id: 'seatingTab', l: 'Sơ đồ lớp' },
       { id: 'studentTab', l: 'Danh sách lớp' },
@@ -20351,7 +20579,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       var L = null;
       try { L = ((state && state.locks) || {})[id]; } catch (e) { return false; }
       if (!L || typeof L !== 'object') return false;
-      if (L.all) return true;                                   // khoa ca lop -> ke ca chua dang nhap
+      if (L.all) return true;
       var u = myUser();
       return !!(u && L.u && L.u[u]);
     }
@@ -20375,13 +20603,13 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       if (on && !sp) {
         sp = document.createElement('span');
         sp.className = 'hz-lock-ic';
-        sp.innerHTML = LOCK_SVG;                                // chu hang tu cua file nay, khong phai du lieu nhap
+        sp.innerHTML = LOCK_SVG;
         b.appendChild(sp);
       } else if (!on && sp) { try { sp.parentNode.removeChild(sp); } catch (e) { } }
       b.classList.toggle('hz-locked', !!on);
     }
     var ORIG = {};
-    /* Chay tren MOI MAY (khoa muc thi can may hoc sinh tu chan lay minh) */
+
     function enforce() {
       try {
         var items = document.querySelectorAll('#menuDrawer .menu-item'), i;
@@ -20394,7 +20622,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       var cur = '';
       try { cur = String(document.querySelector('.tab-content.active') && document.querySelector('.tab-content.active').id || ''); } catch (e) { }
       if (!cur || !lockedFor(cur)) return;
-      /* Dang ngoi trong bi khoa (vi du khoa luc em do dang o trong) -> dua ve muc mo gan nhat */
+
       var order = ['seatingTab', 'profileTab', 'noticeTab', 'homeworkTab', 'rankTab', 'studentTab', 'linkTab', 'processTab', 'officeToolsTab', 'productKeyTab', 'aiTab', 'trialTab', 'gameTab', 'caroTab', 'gasTab'];
       var to = '', k;
       for (k = 0; k < order.length; k++) if (order[k] !== cur && !lockedFor(order[k])) { to = order[k]; break; }
@@ -20448,10 +20676,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       out.sort(function (a, b) { return String(a.l).localeCompare(String(b.l), 'vi'); });
       return out;
     }
-    /* Luoi chon NHIEM MUC mot luc. secSel chi la "tam nhin" tren may co (khong luu len lop),
-       con khoa that van ghi state.locks theo tung id nhu cu.
-       secSel luu o localStorage MAY CO de tai lai trang van con nguyen o da tick
-       (truoc day no nam trong bo nho nen reload la sach luoi, co nghi la mat het khoa). */
+
     var SEC_SEL_KEY = 'hoanghao_lock_sel';
     var secSel = {};
     function selSave() { try { localStorage.setItem(SEC_SEL_KEY, JSON.stringify(secSel)); } catch (e) { } }
@@ -20480,7 +20705,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       selSave();
       lockUi();
     }
-    /* Chun nhanh nhung muc DANG bi khoa (ca lop hoac khoa rieng em) de mo lai bang 1 nut */
+
     function lockSelLocked() {
       if (!isAdmin()) return;
       var b = lockBag(false) || {};
@@ -20503,14 +20728,14 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       if (!inp || inp.type !== 'checkbox' || !inp.value) return;
       if (inp.checked) secSel[inp.value] = 1; else delete secSel[inp.value];
       selSave();
-      lockUi(true);        // chi o vua tick doi -> khong ve lai ca luoi, kho bi nhay cuon / leap nut
+      lockUi(true);
     }
     function lockUi(skipGrid) {
       if (!isAdmin()) return;
       var box = el('hzLockSecs'), al = el('hzLockAll'), pp = el('hzLockPeople'), sum = el('hzLockSum');
       if (!box || !al || !pp || !sum) return;
       var bag = lockBag(false) || {}, ids = selIds(), html = '';
-      var keepTop = box.scrollTop;                            // bo nho vi tri cuon de khong nhay ve dau
+      var keepTop = box.scrollTop;
       if (!skipGrid) {
         SECS.forEach(function (s) {
           var X = bag[s.id] || {}, st = '';
@@ -20560,7 +20785,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       sum.innerHTML = 'Tóm tắt: đang khoá <b>' + nSec + ' mục</b>' +
         (nEm ? ' · <b>' + nEm + '</b> lượt khoá riêng theo em' : '') +
         (ids.length ? ' · đang chọn <b>' + ids.length + '</b> mục để thao tác' : ' · chưa chọn mục nào để thao tác');
-      /* Canh bao khi gan nhu KHO SACH CA APP de co biet ma mo lai */
+
       var warn = el('hzLockWarn');
       if (warn) {
         var w = '';
@@ -20581,7 +20806,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       if (!ids.length || !bag) return;
       if (!al) return;
       var on = al.checked ? 1 : 0, left = 0;
-      /* Nguoc tay bam "chon tat ca" + "khoa ca lop" la khoa sach ca app -> hoi lai khi tu 8 muc tro len */
+
       if (on && ids.length >= 8) {
         var ten = ids.slice(0, 6).map(function (i2) { return '· ' + lockLabel(i2); }).join('\n');
         if (ids.length > 6) ten += '\n· ... (' + (ids.length - 6) + ' mục nữa)';
@@ -20616,7 +20841,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       try { ten = String((inp.parentNode && inp.parentNode.querySelector('span') || {}).textContent || u); } catch (_) { ten = u; }
       var done = 0, skipped = 0;
       ids.forEach(function (id) {
-        if ((bag[id] || {}).all) { skipped++; return; }        // muc khoa ca lop thi tick tung em khong co y nghia
+        if ((bag[id] || {}).all) { skipped++; return; }
         var L = lockEntry(id, true);
         if (!L) return;
         if (inp.checked) L.u[u] = 1; else delete L.u[u];
@@ -20653,10 +20878,6 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       lockUi();
     }
 
-    /* --------------------- 8. Goi y nuoc di CARO cho Admin ---------------------
-       Toan bo tinh toan + ve o mo nam trong engine CARO (window.caroBus.hintSet/hintGet),
-       cai dat luu o localStorage may cua co (khong di qua Firebase => em nao cung khong
-       thay va cung khong "nhin sang" dung cach cua co duoc). */
     var HINT_LV = ['kho', 'binh', 'de'];
     function hintBus() { try { return (window.caroBus && typeof window.caroBus.hintGet === 'function') ? window.caroBus : null; } catch (e) { return null; } }
     function hintUi() {
@@ -20682,33 +20903,36 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       hintUi();
     }
 
-    /* --------------------- khoi dong --------------------- */
     function boot() {
-      btn = el('hzAdminBtn'); head = el('hzAdminHead'); panel = el('hzAdminPanel');
+      btn = el('hzAdminBtn'); head = el('hzAdminHead'); panel = el('hzAdminPanel'); grip = el('hzAdminGrip');
       if (!btn || !panel) return;
-      installGuards();                             // chan goMenu/openGame/openTrial/Hinh nen theo state.locks
+      installGuards();
       var lp = el('hzLockPeople');
       if (lp && !lp.__hzLock) { lp.__hzLock = 1; lp.addEventListener('change', lockTick); }
-      var ls = el('hzLockSecs');                        // luoi chon nhieu muc cung luc
+      var ls = el('hzLockSecs');
       if (ls && !ls.__hzLock) { ls.__hzLock = 1; ls.addEventListener('change', lockSecTick); }
-      embedAi();                                   // keo khung Trung tam AI vo panel ngay luc mo trang
+      embedAi();
       var saved = '';
       try { saved = localStorage.getItem(TAB_KEY) || ''; } catch (e) { }
       curTab = TABS.indexOf(saved) >= 0 ? saved : 'class';
+      loadScale();
+      loadPanelSize();
       applyTab();
       loadPos(); place();
       bindDrag(btn, false);
       bindDrag(head, true);
+      bindResize();
       window.addEventListener('resize', function () {
         pos = clampPos(pos.x, pos.y); place();
+        applyPanelSize();
         stickyTabs();
         if (isOpen()) placePanel();
       });
-      // Noi dung bang doi (them dong, danh sach Tinh Thong...) -> dinh lai cho khong tran man hinh
+
       if (typeof ResizeObserver === 'function') {
         try { new ResizeObserver(function () { if (isOpen()) placePanel(); }).observe(panel); } catch (e) { }
       }
-      // Admin dang nhap / thoat / doi quyen -> dung ham cu cua app goi sync()
+
       ['renderAuthBar', 'render'].forEach(function (n) {
         var f = window[n];
         if (typeof f !== 'function' || f.__hzAdmin) return;
@@ -20716,7 +20940,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
         w.__hzAdmin = true; window[n] = w;
       });
       sync();
-      setInterval(sync, 1500);   // phong truong hop dang nhap tu Firebase ma goi ham khong chay qua render()
+      setInterval(sync, 1500);
     }
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
     else boot();
