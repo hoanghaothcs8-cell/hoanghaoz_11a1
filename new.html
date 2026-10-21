@@ -20281,6 +20281,21 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
   #menuDrawer .menu-item .hz-lock-ic svg { width:13px; height:13px; fill:none; stroke:#fca5a5; stroke-width:1.8; stroke-linecap:round; }
   #menuDrawer .menu-item.hz-locked { opacity:.45; }
   #menuDrawer .menu-item.hz-locked .hz-lock-ic { display:inline-flex; }
+
+  .hz-look-input { width:100%; box-sizing:border-box; padding:8px 10px !important; border-radius:9px !important;
+    background:rgba(255,255,255,.055) !important; border:1px solid rgba(245,158,11,.28) !important;
+    color:#fde68a !important; font-size:12px; font-family:inherit; }
+  .hz-look-input:focus { outline:none; border-color:rgba(245,158,11,.6) !important; }
+  .hz-look-apps { display:flex; flex-wrap:wrap; gap:6px; margin:7px 0 10px; }
+  .hz-look-apps .hz-check { margin:0; padding:5px 8px; border:1px solid rgba(245,158,11,.24);
+    border-radius:8px; background:rgba(255,255,255,.045); font-size:11px; color:#fde68a; }
+  .hz-look-apps .hz-check input { accent-color:#f59e0b; }
+  .hz-look-links { display:grid; gap:6px; margin-top:8px; }
+  .hz-look-link { display:flex; flex-direction:column; gap:1px; padding:8px 10px; border-radius:9px;
+    border:1px solid rgba(245,158,11,.28); background:rgba(245,158,11,.07); text-decoration:none; }
+  .hz-look-link:hover { background:rgba(245,158,11,.15); }
+  .hz-look-link b { font-size:11.5px; color:#fde68a; }
+  .hz-look-link span { font-size:9px; line-height:1.4; color:#a98c4d; overflow-wrap:anywhere; }
 </style>
 
 <style>
@@ -21403,6 +21418,8 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 20 6v5c0 5-3.4 8.3-8 10-4.6-1.7-8-5-8-10V6z"/><path d="m9 12 2 2 4-4"/></svg>Lớp học</button>
     <button class="hz-tab" type="button" role="tab" data-hztab="users" onclick="adminWidget.tab('users')">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3.5 19c.7-3 2.5-4.5 5.5-4.5s4.8 1.5 5.5 4.5M16 11a3 3 0 1 0-1.5-5.6M16 14.5c2.4.1 3.9 1.6 4.5 4.5"/></svg>Tài khoản</button>
+    <button class="hz-tab" type="button" role="tab" data-hztab="lookup" onclick="adminWidget.tab('lookup')">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.3"/><path d="m15.2 15.2 4.3 4.3"/><circle cx="10.5" cy="8.9" r="1.7"/><path d="M7.6 14.1c.4-1.3 1.5-2 2.9-2s2.5.7 2.9 2"/></svg>Tra cứu</button>
     <button class="hz-tab" type="button" role="tab" data-hztab="iplog" onclick="adminWidget.tab('iplog')">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s6.4-5.5 6.4-10.4a6.4 6.4 0 0 0-12.8 0C5.6 15.5 12 21 12 21z"/><circle cx="12" cy="10.4" r="2.3"/><path d="M4 7.5A8.8 8.8 0 0 1 9 4.2M20 7.5a8.8 8.8 0 0 0-5-3.3"/></svg>Nhật ký IP</button>
     <button class="hz-tab" type="button" role="tab" data-hztab="mast" onclick="adminWidget.tab('mast')">
@@ -21560,6 +21577,30 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     </div>
   </div>
 
+  <div class="hz-sec" data-hzsec="lookup">
+    <h4><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.3"/><path d="m15.2 15.2 4.3 4.3"/><circle cx="10.5" cy="8.9" r="1.7"/><path d="M7.6 14.1c.4-1.3 1.5-2 2.9-2s2.5.7 2.9 2"/></svg>Tra cứu tên trên mạng xã hội</h4>
+    <p class="hz-hint" style="margin:0 0 8px;">Nhập tên, app tạo sẵn link tìm kiếm công khai của từng nền tảng. App <strong>không tự lấy tài khoản, không lưu tên, không dùng IP hay vị trí</strong>. Kết quả có thể trùng tên người khác — mở xem, đối chiếu ảnh/trường/lớp rồi mới kết luận.</p>
+    <label class="hz-lb" for="hzLookName">Tên cần tra</label>
+    <input class="hz-look-input" id="hzLookName" type="text" autocomplete="off" maxlength="80" placeholder="Ví dụ: Nguyễn Minh Anh" onkeydown="if(event.key==='Enter')adminWidget.lookupBuild()">
+    <label class="hz-lb" for="hzLookExtra">Từ khoá thêm — không bắt buộc</label>
+    <input class="hz-look-input" id="hzLookExtra" type="text" autocomplete="off" maxlength="60" placeholder="Ví dụ: Quảng Ngãi, tên trường, lớp" onkeydown="if(event.key==='Enter')adminWidget.lookupBuild()">
+    <label class="hz-lb">Nền tảng cần mở</label>
+    <div class="hz-look-apps" id="hzLookApps">
+      <label class="hz-check"><input type="checkbox" value="facebook" checked><span>Facebook</span></label>
+      <label class="hz-check"><input type="checkbox" value="tiktok" checked><span>TikTok</span></label>
+      <label class="hz-check"><input type="checkbox" value="instagram" checked><span>Instagram</span></label>
+      <label class="hz-check"><input type="checkbox" value="threads"><span>Threads</span></label>
+      <label class="hz-check"><input type="checkbox" value="google" checked><span>Google</span></label>
+    </div>
+    <div class="hz-row" style="margin-top:0;">
+      <button class="hz-b" type="button" onclick="adminWidget.lookupBuild()">Tạo link tra cứu</button>
+      <button class="hz-b ghost" type="button" onclick="adminWidget.lookupClear()">Xoá</button>
+    </div>
+    <p class="hz-note-msg" id="hzLookMsg" role="status" aria-live="polite"></p>
+    <div class="hz-look-links" id="hzLookLinks"></div>
+    <p class="hz-hint">Facebook, TikTok, Instagram và Threads thường bắt đăng nhập mới xem được. Instagram không có ô tìm theo tên khi chưa đăng nhập nên app lọc qua Google. <strong>Zalo</strong> không có trang tìm người theo tên công khai — chỉ tìm được bằng số điện thoại trong app. Chỉ mở để tự đối chiếu, không thu thập hay chuyển tiếp thông tin của học sinh.</p>
+  </div>
+
   <div class="hz-sec" data-hzsec="iplog">
     <h4><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s6.4-5.5 6.4-10.4a6.4 6.4 0 0 0-12.8 0C5.6 15.5 12 21 12 21z"/><circle cx="12" cy="10.4" r="2.3"/></svg>Nhật ký IP &amp; nơi đăng nhập</h4>
     <p class="hz-hint" style="margin:0 0 8px;">Mỗi lần đăng nhập, và mỗi khi IP đổi trong lúc đang dùng app, máy của người đó tự ghi <strong>IP + ngày giờ</strong> lên Firebase — tải lại trang hay tắt máy không mất, chỉ mất khi cô bấm xóa. Tắt app thì IP cuối cùng vẫn được giữ lại. Vị trí là <strong>ước lượng theo IP</strong> (thường tới thành phố/quận, có thể lệch vài km), không phải GPS. Nhiều em dùng chung WiFi trường sẽ ra cùng một vị trí. Tài khoản đang đăng nhập sẵn cũng tự ghi sau khi mở lại app.</p>
@@ -21611,7 +21652,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     var TAB_KEY = 'hoanghao_admin_widget_tab';
     var SIZE_KEY = 'hoanghao_admin_widget_size';
     var SCALE_KEY = 'hoanghao_admin_widget_scale';
-    var TABS = ['class', 'users', 'iplog', 'mast', 'unlock', 'model', 'lock', 'caro', 'gas', 'ai'];
+    var TABS = ['class', 'users', 'lookup', 'iplog', 'mast', 'unlock', 'model', 'lock', 'caro', 'gas', 'ai'];
     var curTab = 'class';
     var BTN = 46, PAD = 8, MAX_LEVEL = 999999;
     var btn, head, panel, grip, pos = { x: 0, y: 0 }, adminSeen = null;
@@ -21731,7 +21772,90 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       try { localStorage.setItem(SCALE_KEY, String(uiScale)); } catch (e) { }
     }
     function toggle() { isOpen() ? close() : open(); }
-    window.adminWidget = { close: close, open: open, toggle: toggle, tab: setTab, zoom: zoomMenu, mastUi: function () { mastUi(); }, applyMast: applyMast, maxMast: maxMast, unlockUi: function () { unlockUi(); }, doUnlock: doUnlock, unlockAll: unlockAll, modelUi: function () { modelUi(); }, doModel: doModel, grantAllModels: grantAllModels, lockUi: function () { lockUi(); }, lockAll: lockAll, lockOpen: lockOpen, lockOpenAll: lockOpenAll, lockSelAll: lockSelAll, lockSelLocked: lockSelLocked, lockSecTick: lockSecTick, hintUi: function () { hintUi(); }, hintSave: hintSave, gasUi: function () { gasUi(); }, gasSave: gasSave };
+    var LOOK_PLATFORMS = {
+      facebook: 'Facebook · tìm bài và trang công khai',
+      tiktok: 'TikTok · tìm tài khoản',
+      instagram: 'Instagram · lọc qua Google',
+      threads: 'Threads · tìm bài công khai',
+      google: 'Google · tìm toàn web'
+    };
+
+    function lookEsc(s) {
+      return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+      });
+    }
+    function lookClean(s, max) {
+      return String(s == null ? '' : s).replace(/\s+/g, ' ').trim().slice(0, max || 80);
+    }
+    function lookShow(url) {
+      var s = String(url || '').replace(/^https?:\/\/(www\.)?/, '');
+      try { return decodeURIComponent(s); } catch (e) { return s; }
+    }
+    function lookUrls(name, extra) {
+      var withExtra = extra ? name + ' ' + extra : name;
+      var enc = encodeURIComponent(withExtra);
+      var quoted = '"' + name.replace(/["“”]/g, '').trim() + '"' + (extra ? ' ' + extra : '');
+      return {
+        facebook: 'https://www.facebook.com/search/top?q=' + enc,
+        tiktok: 'https://www.tiktok.com/search?q=' + enc,
+        instagram: 'https://www.google.com/search?q=' + encodeURIComponent('site:instagram.com ' + quoted),
+        threads: 'https://www.threads.net/search?q=' + enc,
+        google: 'https://www.google.com/search?q=' + encodeURIComponent(quoted)
+      };
+    }
+    function lookPicked() {
+      var box = el('hzLookApps');
+      if (!box) return [];
+      var out = [], ins = box.querySelectorAll('input[type="checkbox"]');
+      for (var i = 0; i < ins.length; i++) if (ins[i].checked) out.push(ins[i].value);
+      return out;
+    }
+    function lookMsg(text, warn) {
+      var m = el('hzLookMsg');
+      if (!m) return;
+      m.textContent = text || '';
+      m.classList.toggle('warn', !!warn);
+    }
+    function lookupBuild() {
+      var nameEl = el('hzLookName'), extraEl = el('hzLookExtra'), out = el('hzLookLinks');
+      if (!nameEl || !out) return [];
+      var name = lookClean(nameEl.value, 80);
+      var extra = lookClean(extraEl && extraEl.value, 60);
+      var picked = lookPicked();
+      if (name.length < 2) {
+        out.innerHTML = '';
+        lookMsg('Nhập ít nhất 2 chữ cái của tên cần tra.', true);
+        try { nameEl.focus(); } catch (e) { }
+        return [];
+      }
+      if (!picked.length) {
+        out.innerHTML = '';
+        lookMsg('Chọn ít nhất một nền tảng cần mở.', true);
+        return [];
+      }
+      var urls = lookUrls(name, extra), html = '', made = [];
+      for (var i = 0; i < picked.length; i++) {
+        var k = picked[i];
+        if (!LOOK_PLATFORMS[k] || !urls[k]) continue;
+        made.push({ key: k, label: LOOK_PLATFORMS[k], url: urls[k] });
+        html += '<a class="hz-look-link" href="' + lookEsc(urls[k]) + '" target="_blank" rel="noopener noreferrer">' +
+          '<b>' + lookEsc(LOOK_PLATFORMS[k]) + '</b><span>' + lookEsc(lookShow(urls[k])) + '</span></a>';
+      }
+      out.innerHTML = html;
+      lookMsg('Đã tạo ' + made.length + ' link cho “' + name + (extra ? ' · ' + extra : '') + '”. Bấm từng link để mở trang tìm kiếm.');
+      return made;
+    }
+    function lookupClear() {
+      var nameEl = el('hzLookName'), extraEl = el('hzLookExtra'), out = el('hzLookLinks');
+      if (nameEl) nameEl.value = '';
+      if (extraEl) extraEl.value = '';
+      if (out) out.innerHTML = '';
+      lookMsg('');
+      try { if (nameEl) nameEl.focus(); } catch (e) { }
+    }
+
+    window.adminWidget = { close: close, open: open, toggle: toggle, tab: setTab, zoom: zoomMenu, lookupBuild: lookupBuild, lookupClear: lookupClear, mastUi: function () { mastUi(); }, applyMast: applyMast, maxMast: maxMast, unlockUi: function () { unlockUi(); }, doUnlock: doUnlock, unlockAll: unlockAll, modelUi: function () { modelUi(); }, doModel: doModel, grantAllModels: grantAllModels, lockUi: function () { lockUi(); }, lockAll: lockAll, lockOpen: lockOpen, lockOpenAll: lockOpenAll, lockSelAll: lockSelAll, lockSelLocked: lockSelLocked, lockSecTick: lockSecTick, hintUi: function () { hintUi(); }, hintSave: hintSave, gasUi: function () { gasUi(); }, gasSave: gasSave };
 
     function setTab(id) {
       if (TABS.indexOf(id) < 0) return;
