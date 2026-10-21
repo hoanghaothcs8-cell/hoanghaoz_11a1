@@ -21579,7 +21579,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
 
   <div class="hz-sec" data-hzsec="lookup">
     <h4><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.3"/><path d="m15.2 15.2 4.3 4.3"/><circle cx="10.5" cy="8.9" r="1.7"/><path d="M7.6 14.1c.4-1.3 1.5-2 2.9-2s2.5.7 2.9 2"/></svg>Tra cứu tên trên mạng xã hội</h4>
-    <p class="hz-hint" style="margin:0 0 8px;">Nhập tên, app tạo sẵn link tìm kiếm công khai của từng nền tảng. App <strong>không tự lấy tài khoản, không lưu tên, không dùng IP hay vị trí</strong>. Kết quả có thể trùng tên người khác — mở xem, đối chiếu ảnh/trường/lớp rồi mới kết luận.</p>
+    <p class="hz-hint" style="margin:0 0 8px;">Nhập tên rồi bấm <strong>Mở Google gộp 4 nền tảng</strong> để xem kết quả Facebook, TikTok, Instagram, Threads trên cùng một trang Google. Hoặc chọn nền tảng và bấm <strong>Tạo link riêng</strong>. App <strong>không tự lấy tài khoản, không lưu tên, không dùng IP hay vị trí</strong>. Kết quả có thể trùng tên người khác — mở xem, đối chiếu ảnh/trường/lớp rồi mới kết luận.</p>
     <label class="hz-lb" for="hzLookName">Tên cần tra</label>
     <input class="hz-look-input" id="hzLookName" type="text" autocomplete="off" maxlength="80" placeholder="Ví dụ: Nguyễn Minh Anh" onkeydown="if(event.key==='Enter')adminWidget.lookupBuild()">
     <label class="hz-lb" for="hzLookExtra">Từ khoá thêm — không bắt buộc</label>
@@ -21593,7 +21593,8 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       <label class="hz-check"><input type="checkbox" value="google" checked><span>Google</span></label>
     </div>
     <div class="hz-row" style="margin-top:0;">
-      <button class="hz-b" type="button" onclick="adminWidget.lookupBuild()">Tạo link tra cứu</button>
+      <button class="hz-b" type="button" onclick="adminWidget.lookupAll()">Mở Google gộp 4 nền tảng</button>
+      <button class="hz-b ghost" type="button" onclick="adminWidget.lookupBuild()">Tạo link riêng</button>
       <button class="hz-b ghost" type="button" onclick="adminWidget.lookupClear()">Xoá</button>
     </div>
     <p class="hz-note-msg" id="hzLookMsg" role="status" aria-live="polite"></p>
@@ -21846,6 +21847,29 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       lookMsg('Đã tạo ' + made.length + ' link cho “' + name + (extra ? ' · ' + extra : '') + '”. Bấm từng link để mở trang tìm kiếm.');
       return made;
     }
+    function lookAllUrl(name, extra) {
+      var quoted = '"' + name.replace(/["“”]/g, '').trim() + '"' + (extra ? ' ' + extra : '');
+      return 'https://www.google.com/search?q=' + encodeURIComponent('(site:facebook.com OR site:tiktok.com OR site:instagram.com OR site:threads.net) ' + quoted);
+    }
+    function lookupAll() {
+      var nameEl = el('hzLookName'), extraEl = el('hzLookExtra'), out = el('hzLookLinks');
+      var name = lookClean(nameEl && nameEl.value, 80);
+      var extra = lookClean(extraEl && extraEl.value, 60);
+      if (name.length < 2) {
+        if (out) out.innerHTML = '';
+        lookMsg('Nhập ít nhất 2 chữ cái của tên cần tra.', true);
+        try { if (nameEl) nameEl.focus(); } catch (e) { }
+        return '';
+      }
+      var url = lookAllUrl(name, extra);
+      if (out) {
+        out.innerHTML = '<a class="hz-look-link" href="' + lookEsc(url) + '" target="_blank" rel="noopener noreferrer">' +
+          '<b>Google · gộp Facebook + TikTok + Instagram + Threads</b><span>' + lookEsc(lookShow(url)) + '</span></a>';
+      }
+      try { window.open(url, '_blank', 'noopener'); } catch (e) { }
+      lookMsg('Đã mở Google gộp 4 nền tảng cho “' + name + (extra ? ' · ' + extra : '') + '”. Nếu trình duyệt chặn tab mới, bấm thẻ link bên dưới.');
+      return url;
+    }
     function lookupClear() {
       var nameEl = el('hzLookName'), extraEl = el('hzLookExtra'), out = el('hzLookLinks');
       if (nameEl) nameEl.value = '';
@@ -21855,7 +21879,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       try { if (nameEl) nameEl.focus(); } catch (e) { }
     }
 
-    window.adminWidget = { close: close, open: open, toggle: toggle, tab: setTab, zoom: zoomMenu, lookupBuild: lookupBuild, lookupClear: lookupClear, mastUi: function () { mastUi(); }, applyMast: applyMast, maxMast: maxMast, unlockUi: function () { unlockUi(); }, doUnlock: doUnlock, unlockAll: unlockAll, modelUi: function () { modelUi(); }, doModel: doModel, grantAllModels: grantAllModels, lockUi: function () { lockUi(); }, lockAll: lockAll, lockOpen: lockOpen, lockOpenAll: lockOpenAll, lockSelAll: lockSelAll, lockSelLocked: lockSelLocked, lockSecTick: lockSecTick, hintUi: function () { hintUi(); }, hintSave: hintSave, gasUi: function () { gasUi(); }, gasSave: gasSave };
+    window.adminWidget = { close: close, open: open, toggle: toggle, tab: setTab, zoom: zoomMenu, lookupBuild: lookupBuild, lookupAll: lookupAll, lookupClear: lookupClear, mastUi: function () { mastUi(); }, applyMast: applyMast, maxMast: maxMast, unlockUi: function () { unlockUi(); }, doUnlock: doUnlock, unlockAll: unlockAll, modelUi: function () { modelUi(); }, doModel: doModel, grantAllModels: grantAllModels, lockUi: function () { lockUi(); }, lockAll: lockAll, lockOpen: lockOpen, lockOpenAll: lockOpenAll, lockSelAll: lockSelAll, lockSelLocked: lockSelLocked, lockSecTick: lockSecTick, hintUi: function () { hintUi(); }, hintSave: hintSave, gasUi: function () { gasUi(); }, gasSave: gasSave };
 
     function setTab(id) {
       if (TABS.indexOf(id) < 0) return;
