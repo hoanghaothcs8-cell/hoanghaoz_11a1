@@ -20334,6 +20334,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
   button.hz-person-soi span { flex:0 0 auto; }
   button.hz-person-soi b { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:#fff; }
   .hz-person-nolink { font-size:10px; font-style:italic; line-height:1.4; color:#a98c4d; }
+  .hz-person-soi-wrap { flex:1 1 100%; display:flex; flex-wrap:wrap; align-items:center; gap:4px; min-width:0; }
   .hz-person-why { flex:1 1 100%; font-size:9.5px; line-height:1.45; color:#c9ad72; }
   .hz-person-note { margin:8px 0 2px; font-size:10.5px; line-height:1.55; color:#a98c4d; }
   .hz-person-copy { display:inline-block; margin-top:4px; padding:4px 7px; border-radius:7px; user-select:all;
@@ -22100,7 +22101,8 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
         if (tt.user) soi.push({ user: tt.user, at: true });
         else if (tt.why) reasons.push(tt.why);
       }
-      actions += personSoiButtons(soi);
+      var soiHtml = personSoiButtons(soi);
+      if (soiHtml) actions += '<span class="hz-person-soi-wrap">' + soiHtml + '</span>';
       if (!actions) actions = '<span class="hz-person-nolink">Chưa cập nhật Facebook/TikTok</span>';
       else if (reasons.length) actions += '<span class="hz-person-why">' + lookEsc(reasons.join(' ')) + '</span>';
       var av = avatar
