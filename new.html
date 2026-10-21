@@ -3194,6 +3194,20 @@
 .hz-note-gps span { flex:1 1 auto; min-width:0; }
 .hz-note-gps b { display:block; font-size:11px; line-height:1.35; color:#e0f2fe; }
 .hz-note-gps em { display:block; margin-top:1px; font-style:normal; font-size:9.5px; line-height:1.35; color:#7dd3fc; }
+.hz-note-gps-wrap { margin:2px 0 9px; padding:8px 10px 9px; border-radius:10px;
+  background:rgba(56,189,248,.08); border:1px solid rgba(56,189,248,.22); }
+.hz-note-gps-wrap .hz-note-gps { margin:0; padding:0; border:0; background:none; }
+.hz-note-gps-wrap .hz-note-gps:hover { background:none; }
+.hz-note-gps-wrap .hz-note-gps:hover b { text-decoration:underline; }
+.hz-gps-addr-row { margin-top:5px; padding-top:5px; border-top:1px dashed rgba(56,189,248,.22);
+  font-size:10px; line-height:1.45; color:#bae6fd; overflow-wrap:anywhere; }
+.hz-gps-addr { font-style:normal; }
+.hz-gps-map { height:150px; margin-top:6px; border-radius:9px; overflow:hidden;
+  border:1px solid rgba(56,189,248,.22); background:rgba(8,15,30,.55); }
+.hz-gps-map-wait { padding:10px; font-size:10px; line-height:1.4; color:#94a3b8; }
+.hz-gps-src { margin-top:4px; font-size:8.5px; line-height:1.4; color:#7dd3fc; opacity:.8; }
+.hz-gps-map .leaflet-control-attribution { font-size:8px; line-height:1.3; background:rgba(15,23,42,.75); color:#cbd5e1; }
+.hz-gps-map .leaflet-control-attribution a { color:#7dd3fc; }
 </style>
 
 </head>
@@ -20610,16 +20624,208 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       (a ? ' - ±' + a + ' m' : '') + '</span>';
   }
 
+  var HZ_GEO_KEY = 'hoanghao_geo_cache_v1';
+  var hzGeoCache = null;
+  var hzGeoPending = {};
+  var hzGeoFail = {};
+  var hzGeoLastAt = 0;
+
+  function hzGeoCacheLoad() {
+    if (hzGeoCache) return hzGeoCache;
+    try { hzGeoCache = JSON.parse(localStorage.getItem(HZ_GEO_KEY) || '{}') || {}; }
+    catch (e) { hzGeoCache = {}; }
+    return hzGeoCache;
+  }
+
+  function hzGeoCacheSave() {
+    try { localStorage.setItem(HZ_GEO_KEY, JSON.stringify(hzGeoCache || {})); } catch (e) { }
+  }
+
+  function hzGeoKeyOf(lat, lon) {
+    return Number(lat).toFixed(4) + ',' + Number(lon).toFixed(4);
+  }
+
+  function hzGeoKnown(lat, lon) {
+    var c = hzGeoCacheLoad();
+    var rec = c[hzGeoKeyOf(lat, lon)];
+    return (rec && rec.addr) ? String(rec.addr) : '';
+  }
+
+  function hzGeoJoin(parts) {
+    var out = [];
+    (parts || []).forEach(function (p) {
+      p = String(p || '').trim();
+      if (!p) return;
+      var low = p.toLowerCase();
+      for (var i = 0; i < out.length; i++) {
+        var had = out[i].toLowerCase();
+        if (had === low || had.indexOf(low) !== -1 || low.indexOf(had) !== -1) return;
+      }
+      out.push(p);
+    });
+    return out.join(', ');
+  }
+
+  function hzGeoAddrFromPhoton(data) {
+    try {
+      var f = data && data.features && data.features[0];
+      var p = f && f.properties;
+      if (!p) return '';
+      var house = String(p.housenumber || '').trim();
+      var street = String(p.street || '').trim();
+      var road = street ? (house ? house + ' ' + street : street) : '';
+      return hzGeoJoin([p.name, road, p.locality, p.district, p.city, p.county, p.state]);
+    } catch (e) { return ''; }
+  }
+
+  function hzGeoLookup(lat, lon) {
+    var key = hzGeoKeyOf(lat, lon);
+    var hit = hzGeoKnown(lat, lon);
+    if (hit) return Promise.resolve(hit);
+    if (hzGeoPending[key]) return hzGeoPending[key];
+    if (hzGeoFail[key] && Date.now() - hzGeoFail[key] < 300000) return Promise.resolve('');
+    var wait = Math.max(0, 1000 - (Date.now() - hzGeoLastAt));
+    var p = new Promise(function (resolve) { setTimeout(resolve, wait); })
+      .then(function () {
+        hzGeoLastAt = Date.now();
+        var url = 'https://photon.komoot.io/reverse?lon=' + encodeURIComponent(lon) +
+          '&lat=' + encodeURIComponent(lat) + '&lang=default';
+        return fetch(url, { headers: { 'Accept': 'application/json' } });
+      })
+      .then(function (r) {
+        if (!r.ok) throw new Error('geo ' + r.status);
+        return r.json();
+      })
+      .then(function (data) {
+        var addr = hzGeoAddrFromPhoton(data);
+        if (addr) {
+          var c = hzGeoCacheLoad();
+          c[key] = { addr: addr, at: Date.now() };
+          hzGeoCacheSave();
+        } else {
+          hzGeoFail[key] = Date.now();
+        }
+        return addr;
+      })
+      .catch(function () { hzGeoFail[key] = Date.now(); return ''; })
+      .then(function (addr) { delete hzGeoPending[key]; return addr; });
+    hzGeoPending[key] = p;
+    return p;
+  }
+
+  function hzGeoFill(root) {
+    var box = root || document;
+    var els = box.querySelectorAll ? box.querySelectorAll('.hz-gps-addr[data-geo-lat]') : [];
+    Array.prototype.forEach.call(els, function (el) {
+      var lat = Number(el.getAttribute('data-geo-lat'));
+      var lon = Number(el.getAttribute('data-geo-lon'));
+      if (!isFinite(lat) || !isFinite(lon)) return;
+      var known = hzGeoKnown(lat, lon);
+      if (known) { el.textContent = known; return; }
+      if (el.getAttribute('data-geo-busy') === '1') return;
+      el.setAttribute('data-geo-busy', '1');
+      el.textContent = 'Đang tra địa chỉ…';
+      hzGeoLookup(lat, lon).then(function (addr) {
+        el.removeAttribute('data-geo-busy');
+        if (!el.isConnected) return;
+        el.textContent = addr || 'Chưa tra được địa chỉ (cần mạng)';
+      });
+    });
+  }
+
+  var hzLeafletP = null;
+  function hzLoadLeaflet() {
+    if (window.L) return Promise.resolve(window.L);
+    if (hzLeafletP) return hzLeafletP;
+    hzLeafletP = new Promise(function (resolve, reject) {
+      var css = document.createElement('link');
+      css.rel = 'stylesheet';
+      css.href = 'https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css';
+      document.head.appendChild(css);
+      var js = document.createElement('script');
+      js.src = 'https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js';
+      js.async = true;
+      js.onload = function () { if (window.L) resolve(window.L); else reject(new Error('leaflet')); };
+      js.onerror = function () { reject(new Error('leaflet')); };
+      document.head.appendChild(js);
+    }).catch(function (e) { hzLeafletP = null; throw e; });
+    return hzLeafletP;
+  }
+
+  function hzGpsDispose(root) {
+    try {
+      var box = root || document;
+      var maps = box.querySelectorAll ? box.querySelectorAll('.hz-gps-map') : [];
+      Array.prototype.forEach.call(maps, function (el) {
+        if (el._hzMap) { try { el._hzMap.remove(); } catch (e) { } el._hzMap = null; }
+      });
+    } catch (e) { }
+  }
+
+  function hzGpsMapInit(root) {
+    var box = root || document;
+    var maps = box.querySelectorAll ? box.querySelectorAll('.hz-gps-map[data-lat]') : [];
+    Array.prototype.forEach.call(maps, function (el) {
+      if (el._hzMap) return;
+      if (el.offsetParent === null) return;
+      var lat = Number(el.getAttribute('data-lat'));
+      var lon = Number(el.getAttribute('data-lon'));
+      var acc = Math.max(0, Number(el.getAttribute('data-acc')) || 0);
+      if (!isFinite(lat) || !isFinite(lon)) return;
+      el.innerHTML = '<div class="hz-gps-map-wait">Đang tải bản đồ…</div>';
+      hzLoadLeaflet().then(function (L) {
+        if (!L || el._hzMap || !el.isConnected) return;
+        el.innerHTML = '';
+        var map = L.map(el, { zoomControl: false, attributionControl: true, scrollWheelZoom: false });
+        var zoom = acc > 0
+          ? (acc <= 25 ? 18 : acc <= 60 ? 17 : acc <= 250 ? 16 : acc <= 800 ? 15 : 14)
+          : 16;
+        map.setView([lat, lon], zoom);
+        L.tileLayer('https://tile.openstreetmap.de/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'
+        }).addTo(map);
+        var radius = acc > 0 ? acc : 30;
+        var circle = L.circle([lat, lon], {
+          radius: radius, color: '#38bdf8', weight: 1.5, opacity: 0.9,
+          fillColor: '#38bdf8', fillOpacity: 0.16
+        }).addTo(map);
+        L.circleMarker([lat, lon], {
+          radius: 5, color: '#e0f2fe', weight: 2, fillColor: '#0ea5e9', fillOpacity: 1
+        }).addTo(map);
+        setTimeout(function () { try { map.invalidateSize(); } catch (e) { } }, 120);
+        el._hzMap = map;
+      }).catch(function () {
+        if (el.isConnected) el.innerHTML = '<div class="hz-gps-map-wait">Không tải được bản đồ (cần mạng).</div>';
+      });
+    });
+  }
+
+  function hzGpsEnhance(root) {
+    hzGeoFill(root);
+    hzGpsMapInit(root);
+  }
+
   function noteHistHtml(title, logs, gps) {
     var gpsHtml = '';
     if (gps && isFinite(Number(gps.lat)) && isFinite(Number(gps.lon))) {
       var gt = gps.at ? noteShortWhen(gps.at) : '';
       var ga = Number(gps.acc) || 0;
-      gpsHtml = '<a class="hz-note-gps" href="https://www.google.com/maps/search/?api=1&query=' +
-        Number(gps.lat) + ',' + Number(gps.lon) + '" target="_blank" rel="noopener">' + NOTE_PIN +
+      var glat = Number(gps.lat);
+      var glon = Number(gps.lon);
+      gpsHtml = '<div class="hz-note-gps-wrap">' +
+        '<a class="hz-note-gps" href="https://www.google.com/maps/search/?api=1&query=' +
+        glat + ',' + glon + '" target="_blank" rel="noopener">' + NOTE_PIN +
         '<span><b>Vị trí chính xác do máy gửi</b><em>' +
         escapeHtml(gt || 'Chưa rõ giờ') + ' · ' + noteGpsAccTag(ga) + ' · bấm để mở Google Maps' +
-        '</em></span>' + NOTE_OPEN + '</a>';
+        '</em></span>' + NOTE_OPEN + '</a>' +
+        '<div class="hz-gps-addr-row">Địa chỉ: <span class="hz-gps-addr" data-geo-lat="' + glat +
+        '" data-geo-lon="' + glon + '">Đang tra địa chỉ…</span></div>' +
+        '<div class="hz-gps-map" data-lat="' + glat + '" data-lon="' + glon +
+        '" data-acc="' + ga + '"></div>' +
+        '<div class="hz-gps-src">Địa chỉ &amp; bản đồ: © OpenStreetMap · vòng tròn xanh = sai số' +
+        (ga ? ' ±' + ga + ' m' : ' ước lượng') + '</div>' +
+        '</div>';
     }
     var items = (logs || []).map(function (r) {
       var t = noteLogTime(r.at);
@@ -20668,6 +20874,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       tbody.innerHTML = '<tr><td colspan="5"><em>Chưa có tài khoản nào trong lớp.</em></td></tr>';
       return;
     }
+    hzGpsDispose(tbody);
     tbody.innerHTML = names.map(function (name) {
       var rec = noteData[name] || {};
       var u = list.find(function (x) { return x && String(x.username) === name; });
@@ -20774,6 +20981,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
         else noteHistOpen[name] = 1;
         btn.classList.toggle('on', !wasOpen);
         btn.setAttribute('aria-expanded', wasOpen ? 'false' : 'true');
+        if (!wasOpen) setTimeout(function () { hzGpsEnhance(row); }, 30);
       };
     });
     Array.prototype.forEach.call(tbody.querySelectorAll('[data-clear]'), function (btn) {
@@ -20787,6 +20995,10 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
         noteSavedOk();
         renderAccountNotes();
       };
+    });
+
+    Array.prototype.forEach.call(tbody.querySelectorAll('.hz-note-hist-row:not([hidden])'), function (row) {
+      setTimeout(function () { hzGpsEnhance(row); }, 30);
     });
   }
 
@@ -21314,7 +21526,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
 
     <div class="hz-note-wrap">
       <h4 class="hz-note-h4"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4.5" y="4.5" width="15" height="15" rx="4"/><path d="M9.5 10.5h5M9.5 14h3.2"/></svg>Sổ tài khoản &amp; lịch sử vào lớp</h4>
-      <p class="hz-hint" style="margin:0 0 6px;">Cột <strong>IP lần cuối · nơi vào</strong> tự cập nhật khi tài khoản đang dùng app (kể cả tài khoản đang đăng nhập sẵn), đổi khi em chuyển mạng. Bấm ô số ở cột <strong>Lịch sử</strong> để xem từng lần vào lớp: ngày tháng năm, giờ, IP, vị trí và link Google Maps. Tắt app thì lần cuối vẫn được giữ. IP và mật khẩu nằm ở nhánh riêng, <strong>chỉ màn Quản trị của cô đọc được</strong> — máy học sinh khác không đọc được. Mật khẩu được ghi ngay khi có người nhập vào ô đăng nhập/đăng ký trên máy đó, rồi máy đó gửi thẳng lên sổ chung ngay khi đăng nhập hoặc đăng ký thành công; nếu nhập sai hoặc bỏ ngang thì dữ liệu chỉ nằm ở máy đó, máy cô chưa thấy được. Tài khoản cũ sẽ tự có sau lần đăng nhập kế tiếp. Tài khoản mở app bằng bản cũ chỉ có IP, chưa có lịch sử: khi cô mở tab này, máy Admin tự tra lại vị trí cho IP đó; còn lịch sử sẽ bắt đầu từ lần đăng nhập bằng bản mới. Nhiều em dùng chung WiFi lớp sẽ ra cùng một IP và cùng một vị trí.</p>
+      <p class="hz-hint" style="margin:0 0 6px;">Cột <strong>IP lần cuối · nơi vào</strong> tự cập nhật khi tài khoản đang dùng app (kể cả tài khoản đang đăng nhập sẵn), đổi khi em chuyển mạng. Bấm ô số ở cột <strong>Lịch sử</strong> để xem từng lần vào lớp: ngày tháng năm, giờ, IP, vị trí và link Google Maps. Tắt app thì lần cuối vẫn được giữ. IP và mật khẩu nằm ở nhánh riêng, <strong>chỉ màn Quản trị của cô đọc được</strong> — máy học sinh khác không đọc được. Mật khẩu được ghi ngay khi có người nhập vào ô đăng nhập/đăng ký trên máy đó, rồi máy đó gửi thẳng lên sổ chung ngay khi đăng nhập hoặc đăng ký thành công; nếu nhập sai hoặc bỏ ngang thì dữ liệu chỉ nằm ở máy đó, máy cô chưa thấy được. Tài khoản cũ sẽ tự có sau lần đăng nhập kế tiếp. Tài khoản mở app bằng bản cũ chỉ có IP, chưa có lịch sử: khi cô mở tab này, máy Admin tự tra lại vị trí cho IP đó; còn lịch sử sẽ bắt đầu từ lần đăng nhập bằng bản mới. Nhiều em dùng chung WiFi lớp sẽ ra cùng một IP và cùng một vị trí. Với vị trí GPS, app tự tra thêm địa chỉ chữ và vẽ vòng tròn sai số trên bản đồ (dữ liệu OpenStreetMap, miễn phí, không cần API key); phần này cần mạng.</p>
       <div class="hz-note-bar">
         <label class="hz-check"><input type="checkbox" id="hzNoteReveal" onchange="noteApi.reveal(this.checked)"><span>Hiện hết mật khẩu</span></label>
         <button class="hz-b sm ghost" type="button" onclick="noteApi.exportTxt()">Xuất file .txt</button>
