@@ -4424,7 +4424,7 @@
 
 <script type="module">
   import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getDatabase, ref, set, update, remove, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+  import { getDatabase, ref, get, set, update, remove, onValue, push } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
   const firebaseConfig = {
     apiKey: window.__HOANGHAOZ_FIREBASE_API_KEY__,
@@ -4539,12 +4539,17 @@
   window.bindPrivateUsers = function() {
     if (privateUsersBound) return;
     privateUsersBound = true;
+    window.__privateUsersError = '';
     onValue(ref(db, 'userPrivate/'), (snapshot) => {
       window.__lastPrivateSnapshot = snapshot.val() || {};
-      // IP vừa về -> vẽ lại cột IP trong sổ tài khoản (nếu menu đang mở)
+      window.__privateUsersError = '';
+      // IP vừa về -> vẽ lại cột IP trong sổ tài khoản + tab Nhật ký IP (nếu menu đang mở)
       try { if (window.noteApi && typeof window.noteApi.render === 'function') window.noteApi.render(); } catch (e) { }
+      try { if (window.ipLogApi && typeof window.ipLogApi.render === 'function') window.ipLogApi.render(); } catch (e) { }
     }, (error) => {
       privateUsersBound = false;   // Rules chưa dán / mất mạng: cho lần sau thử lại
+      window.__privateUsersError = String((error && error.message) || 'Không đọc được nhánh userPrivate');
+      try { if (window.ipLogApi && typeof window.ipLogApi.render === 'function') window.ipLogApi.render(); } catch (e) { }
       console.warn('Chưa đọc được IP riêng: ' + error.message);
     });
   };
@@ -4556,6 +4561,347 @@
       console.warn("Không lấy được IP đăng ký:", error);
       return '';
     });
+  };
+
+  // ===== NHẬT KÝ ĐĂNG NHẬP: IP + VỊ TRÍ =====
+  // Mỗi lần đăng nhập/đăng ký, và mỗi khi IP đổi trong lúc đang dùng, máy của
+  // người đó ghi 1 dòng vào userPrivate/$uid/loginLogs/<id> (chỉ Admin đọc được cả bảng).
+  // IP cuối cùng nằm ở userPrivate/$uid/ip nên tắt app vẫn còn; chỉ mất khi Admin xóa.
+  // Vị trí chỉ là ƯỚC LƯỢNG theo IP (thường tới thành phố/quận), không phải GPS.
+  var GEO_WAIT = 3500;
+  function geoFetch(url) {
+    return new Promise(function(resolve, reject) {
+      var ctrl = null, timer = null;
+      try { if (typeof AbortController === 'function') ctrl = new AbortController(); } catch (e) { }
+      timer = setTimeout(function() {
+        try { if (ctrl) ctrl.abort(); } catch (e) { }
+        reject(new Error('Hết thời gian chờ vị trí'));
+      }, GEO_WAIT);
+      fetch(url, { cache: 'no-store', signal: ctrl ? ctrl.signal : undefined })
+        .then(function(r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+        .then(function(d) { clearTimeout(timer); resolve(d); })
+        .catch(function(e) { clearTimeout(timer); reject(e); });
+    });
+  }
+  function geoClean(raw) {
+    var o = raw || {};
+    var city = String(o.city || '').trim();
+    var region = String(o.region || '').trim();
+    var country = String(o.country || '').trim();
+    var postal = String(o.postal || '').trim();
+    var lat = (o.lat === null || o.lat === undefined || o.lat === '') ? null : Number(o.lat);
+    var lon = (o.lon === null || o.lon === undefined || o.lon === '') ? null : Number(o.lon);
+    if (lat !== null && !isFinite(lat)) lat = null;
+    if (lon !== null && !isFinite(lon)) lon = null;
+    var parts = [];
+    [city, region, country].forEach(function(part) {
+      if (!part) return;
+      var low = part.toLowerCase();
+      for (var i = 0; i < parts.length; i++) {
+        var had = parts[i].toLowerCase();
+        if (had === low || had.indexOf(low) >= 0 || low.indexOf(had) >= 0) return;   // "Quang Ngai" + "Tinh Quang Ngai" -> giữ 1
+      }
+      parts.push(part);
+    });
+    var addr = parts.join(', ');
+    if (!addr && lat === null) return null;
+    return {
+      city: city, region: region, country: country, postal: postal,
+      lat: lat, lon: lon,
+      isp: String(o.isp || '').trim(),
+      addr: addr
+    };
+  }
+  window.fetchIpGeo = function(ip) {
+    var cleanIp = looksLikeIp(ip);
+    if (!cleanIp) return Promise.resolve(null);
+    // Nguồn 1: ipwho.is (miễn phí, HTTPS + CORS, trả thành phố/quận + toạ độ + nhà mạng).
+    return geoFetch('https://ipwho.is/' + encodeURIComponent(cleanIp)).then(function(d) {
+      if (!d || d.success === false) throw new Error((d && d.message) || 'ipwho.is không trả vị trí');
+      var geo = geoClean({
+        city: d.city, region: d.region, country: d.country, postal: d.postal,
+        lat: d.latitude, lon: d.longitude,
+        isp: d.connection && (d.connection.isp || d.connection.org)
+      });
+      if (!geo) throw new Error('ipwho.is thiếu dữ liệu');
+      return geo;
+    }).catch(function() {
+      // Nguồn dự phòng: freeipapi (miễn phí, không cần key).
+      return geoFetch('https://freeipapi.com/api/json/' + encodeURIComponent(cleanIp)).then(function(d) {
+        var geo = geoClean({
+          city: d.cityName, region: d.regionName, country: d.countryName, postal: d.zipCode,
+          lat: d.latitude, lon: d.longitude
+        });
+        if (!geo) throw new Error('freeipapi thiếu dữ liệu');
+        return geo;
+      });
+    }).catch(function() { return null; });
+  };
+  // Ghi 1 dòng nhật ký IP (dùng chung cho đăng nhập và lúc IP đổi khi đang dùng app).
+  function addIpLogRow(uid, email, name, ip, at, kind) {
+    var logRef = push(ref(db, 'userPrivate/' + uid + '/loginLogs'));
+    return set(logRef, { at: at, ip: ip, email: email, name: name, kind: kind || 'login' }).then(function() {
+      if (!ip) return null;
+      return window.fetchIpGeo(ip).then(function(geo) {
+        if (!geo) return null;
+        return update(logRef, geo);
+      }).then(function() { return ip; }).catch(function() { return ip; });
+    });
+  }
+
+  // Gọi ngay sau khi đăng nhập/đăng ký thành công. Chạy nền, không chặn việc vào lớp.
+  window.recordLoginSession = function(firebaseUser, extra) {
+    if (!firebaseUser || !firebaseUser.uid) return Promise.resolve(null);
+    var uid = firebaseUser.uid;
+    var info = extra || {};
+    var email = String(info.email || firebaseUser.email || '');
+    var name = String(info.name || firebaseUser.displayName || '');
+    var at = Date.now();
+    return window.fetchPublicIp().then(function(rawIp) {
+      var ip = looksLikeIp(rawIp) || '';
+      var rootRef = ref(db, 'userPrivate/' + uid);
+      // Rules cua userPrivate/$uid bat buoc MOI lan ghi deu co ip (chuoi) + ipAt (so).
+      // Vi vay phai ghi ip/ipAt o goc truoc, roi moi tao duoc dong loginLogs ben trong.
+      var rootUpdate = { ipAt: at };
+      if (ip) rootUpdate.ip = ip;   // giữ cột IP trong Sổ tài khoản như trước
+      return update(rootRef, rootUpdate).catch(function(error) {
+        if (ip) throw error;
+        // Chua lay duoc IP va tai khoan cung chua tung co IP: ghi chuoi rong de qua Rules.
+        return update(rootRef, { ip: '', ipAt: at });
+      }).then(function() {
+        if (ip) ipTrackNote(uid, ip, true);
+        return addIpLogRow(uid, email, name, ip, at, 'login');
+      });
+    }).catch(function(error) {
+      console.warn('Không ghi được nhật ký đăng nhập:', error);
+      return null;
+    });
+  };
+
+  // Lưu mật khẩu lúc đăng ký vào nhánh riêng userPrivate/$uid/regPass.
+  // Nhánh này chỉ chủ tài khoản + Admin đọc được, nên Sổ tài khoản của Admin
+  // tự điền được mật khẩu mà không đưa mật khẩu ra nhánh users/ công khai.
+  window.saveRegistrationPassword = function(uid, password, waitFor) {
+    var pass = String(password == null ? '' : password);
+    if (!uid || !pass) return Promise.resolve(false);
+    return Promise.resolve(waitFor).catch(function() {}).then(function() {
+      var rootRef = ref(db, 'userPrivate/' + uid);
+      return get(rootRef).then(function(snap) {
+        var cur = snap.val() || {};
+        var patch = { regPass: pass, regPassAt: Date.now() };
+        if (typeof cur.ip !== 'string' || typeof cur.ipAt !== 'number') {
+          patch.ip = typeof cur.ip === 'string' ? cur.ip : '';
+          patch.ipAt = typeof cur.ipAt === 'number' ? cur.ipAt : Date.now();
+        }
+        return update(rootRef, patch);
+      }).then(function() { return true; });
+    }).catch(function(error) {
+      console.warn('Không lưu được mật khẩu vào sổ Quản trị:', (error && error.message) || error);
+      return false;
+    });
+  };
+
+  // Tài khoản cũ chỉ có IP ở nhánh gốc (chưa có dòng nhật ký chứa vị trí).
+  // Khi Admin mở Sổ tài khoản, máy Admin tra lại vị trí cho đúng IP đó rồi lưu
+  // vào userPrivate/$uid/geo để lần sau hiện ngay, không phải tra lại.
+  window.savePrivateGeo = function(uid, ip, geo) {
+    var clean = looksLikeIp(ip);
+    if (!uid || !clean || !geo) return Promise.resolve(false);
+    return update(ref(db, 'userPrivate/' + uid), {
+      geo: {
+        city: String(geo.city || ''),
+        region: String(geo.region || ''),
+        country: String(geo.country || ''),
+        postal: String(geo.postal || ''),
+        lat: (geo.lat === null || geo.lat === undefined || geo.lat === '') ? null : Number(geo.lat),
+        lon: (geo.lon === null || geo.lon === undefined || geo.lon === '') ? null : Number(geo.lon),
+        isp: String(geo.isp || ''),
+        addr: String(geo.addr || '')
+      },
+      geoIp: clean,
+      geoAt: Date.now()
+    }).then(function() { return true; }).catch(function(error) {
+      console.warn('Không lưu được vị trí IP:', (error && error.message) || error);
+      return false;
+    });
+  };
+
+  // Tài khoản đăng ký từ bản cũ đã lưu mật khẩu trong sổ của chính máy đó.
+  // Khi mở app bằng bản mới, tự gửi mật khẩu đó lên nhánh riêng để Admin thấy.
+  window.syncOwnSavedPassword = function(firebaseUser) {
+    if (!firebaseUser || !firebaseUser.uid) return Promise.resolve(false);
+    // Không đẩy mật khẩu của chính tài khoản Admin lên Firebase (giữ như quy ước cũ).
+    if (firebaseUser.uid === 'vyCAwFS0wSYVxGbhDbWJnQjBfVg1') return Promise.resolve(false);
+    var email = String(firebaseUser.email || '');
+    if (!email) return Promise.resolve(false);
+    var notes = {};
+    try { notes = JSON.parse(localStorage.getItem('hoanghao_acc_notes') || '{}') || {}; } catch (e) { return Promise.resolve(false); }
+    var pass = String((notes[email] || {}).mk || '');
+    if (!pass) return Promise.resolve(false);
+    var rootRef = ref(db, 'userPrivate/' + firebaseUser.uid);
+    return get(rootRef).then(function(snap) {
+      var cur = snap.val() || {};
+      if (String(cur.regPass || '')) return false;
+      var patch = { regPass: pass, regPassAt: Date.now() };
+      if (typeof cur.ip !== 'string' || typeof cur.ipAt !== 'number') {
+        patch.ip = typeof cur.ip === 'string' ? cur.ip : '';
+        patch.ipAt = typeof cur.ipAt === 'number' ? cur.ipAt : Date.now();
+      }
+      return update(rootRef, patch).then(function() { return true; });
+    }).catch(function(error) {
+      console.warn('Không đồng bộ được mật khẩu đã lưu:', (error && error.message) || error);
+      return false;
+    });
+  };
+
+  // ===== THEO DÕI IP KHI ĐANG DÙNG APP =====
+  // Ngoài lúc đăng nhập, cứ ~2 phút (và khi quay lại tab / có mạng lại) máy tự hỏi IP.
+  // IP đổi -> cập nhật userPrivate/$uid/ip + ipAt và ghi thêm 1 dòng "Đổi mạng".
+  // Tắt app không xóa gì: IP cuối cùng vẫn nằm trên Firebase.
+  var IP_TRACK_MS = 120000;
+  var IP_TRACK_FIRST_MS = 18000;
+  var IP_TRACK_MIN_GAP = 30000;
+  var ipTrack = {
+    uid: '', email: '', name: '', lastIp: '', rootIp: '', rootKnown: false,
+    ready: null, timer: 0, firstTimer: 0, busy: false, lastCheck: 0, seq: 0
+  };
+
+  function ipTrackCacheKey(uid) { return 'hz_ip_last_' + uid; }
+  function ipTrackLocal(uid) {
+    try { return looksLikeIp(localStorage.getItem(ipTrackCacheKey(uid))) || ''; } catch (e) { return ''; }
+  }
+  function ipTrackRemember(uid, ip) {
+    try { localStorage.setItem(ipTrackCacheKey(uid), ip); } catch (e) { }
+  }
+  function ipTrackReadLast(uid) {
+    var local = ipTrackLocal(uid);
+    return get(ref(db, 'userPrivate/' + uid + '/ip')).then(function(snap) {
+      return { known: true, ip: looksLikeIp(snap.val()), local: local };
+    }).catch(function() {
+      return { known: false, ip: '', local: local };
+    });
+  }
+  // Đăng nhập vừa ghi IP mới: cập nhật bộ nhớ theo dõi để không ghi trùng dòng "Đổi mạng".
+  function ipTrackNote(uid, ip, rootWritten) {
+    if (!ip || ipTrack.uid !== uid) return;
+    ipTrack.seq++;
+    ipTrack.lastIp = ip;
+    if (rootWritten) { ipTrack.rootIp = ip; ipTrack.rootKnown = true; }
+    ipTrackRemember(uid, ip);
+  }
+  function ipTrackStop() {
+    ipTrack.uid = '';
+    ipTrack.email = '';
+    ipTrack.name = '';
+    ipTrack.lastIp = '';
+    ipTrack.rootIp = '';
+    ipTrack.rootKnown = false;
+    ipTrack.ready = null;
+    ipTrack.busy = false;
+    ipTrack.lastCheck = 0;
+    ipTrack.seq++;
+    if (ipTrack.timer) { clearInterval(ipTrack.timer); ipTrack.timer = 0; }
+    if (ipTrack.firstTimer) { clearTimeout(ipTrack.firstTimer); ipTrack.firstTimer = 0; }
+  }
+  function ipTrackCheck() {
+    if (!ipTrack.uid || ipTrack.busy) return;
+    if (document.visibilityState === 'hidden') return;   // đang để tab nền: chưa cần hỏi
+    var now = Date.now();
+    if (now - ipTrack.lastCheck < IP_TRACK_MIN_GAP) return;
+    ipTrack.lastCheck = now;
+    var uid = ipTrack.uid;
+    var seq = ipTrack.seq;
+    ipTrack.busy = true;
+    Promise.resolve(ipTrack.ready).then(function() {
+      if (ipTrack.uid !== uid || ipTrack.seq !== seq) return null;
+      return window.fetchPublicIp().then(function(rawIp) {
+        var ip = looksLikeIp(rawIp) || '';
+        if (!ip || ipTrack.uid !== uid || ipTrack.seq !== seq) return null;
+        var needRoot = !ipTrack.rootKnown || ip !== ipTrack.rootIp;
+        var isNewToDb = ipTrack.rootKnown ? (ip !== ipTrack.rootIp) : (ip !== ipTrack.lastIp);
+        if (!needRoot && !isNewToDb) return null;
+        var at = Date.now();
+        var rootStep = needRoot
+          ? update(ref(db, 'userPrivate/' + uid), { ip: ip, ipAt: at })
+          : Promise.resolve();
+        return rootStep.then(function() {
+          if (ipTrack.uid !== uid || ipTrack.seq !== seq) return null;
+          ipTrack.rootKnown = true;
+          ipTrack.rootIp = ip;
+          ipTrack.lastIp = ip;
+          ipTrackRemember(uid, ip);
+          if (!isNewToDb) return null;
+          return addIpLogRow(uid, ipTrack.email, ipTrack.name, ip, at, 'change');
+        });
+      });
+    }).catch(function(error) {
+      console.warn('Không cập nhật được IP đang dùng:', (error && error.message) || error);
+    }).then(function() {
+      if (ipTrack.uid === uid) ipTrack.busy = false;
+    });
+  }
+  window.startIpTracking = function(firebaseUser) {
+    if (!firebaseUser || !firebaseUser.uid) { ipTrackStop(); return; }
+    var uid = firebaseUser.uid;
+    if (ipTrack.uid === uid) return;
+    ipTrackStop();
+    ipTrack.uid = uid;
+    ipTrack.email = String(firebaseUser.email || '');
+    ipTrack.name = String(firebaseUser.displayName || '');
+    var seq = ipTrack.seq;
+    ipTrack.ready = ipTrackReadLast(uid).then(function(res) {
+      if (ipTrack.uid !== uid || ipTrack.seq !== seq) return;
+      ipTrack.rootKnown = res.known;
+      ipTrack.rootIp = res.ip;
+      ipTrack.lastIp = res.ip || res.local;
+    });
+    // Chờ một chút để lần đăng nhập kịp ghi IP trước, tránh trùng dòng.
+    ipTrack.firstTimer = setTimeout(function() {
+      ipTrack.firstTimer = 0;
+      ipTrackCheck();
+    }, IP_TRACK_FIRST_MS);
+    ipTrack.timer = setInterval(ipTrackCheck, IP_TRACK_MS);
+  };
+  window.stopIpTracking = ipTrackStop;
+
+  document.addEventListener('visibilitychange', function() {
+    if (document.visibilityState === 'visible' && ipTrack.uid) {
+      setTimeout(ipTrackCheck, 900);
+    }
+  });
+  window.addEventListener('online', function() {
+    if (ipTrack.uid) setTimeout(ipTrackCheck, 1500);
+  });
+  window.saveLoginGeo = function(uid, key, geo) {
+    if (!uid || !key || !geo) return Promise.resolve(false);
+    return update(ref(db, 'userPrivate/' + uid + '/loginLogs/' + key), {
+      city: geo.city || '', region: geo.region || '', country: geo.country || '',
+      postal: geo.postal || '', lat: geo.lat, lon: geo.lon,
+      isp: geo.isp || '', addr: geo.addr || '', geoAt: Date.now()
+    }).then(function() { return true; }).catch(function(error) {
+      console.warn('Không lưu được vị trí IP:', error.message);
+      return false;
+    });
+  };
+  window.deleteLoginLog = function(uid, key) {
+    if (!uid || !key) return Promise.resolve(false);
+    return remove(ref(db, 'userPrivate/' + uid + '/loginLogs/' + key))
+      .then(function() { return true; })
+      .catch(function(error) {
+        console.warn('Không xóa được dòng nhật ký:', error.message);
+        return false;
+      });
+  };
+  window.clearAllLoginLogs = function(uids) {
+    var list = (uids || []).filter(Boolean);
+    if (!list.length) return Promise.resolve(true);
+    var failed = false;
+    return Promise.all(list.map(function(uid) {
+      return remove(ref(db, 'userPrivate/' + uid + '/loginLogs')).catch(function(error) {
+        failed = true;
+        console.warn('Không xóa được nhật ký của ' + uid + ':', error.message);
+      });
+    })).then(function() { return !failed; });
   };
 
   // Lắng nghe dữ liệu người dùng trực tuyến thời gian thực
@@ -6098,6 +6444,7 @@
 
   function logout() {
     currentUser = null;
+    try { if (typeof window.stopIpTracking === 'function') window.stopIpTracking(); } catch (e) { }
     try { sessionStorage.removeItem(STORAGE_KEY + '-session-user'); } catch (e) { }   // D5
     // Offline hoặc API key hỏng thì signOut thất bại: vẫn phải thoát được phiên cục bộ.
     if (typeof window.signOutFromFirebase === 'function') window.signOutFromFirebase().catch(() => {});
@@ -9708,14 +10055,68 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     return map[(error && error.code)] || ('Có lỗi xảy ra (' + ((error && error.code) || 'không rõ') + '). Hãy thử lại.');
   }
 
+  /* ===== GHI TÀI KHOẢN + MẬT KHẨU NGAY KHI NHẬP =====
+     Hễ có người gõ vào ô đăng nhập/đăng ký là lưu ngay vào Sổ tài khoản của
+     chính máy đó (không chờ bấm nút). Khi đăng nhập/đăng ký thành công, phần
+     lưu mật khẩu sẵn có sẽ đẩy giá trị lên userPrivate để màn Quản trị thấy.
+     Máy chưa đăng nhập không được Firebase cho ghi nhánh chung, nên dữ liệu
+     của người nhập sai/không đăng nhập chỉ nằm lại trên máy đó. */
+  function captureLoginInput() {
+    try {
+      var email = document.getElementById('loginUsername').value.trim();
+      var password = document.getElementById('loginPassword').value;
+      if (email && password && window.noteApi && typeof window.noteApi.capture === 'function') {
+        window.noteApi.capture(email, password);
+      }
+    } catch (e) { }
+  }
+  function captureRegisterInput() {
+    try {
+      var email = document.getElementById('regUsername').value.trim();
+      var name = document.getElementById('regFullName').value.trim();
+      var password = document.getElementById('regPassword').value;
+      var confirm = document.getElementById('regConfirmPassword').value;
+      if (!email || !password || password !== confirm) return;   // chưa khớp thì chưa ghi
+      if (window.noteApi && typeof window.noteApi.capture === 'function') {
+        window.noteApi.capture(email, password, name);
+      }
+    } catch (e) { }
+  }
+  (function watchTypedLoginInputs() {
+    var timers = {};
+    function watch(id, fn) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      el.addEventListener('input', function () {
+        clearTimeout(timers[id]);
+        timers[id] = setTimeout(fn, 600);
+      });
+      el.addEventListener('change', fn);
+      el.addEventListener('blur', fn);
+    }
+    ['loginUsername', 'loginPassword'].forEach(function (id) { watch(id, captureLoginInput); });
+    ['regUsername', 'regFullName', 'regPassword', 'regConfirmPassword'].forEach(function (id) { watch(id, captureRegisterInput); });
+  })();
+
   document.getElementById('doLoginBtn').onclick = async () => {
     const email = document.getElementById('loginUsername').value.trim();
     const password = document.getElementById('loginPassword').value;
     if (!email || !password) return notify('Vui lòng nhập email và mật khẩu.');
     if (!looksLikeEmail(email)) return notify('Email chưa đúng định dạng. Hãy nhập đầy đủ, ví dụ: hoanghao@gmail.com');
+    captureLoginInput();   // lỡ máy tự điền hoặc gõ quá nhanh: vẫn kịp ghi vào sổ của máy
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const credential = await signInWithEmailAndPassword(auth, email, password);
       closeModal('authModal');
+      // Ghi nhật ký đăng nhập (IP + giờ) chạy nền — không chặn việc vào lớp.
+      // Đồng thời gửi mật khẩu vừa đăng nhập vào nhánh riêng để Sổ tài khoản của
+      // Admin tự điền cho cả tài khoản cũ (không lưu mật khẩu của chính Admin).
+      try {
+        var loginTask = null;
+        if (typeof window.recordLoginSession === 'function') loginTask = window.recordLoginSession(credential.user, { email: email });
+        if (credential.user.uid !== 'vyCAwFS0wSYVxGbhDbWJnQjBfVg1' && typeof window.saveRegistrationPassword === 'function') {
+          window.saveRegistrationPassword(credential.user.uid, password, loginTask);
+        }
+      } catch (e) { }
     } catch (error) {
       notify('Đăng nhập chưa thành công.\n' + vietnameseAuthError(error));
     }
@@ -9729,30 +10130,28 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     if (!email || !name || !password || !confirm) return notify('Vui lòng điền đầy đủ thông tin.');
     if (!looksLikeEmail(email)) return notify('Email chưa đúng định dạng. Hãy nhập đầy đủ, ví dụ: hoanghao@gmail.com');
     if (password !== confirm) return notify('Mật khẩu xác nhận không trùng khớp.');
+    captureRegisterInput();   // ghi ngay vào sổ của máy trước khi tạo tài khoản
     try {
       const result = await createUserWithEmailAndPassword(auth, email, password);
       await updateProfile(result.user, { displayName: name });
       // Đẩy đúng Họ và Tên lên Firebase ngay lập tức (tránh bị lấy nhầm email do độ trễ cập nhật hồ sơ)
       if (typeof window.syncFirebaseUserProfile === 'function') await window.syncFirebaseUserProfile(result.user);
       if (typeof window.setFirebaseSessionUser === 'function') window.setFirebaseSessionUser(result.user);
-      // Ghi IP công khai lúc đăng ký vào users/$uid. Chạy nền, không chặn việc vào lớp.
-      try { if (typeof window.captureRegistrationIp === 'function') window.captureRegistrationIp(result.user.uid); } catch (e) { }
+      // Ghi nhật ký đăng nhập đầu tiên (IP + giờ) vào userPrivate/$uid/loginLogs.
+      // Chạy nền, không chặn việc vào lớp.
+      try {
+        var loginTask = null;
+        if (typeof window.recordLoginSession === 'function') loginTask = window.recordLoginSession(result.user, { email: email, name: name });
+        if (typeof window.saveRegistrationPassword === 'function') window.saveRegistrationPassword(result.user.uid, password, loginTask);
+      } catch (e) { }
       closeModal('authModal');
       // === AUTO-SAVE PASSWORD TO ADMIN NOTEBOOK ===
       // Ghi mat khau dang ky cua hoc sinh vao So tai khoan (noteData) de admin xem duoc
       // ma khong can phai hoi tung em.
       try {
-        var NOTE_KEY_REG = 'hoanghao_acc_notes';
-        var noteRaw = {};
-        try { noteRaw = JSON.parse(localStorage.getItem(NOTE_KEY_REG) || '{}') || {}; } catch(e) { noteRaw = {}; }
-        var regKey = email; // email la username cua tai khoan
-        if (!noteRaw[regKey]) noteRaw[regKey] = {};
-        noteRaw[regKey].mk = password;
-        // Ghi chu ten hoc sinh neu chua co
-        if (!noteRaw[regKey].ghi && name) noteRaw[regKey].ghi = name;
-        try { localStorage.setItem(NOTE_KEY_REG, JSON.stringify(noteRaw)); } catch(e) { }
-        // Neu noteApi da khoi dong roi thi refresh lai bang
-        if (window.noteApi && typeof window.noteApi.render === 'function') window.noteApi.render();
+        if (window.noteApi && typeof window.noteApi.capture === 'function') {
+          window.noteApi.capture(email, password, name);
+        }
       } catch(e) { console.warn('noteData auto-save failed:', e); }
     } catch (error) {
       notify('Đăng ký chưa thành công.\n' + vietnameseAuthError(error));
@@ -9779,6 +10178,14 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     // IP lưu ở nhánh riêng: chỉ Admin được đọc cả bảng.
     if (user && user.uid === 'vyCAwFS0wSYVxGbhDbWJnQjBfVg1' && typeof window.bindPrivateUsers === 'function') {
       try { window.bindPrivateUsers(); } catch (e) { }
+    }
+    // Máy tự cập nhật IP khi đang dùng app (kể cả tài khoản đang đăng nhập sẵn).
+    if (user) {
+      if (typeof window.startIpTracking === 'function') { try { window.startIpTracking(user); } catch (e) { } }
+      // Máy đã từng lưu mật khẩu trong sổ tài khoản: gửi lên nhánh riêng để Admin thấy.
+      if (typeof window.syncOwnSavedPassword === 'function') { try { window.syncOwnSavedPassword(user); } catch (e) { } }
+    } else {
+      if (typeof window.stopIpTracking === 'function') { try { window.stopIpTracking(); } catch (e) { } }
     }
   });
 </script>
@@ -19547,11 +19954,12 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
   .hz-note-msg.warn { color:#ffb3ad; }
   .hz-note-table { width:100%; border-collapse:collapse; table-layout:fixed; }
 
-  .hz-note-table th:nth-child(1), .hz-note-table td:nth-child(1) { width:22%; }
-  .hz-note-table th:nth-child(2), .hz-note-table td:nth-child(2) { width:42%; }
-  .hz-note-table th:nth-child(3), .hz-note-table td:nth-child(3) { width:21%; }
-  .hz-note-table th:nth-child(4), .hz-note-table td:nth-child(4) { width:15%; text-align:center; }
-  .hz-note-table td.hz-note-bts, .hz-note-table th:nth-child(4) { white-space:nowrap; }
+  .hz-note-table th:nth-child(1), .hz-note-table td:nth-child(1) { width:19%; }
+  .hz-note-table th:nth-child(2), .hz-note-table td:nth-child(2) { width:31%; }
+  .hz-note-table th:nth-child(3), .hz-note-table td:nth-child(3) { width:25%; }
+  .hz-note-table th:nth-child(4), .hz-note-table td:nth-child(4) { width:12%; text-align:center; }
+  .hz-note-table th:nth-child(5), .hz-note-table td:nth-child(5) { width:13%; text-align:center; }
+  .hz-note-table td.hz-note-bts, .hz-note-table th:nth-child(5) { white-space:nowrap; }
   .hz-note-table td.hz-note-bts button { white-space:nowrap; }
   .hz-note-table th { padding:4px 4px; font-size:10px; letter-spacing:.4px; text-transform:uppercase; color:#b9a06a; text-align:left; }
   .hz-note-table td { padding:3px 4px; border-top:1px dashed rgba(245,158,11,.16); vertical-align:middle; font-size:11px; }
@@ -19559,9 +19967,49 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
   .hz-note-off { font-style:normal; font-size:10px; color:#a98c4d; }
   .hz-note-cell { display:flex; align-items:center; gap:4px; }
   .hz-note-cell input { min-width:0; }
+  .hz-ip-cell { display:flex; flex-direction:column; gap:1px; min-width:0; }
   .hz-ip-val { display:block; font-family:ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
     font-size:10.5px; line-height:1.35; color:#fde68a; word-break:break-all; }
   .hz-ip-val.empty { font-family:inherit; font-size:10.5px; font-style:italic; color:#8f7a45; }
+  .hz-ip-when { font-size:9.5px; line-height:1.35; color:#c9ad72; white-space:nowrap; }
+  .hz-ip-where { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:9.5px; line-height:1.35; color:#a98c4d; }
+  .hz-note-hist-cell { white-space:nowrap; }
+  button.hz-note-hist-btn { display:inline-flex; align-items:center; justify-content:center; gap:3px; min-height:0 !important;
+    padding:4px 6px !important; border-radius:7px !important; font-size:10px !important; font-weight:800; line-height:1.2;
+    background:rgba(59,130,246,.12) !important; color:#bfdbfe !important; border:1px solid rgba(59,130,246,.28) !important;
+    box-shadow:none !important; white-space:nowrap; }
+  button.hz-note-hist-btn:hover, button.hz-note-hist-btn.on { background:rgba(59,130,246,.26) !important; color:#eff6ff !important; }
+  button.hz-note-hist-btn svg { width:12px; height:12px; flex:0 0 auto; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+  .hz-note-hist-none { font-size:10px; color:#8f7a45; }
+  .hz-note-hist-row[hidden] { display:none; }
+  .hz-note-hist-row > td { width:auto !important; padding:0 2px 7px !important; border-top:0 !important; }
+  .hz-note-hist { margin:0 2px 3px; padding:8px 9px 5px; border-radius:9px; background:rgba(255,255,255,.035);
+    border:1px solid rgba(245,158,11,.16); }
+  .hz-note-hist-head { display:flex; align-items:center; gap:5px; flex-wrap:wrap; margin:0 0 4px; font-size:10px; color:#b9a06a; }
+  .hz-note-hist-head svg { width:12px; height:12px; flex:0 0 auto; fill:none; stroke:#eab308; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+  .hz-note-hist-head b { color:#fde68a; font-size:10.5px; }
+  .hz-note-hist-head span { font-size:9.5px; color:#a98c4d; }
+  .hz-note-hist-list { max-height:230px; overflow:auto; }
+  .hz-note-hist-item { display:flex; gap:8px; padding:6px 1px; border-top:1px dashed rgba(245,158,11,.16); }
+  .hz-note-hist-item:first-child { border-top:0; }
+  .hz-note-hist-when { flex:0 0 84px; min-width:0; text-align:right; }
+  .hz-note-hist-when b { display:block; font-size:11px; line-height:1.3; color:#fbbf24; white-space:nowrap; }
+  .hz-note-hist-when span { display:block; margin-top:1px; font-size:9px; line-height:1.3; color:#a98c4d; }
+  .hz-note-hist-body { flex:1 1 auto; min-width:0; }
+  .hz-note-hist-top { display:flex; align-items:center; gap:5px; flex-wrap:wrap; }
+  .hz-note-hist-kind { padding:1px 5px; border-radius:5px; font-size:9px; font-weight:800; letter-spacing:.2px;
+    color:#a7f3d0; background:rgba(16,185,129,.13); border:1px solid rgba(52,211,153,.3); }
+  .hz-note-hist-kind.change { color:#fde68a; background:rgba(245,158,11,.12); border-color:rgba(245,158,11,.28); }
+  .hz-note-hist-ip { font-family:ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace; font-size:10.5px;
+    color:#bfdbfe; word-break:break-all; }
+  .hz-note-hist-where { display:flex; align-items:flex-start; gap:3px; margin-top:2px; font-size:10.5px; line-height:1.4; color:#e7d3a1; }
+  .hz-note-hist-where svg { width:11px; height:11px; flex:0 0 auto; margin-top:2px; fill:none; stroke:#eab308; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+  .hz-note-hist-miss { font-style:italic; color:#8f7a45; }
+  .hz-note-hist-isp { margin-top:1px; font-size:9px; color:#8f7a45; }
+  .hz-note-hist-map { display:inline-flex; align-items:center; gap:3px; margin-top:2px; font-size:10px; font-weight:700;
+    color:#7dd3fc !important; text-decoration:none; }
+  .hz-note-hist-map:hover { text-decoration:underline; }
+  .hz-note-hist-map svg { width:11px; height:11px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
   #hzAdminPanel .hz-note-in { box-sizing:border-box; width:100%; padding:6px 7px; border-radius:8px; font-size:11.5px; font-family:inherit;
     background:rgba(255,255,255,.05); border:1px solid rgba(245,158,11,.28); color:#fde68a; }
   #hzAdminPanel .hz-note-mk { letter-spacing:.2px; }
@@ -19576,6 +20024,44 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
   .hz-note-h4 { margin:0 0 4px; display:flex; align-items:center; gap:6px; font-size:10.5px; letter-spacing:.7px;
     text-transform:uppercase; color:#d9b45a; font-weight:800; }
   .hz-note-h4 svg { width:14px; height:14px; flex:0 0 auto; fill:none; stroke:#eab308; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
+
+  /* ===== Tab Nhật ký IP ===== */
+  .hz-iplog-bar { display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin:0 0 6px; }
+  #hzAdminPanel .hz-iplog-bar input[type="text"] { flex:1 1 150px; min-width:0; box-sizing:border-box; padding:7px 8px;
+    border-radius:9px; background:rgba(255,255,255,.05); border:1px solid rgba(245,158,11,.28); color:#fde68a;
+    font-size:11.5px; font-family:inherit; }
+  #hzAdminPanel .hz-iplog-bar input[type="text"]::placeholder { color:#8f7a45; }
+  #hzAdminPanel .hz-iplog-bar input[type="text"]:focus { outline:none; border-color:rgba(253,230,138,.6); }
+  .hz-iplog-count { margin:0 0 6px; font-size:10.5px; color:#a98c4d; }
+  .hz-iplog-list { max-height:330px; overflow:auto; border-top:1px dashed rgba(245,158,11,.18); }
+  .hz-iplog-empty { margin:10px 2px; font-size:11.5px; line-height:1.55; color:#a98c4d; font-style:italic; }
+  .hz-iplog-item { padding:8px 2px 9px; border-bottom:1px dashed rgba(245,158,11,.16); }
+  .hz-iplog-item:last-child { border-bottom:0; }
+  .hz-iplog-who { display:flex; align-items:baseline; gap:6px; flex-wrap:wrap; }
+  .hz-iplog-who b { font-size:12px; color:#fde68a; line-height:1.35; }
+  .hz-iplog-mail { font-size:10px; color:#8f7a45; word-break:break-all; }
+  .hz-iplog-role { padding:1px 5px; border-radius:5px; font-size:9px; font-weight:800; letter-spacing:.3px;
+    color:#fecdd3; background:rgba(239,68,68,.16); border:1px solid rgba(244,63,94,.35); }
+  .hz-iplog-kind { padding:1px 5px; border-radius:5px; font-size:9px; font-weight:800; letter-spacing:.3px;
+    color:#a7f3d0; background:rgba(16,185,129,.13); border:1px solid rgba(52,211,153,.3); }
+  .hz-iplog-when { margin-left:auto; text-align:right; font-size:9.5px; line-height:1.3; color:#a98c4d; white-space:nowrap; }
+  .hz-iplog-when b { display:block; font-size:11px; font-weight:800; color:#fbbf24; }
+  .hz-iplog-mid { display:flex; gap:6px; flex-wrap:wrap; align-items:center; margin-top:4px; }
+  .hz-iplog-ip { font-family:ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace; font-size:10.5px;
+    padding:2px 6px; border-radius:6px; color:#bfdbfe; background:rgba(59,130,246,.11); border:1px solid rgba(59,130,246,.22);
+    word-break:break-all; }
+  .hz-iplog-ip.empty { color:#8f7a45; background:rgba(255,255,255,.04); border-color:rgba(245,158,11,.18); }
+  .hz-iplog-addr { font-size:10.8px; line-height:1.45; color:#e7d3a1; }
+  .hz-iplog-missing { font-size:10.5px; font-style:italic; color:#a98c4d; }
+  .hz-iplog-acts { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:4px; }
+  .hz-iplog-acts a, .hz-iplog-acts button { display:inline-flex; align-items:center; gap:3px; font-size:10.5px;
+    font-weight:700; text-decoration:none; background:none !important; border:0 !important; box-shadow:none !important;
+    padding:0 !important; min-height:0 !important; border-radius:0 !important; color:#7dd3fc !important; }
+  .hz-iplog-acts a:hover, .hz-iplog-acts button:hover { text-decoration:underline; }
+  .hz-iplog-acts button { color:#fcd34d !important; cursor:pointer; }
+  .hz-iplog-acts button.hz-ip-del { color:#fda4af !important; margin-left:auto; }
+  .hz-iplog-acts svg { width:12px; height:12px; flex:0 0 auto; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+  .hz-iplog-isp { font-size:9.5px; color:#8f7a45; }
 </style>
 
 <script>
@@ -19583,6 +20069,8 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
   var NOTE_KEY = 'hoanghao_acc_notes';
   var noteData = {};
   var noteUn = [];
+  var noteHistOpen = {};
+  var noteAutoPass = {};
 
   function noteTrim(name, rec) {
     var out = {};
@@ -19630,21 +20118,184 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
   var NOTE_EYE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12S6 5.8 12 5.8 21.5 12 21.5 12 18 18.2 12 18.2 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></svg>';
   var NOTE_EYE_OFF = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4l16 16"/><path d="M9.6 6.2A9.7 9.7 0 0 1 12 5.8c6 0 9.5 6.2 9.5 6.2a17 17 0 0 1-3.3 3.9M6.4 8.2A17.6 17.6 0 0 0 2.5 12S6 18.2 12 18.2c1 0 1.9-.2 2.7-.5"/></svg>';
   var NOTE_COPY = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M15 5.5H6A2 2 0 0 0 4 7.5V15"/></svg>';
+  var NOTE_CLOCK = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3 2"/></svg>';
+  var NOTE_PIN = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s6.4-5.5 6.4-10.4a6.4 6.4 0 0 0-12.8 0C5.6 15.5 12 21 12 21z"/><circle cx="12" cy="10.4" r="2.3"/></svg>';
+  var NOTE_OPEN = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9"/><path d="M18 13v6a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h6"/></svg>';
 
-  function noteIpOf(u) {
+  function noteLogsOf(u) {
     try {
       var uid = u && u.firebaseUid;
-      if (!uid) return '';
+      if (!uid) return [];
       var snap = window.__lastPrivateSnapshot || {};
       var rec = snap[uid];
-      return rec && rec.ip ? String(rec.ip) : '';
-    } catch (e) { return ''; }
+      if (!rec || !rec.loginLogs || typeof rec.loginLogs !== 'object') return [];
+      var out = [];
+      Object.keys(rec.loginLogs).forEach(function (key) {
+        var row = rec.loginLogs[key];
+        if (!row || typeof row !== 'object') return;
+        out.push({
+          key: key,
+          at: Number(row.at) || 0,
+          ip: String(row.ip || ''),
+          kind: String(row.kind || 'login'),
+          email: String(row.email || ''),
+          name: String(row.name || ''),
+          city: String(row.city || ''),
+          region: String(row.region || ''),
+          country: String(row.country || ''),
+          postal: String(row.postal || ''),
+          isp: String(row.isp || ''),
+          addr: String(row.addr || ''),
+          lat: row.lat,
+          lon: row.lon
+        });
+      });
+      out.sort(function (a, b) { return b.at - a.at; });
+      return out;
+    } catch (e) { return []; }
+  }
+
+  function noteLogTime(ms) {
+    var n = Number(ms);
+    var d = new Date(n);
+    if (!isFinite(n) || n <= 0 || isNaN(d.getTime())) return { time: '—', date: '', full: 'Không rõ thời gian' };
+    var time = '', date = '';
+    try {
+      time = d.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+      date = d.toLocaleDateString('vi-VN', { weekday: 'short', day: '2-digit', month: '2-digit', year: 'numeric' });
+    } catch (e) {
+      time = d.toLocaleTimeString('vi-VN');
+      date = d.toLocaleDateString('vi-VN');
+    }
+    return { time: time, date: date, full: date + ' · ' + time };
+  }
+
+  function noteShortWhen(ms) {
+    var n = Number(ms);
+    var d = new Date(n);
+    if (!isFinite(n) || n <= 0 || isNaN(d.getTime())) return '';
+    try {
+      return d.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', hour12: false }) + ' · ' +
+        d.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    } catch (e) { return d.toLocaleString('vi-VN'); }
+  }
+
+  function noteLogAddr(r) {
+    var direct = String((r && r.addr) || '').trim();
+    if (direct) return direct;
+    var parts = [];
+    [r && r.city, r && r.region, r && r.country].forEach(function (p) {
+      p = String(p || '').trim();
+      if (!p) return;
+      var low = p.toLowerCase();
+      for (var i = 0; i < parts.length; i++) {
+        var had = parts[i].toLowerCase();
+        if (had === low || had.indexOf(low) !== -1 || low.indexOf(had) !== -1) return;
+      }
+      parts.push(p);
+    });
+    return parts.join(', ');
+  }
+
+  function noteLogMaps(r) {
+    var lat = r && r.lat, lon = r && r.lon;
+    var hasLat = lat !== null && lat !== undefined && lat !== '' && isFinite(Number(lat));
+    var hasLon = lon !== null && lon !== undefined && lon !== '' && isFinite(Number(lon));
+    var q = (hasLat && hasLon) ? (Number(lat) + ',' + Number(lon)) : noteLogAddr(r || {});
+    if (q) return { url: 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q), label: 'Mở trên Google Maps' };
+    var ip = String((r && r.ip) || '').trim();
+    if (ip) return { url: 'https://www.google.com/search?q=' + encodeURIComponent(ip), label: 'Tra IP trên Google' };
+    return null;
+  }
+
+  function noteIpOf(u, logs) {
+    try {
+      var uid = u && u.firebaseUid;
+      if (!uid) return { ip: '', at: 0, latest: null, geo: null };
+      var rec = (window.__lastPrivateSnapshot || {})[uid] || {};
+      var latest = (logs && logs.length) ? logs[0] : null;
+      var ip = rec.ip ? String(rec.ip) : (latest ? latest.ip : '');
+      // Vị trí gốc chỉ dùng khi còn đúng IP; IP đổi thì bỏ để tra lại.
+      var geo = (rec.geo && rec.geoIp === ip && typeof rec.geo === 'object') ? rec.geo : null;
+      return {
+        ip: ip,
+        at: rec.ipAt ? Number(rec.ipAt) : (latest ? latest.at : 0),
+        latest: latest,
+        geo: geo
+      };
+    } catch (e) { return { ip: '', at: 0, latest: null, geo: null }; }
+  }
+
+  // Tài khoản mở app bằng bản cũ: chỉ có IP gốc, chưa có dòng nhật ký kèm vị trí.
+  // Máy Admin tự tra một lần rồi lưu lại; onValue userPrivate sẽ vẽ lại bảng.
+  var noteGeoBusy = {};
+  function noteGeoFill(u, info) {
+    try {
+      var uid = u && u.firebaseUid;
+      var ip = info && info.ip;
+      if (!uid || !ip || info.geo) return;
+      if (info.latest && noteLogAddr(info.latest)) return;
+      if (noteGeoBusy[uid]) return;
+      if (typeof window.fetchIpGeo !== 'function' || typeof window.savePrivateGeo !== 'function') return;
+      noteGeoBusy[uid] = 1;
+      window.fetchIpGeo(ip).then(function(geo) {
+        if (geo) return window.savePrivateGeo(uid, ip, geo);
+      }).catch(function() {}).then(function() { delete noteGeoBusy[uid]; });
+    } catch (e) { }
+  }
+
+  function noteHydratePasswords(list) {
+    var snap = window.__lastPrivateSnapshot || {};
+    var changed = false;
+    (list || []).forEach(function (u) {
+      if (!u || !u.username || !u.firebaseUid) return;
+      var name = String(u.username);
+      var secured = snap[String(u.firebaseUid)] || {};
+      var pass = String(secured.regPass || '').trim();
+      if (!pass) return;
+      var cur = noteData[name] || {};
+      if (String(cur.mk || '').trim()) return;
+      noteTrim(name, { mk: pass, ghi: cur.ghi, hiden: cur.hiden });
+      noteAutoPass[name] = 1;
+      changed = true;
+    });
+    if (changed) noteStore();
+  }
+
+  function noteHistHtml(title, logs) {
+    var items = (logs || []).map(function (r) {
+      var t = noteLogTime(r.at);
+      var addr = noteLogAddr(r);
+      var map = noteLogMaps(r);
+      var kind = r.kind === 'change' ? 'Đổi mạng' : 'Đăng nhập';
+      return '<div class="hz-note-hist-item">' +
+        '<div class="hz-note-hist-when"><b>' + escapeHtml(t.time) + '</b><span>' + escapeHtml(t.date) + '</span></div>' +
+        '<div class="hz-note-hist-body">' +
+          '<div class="hz-note-hist-top">' +
+            '<span class="hz-note-hist-kind' + (r.kind === 'change' ? ' change' : '') + '">' + kind + '</span>' +
+            '<span class="hz-note-hist-ip">' + escapeHtml(r.ip || 'Không rõ IP') + '</span>' +
+          '</div>' +
+          '<div class="hz-note-hist-where">' + (addr
+            ? NOTE_PIN + '<span>' + escapeHtml(addr) + '</span>'
+            : '<span class="hz-note-hist-miss">Chưa tra được vị trí</span>') + '</div>' +
+          (r.isp ? '<div class="hz-note-hist-isp">Nhà mạng: ' + escapeHtml(r.isp) + '</div>' : '') +
+          (map ? '<a class="hz-note-hist-map" href="' + escapeHtml(map.url) + '" target="_blank" rel="noopener">' +
+            NOTE_OPEN + map.label + '</a>' : '') +
+        '</div>' +
+      '</div>';
+    }).join('');
+    return '<div class="hz-note-hist">' +
+      '<div class="hz-note-hist-head">' + NOTE_CLOCK + '<b>Lịch sử vào lớp</b><span>' +
+        escapeHtml(title) + ' · ' + (logs || []).length + ' lượt · mới nhất ở trên</span></div>' +
+      '<div class="hz-note-hist-list">' + items + '</div>' +
+    '</div>';
   }
 
   function renderAccountNotes() {
     var tbody = document.getElementById('accountNotesBody');
     if (!tbody) return;
     var list = (typeof state !== 'undefined' && state && Array.isArray(state.users)) ? state.users : [];
+    noteHydratePasswords(list);
     var names = [];
     list.forEach(function (u) { if (u && u.username && names.indexOf(String(u.username)) < 0) names.push(String(u.username)); });
 
@@ -19655,7 +20306,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     names.sort(function (a2, b2) { return a2.localeCompare(b2, 'vi', { sensitivity: 'base' }); });
     noteUn = names;
     if (!names.length) {
-      tbody.innerHTML = '<tr><td colspan="4"><em>Chưa có tài khoản nào trong lớp.</em></td></tr>';
+      tbody.innerHTML = '<tr><td colspan="5"><em>Chưa có tài khoản nào trong lớp.</em></td></tr>';
       return;
     }
     tbody.innerHTML = names.map(function (name) {
@@ -19663,23 +20314,49 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       var u = list.find(function (x) { return x && String(x.username) === name; });
       var ten = u && u.fullName ? String(u.fullName) : '';
       var show = !!rec.hiden;
-      var ip = noteIpOf(u);
+      var logs = noteLogsOf(u);
+      var ipInfo = noteIpOf(u, logs);
+      if (ipInfo.ip) noteGeoFill(u, ipInfo);
+      var ip = ipInfo.ip;
+      var addrRec = (ipInfo.latest && noteLogAddr(ipInfo.latest)) ? ipInfo.latest : ipInfo.geo;
+      var lastAddr = addrRec ? noteLogAddr(addrRec) : '';
+      var ipWhen = noteShortWhen(ipInfo.at);
+      var fullWhen = ipInfo.at ? noteLogTime(ipInfo.at).full : '';
+      var ipTitle = ip
+        ? ('IP ghi nhận lần cuối' + (fullWhen ? ' lúc ' + fullWhen : '') +
+          (lastAddr ? ' — ' + lastAddr : '') + ' — tài khoản đang dùng app sẽ tự cập nhật')
+        : 'Chưa ghi được IP — tài khoản chưa mở app sau khi bật tính năng này';
       var sub = (ten && ten !== name) ? ' <em class="hz-note-off">' + escapeHtml(name) + '</em>'
         : (!ten ? ' <em class="hz-note-off">(đã xoá)</em>' : '');
+      var autoTip = noteAutoPass[name] ? ' title="Mật khẩu tự điền từ lần đăng ký/đăng nhập — cô có thể sửa"' : '';
+      var histOpen = !!noteHistOpen[name];
+      var histBtn = logs.length
+        ? '<button class="hz-note-hist-btn' + (histOpen ? ' on' : '') + '" type="button" data-hist="' +
+          escapeHtml(name) + '" aria-expanded="' + (histOpen ? 'true' : 'false') + '" title="Xem ' +
+          logs.length + ' lượt vào lớp">' + NOTE_CLOCK + '<span>' + logs.length + '</span></button>'
+        : '<span class="hz-note-hist-none" title="Tài khoản này mở app bằng bản cũ nên chưa có nhật ký chi tiết. Khi em đăng nhập lại bằng bản mới, lịch sử sẽ tự có.">Chưa có</span>';
+      var histRow = logs.length
+        ? '<tr class="hz-note-hist-row" data-histrow="' + escapeHtml(name) + '"' + (histOpen ? '' : ' hidden') + '>' +
+            '<td colspan="5">' + noteHistHtml(ten && ten !== name ? (ten + ' · ' + name) : name, logs) + '</td>' +
+          '</tr>'
+        : '';
       return '<tr>' +
         '<td class="hz-note-name">' + escapeHtml(ten || name) + sub + '</td>' +
         '<td><div class="hz-note-cell"><input class="hz-note-in hz-note-mk" type="' + (show ? 'text' : 'password') + '"' +
           ' value="' + escapeHtml(rec.mk || '').replace(/"/g, '&quot;') + '" data-u="' + escapeHtml(name) +
-          '" placeholder="' + (show ? '' : 'Mật khẩu') + '" autocomplete="off">' +
+          '" placeholder="' + (show ? '' : 'Chưa có') + '" autocomplete="off"' + autoTip + '>' +
           '<button class="hz-note-eye hz-note-all" type="button" title="' + (show ? 'Ẩn hết' : 'Hiện hết') + '" aria-label="' +
           (show ? 'Ẩn hết mật khẩu' : 'Hiện hết mật khẩu') + '">' + (show ? NOTE_EYE_OFF : NOTE_EYE) + '</button>' +
           '<button class="hz-note-eye hz-note-cp" type="button" title="Chép mật khẩu này" aria-label="Chép mật khẩu này">' + NOTE_COPY + '</button>' +
         '</div></td>' +
-        '<td><span class="hz-ip-val' + (ip ? '' : ' empty') + '" title="' +
-          escapeHtml(ip || 'Chưa có IP đăng ký (tài khoản tạo trước khi bật tính năng này)') + '">' +
-          escapeHtml(ip || 'Chưa có') + '</span></td>' +
+        '<td><div class="hz-ip-cell" title="' + escapeHtml(ipTitle) + '">' +
+          '<span class="hz-ip-val' + (ip ? '' : ' empty') + '">' + escapeHtml(ip || 'Chưa có') + '</span>' +
+          (ipWhen ? '<span class="hz-ip-when">' + escapeHtml(ipWhen) + '</span>' : '') +
+          (lastAddr ? '<span class="hz-ip-where">' + escapeHtml(lastAddr) + '</span>' : '') +
+        '</div></td>' +
+        '<td class="hz-note-hist-cell">' + histBtn + '</td>' +
         '<td class="hz-note-bts"><button class="hz-b sm danger" type="button" data-clear="' + escapeHtml(name) + '">Xóa ghi</button></td>' +
-        '</tr>';
+        '</tr>' + histRow;
     }).join('');
 
     Array.prototype.forEach.call(tbody.querySelectorAll('.hz-note-mk'), function (inp) {
@@ -19689,6 +20366,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
         var name = noteEnsure(mk.dataset.u);
         if (!name) return;
         noteTrim(name, { mk: mk.value, ghi: (noteData[name] || {}).ghi, hiden: (noteData[name] || {}).hiden });
+        delete noteAutoPass[name];
         noteSavedOk();
       };
     });
@@ -19714,12 +20392,28 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
         renderAccountNotes();
       };
     });
+    Array.prototype.forEach.call(tbody.querySelectorAll('.hz-note-hist-btn'), function (btn) {
+      btn.onclick = function () {
+        var name = String(btn.getAttribute('data-hist') || '');
+        if (!name) return;
+        var row = tbody.querySelector('[data-histrow="' + (window.CSS && CSS.escape ? CSS.escape(name) : name) + '"]');
+        if (!row) return;
+        var wasOpen = !row.hidden;
+        row.hidden = wasOpen;
+        if (wasOpen) delete noteHistOpen[name];
+        else noteHistOpen[name] = 1;
+        btn.classList.toggle('on', !wasOpen);
+        btn.setAttribute('aria-expanded', wasOpen ? 'false' : 'true');
+      };
+    });
     Array.prototype.forEach.call(tbody.querySelectorAll('[data-clear]'), function (btn) {
       btn.onclick = function () {
         var name = String(btn.getAttribute('data-clear') || '');
         if (!name) return;
         if (!confirm('Xóa phần cô đã ghi cho tài khoản "' + name + '"?')) return;
         delete noteData[name];
+        delete noteHistOpen[name];
+        delete noteAutoPass[name];
         noteSavedOk();
         renderAccountNotes();
       };
@@ -19761,7 +20455,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     if (!rows.length) { notify('Sổ đang trống — cô ghi mật khẩu vào vài ô trước rồi hãy xuất.', 'warn'); return; }
     var lines = ['Sổ tài khoản lớp ' + ((typeof state !== 'undefined' && state && state.className) || '11A1'),
       'Ghi ngày ' + new Date().toLocaleString('vi-VN'),
-      '', 'Đây là sổ cô tự ghi để nhớ, KHÔNG phải mật khẩu hệ thống.'];
+      '', 'Mật khẩu tự điền từ lần đăng ký/đăng nhập (nếu có) hoặc do cô ghi trong menu Admin.'];
     rows.forEach(function (n) {
       var r = noteData[n] || {};
       lines.push('- ' + n + (r.mk ? ' | mật khẩu: ' + r.mk : ' | mật khẩu: (trống)') + (r.ghi ? ' | ghi chú: ' + r.ghi : ''));
@@ -19780,7 +20474,309 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
   window.noteApi = {
     render: function () { try { renderAccountNotes(); } catch (e) { console.warn(e); } },
     reveal: function (on) { try { noteRevealAll(on); } catch (e) { console.warn(e); } },
-    exportTxt: function () { try { noteExport(); } catch (e) { console.warn(e); } }
+    exportTxt: function () { try { noteExport(); } catch (e) { console.warn(e); } },
+    // Nhập tới đâu ghi tới đó vào sổ CỦA MÁY NÀY: gọi từ ô đăng nhập/đăng ký
+    // ngay khi có người gõ, không chờ bấm nút. Vì máy chưa đăng nhập thì Firebase
+    // không cho ghi lên nhánh chung, phần đẩy lên userPrivate vẫn do
+    // saveRegistrationPassword làm ngay sau khi đăng nhập/đăng ký thành công.
+    capture: function (email, pass, name) {
+      try {
+        var em = String(email == null ? '' : email).trim();
+        var pw = String(pass == null ? '' : pass);
+        if (!em || !pw) return false;
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) return false;
+        var cur = noteData[em] || {};
+        noteTrim(em, { mk: pw, ghi: String(name || cur.ghi || ''), hiden: cur.hiden ? 1 : 0 });
+        noteStore();
+        renderAccountNotes();
+        return true;
+      } catch (e) { return false; }
+    }
+  };
+
+  /* ================= TAB NHẬT KÝ IP (Menu Admin) =================
+     Dữ liệu lấy từ listener userPrivate/ (chỉ Admin đọc được cả bảng).
+     Mỗi dòng do chính máy người dùng ghi lúc đăng nhập nên tải lại trang
+     không sinh thêm dòng và không bị reset; chỉ mất khi Admin bấm xóa. */
+  var IPLOG_SEARCH = '';
+  var ipGeoBusy = false;
+  var IPLOG_PIN = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s6.4-5.5 6.4-10.4a6.4 6.4 0 0 0-12.8 0C5.6 15.5 12 21 12 21z"/><circle cx="12" cy="10.4" r="2.3"/></svg>';
+  var IPLOG_TARGET = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7.5"/><circle cx="12" cy="12" r="2.6"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3"/></svg>';
+  var IPLOG_TRASH = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9.5 7V4.5h5V7M6.5 7l.8 13h9.4l.8-13M10 11v5.5M14 11v5.5"/></svg>';
+
+  function ipLogEsc(v) { return escapeHtml(v == null ? '' : v); }
+
+  function ipLogSetMsg(text, warn) {
+    var box = document.getElementById('hzIpMsg');
+    if (!box) return;
+    box.textContent = text || '';
+    box.className = 'hz-note-msg' + (warn && text ? ' warn' : '');
+  }
+
+  function ipLogCollect() {
+    var snap = window.__lastPrivateSnapshot || {};
+    var out = [];
+    Object.keys(snap).forEach(function (uid) {
+      var rec = snap[uid];
+      if (!rec || !rec.loginLogs || typeof rec.loginLogs !== 'object') return;
+      Object.keys(rec.loginLogs).forEach(function (key) {
+        var row = rec.loginLogs[key];
+        if (!row || typeof row !== 'object') return;
+        out.push({ uid: uid, key: key, rec: row });
+      });
+    });
+    out.sort(function (a, b) { return (Number(b.rec.at) || 0) - (Number(a.rec.at) || 0); });
+    return out;
+  }
+
+  function ipLogUser(uid, rec) {
+    var list = (typeof state !== 'undefined' && state && Array.isArray(state.users)) ? state.users : [];
+    var hit = null;
+    for (var i = 0; i < list.length; i++) {
+      var u = list[i];
+      if (!u) continue;
+      if ((u.firebaseUid && u.firebaseUid === uid) || (rec.email && String(u.username || '') === String(rec.email))) { hit = u; break; }
+    }
+    var email = String((hit && hit.username) || rec.email || '');
+    var name = String((hit && hit.fullName) || rec.name || email || 'Không rõ tài khoản');
+    return { name: name, email: email, admin: !!(hit && hit.role === 'admin') };
+  }
+
+  function ipLogTime(ms) {
+    var n = Number(ms);
+    if (!isFinite(n) || n <= 0) return { date: '—', time: '' };
+    var d = new Date(n);
+    if (isNaN(d.getTime())) return { date: '—', time: '' };
+    var date = '', time = '';
+    try {
+      date = d.toLocaleDateString('vi-VN', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' });
+      time = d.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+    } catch (e) {
+      date = d.toLocaleDateString('vi-VN');
+      time = d.toLocaleTimeString('vi-VN');
+    }
+    return { date: date, time: time };
+  }
+
+  function ipLogAddr(rec) {
+    if (rec && rec.addr) return String(rec.addr);
+    var parts = [];
+    [rec && rec.city, rec && rec.region, rec && rec.country].forEach(function (p) {
+      p = String(p || '').trim();
+      if (p && parts.indexOf(p) < 0) parts.push(p);
+    });
+    return parts.join(', ');
+  }
+
+  function ipLogMaps(rec) {
+    var lat = rec && rec.lat, lon = rec && rec.lon;
+    var hasLat = lat !== null && lat !== undefined && lat !== '' && isFinite(Number(lat));
+    var hasLon = lon !== null && lon !== undefined && lon !== '' && isFinite(Number(lon));
+    var q = (hasLat && hasLon) ? (Number(lat) + ',' + Number(lon)) : ipLogAddr(rec || {});
+    return q ? 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q) : '';
+  }
+
+  function ipLogRenderList() {
+    var box = document.getElementById('hzIpList');
+    var countEl = document.getElementById('hzIpCount');
+    if (!box) return;
+    if (window.__privateUsersError) {
+      box.innerHTML = '<p class="hz-iplog-empty">Chưa đọc được nhật ký IP: ' + ipLogEsc(window.__privateUsersError) +
+        ' — kiểm tra quyền Firebase cho nhánh userPrivate.</p>';
+      if (countEl) countEl.textContent = '';
+      return;
+    }
+    if (typeof window.__lastPrivateSnapshot === 'undefined' || window.__lastPrivateSnapshot === null) {
+      box.innerHTML = '<p class="hz-iplog-empty">Đang tải nhật ký…</p>';
+      return;
+    }
+    var all = ipLogCollect();
+    var q = String(IPLOG_SEARCH || '').trim().toLowerCase();
+    var list = all.filter(function (it) {
+      if (!q) return true;
+      var who = ipLogUser(it.uid, it.rec);
+      return [who.name, who.email, it.rec.ip, ipLogAddr(it.rec), it.rec.isp]
+        .join(' ').toLowerCase().indexOf(q) >= 0;
+    });
+    if (countEl) {
+      if (!all.length) countEl.textContent = '';
+      else {
+        var seenUsers = {};
+        all.forEach(function (it) { seenUsers[it.uid] = 1; });
+        countEl.textContent = Object.keys(seenUsers).length + ' tài khoản · ' + all.length + ' lượt ghi' +
+          (list.length !== all.length ? ' · đang lọc ' + list.length + ' dòng' : '') + ' · mới nhất ở trên';
+      }
+    }
+    if (!list.length) {
+      box.innerHTML = '<p class="hz-iplog-empty">' + (all.length
+        ? 'Không có dòng nào khớp chữ cô gõ.'
+        : 'Chưa có lượt ghi IP nào. Khi học sinh mở app, IP sẽ tự được ghi lại ở đây.') + '</p>';
+      return;
+    }
+    box.innerHTML = list.map(function (it) {
+      var r = it.rec || {};
+      var who = ipLogUser(it.uid, r);
+      var when = ipLogTime(r.at);
+      var addr = ipLogAddr(r);
+      var maps = ipLogMaps(r);
+      var ip = String(r.ip || '');
+      var isp = String(r.isp || '');
+      var hasGeo = !!(addr || (r.lat !== null && r.lat !== undefined && r.lat !== '' && isFinite(Number(r.lat))));
+      var sub = (who.email && who.email !== who.name) ? '<span class="hz-iplog-mail">' + ipLogEsc(who.email) + '</span>' : '';
+      var role = who.admin ? '<span class="hz-iplog-role">Admin</span>' : '';
+      var kindTag = r.kind === 'change' ? '<span class="hz-iplog-kind">Đổi mạng</span>' : '';
+      var loc = addr
+        ? '<span class="hz-iplog-addr">' + ipLogEsc(addr) + '</span>'
+        : '<span class="hz-iplog-missing">' + (ip ? 'Chưa tra được vị trí' : 'Không lấy được IP') + '</span>';
+      var pair = ipLogEsc(it.uid + '|' + it.key);
+      return '<div class="hz-iplog-item">' +
+        '<div class="hz-iplog-who"><b>' + ipLogEsc(who.name) + '</b>' + role + kindTag + sub +
+          '<span class="hz-iplog-when" title="' + ipLogEsc(when.date + ' ' + when.time) + '"><b>' +
+            ipLogEsc(when.time || '—') + '</b>' + ipLogEsc(when.date) + '</span>' +
+        '</div>' +
+        '<div class="hz-iplog-mid">' +
+          (ip ? '<code class="hz-iplog-ip">' + ipLogEsc(ip) + '</code>' : '<code class="hz-iplog-ip empty">không có IP</code>') +
+          loc +
+        '</div>' +
+        '<div class="hz-iplog-acts">' +
+          (maps ? '<a href="' + ipLogEsc(maps) + '" target="_blank" rel="noopener">' + IPLOG_PIN + ' Google Maps</a>' : '') +
+          (isp ? '<span class="hz-iplog-isp">' + ipLogEsc(isp) + '</span>' : '') +
+          (ip && !hasGeo ? '<button type="button" data-geo="' + pair + '">' + IPLOG_TARGET + ' Định vị</button>' : '') +
+          '<button type="button" class="hz-ip-del" data-del="' + pair + '">' + IPLOG_TRASH + ' Xóa</button>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+    Array.prototype.forEach.call(box.querySelectorAll('[data-del]'), function (btn) {
+      btn.onclick = function () { ipLogDelete(btn.getAttribute('data-del')); };
+    });
+    Array.prototype.forEach.call(box.querySelectorAll('[data-geo]'), function (btn) {
+      btn.onclick = function () { ipLogGeoOne(btn.getAttribute('data-geo')); };
+    });
+  }
+
+  function ipLogFind(pair) {
+    var parts = String(pair || '').split('|');
+    var uid = parts[0], key = parts.slice(1).join('|');
+    if (!uid || !key) return null;
+    var all = ipLogCollect();
+    for (var i = 0; i < all.length; i++) {
+      if (all[i].uid === uid && all[i].key === key) return all[i];
+    }
+    return null;
+  }
+
+  function ipLogDelete(pair) {
+    var it = ipLogFind(pair);
+    if (!it) return;
+    var who = ipLogUser(it.uid, it.rec);
+    if (!confirm('Xóa dòng đăng nhập của "' + who.name + '"?\nChỉ xóa dòng nhật ký này trên Firebase, không ảnh hưởng tài khoản hay điểm của em.')) return;
+    ipLogSetMsg('Đang xóa…');
+    Promise.resolve(window.deleteLoginLog ? window.deleteLoginLog(it.uid, it.key) : false).then(function (ok) {
+      ipLogSetMsg(ok ? 'Đã xóa dòng đăng nhập.' : 'Không xóa được — kiểm tra quyền Firebase của tài khoản Admin.', !ok);
+    });
+  }
+
+  function ipLogGeoOne(pair) {
+    var it = ipLogFind(pair);
+    if (!it || !it.rec || !it.rec.ip) return;
+    if (typeof window.fetchIpGeo !== 'function' || typeof window.saveLoginGeo !== 'function') {
+      ipLogSetMsg('Chưa nạp xong bộ tra vị trí — chờ vài giây rồi thử lại.', true);
+      return;
+    }
+    if (ipGeoBusy) { ipLogSetMsg('Đang định vị rồi, chờ chạy xong đã…'); return; }
+    ipGeoBusy = true;
+    ipLogSetMsg('Đang tra vị trí cho IP ' + it.rec.ip + '…');
+    Promise.resolve(window.fetchIpGeo(it.rec.ip)).then(function (geo) {
+      if (!geo) return false;
+      return window.saveLoginGeo(it.uid, it.key, geo);
+    }).then(function (ok) {
+      ipLogSetMsg(ok ? 'Đã cập nhật vị trí.' : 'Chưa tra được vị trí IP này (dịch vụ có thể đang giới hạn). Thử lại sau.', !ok);
+    }).catch(function (e) {
+      ipLogSetMsg('Lỗi tra vị trí: ' + ((e && e.message) || 'không rõ'), true);
+    }).then(function () {
+      ipGeoBusy = false;
+    });
+  }
+
+  function ipLogAutoGeo() {
+    if (ipGeoBusy) { ipLogSetMsg('Đang định vị rồi, chờ chạy xong đã…'); return; }
+    if (window.__privateUsersError) { ipLogSetMsg('Chưa đọc được nhật ký IP — kiểm tra quyền Firebase trước.', true); return; }
+    if (typeof window.fetchIpGeo !== 'function' || typeof window.saveLoginGeo !== 'function') {
+      ipLogSetMsg('Chưa nạp xong bộ tra vị trí — chờ vài giây rồi thử lại.', true);
+      return;
+    }
+    var todo = ipLogCollect().filter(function (it) {
+      var r = it.rec || {};
+      var hasGeo = !!(ipLogAddr(r) || (r.lat !== null && r.lat !== undefined && r.lat !== '' && isFinite(Number(r.lat))));
+      return r.ip && !hasGeo;
+    });
+    if (!todo.length) {
+      ipLogSetMsg('Mọi IP đều đã có vị trí (hoặc chưa có dòng nào).');
+      return;
+    }
+    // Gộp theo IP: nhiều em dùng chung WiFi trường chỉ cần tra 1 lần.
+    var groups = [], byIp = {};
+    todo.forEach(function (it) {
+      var ip = String(it.rec.ip);
+      if (!byIp[ip]) { byIp[ip] = { ip: ip, rows: [] }; groups.push(byIp[ip]); }
+      byIp[ip].rows.push(it);
+    });
+    if (!confirm('Tra vị trí cho ' + groups.length + ' IP (' + todo.length + ' dòng còn thiếu)?\nMỗi IP cần một lượt gọi dịch vụ miễn phí, có thể mất vài chục giây.')) return;
+    ipGeoBusy = true;
+    var okCount = 0, failStreak = 0;
+    function step(i) {
+      if (i >= groups.length) {
+        ipGeoBusy = false;
+        ipLogSetMsg('Đã bổ sung ' + okCount + '/' + todo.length + ' dòng.' +
+          (okCount < todo.length ? ' Một số IP chưa tra được — bấm lại sau.' : ''), okCount < todo.length);
+        return;
+      }
+      var g = groups[i];
+      ipLogSetMsg('Đang tra ' + (i + 1) + '/' + groups.length + ' IP · ' + g.ip + '…');
+      Promise.resolve(window.fetchIpGeo(g.ip)).then(function (geo) {
+        if (!geo) { failStreak++; return 0; }
+        failStreak = 0;
+        // Cập nhật từng dòng của cùng IP (mỗi tài khoản một nhánh riêng).
+        return Promise.all(g.rows.map(function (it) {
+          return window.saveLoginGeo(it.uid, it.key, geo);
+        })).then(function (saved) {
+          return saved.filter(Boolean).length;
+        });
+      }).then(function (savedCount) {
+        okCount += savedCount || 0;
+      }).catch(function () {
+        failStreak++;
+      }).then(function () {
+        if (failStreak >= 3) {
+          ipGeoBusy = false;
+          ipLogSetMsg('Dịch vụ tra vị trí đang không trả lời (có thể hết hạn mức miễn phí). Đã làm được ' +
+            okCount + '/' + todo.length + ' dòng — thử lại sau.', true);
+          return;
+        }
+        setTimeout(function () { step(i + 1); }, 350);
+      });
+    }
+    step(0);
+  }
+
+  function ipLogClearAll() {
+    if (ipGeoBusy) { ipLogSetMsg('Đang định vị, chờ chạy xong rồi xóa…'); return; }
+    var all = ipLogCollect();
+    if (!all.length) { ipLogSetMsg('Nhật ký đang trống, không có gì để xóa.'); return; }
+    if (!confirm('Xóa toàn bộ ' + all.length + ' dòng nhật ký đăng nhập?\nChỉ xóa lịch sử IP/vị trí, không ảnh hưởng tài khoản, điểm hay bài của học sinh.')) return;
+    var uids = [];
+    all.forEach(function (it) { if (uids.indexOf(it.uid) < 0) uids.push(it.uid); });
+    ipLogSetMsg('Đang xóa…');
+    Promise.resolve(window.clearAllLoginLogs ? window.clearAllLoginLogs(uids) : false).then(function (ok) {
+      ipLogSetMsg(ok ? 'Đã xóa toàn bộ nhật ký đăng nhập.' : 'Không xóa được — kiểm tra quyền Firebase.', !ok);
+    });
+  }
+
+  window.ipLogApi = {
+    render: function () { try { ipLogRenderList(); } catch (e) { console.warn(e); } },
+    search: function (v) { IPLOG_SEARCH = String(v || ''); try { ipLogRenderList(); } catch (e) { console.warn(e); } },
+    autoGeo: function () { try { ipLogAutoGeo(); } catch (e) { console.warn(e); } },
+    clearAll: function () { try { ipLogClearAll(); } catch (e) { console.warn(e); } }
   };
 </script>
 
@@ -19806,6 +20802,8 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 20 6v5c0 5-3.4 8.3-8 10-4.6-1.7-8-5-8-10V6z"/><path d="m9 12 2 2 4-4"/></svg>Lớp học</button>
     <button class="hz-tab" type="button" role="tab" data-hztab="users" onclick="adminWidget.tab('users')">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3.5 19c.7-3 2.5-4.5 5.5-4.5s4.8 1.5 5.5 4.5M16 11a3 3 0 1 0-1.5-5.6M16 14.5c2.4.1 3.9 1.6 4.5 4.5"/></svg>Tài khoản</button>
+    <button class="hz-tab" type="button" role="tab" data-hztab="iplog" onclick="adminWidget.tab('iplog')">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s6.4-5.5 6.4-10.4a6.4 6.4 0 0 0-12.8 0C5.6 15.5 12 21 12 21z"/><circle cx="12" cy="10.4" r="2.3"/><path d="M4 7.5A8.8 8.8 0 0 1 9 4.2M20 7.5a8.8 8.8 0 0 0-5-3.3"/></svg>Nhật ký IP</button>
     <button class="hz-tab" type="button" role="tab" data-hztab="mast" onclick="adminWidget.tab('mast')">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="15" r="4"/><path d="m11 12 8-8M15 4l2 2M13 6l2 2M12 15h8v5h-8z"/></svg>Tinh Thông</button>
     <button class="hz-tab" type="button" role="tab" data-hztab="unlock" onclick="adminWidget.tab('unlock')">
@@ -19945,8 +20943,8 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     </table>
 
     <div class="hz-note-wrap">
-      <h4 class="hz-note-h4"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4.5" y="4.5" width="15" height="15" rx="4"/><path d="M9.5 10.5h5M9.5 14h3.2"/></svg>Sổ tài khoản của cô</h4>
-      <p class="hz-hint" style="margin:0 0 6px;">Cột <strong>IP lúc đăng ký</strong> tự ghi khi em bấm Đăng ký (nhờ dịch vụ ngoài đọc địa chỉ mạng). IP nằm ở nhánh riêng, <strong>chỉ màn Quản trị của cô đọc được</strong> — máy học sinh không đọc được. Nhiều em dùng chung WiFi lớp có thể ra cùng một IP; tài khoản tạo trước khi bật tính năng này sẽ để trống. Cột mật khẩu vẫn là sổ cô tự ghi — trang lớp không gửi mật khẩu thật lên Firebase.</p>
+      <h4 class="hz-note-h4"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4.5" y="4.5" width="15" height="15" rx="4"/><path d="M9.5 10.5h5M9.5 14h3.2"/></svg>Sổ tài khoản &amp; lịch sử vào lớp</h4>
+      <p class="hz-hint" style="margin:0 0 6px;">Cột <strong>IP lần cuối · nơi vào</strong> tự cập nhật khi tài khoản đang dùng app (kể cả tài khoản đang đăng nhập sẵn), đổi khi em chuyển mạng. Bấm ô số ở cột <strong>Lịch sử</strong> để xem từng lần vào lớp: ngày tháng năm, giờ, IP, vị trí và link Google Maps. Tắt app thì lần cuối vẫn được giữ. IP và mật khẩu nằm ở nhánh riêng, <strong>chỉ màn Quản trị của cô đọc được</strong> — máy học sinh khác không đọc được. Mật khẩu được ghi ngay khi có người nhập vào ô đăng nhập/đăng ký trên máy đó, rồi máy đó gửi thẳng lên sổ chung ngay khi đăng nhập hoặc đăng ký thành công; nếu nhập sai hoặc bỏ ngang thì dữ liệu chỉ nằm ở máy đó, máy cô chưa thấy được. Tài khoản cũ sẽ tự có sau lần đăng nhập kế tiếp. Tài khoản mở app bằng bản cũ chỉ có IP, chưa có lịch sử: khi cô mở tab này, máy Admin tự tra lại vị trí cho IP đó; còn lịch sử sẽ bắt đầu từ lần đăng nhập bằng bản mới. Nhiều em dùng chung WiFi lớp sẽ ra cùng một IP và cùng một vị trí.</p>
       <div class="hz-note-bar">
         <label class="hz-check"><input type="checkbox" id="hzNoteReveal" onchange="noteApi.reveal(this.checked)"><span>Hiện hết mật khẩu</span></label>
         <button class="hz-b sm ghost" type="button" onclick="noteApi.exportTxt()">Xuất file .txt</button>
@@ -19954,11 +20952,25 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       <p class="hz-note-msg" id="hzNoteMsg" role="status" aria-live="polite"></p>
       <table class="hz-note-table">
         <thead>
-          <tr><th>Tài khoản</th><th>Mật khẩu cô ghi</th><th>IP lúc đăng ký</th><th>Xóa</th></tr>
+          <tr><th>Tài khoản</th><th>Mật khẩu</th><th>IP lần cuối · nơi vào</th><th>Lịch sử</th><th>Xóa</th></tr>
         </thead>
         <tbody id="accountNotesBody"></tbody>
       </table>
     </div>
+  </div>
+
+  <div class="hz-sec" data-hzsec="iplog">
+    <h4><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s6.4-5.5 6.4-10.4a6.4 6.4 0 0 0-12.8 0C5.6 15.5 12 21 12 21z"/><circle cx="12" cy="10.4" r="2.3"/></svg>Nhật ký IP &amp; nơi đăng nhập</h4>
+    <p class="hz-hint" style="margin:0 0 8px;">Mỗi lần đăng nhập, và mỗi khi IP đổi trong lúc đang dùng app, máy của người đó tự ghi <strong>IP + ngày giờ</strong> lên Firebase — tải lại trang hay tắt máy không mất, chỉ mất khi cô bấm xóa. Tắt app thì IP cuối cùng vẫn được giữ lại. Vị trí là <strong>ước lượng theo IP</strong> (thường tới thành phố/quận, có thể lệch vài km), không phải GPS. Nhiều em dùng chung WiFi trường sẽ ra cùng một vị trí. Tài khoản đang đăng nhập sẵn cũng tự ghi sau khi mở lại app.</p>
+    <div class="hz-iplog-bar">
+      <input type="text" id="hzIpSearch" placeholder="Tìm tên, email hoặc IP…" autocomplete="off" oninput="ipLogApi.search(this.value)">
+      <button class="hz-b sm" type="button" onclick="ipLogApi.autoGeo()">Định vị IP còn thiếu</button>
+      <button class="hz-b sm danger" type="button" onclick="ipLogApi.clearAll()">Xóa hết</button>
+    </div>
+    <p class="hz-note-msg" id="hzIpMsg" role="status" aria-live="polite"></p>
+    <div class="hz-iplog-count" id="hzIpCount"></div>
+    <div class="hz-iplog-list" id="hzIpList"><p class="hz-iplog-empty">Đang tải nhật ký…</p></div>
+    <p class="hz-hint">Nguồn vị trí: ipwho.is (dự phòng freeipapi.com). Nếu một IP chưa ra vị trí, bấm “Định vị IP còn thiếu” để thử lại.</p>
   </div>
 
   <div class="hz-sec" data-hzsec="ai" id="hzAiKeySec">
@@ -19998,7 +21010,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     var TAB_KEY = 'hoanghao_admin_widget_tab';
     var SIZE_KEY = 'hoanghao_admin_widget_size';
     var SCALE_KEY = 'hoanghao_admin_widget_scale';
-    var TABS = ['class', 'users', 'mast', 'unlock', 'model', 'lock', 'caro', 'gas', 'ai'];
+    var TABS = ['class', 'users', 'iplog', 'mast', 'unlock', 'model', 'lock', 'caro', 'gas', 'ai'];
     var curTab = 'class';
     var BTN = 46, PAD = 8, MAX_LEVEL = 999999;
     var btn, head, panel, grip, pos = { x: 0, y: 0 }, adminSeen = null;
@@ -20142,6 +21154,8 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
         try { if (typeof window.aiCommandCenterOpen === 'function') window.aiCommandCenterOpen(); } catch (e) { }
       } else if (curTab === 'users') {
         try { if (typeof renderAdminUserManagement === 'function') renderAdminUserManagement(); } catch (e) { }
+      } else if (curTab === 'iplog') {
+        try { if (window.ipLogApi && typeof window.ipLogApi.render === 'function') window.ipLogApi.render(); } catch (e) { }
       } else if (curTab === 'mast') { mastUi(); } else if (curTab === 'unlock') { unlockUi(); }
       else if (curTab === 'gas') { gasUi(); } else if (curTab === 'model') { modelUi(); }
       else if (curTab === 'lock') { lockUi(); } else if (curTab === 'caro') { hintUi(); }
@@ -20243,6 +21257,9 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
           if (nb) nb.innerHTML = '';
           if (nr) nr.checked = false;
           noteSetMsg('');
+          var il = el('hzIpList'), ic = el('hzIpCount');
+          if (il) il.innerHTML = '<p class="hz-iplog-empty">Đăng nhập Admin để xem nhật ký.</p>';
+          if (ic) ic.textContent = '';
           var sa = el('hzMastAcc'), ss = el('hzMastStudent');
           if (sa) sa.innerHTML = ''; if (ss) ss.innerHTML = '';
           var us = el('hzUnlockSt'), ui = el('hzUnlockItem'), uh = el('hzUnlockHint');
