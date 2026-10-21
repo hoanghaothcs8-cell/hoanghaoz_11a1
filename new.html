@@ -3125,6 +3125,66 @@
 <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/mammoth@1.6.0/mammoth.browser.min.js"></script>
 
+<style>
+/* ===== HOP QUYEN UNG DUNG ===== */
+#hzPermModal { z-index:10020; background:rgba(3,2,8,.76); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); padding:16px; }
+#hzPermModal .hz-perm-card { width:min(430px,100%); max-height:min(86vh,720px); overflow:auto; padding:22px 20px 16px;
+  border-radius:26px; border:1px solid rgba(192,132,252,.28);
+  background:linear-gradient(165deg,#1b1230,#0d0916 55%,#120b1e);
+  box-shadow:0 40px 100px rgba(0,0,0,.7), inset 0 1px 0 rgba(255,255,255,.06);
+  color:#f4f1fa; animation:hzPop2 .34s cubic-bezier(.34,1.4,.64,1) both; }
+#hzPermModal .hz-perm-head { display:flex; align-items:flex-start; gap:13px; }
+#hzPermModal .hz-perm-icon { flex:0 0 auto; width:52px; height:52px; border-radius:15px; display:grid; place-items:center;
+  background:linear-gradient(135deg,#7c3aed,#c084fc); color:#fff; font-size:27px; font-weight:900; line-height:1;
+  box-shadow:0 10px 24px rgba(124,58,237,.45), inset 0 1px 0 rgba(255,255,255,.25); }
+#hzPermModal .hz-perm-kicker { font-size:9.5px; font-weight:900; letter-spacing:1.5px; color:#c084fc; }
+#hzPermModal .hz-perm-head h3 { margin:3px 0 0; font-size:18px; line-height:1.25; font-weight:800; color:#faf7ff; }
+#hzPermModal .hz-perm-head p { margin:4px 0 0; font-size:11.5px; line-height:1.5; color:#a1a1aa; }
+#hzPermModal .hz-perm-row { display:flex; align-items:flex-start; gap:11px; padding:13px 12px; margin-top:10px;
+  border:1px solid rgba(255,255,255,.075); border-radius:16px; background:rgba(255,255,255,.035); }
+#hzPermModal .hz-perm-ic { flex:0 0 auto; width:34px; height:34px; border-radius:11px; display:grid; place-items:center;
+  background:rgba(168,85,247,.14); border:1px solid rgba(192,132,252,.25); color:#e9d5ff; }
+#hzPermModal .hz-perm-ic svg { width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+#hzPermModal .hz-perm-tx { flex:1 1 auto; min-width:0; }
+#hzPermModal .hz-perm-tx b { display:block; font-size:13px; line-height:1.35; color:#f4f1fa; }
+#hzPermModal .hz-perm-tx span { display:block; margin-top:2px; font-size:11px; line-height:1.5; color:#a1a1aa; }
+#hzPermModal .hz-perm-state { display:inline-flex; align-items:center; gap:4px; margin-top:5px; font-size:10px;
+  font-weight:800; line-height:1.35; color:#8f8a9c; }
+#hzPermModal .hz-perm-state[data-tone="ok"] { color:#a7f3d0; }
+#hzPermModal .hz-perm-state[data-tone="bad"] { color:#fda4af; }
+#hzPermModal button.hz-perm-btn { flex:0 0 auto; align-self:center; min-height:0 !important; padding:8px 11px !important;
+  border-radius:10px !important; font-size:11px !important; font-weight:800; line-height:1.2;
+  background:rgba(168,85,247,.2) !important; color:#f3e8ff !important;
+  border:1px solid rgba(192,132,252,.45) !important; box-shadow:none !important; }
+#hzPermModal button.hz-perm-btn:hover { background:rgba(168,85,247,.34) !important; }
+#hzPermModal button.hz-perm-btn:disabled { opacity:.6; cursor:default; }
+#hzPermModal .hz-perm-note { margin:12px 2px 0; font-size:10.5px; line-height:1.55; color:#7c7490; }
+#hzPermModal .hz-perm-foot { display:flex; align-items:center; justify-content:flex-end; gap:8px; margin-top:14px; }
+#hzPermModal button.hz-perm-skip { min-height:0 !important; padding:9px 12px !important; border-radius:11px !important;
+  font-size:11.5px !important; font-weight:800; background:transparent !important; color:#a1a1aa !important;
+  border:0 !important; box-shadow:none !important; }
+#hzPermModal button.hz-perm-skip:hover { color:#e4e4e7 !important; }
+#hzPermModal button.hz-perm-done { min-height:0 !important; padding:9px 16px !important; border-radius:11px !important;
+  font-size:11.5px !important; font-weight:900; background:linear-gradient(135deg,#7c3aed,#a855f7) !important;
+  color:#fff !important; border:1px solid rgba(192,132,252,.5) !important; box-shadow:0 8px 20px rgba(124,58,237,.3) !important; }
+@media (max-width:520px) {
+  #hzPermModal { align-items:flex-end; padding:10px 10px calc(10px + env(safe-area-inset-bottom)); }
+  #hzPermModal .hz-perm-card { width:100%; max-height:90vh; border-radius:24px; }
+}
+.hz-ip-gps { display:inline-flex; align-items:center; gap:3px; max-width:100%; min-width:0;
+  font-size:9.5px; line-height:1.35; font-weight:700; color:#7dd3fc !important; text-decoration:none;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.hz-ip-gps:hover { color:#bae6fd !important; text-decoration:underline; }
+.hz-ip-gps svg { width:11px; height:11px; flex:0 0 auto; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+.hz-note-gps { display:flex; align-items:center; gap:8px; margin:2px 0 9px; padding:8px 10px; border-radius:10px;
+  background:rgba(56,189,248,.08); border:1px solid rgba(56,189,248,.22); color:#bae6fd !important; text-decoration:none; }
+.hz-note-gps:hover { background:rgba(56,189,248,.14); text-decoration:none; }
+.hz-note-gps > svg { width:14px; height:14px; flex:0 0 auto; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+.hz-note-gps span { flex:1 1 auto; min-width:0; }
+.hz-note-gps b { display:block; font-size:11px; line-height:1.35; color:#e0f2fe; }
+.hz-note-gps em { display:block; margin-top:1px; font-style:normal; font-size:9.5px; line-height:1.35; color:#7dd3fc; }
+</style>
+
 </head>
 <body>
 <div id="hoanghaoSplash" aria-label="hoanghaoZ">
@@ -3803,6 +3863,15 @@
           </div>
         </div>
         <div class="panel" style="margin-top:18px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
+            <div>
+              <h3 style="font-size:16px;margin-bottom:5px;">Quyền ứng dụng</h3>
+              <p style="font-size:12px;color:#71717a;margin:0;">Vị trí chỉ lấy khi bạn bấm Bật. Ảnh chọn qua thư viện của máy.</p>
+            </div>
+            <button class="secondary" type="button" onclick="window.openPermissionSheet(true)" style="padding:7px 12px;font-size:12px;">Mở quyền</button>
+          </div>
+        </div>
+        <div class="panel" style="margin-top:18px;">
           <h3 style="font-size:16px;margin-bottom:5px;">Kỹ năng tu luyện</h3>
           <p style="font-size:12px;color:#71717a;margin-bottom:12px;">Đột phá cảnh giới để mở khóa kỹ năng; mỗi kỹ năng dùng 1 lần/tuần.</p>
           <div id="skillList" style="display:grid;gap:10px;"></div>
@@ -4229,6 +4298,47 @@
       <svg class="hz-gate-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="10.5" width="15" height="9.5" rx="2.5"/><path d="M8 10.5V7.8a4 4 0 0 1 8 0v2.7"/><path d="M12 14.4v2.1"/></svg>
       <span>Trang lớp chỉ mở sau khi em đăng nhập. Chưa có tài khoản thì chạm <b>Đăng ký</b> ở trên để tạo mới.</span>
     </p>
+  </div>
+</div>
+
+<!-- HỘP QUYỀN ỨNG DỤNG: hiện một lần sau khi đăng nhập, mở lại được ở Trang cá nhân -->
+<div class="modal-overlay" id="hzPermModal" onclick="if(event.target===this)window.hzPermClose()">
+  <div class="hz-perm-card" role="dialog" aria-modal="true" aria-labelledby="hzPermTitle">
+    <div class="hz-perm-head">
+      <div class="hz-perm-icon" aria-hidden="true">Z</div>
+      <div>
+        <div class="hz-perm-kicker">QUYỀN TRUY CẬP</div>
+        <h3 id="hzPermTitle">hoanghaoZ muốn dùng thêm</h3>
+        <p>Bạn chọn bật quyền nào cũng được. Không bật vẫn dùng lớp bình thường.</p>
+      </div>
+    </div>
+
+    <div class="hz-perm-row">
+      <span class="hz-perm-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21s6.4-5.5 6.4-10.4a6.4 6.4 0 0 0-12.8 0C5.6 15.5 12 21 12 21z"/><circle cx="12" cy="10.4" r="2.3"/></svg></span>
+      <div class="hz-perm-tx">
+        <b>Vị trí</b>
+        <span>Chỉ lấy khi bạn bấm Bật, để ghi nhận vị trí khi vào lớp. Không chạy nền.</span>
+        <em class="hz-perm-state" id="hzPermLocState">Chưa bật</em>
+      </div>
+      <button type="button" class="hz-perm-btn" id="hzPermLocBtn" onclick="window.hzPermRequestLocation()">Bật</button>
+    </div>
+
+    <div class="hz-perm-row">
+      <span class="hz-perm-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/><circle cx="9" cy="10" r="1.6"/><path d="m5 17 4.5-4.5 3 3 2.5-2.5 4 4"/></svg></span>
+      <div class="hz-perm-tx">
+        <b>Ảnh đại diện</b>
+        <span>Chọn từ thư viện ảnh của máy. Trình duyệt chỉ mở ảnh khi bạn bấm chọn, không đọc ảnh trước.</span>
+        <em class="hz-perm-state" data-tone="ok">Theo nhu cầu</em>
+      </div>
+      <button type="button" class="hz-perm-btn" onclick="window.hzPermOpenPhoto()">Chọn ảnh</button>
+    </div>
+
+    <p class="hz-perm-note">Khi bấm Bật, trình duyệt sẽ hiện hộp thoại xin phép riêng. Chọn Đồng ý thì máy mới gửi vị trí; chọn Từ chối thì không có gì được gửi và bạn vẫn vào lớp bình thường.</p>
+
+    <div class="hz-perm-foot">
+      <button type="button" class="hz-perm-skip" onclick="window.hzPermLater()">Để sau</button>
+      <button type="button" class="hz-perm-done" onclick="window.hzPermClose()">Xong</button>
+    </div>
   </div>
 </div>
 
@@ -4722,6 +4832,30 @@
       geoAt: Date.now()
     }).then(function() { return true; }).catch(function(error) {
       console.warn('Không lưu được vị trí IP:', (error && error.message) || error);
+      return false;
+    });
+  };
+
+  // Vị trí GPS do chính máy học sinh gửi lên sau khi bấm "Bật vị trí" và đồng ý
+  // hộp thoại của trình duyệt. Không tự chạy nền, không lấy khi chưa được phép.
+  // Rules bắt mọi lần ghi dưới userPrivate/$uid phải còn ip (chuỗi) + ipAt (số),
+  // nên giữ lại hai trường gốc khi ghi thêm location.
+  window.saveGpsLocation = function(uid, loc) {
+    if (!uid || !loc) return Promise.resolve(false);
+    var lat = Number(loc.lat), lon = Number(loc.lon);
+    if (!isFinite(lat) || !isFinite(lon)) return Promise.resolve(false);
+    var at = Number(loc.at) || Date.now();
+    var acc = Number(loc.acc) || 0;
+    var rootRef = ref(db, 'userPrivate/' + uid);
+    return get(rootRef).then(function(snap) {
+      var cur = snap.val() || {};
+      return update(rootRef, {
+        location: { lat: lat, lon: lon, acc: acc, at: at },
+        ip: typeof cur.ip === 'string' ? cur.ip : '',
+        ipAt: typeof cur.ipAt === 'number' ? cur.ipAt : at
+      });
+    }).then(function() { return true; }).catch(function(error) {
+      console.warn('Không lưu được vị trí GPS:', (error && error.message) || error);
       return false;
     });
   };
@@ -10173,6 +10307,177 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
 
   // Chỉ ký gửi yêu cầu signOut lên Firebase; việc xóa phiên cục bộ do logout() đảm nhiệm.
   window.signOutFromFirebase = async () => { await signOut(auth); };
+
+  /* ===== HỘP QUYỀN ỨNG DỤNG =====
+     Hiện một lần sau khi đăng nhập (mỗi tài khoản / mỗi máy), mở lại được ở
+     Trang cá nhân. Vị trí chỉ được lấy khi người dùng bấm Bật và đồng ý hộp
+     thoại của trình duyệt; không có lần lấy nào chạy ngầm. */
+  var hzPermUser = null;
+  var hzPermBusy = false;
+  var hzPermAutoDone = {};
+
+  function hzPermTell(msg, kind) {
+    try { if (typeof window.notify === 'function') window.notify(msg, kind); } catch (e) { }
+  }
+  function hzPermSeenKey(uid) { return 'hz_perm_seen_' + uid; }
+  function hzPermGpsKey(uid) { return 'hz_gps_' + uid; }
+  function hzPermSeen(uid) {
+    try { return localStorage.getItem(hzPermSeenKey(uid)) === '1'; } catch (e) { return false; }
+  }
+  function hzPermMarkSeen(uid) {
+    try { localStorage.setItem(hzPermSeenKey(uid), '1'); } catch (e) { }
+  }
+  function hzPermSaved(uid) {
+    try {
+      var x = JSON.parse(localStorage.getItem(hzPermGpsKey(uid)) || 'null');
+      if (x && isFinite(Number(x.lat)) && isFinite(Number(x.lon))) return x;
+    } catch (e) { }
+    return null;
+  }
+  function hzPermSaveLocal(uid, loc) {
+    try { localStorage.setItem(hzPermGpsKey(uid), JSON.stringify(loc)); } catch (e) { }
+  }
+  function hzPermTime(ms) {
+    var n = Number(ms);
+    if (!isFinite(n) || n <= 0) return '';
+    try {
+      return new Date(n).toLocaleString('vi-VN', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' });
+    } catch (e) { return ''; }
+  }
+  function hzPermSetState(text, tone) {
+    var el = document.getElementById('hzPermLocState');
+    if (!el) return;
+    el.textContent = text;
+    if (tone) el.setAttribute('data-tone', tone);
+    else el.removeAttribute('data-tone');
+  }
+  window.hzPermRender = function() {
+    var u = hzPermUser;
+    if (!u) return;
+    var saved = hzPermSaved(u.uid);
+    var btn = document.getElementById('hzPermLocBtn');
+    if (saved) {
+      var when = hzPermTime(saved.at);
+      var acc = Number(saved.acc) || 0;
+      hzPermSetState('Đã lưu' + (when ? ' ' + when : '') + (acc ? ' · sai số ±' + acc + ' m' : ''), 'ok');
+      if (btn) btn.textContent = 'Cập nhật';
+    } else {
+      hzPermSetState('Chưa bật');
+      if (btn) btn.textContent = 'Bật';
+    }
+  };
+  function hzPermQuery() {
+    try {
+      if (!navigator.permissions || typeof navigator.permissions.query !== 'function') return;
+      navigator.permissions.query({ name: 'geolocation' }).then(function(p) {
+        function apply() {
+          if (!document.getElementById('hzPermLocState')) return;
+          if (p.state === 'denied') {
+            hzPermSetState('Bị chặn trong trình duyệt', 'bad');
+            var b = document.getElementById('hzPermLocBtn');
+            if (b) b.textContent = 'Thử lại';
+          } else if (p.state === 'granted') {
+            var u = hzPermUser;
+            var saved = u ? hzPermSaved(u.uid) : null;
+            if (!saved) hzPermSetState('Đã cho phép · bấm Bật để lưu', 'ok');
+          }
+        }
+        apply();
+        p.onchange = apply;
+      }).catch(function() { });
+    } catch (e) { }
+  }
+  window.openPermissionSheet = function(force) {
+    var u = hzPermUser || window.__hzPermUser || null;
+    if (!u || !u.uid) { hzPermTell('Hãy đăng nhập trước khi bật quyền.', 'warn'); return; }
+    hzPermUser = u;
+    var m = document.getElementById('hzPermModal');
+    if (!m) return;
+    window.hzPermRender();
+    m.classList.add('active');
+    hzPermQuery();
+  };
+  window.hzPermClose = function() {
+    var m = document.getElementById('hzPermModal');
+    if (m) m.classList.remove('active');
+  };
+  window.hzPermLater = function() {
+    if (hzPermUser && hzPermUser.uid) hzPermMarkSeen(hzPermUser.uid);
+    window.hzPermClose();
+  };
+  window.hzPermRequestLocation = function() {
+    var u = hzPermUser || window.__hzPermUser || null;
+    if (!u || !u.uid) { hzPermTell('Hãy đăng nhập trước khi bật vị trí.', 'warn'); return; }
+    if (!navigator.geolocation) { hzPermTell('Trình duyệt này không hỗ trợ lấy vị trí.', 'warn'); return; }
+    if (hzPermBusy) return;
+    hzPermBusy = true;
+    var btn = document.getElementById('hzPermLocBtn');
+    var oldText = btn ? btn.textContent : 'Bật';
+    if (btn) { btn.disabled = true; btn.textContent = 'Đang hỏi…'; }
+    navigator.geolocation.getCurrentPosition(function(pos) {
+      var loc = {
+        lat: pos.coords.latitude,
+        lon: pos.coords.longitude,
+        acc: Math.round(Number(pos.coords.accuracy) || 0),
+        at: Date.now()
+      };
+      Promise.resolve(window.saveGpsLocation ? window.saveGpsLocation(u.uid, loc) : false).then(function(ok) {
+        hzPermBusy = false;
+        if (btn) btn.disabled = false;
+        if (ok) {
+          hzPermSaveLocal(u.uid, loc);
+          window.hzPermRender();
+          hzPermTell('Đã lưu vị trí. Ghim sẽ hiện trong Sổ tài khoản của quản trị.', 'ok');
+        } else {
+          if (btn) btn.textContent = oldText || 'Thử lại';
+          hzPermTell('Chưa lưu được vị trí lên Firebase. Kiểm tra mạng rồi thử lại.', 'warn');
+        }
+      });
+    }, function(err) {
+      hzPermBusy = false;
+      if (btn) { btn.disabled = false; btn.textContent = 'Thử lại'; }
+      var code = err && err.code;
+      if (code === 1) {
+        hzPermSetState('Bị chặn trong trình duyệt', 'bad');
+        hzPermTell('Bạn đã từ chối quyền vị trí. Muốn bật lại, mở cài đặt trình duyệt → Quyền trang web → Vị trí.', 'warn');
+      } else if (code === 2) {
+        hzPermTell('Máy chưa xác định được vị trí. Hãy bật GPS rồi thử lại.', 'warn');
+      } else {
+        hzPermTell('Hết thời gian lấy vị trí. Ra chỗ thoáng hơn rồi thử lại.', 'warn');
+      }
+    }, { enableHighAccuracy: true, timeout: 12000, maximumAge: 0 });
+  };
+  window.hzPermOpenPhoto = function() {
+    window.hzPermClose();
+    setTimeout(function() {
+      try {
+        if (typeof window.openProfileEdit === 'function') window.openProfileEdit();
+        else if (typeof window.goMenu === 'function') window.goMenu('profileTab');
+      } catch (e) { }
+    }, 180);
+  };
+  window.hzPermMaybeAuto = function(user) {
+    if (!user || !user.uid) return;
+    hzPermUser = user;
+    window.__hzPermUser = user;
+    if (hzPermSeen(user.uid) || hzPermAutoDone[user.uid]) return;
+    hzPermAutoDone[user.uid] = 1;
+    var tries = 0;
+    function tryShow() {
+      tries++;
+      if (!hzPermUser || hzPermUser.uid !== user.uid) return;
+      var m = document.getElementById('hzPermModal');
+      if (m && m.classList.contains('active')) return;
+      if (document.querySelector('.modal-overlay.active')) {
+        if (tries < 5) setTimeout(tryShow, 2200);
+        return;
+      }
+      hzPermMarkSeen(user.uid);
+      window.openPermissionSheet();
+    }
+    setTimeout(tryShow, 2600);
+  };
+
   onAuthStateChanged(auth, user => {
     if (typeof window.setFirebaseSessionUser === 'function') window.setFirebaseSessionUser(user);
     // IP lưu ở nhánh riêng: chỉ Admin được đọc cả bảng.
@@ -10181,10 +10486,16 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     }
     // Máy tự cập nhật IP khi đang dùng app (kể cả tài khoản đang đăng nhập sẵn).
     if (user) {
+      window.__hzPermUser = user;
+      hzPermUser = user;
       if (typeof window.startIpTracking === 'function') { try { window.startIpTracking(user); } catch (e) { } }
       // Máy đã từng lưu mật khẩu trong sổ tài khoản: gửi lên nhánh riêng để Admin thấy.
       if (typeof window.syncOwnSavedPassword === 'function') { try { window.syncOwnSavedPassword(user); } catch (e) { } }
+      try { window.hzPermMaybeAuto(user); } catch (e) { }
     } else {
+      window.__hzPermUser = null;
+      hzPermUser = null;
+      try { window.hzPermClose(); } catch (e) { }
       if (typeof window.stopIpTracking === 'function') { try { window.stopIpTracking(); } catch (e) { } }
     }
   });
@@ -20217,13 +20528,23 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       var ip = rec.ip ? String(rec.ip) : (latest ? latest.ip : '');
       // Vị trí gốc chỉ dùng khi còn đúng IP; IP đổi thì bỏ để tra lại.
       var geo = (rec.geo && rec.geoIp === ip && typeof rec.geo === 'object') ? rec.geo : null;
+      // Vị trí GPS do máy học sinh tự gửi khi bấm Bật quyền (khác vị trí theo IP).
+      var gps = null;
+      var loc = (rec.location && typeof rec.location === 'object') ? rec.location : null;
+      if (loc) {
+        var glat = Number(loc.lat), glon = Number(loc.lon);
+        if (isFinite(glat) && isFinite(glon)) {
+          gps = { lat: glat, lon: glon, acc: Number(loc.acc) || 0, at: Number(loc.at) || 0 };
+        }
+      }
       return {
         ip: ip,
         at: rec.ipAt ? Number(rec.ipAt) : (latest ? latest.at : 0),
         latest: latest,
-        geo: geo
+        geo: geo,
+        gps: gps
       };
-    } catch (e) { return { ip: '', at: 0, latest: null, geo: null }; }
+    } catch (e) { return { ip: '', at: 0, latest: null, geo: null, gps: null }; }
   }
 
   // Tài khoản mở app bằng bản cũ: chỉ có IP gốc, chưa có dòng nhật ký kèm vị trí.
@@ -20262,7 +20583,17 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     if (changed) noteStore();
   }
 
-  function noteHistHtml(title, logs) {
+  function noteHistHtml(title, logs, gps) {
+    var gpsHtml = '';
+    if (gps && isFinite(Number(gps.lat)) && isFinite(Number(gps.lon))) {
+      var gt = gps.at ? noteShortWhen(gps.at) : '';
+      var ga = Number(gps.acc) || 0;
+      gpsHtml = '<a class="hz-note-gps" href="https://www.google.com/maps/search/?api=1&query=' +
+        Number(gps.lat) + ',' + Number(gps.lon) + '" target="_blank" rel="noopener">' + NOTE_PIN +
+        '<span><b>Vị trí chính xác do máy gửi</b><em>' +
+        escapeHtml((gt || 'Chưa rõ giờ') + (ga ? ' · sai số ±' + ga + ' m' : '') + ' · bấm để mở Google Maps') +
+        '</em></span>' + NOTE_OPEN + '</a>';
+    }
     var items = (logs || []).map(function (r) {
       var t = noteLogTime(r.at);
       var addr = noteLogAddr(r);
@@ -20287,6 +20618,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     return '<div class="hz-note-hist">' +
       '<div class="hz-note-hist-head">' + NOTE_CLOCK + '<b>Lịch sử vào lớp</b><span>' +
         escapeHtml(title) + ' · ' + (logs || []).length + ' lượt · mới nhất ở trên</span></div>' +
+      gpsHtml +
       '<div class="hz-note-hist-list">' + items + '</div>' +
     '</div>';
   }
@@ -20322,6 +20654,15 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       var lastAddr = addrRec ? noteLogAddr(addrRec) : '';
       var ipWhen = noteShortWhen(ipInfo.at);
       var fullWhen = ipInfo.at ? noteLogTime(ipInfo.at).full : '';
+      var gps = ipInfo.gps || null;
+      var gpsWhen = gps && gps.at ? noteShortWhen(gps.at) : '';
+      var gpsHtml = gps
+        ? '<a class="hz-ip-gps" href="https://www.google.com/maps/search/?api=1&query=' + Number(gps.lat) + ',' + Number(gps.lon) +
+          '" target="_blank" rel="noopener" title="Vị trí do máy học sinh gửi khi bấm Bật quyền' +
+          (gps.acc ? ' — sai số khoảng ±' + gps.acc + ' m' : '') +
+          (gpsWhen ? ' — lúc ' + escapeHtml(gpsWhen) : '') + '">' +
+          NOTE_PIN + '<span>Vị trí GPS' + (gpsWhen ? ' · ' + escapeHtml(gpsWhen) : '') + '</span></a>'
+        : '';
       var ipTitle = ip
         ? ('IP ghi nhận lần cuối' + (fullWhen ? ' lúc ' + fullWhen : '') +
           (lastAddr ? ' — ' + lastAddr : '') + ' — tài khoản đang dùng app sẽ tự cập nhật')
@@ -20337,7 +20678,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
         : '<span class="hz-note-hist-none" title="Tài khoản này mở app bằng bản cũ nên chưa có nhật ký chi tiết. Khi em đăng nhập lại bằng bản mới, lịch sử sẽ tự có.">Chưa có</span>';
       var histRow = logs.length
         ? '<tr class="hz-note-hist-row" data-histrow="' + escapeHtml(name) + '"' + (histOpen ? '' : ' hidden') + '>' +
-            '<td colspan="5">' + noteHistHtml(ten && ten !== name ? (ten + ' · ' + name) : name, logs) + '</td>' +
+            '<td colspan="5">' + noteHistHtml(ten && ten !== name ? (ten + ' · ' + name) : name, logs, gps) + '</td>' +
           '</tr>'
         : '';
       return '<tr>' +
@@ -20353,6 +20694,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
           '<span class="hz-ip-val' + (ip ? '' : ' empty') + '">' + escapeHtml(ip || 'Chưa có') + '</span>' +
           (ipWhen ? '<span class="hz-ip-when">' + escapeHtml(ipWhen) + '</span>' : '') +
           (lastAddr ? '<span class="hz-ip-where">' + escapeHtml(lastAddr) + '</span>' : '') +
+          gpsHtml +
         '</div></td>' +
         '<td class="hz-note-hist-cell">' + histBtn + '</td>' +
         '<td class="hz-note-bts"><button class="hz-b sm danger" type="button" data-clear="' + escapeHtml(name) + '">Xóa ghi</button></td>' +
