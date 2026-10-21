@@ -20296,6 +20296,74 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
   .hz-look-link:hover { background:rgba(245,158,11,.15); }
   .hz-look-link b { font-size:11.5px; color:#fde68a; }
   .hz-look-link span { font-size:9px; line-height:1.4; color:#a98c4d; overflow-wrap:anywhere; }
+
+  .hz-person-bar { display:flex; align-items:stretch; gap:6px; }
+  .hz-person-bar .hz-look-input { flex:1 1 auto; min-width:0; }
+  button.hz-person-clear { flex:0 0 auto; min-height:0 !important; padding:0 10px !important; border-radius:9px !important;
+    background:rgba(255,255,255,.06) !important; border:1px solid rgba(245,158,11,.3) !important;
+    color:#fcd34d !important; box-shadow:none !important; font-size:11px !important; font-weight:800; line-height:1.2; }
+  button.hz-person-clear:hover:not(:disabled) { background:rgba(245,158,11,.16) !important; color:#fff !important; }
+  button.hz-person-clear:disabled { opacity:.38; cursor:not-allowed; }
+  .hz-person-count { margin:7px 0 6px; font-size:11px; line-height:1.5; color:#c9ad72; overflow-wrap:anywhere; }
+  .hz-person-list { display:grid; grid-template-columns:minmax(0, 1fr); gap:6px; max-height:min(340px, 42vh); overflow:auto; overscroll-behavior:contain; padding-right:2px; }
+  .hz-person-empty { margin:0; padding:13px 11px; text-align:center; font-size:11.5px; line-height:1.6; color:#a98c4d;
+    border:1px dashed rgba(245,158,11,.24); border-radius:10px; background:rgba(255,255,255,.025); overflow-wrap:anywhere; }
+  .hz-person-empty b { color:#fde68a; }
+  .hz-person-empty .hz-b { margin-top:7px; }
+  .hz-person-card { display:flex; align-items:flex-start; gap:8px; min-width:0; padding:8px; border-radius:10px;
+    border:1px solid rgba(245,158,11,.24); background:rgba(245,158,11,.055); }
+  .hz-person-av { flex:0 0 auto; width:34px; height:34px; border-radius:9px; overflow:hidden; display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(135deg,#7c3aed,#c084fc); color:#fff; font-size:13px; font-weight:900; line-height:1; }
+  .hz-person-av img { display:block; width:100%; height:100%; object-fit:cover; }
+  .hz-person-main { flex:1 1 auto; min-width:0; }
+  .hz-person-name { margin:0 0 5px; font-size:12.5px; font-weight:800; line-height:1.35; color:#fef3c7; overflow-wrap:anywhere; }
+  .hz-person-actions { display:flex; flex-wrap:wrap; align-items:center; gap:4px; min-width:0; }
+  .hz-person-link { display:inline-flex; flex:0 1 auto; align-items:center; gap:4px; max-width:100%; min-width:0; padding:4px 7px; border-radius:7px;
+    border:1px solid rgba(245,158,11,.3); background:rgba(245,158,11,.08); color:#fde68a !important; text-decoration:none;
+    font-size:10px; line-height:1.3; }
+  .hz-person-link:hover { background:rgba(245,158,11,.18); color:#fff !important; }
+  .hz-person-link svg { width:11px; height:11px; flex:0 0 auto; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+  .hz-person-link b { flex:0 0 auto; font-weight:800; }
+  .hz-person-link span { min-width:0; max-width:190px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:#c9ad72; }
+  button.hz-person-soi { display:inline-flex; flex:0 1 auto; align-items:center; gap:4px; max-width:100%; min-width:0; min-height:0 !important; padding:4px 7px !important;
+    border-radius:7px !important; font-size:10px !important; font-weight:800; line-height:1.3;
+    background:linear-gradient(150deg,rgba(245,158,11,.24),rgba(180,83,9,.2)) !important;
+    border:1px solid rgba(245,158,11,.46) !important; color:#fef3c7 !important; box-shadow:none !important; }
+  button.hz-person-soi:hover { background:rgba(245,158,11,.3) !important; color:#fff !important; }
+  button.hz-person-soi svg { width:11px; height:11px; flex:0 0 auto; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+  button.hz-person-soi span { flex:0 0 auto; }
+  button.hz-person-soi b { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:#fff; }
+  .hz-person-nolink { font-size:10px; font-style:italic; line-height:1.4; color:#a98c4d; }
+  .hz-person-why { flex:1 1 100%; font-size:9.5px; line-height:1.45; color:#c9ad72; }
+  .hz-person-note { margin:8px 0 2px; font-size:10.5px; line-height:1.55; color:#a98c4d; }
+  .hz-person-copy { display:inline-block; margin-top:4px; padding:4px 7px; border-radius:7px; user-select:all;
+    background:rgba(255,255,255,.08); border:1px dashed rgba(245,158,11,.42); color:#fde68a;
+    font-family:ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace; font-size:11px; overflow-wrap:anywhere; }
+  .hz-look-outside { margin-top:10px; border:1px solid rgba(245,158,11,.22); border-radius:10px; background:rgba(255,255,255,.03); }
+  .hz-look-outside > summary { display:flex; align-items:center; gap:6px; padding:8px 10px; list-style:none; cursor:pointer;
+    border-radius:10px; font-size:11px; font-weight:800; color:#e0a92e; }
+  .hz-look-outside > summary::-webkit-details-marker { display:none; }
+  .hz-look-outside > summary:hover { background:rgba(245,158,11,.09); }
+  .hz-look-outside > summary svg { width:13px; height:13px; flex:0 0 auto; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+  .hz-look-outside > summary .hz-look-chev { margin-left:auto; transition:transform .18s; }
+  .hz-look-outside[open] > summary .hz-look-chev { transform:rotate(180deg); }
+  .hz-look-outside-body { padding:0 10px 10px; border-top:1px dashed rgba(245,158,11,.16); }
+  .hz-person-pos { display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-top:12px; padding-top:9px;
+    border-top:1px dashed rgba(245,158,11,.18); }
+  .hz-person-pos-lab { font-size:10.5px; font-weight:800; letter-spacing:.3px; text-transform:uppercase; color:#b9a06a; }
+  button.hz-person-pos-btn { display:inline-flex; align-items:center; justify-content:center; width:26px; height:24px; min-height:0 !important;
+    padding:0 !important; border-radius:7px !important; background:rgba(255,255,255,.06) !important;
+    border:1px solid rgba(245,158,11,.3) !important; color:#fcd34d !important; box-shadow:none !important; }
+  button.hz-person-pos-btn:hover:not(:disabled) { background:rgba(245,158,11,.18) !important; color:#fff !important; }
+  button.hz-person-pos-btn:disabled { opacity:.35; cursor:not-allowed; }
+  .hz-person-pos-btn svg { width:13px; height:13px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+  .hz-person-pos-hint { font-size:9.5px; color:#8f7a45; }
+  #hzAdminPanel .hz-person-bar input:focus-visible,
+  #hzAdminPanel .hz-person-link:focus-visible,
+  #hzAdminPanel button.hz-person-clear:focus-visible,
+  #hzAdminPanel button.hz-person-soi:focus-visible,
+  #hzAdminPanel button.hz-person-pos-btn:focus-visible,
+  #hzAdminPanel .hz-look-outside > summary:focus-visible { outline:2px solid #fbbf24; outline-offset:2px; }
 </style>
 
 <style>
@@ -21578,28 +21646,60 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
   </div>
 
   <div class="hz-sec" data-hzsec="lookup">
-    <h4><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.3"/><path d="m15.2 15.2 4.3 4.3"/><circle cx="10.5" cy="8.9" r="1.7"/><path d="M7.6 14.1c.4-1.3 1.5-2 2.9-2s2.5.7 2.9 2"/></svg>Tra cứu tên trên mạng xã hội</h4>
-    <p class="hz-hint" style="margin:0 0 8px;">Nhập tên rồi bấm <strong>Mở Google gộp 4 nền tảng</strong> để xem kết quả Facebook, TikTok, Instagram, Threads trên cùng một trang Google. Hoặc chọn nền tảng và bấm <strong>Tạo link riêng</strong>. App <strong>không tự lấy tài khoản, không lưu tên, không dùng IP hay vị trí</strong>. Kết quả có thể trùng tên người khác — mở xem, đối chiếu ảnh/trường/lớp rồi mới kết luận.</p>
-    <label class="hz-lb" for="hzLookName">Tên cần tra</label>
-    <input class="hz-look-input" id="hzLookName" type="text" autocomplete="off" maxlength="80" placeholder="Ví dụ: Nguyễn Minh Anh" onkeydown="if(event.key==='Enter')adminWidget.lookupBuild()">
-    <label class="hz-lb" for="hzLookExtra">Từ khoá thêm — không bắt buộc</label>
-    <input class="hz-look-input" id="hzLookExtra" type="text" autocomplete="off" maxlength="60" placeholder="Ví dụ: Quảng Ngãi, tên trường, lớp" onkeydown="if(event.key==='Enter')adminWidget.lookupBuild()">
-    <label class="hz-lb">Nền tảng cần mở</label>
-    <div class="hz-look-apps" id="hzLookApps">
-      <label class="hz-check"><input type="checkbox" value="facebook" checked><span>Facebook</span></label>
-      <label class="hz-check"><input type="checkbox" value="tiktok" checked><span>TikTok</span></label>
-      <label class="hz-check"><input type="checkbox" value="instagram" checked><span>Instagram</span></label>
-      <label class="hz-check"><input type="checkbox" value="threads"><span>Threads</span></label>
-      <label class="hz-check"><input type="checkbox" value="google" checked><span>Google</span></label>
+    <h4><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.3"/><path d="m15.2 15.2 4.3 4.3"/><circle cx="10.5" cy="8.9" r="1.7"/><path d="M7.6 14.1c.4-1.3 1.5-2 2.9-2s2.5.7 2.9 2"/></svg>Tra cứu người trong lớp</h4>
+    <p class="hz-hint" style="margin:0 0 8px;">Gõ tên để lọc học sinh trong lớp. App chỉ đọc <strong>tên, ảnh, link Facebook/TikTok</strong> đã lưu trong hồ sơ, không sửa dữ liệu và không gửi gì lên mạng. Khi mở link, hãy đối chiếu ảnh/trường/lớp trước khi kết luận.</p>
+
+    <label class="hz-lb" for="hzPersonSearch">Tìm trong lớp</label>
+    <div class="hz-person-bar">
+      <input class="hz-look-input" id="hzPersonSearch" type="text" autocomplete="off" maxlength="80" placeholder="Ví dụ: Nguyễn Minh Anh" aria-describedby="hzPersonCount" aria-controls="hzPersonList" oninput="adminWidget.lookupPeople(this.value)">
+      <button class="hz-person-clear" id="hzPersonClear" type="button" onclick="adminWidget.lookupPersonClear()" aria-label="Xoá nội dung tìm trong lớp" title="Xoá nội dung tìm" disabled>Xoá</button>
     </div>
-    <div class="hz-row" style="margin-top:0;">
-      <button class="hz-b" type="button" onclick="adminWidget.lookupAll()">Mở Google gộp 4 nền tảng</button>
-      <button class="hz-b ghost" type="button" onclick="adminWidget.lookupBuild()">Tạo link riêng</button>
-      <button class="hz-b ghost" type="button" onclick="adminWidget.lookupClear()">Xoá</button>
+    <p class="hz-person-count" id="hzPersonCount" role="status" aria-live="polite"></p>
+    <div class="hz-person-list" id="hzPersonList" role="group" aria-label="Kết quả tìm trong lớp"></div>
+    <p class="hz-note-msg" id="hzPersonMsg" role="status" aria-live="polite"></p>
+    <p class="hz-person-note">Cần bật social-analyzer trên máy cô. Kết quả của tool chỉ để tham khảo — Facebook/TikTok hay báo sai, phải mở link kiểm tra.</p>
+
+    <details class="hz-look-outside" id="hzLookOutside">
+      <summary>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.7 12h16.6M12 3.5c2.4 2.3 3.6 5.1 3.6 8.5S14.4 18.2 12 20.5c-2.4-2.3-3.6-5.1-3.6-8.5S9.6 5.8 12 3.5z"/></svg>
+        <span>Tìm ngoài lớp (Google, Facebook, TikTok)</span>
+        <svg class="hz-look-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      </summary>
+      <div class="hz-look-outside-body">
+        <p class="hz-hint" style="margin:8px 0;">Nhập tên rồi bấm <strong>Mở Google gộp 4 nền tảng</strong> để xem kết quả Facebook, TikTok, Instagram, Threads trên cùng một trang Google. Hoặc chọn nền tảng và bấm <strong>Tạo link riêng</strong>. App <strong>không tự lấy tài khoản, không lưu tên, không dùng IP hay vị trí</strong>. Kết quả có thể trùng tên người khác — mở xem, đối chiếu ảnh/trường/lớp rồi mới kết luận.</p>
+        <label class="hz-lb" for="hzLookName">Tên cần tra</label>
+        <input class="hz-look-input" id="hzLookName" type="text" autocomplete="off" maxlength="80" placeholder="Ví dụ: Nguyễn Minh Anh" onkeydown="if(event.key==='Enter')adminWidget.lookupBuild()">
+        <label class="hz-lb" for="hzLookExtra">Từ khoá thêm — không bắt buộc</label>
+        <input class="hz-look-input" id="hzLookExtra" type="text" autocomplete="off" maxlength="60" placeholder="Ví dụ: Quảng Ngãi, tên trường, lớp" onkeydown="if(event.key==='Enter')adminWidget.lookupBuild()">
+        <label class="hz-lb">Nền tảng cần mở</label>
+        <div class="hz-look-apps" id="hzLookApps">
+          <label class="hz-check"><input type="checkbox" value="facebook" checked><span>Facebook</span></label>
+          <label class="hz-check"><input type="checkbox" value="tiktok" checked><span>TikTok</span></label>
+          <label class="hz-check"><input type="checkbox" value="instagram" checked><span>Instagram</span></label>
+          <label class="hz-check"><input type="checkbox" value="threads"><span>Threads</span></label>
+          <label class="hz-check"><input type="checkbox" value="google" checked><span>Google</span></label>
+        </div>
+        <div class="hz-row" style="margin-top:0;">
+          <button class="hz-b" type="button" onclick="adminWidget.lookupAll()">Mở Google gộp 4 nền tảng</button>
+          <button class="hz-b ghost" type="button" onclick="adminWidget.lookupBuild()">Tạo link riêng</button>
+          <button class="hz-b ghost" type="button" onclick="adminWidget.lookupClear()">Xoá</button>
+        </div>
+        <p class="hz-note-msg" id="hzLookMsg" role="status" aria-live="polite"></p>
+        <div class="hz-look-links" id="hzLookLinks"></div>
+        <p class="hz-hint">Facebook, TikTok, Instagram và Threads thường bắt đăng nhập mới xem được. Instagram không có ô tìm theo tên khi chưa đăng nhập nên app lọc qua Google. <strong>Zalo</strong> không có trang tìm người theo tên công khai — chỉ tìm được bằng số điện thoại trong app. Chỉ mở để tự đối chiếu, không thu thập hay chuyển tiếp thông tin của học sinh.</p>
+      </div>
+    </details>
+
+    <div class="hz-person-pos" role="group" aria-label="Vị trí tab Tra cứu trong Menu Admin">
+      <span class="hz-person-pos-lab">Vị trí tab:</span>
+      <button class="hz-person-pos-btn" id="hzLookPosLeft" type="button" onclick="adminWidget.lookupPos(-1)" aria-label="Chuyển tab Tra cứu sang trái" title="Chuyển sang trái">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+      </button>
+      <button class="hz-person-pos-btn" id="hzLookPosRight" type="button" onclick="adminWidget.lookupPos(1)" aria-label="Chuyển tab Tra cứu sang phải" title="Chuyển sang phải">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
+      <span class="hz-person-pos-hint">Lưu trên máy này</span>
     </div>
-    <p class="hz-note-msg" id="hzLookMsg" role="status" aria-live="polite"></p>
-    <div class="hz-look-links" id="hzLookLinks"></div>
-    <p class="hz-hint">Facebook, TikTok, Instagram và Threads thường bắt đăng nhập mới xem được. Instagram không có ô tìm theo tên khi chưa đăng nhập nên app lọc qua Google. <strong>Zalo</strong> không có trang tìm người theo tên công khai — chỉ tìm được bằng số điện thoại trong app. Chỉ mở để tự đối chiếu, không thu thập hay chuyển tiếp thông tin của học sinh.</p>
   </div>
 
   <div class="hz-sec" data-hzsec="iplog">
@@ -21651,6 +21751,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     var POS_KEY = 'hoanghao_admin_widget_pos';
     var OPEN_KEY = 'hoanghao_admin_widget_open';
     var TAB_KEY = 'hoanghao_admin_widget_tab';
+    var LOOKUP_POS_KEY = 'hoanghao_admin_lookup_pos';
     var SIZE_KEY = 'hoanghao_admin_widget_size';
     var SCALE_KEY = 'hoanghao_admin_widget_scale';
     var TABS = ['class', 'users', 'lookup', 'iplog', 'mast', 'unlock', 'model', 'lock', 'caro', 'gas', 'ai'];
@@ -21734,6 +21835,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     }
     function isOpen() { return panel.classList.contains('show'); }
     function open() {
+      lookupRestorePos();
       applyPanelSize();
       panel.classList.add('show'); btn.classList.add('show');
       if (grip) grip.classList.add('show');
@@ -21879,7 +21981,306 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       try { if (nameEl) nameEl.focus(); } catch (e) { }
     }
 
-    window.adminWidget = { close: close, open: open, toggle: toggle, tab: setTab, zoom: zoomMenu, lookupBuild: lookupBuild, lookupAll: lookupAll, lookupClear: lookupClear, mastUi: function () { mastUi(); }, applyMast: applyMast, maxMast: maxMast, unlockUi: function () { unlockUi(); }, doUnlock: doUnlock, unlockAll: unlockAll, modelUi: function () { modelUi(); }, doModel: doModel, grantAllModels: grantAllModels, lockUi: function () { lockUi(); }, lockAll: lockAll, lockOpen: lockOpen, lockOpenAll: lockOpenAll, lockSelAll: lockSelAll, lockSelLocked: lockSelLocked, lockSecTick: lockSecTick, hintUi: function () { hintUi(); }, hintSave: hintSave, gasUi: function () { gasUi(); }, gasSave: gasSave };
+    var PERSON_FB_RESERVED = {
+      'profile.php': 1, 'share': 1, 'people': 1, 'watch': 1, 'groups': 1, 'reel': 1, 'reels': 1,
+      'stories': 1, 'photo': 1, 'video': 1, 'p': 1, 'events': 1, 'pages': 1, 'marketplace': 1,
+      'gaming': 1, 'login': 1, 'help': 1, 'privacy': 1, 'policies': 1, 'settings': 1,
+      'friends': 1, 'messages': 1, 'notifications': 1, 'search': 1, 'bookmarks': 1,
+      'live': 1, 'hashtag': 1, 'ads': 1
+    };
+
+    function personNorm(v) {
+      var s = String(v == null ? '' : v);
+      try { s = s.normalize('NFD').replace(/[\u0300-\u036f]/g, ''); } catch (e) { }
+      return s.replace(/[đĐ]/g, 'd').toLowerCase().replace(/\s+/g, ' ').trim();
+    }
+    function personInitial(name) {
+      var s = String(name || '').trim();
+      if (!s) return '?';
+      try { return Array.from(s)[0].toUpperCase(); } catch (e) { return s.charAt(0).toUpperCase(); }
+    }
+    function personHref(value) {
+      var raw = String(value == null ? '' : value).trim();
+      if (!raw) return '';
+      var href = '';
+      try { href = typeof safeSocialHref === 'function' ? safeSocialHref(raw) : ''; } catch (e) { href = ''; }
+      if (!href) {
+        var guess = /^https?:\/\//i.test(raw) ? raw : 'https://' + raw;
+        try {
+          var u0 = new URL(guess);
+          if (u0.protocol === 'http:' || u0.protocol === 'https:') href = guess;
+        } catch (e) { }
+      }
+      if (!href) return '';
+      try {
+        var u = new URL(href);
+        return (u.protocol === 'http:' || u.protocol === 'https:') ? u.href : '';
+      } catch (e) { return ''; }
+    }
+    function personAvatarSrc(v) {
+      var s = String(v == null ? '' : v).trim();
+      if (!s) return '';
+      if (/^data:image\/(?:png|jpe?g|webp|gif);base64,[A-Za-z0-9+/=\s]+$/i.test(s)) return s;
+      if (/^https?:\/\//i.test(s)) {
+        try {
+          var u = new URL(s);
+          if (u.protocol === 'http:' || u.protocol === 'https:') return u.href;
+        } catch (e) { }
+      }
+      return '';
+    }
+    function personParse(kind, value) {
+      var href = personHref(value);
+      if (!href) return null;
+      var u;
+      try { u = new URL(href); } catch (e) { return null; }
+      var host = u.hostname.toLowerCase(), user = '', why = '';
+      if (kind === 'facebook') {
+        if (!/^(?:www\.|m\.|web\.)?facebook\.com$/.test(host)) return null;
+        var parts = u.pathname.split('/').filter(Boolean);
+        var first = parts.length ? parts[0] : '';
+        var low = first.toLowerCase();
+        var decoded = first;
+        try { decoded = decodeURIComponent(first); } catch (e) { }
+        if (!first) why = 'Link Facebook này không có tên trang cá nhân nên không lấy được username.';
+        else if (/\.php$/i.test(first) || PERSON_FB_RESERVED[low]) why = 'Link Facebook dạng profile.php, share, people… không phải trang cá nhân nên không lấy được username.';
+        else if (!/^[A-Za-z0-9._-]{2,80}$/.test(decoded) || /^\d+$/.test(decoded)) why = 'Link Facebook này không phải trang cá nhân nên không lấy được username.';
+        else user = decoded;
+      } else {
+        if (!/^(?:www\.|m\.)?tiktok\.com$/.test(host)) return null;
+        var m = /^\/(@[A-Za-z0-9._]{2,24})(?:\/(?:video|photo)\/[^/]+)?\/?$/i.exec(u.pathname);
+        if (!m) why = 'Link TikTok này không phải trang cá nhân nên không lấy được username.';
+        else user = m[1].slice(1);
+      }
+      return { href: href, user: user, why: why };
+    }
+    function personLinkHtml(kind, p, name) {
+      var label = kind === 'facebook' ? 'Facebook' : 'TikTok';
+      var icon = kind === 'facebook'
+        ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8.5h2.2V5.4h-2.2c-2.3 0-3.8 1.5-3.8 3.9v1.9H8v3.1h2.2V21h3.2v-6.7h2.4l.5-3.1h-2.9V9.5c0-.7.3-1 .6-1z"/></svg>'
+        : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4v9.6a4.2 4.2 0 1 1-3.7-4.2"/><path d="M14 4c.5 2.3 2 3.8 4.4 4.1"/></svg>';
+      return '<a class="hz-person-link" href="' + lookEsc(p.href) + '" target="_blank" rel="noopener noreferrer" title="Mở ' + label + ' của ' + lookEsc(name) + '">' +
+        icon + '<b>' + label + '</b><span>' + lookEsc(lookShow(p.href)) + '</span></a>';
+    }
+    function personSoiButtons(items) {
+      var seen = {}, out = [], i;
+      for (i = 0; i < items.length; i++) {
+        var it = items[i];
+        if (!it || !it.user) continue;
+        var key = it.user.toLowerCase();
+        if (seen[key]) { if (it.at) seen[key].at = true; continue; }
+        var rec = { user: it.user, at: !!it.at };
+        seen[key] = rec; out.push(rec);
+      }
+      var html = '';
+      for (i = 0; i < out.length; i++) {
+        var shown = (out[i].at ? '@' : '') + out[i].user;
+        html += '<button class="hz-person-soi" type="button" onclick="adminWidget.lookupSoi(this)" data-soi="' + lookEsc(out[i].user) + '"' +
+          (out[i].at ? ' data-at="1"' : '') + ' aria-label="Soi username ' + lookEsc(shown) + ' trên social-analyzer" title="Copy username và mở social-analyzer">' +
+          '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="5.8"/><path d="m14.8 14.8 4.2 4.2"/></svg>' +
+          '<span>Soi username</span><b>' + lookEsc(shown) + '</b></button>';
+      }
+      return html;
+    }
+    function personCardHtml(st) {
+      var name = lookClean(st && st.name, 80);
+      if (!name) return '';
+      var avatar = personAvatarSrc(st && st.avatar);
+      var links = (st && st.links && typeof st.links === 'object') ? st.links : {};
+      var fb = personParse('facebook', links.facebook);
+      var tt = personParse('tiktok', links.tiktok);
+      var actions = '', soi = [], reasons = [];
+      if (fb) {
+        actions += personLinkHtml('facebook', fb, name);
+        if (fb.user) soi.push({ user: fb.user, at: false });
+        else if (fb.why) reasons.push(fb.why);
+      }
+      if (tt) {
+        actions += personLinkHtml('tiktok', tt, name);
+        if (tt.user) soi.push({ user: tt.user, at: true });
+        else if (tt.why) reasons.push(tt.why);
+      }
+      actions += personSoiButtons(soi);
+      if (!actions) actions = '<span class="hz-person-nolink">Chưa cập nhật Facebook/TikTok</span>';
+      else if (reasons.length) actions += '<span class="hz-person-why">' + lookEsc(reasons.join(' ')) + '</span>';
+      var av = avatar
+        ? '<img src="' + lookEsc(avatar) + '" alt="">'
+        : lookEsc(personInitial(name));
+      return '<div class="hz-person-card"><span class="hz-person-av">' + av + '</span>' +
+        '<div class="hz-person-main"><p class="hz-person-name">' + lookEsc(name) + '</p>' +
+        '<div class="hz-person-actions">' + actions + '</div></div></div>';
+    }
+    function personMsg(html, warn) {
+      var m = el('hzPersonMsg');
+      if (!m) return;
+      m.innerHTML = html || '';
+      m.classList.toggle('warn', !!warn);
+    }
+    function lookupPeople(value) {
+      if (!isAdmin()) return;
+      var input = el('hzPersonSearch'), list = el('hzPersonList'), count = el('hzPersonCount'), clr = el('hzPersonClear');
+      if (!input || !list) return;
+      var raw = lookClean(value === undefined ? input.value : value, 80);
+      if (clr) clr.disabled = !raw;
+      var arr = [];
+      try { arr = (typeof state !== 'undefined' && state && Array.isArray(state.students)) ? state.students : []; } catch (e) { arr = []; }
+      if (!arr.length) {
+        if (count) count.textContent = 'Chưa tải được danh sách lớp.';
+        list.innerHTML = '<p class="hz-person-empty">Chưa tải được danh sách lớp.</p>';
+        return;
+      }
+      var kw = personNorm(raw);
+      if (kw.length < 2) {
+        if (count) count.textContent = raw
+          ? 'Gõ thêm một chữ cái nữa để tìm trong lớp.'
+          : 'Có ' + arr.length + ' học sinh trong lớp. Gõ ít nhất 2 chữ cái để tìm.';
+        list.innerHTML = '';
+        return;
+      }
+      var found = [], i;
+      for (i = 0; i < arr.length; i++) {
+        var st = arr[i];
+        var name = lookClean(st && st.name, 80);
+        if (!name) continue;
+        var n = personNorm(name), rank = -1;
+        if (n === kw) rank = 0;
+        else if (n.indexOf(kw) === 0) rank = 1;
+        else if (n.indexOf(kw) > 0) rank = 2;
+        if (rank >= 0) found.push({ st: st, name: name, rank: rank });
+      }
+      found.sort(function (a, b) {
+        if (a.rank !== b.rank) return a.rank - b.rank;
+        try { return a.name.localeCompare(b.name, 'vi'); } catch (e) { return a.name < b.name ? -1 : (a.name > b.name ? 1 : 0); }
+      });
+      if (count) count.textContent = 'Tìm thấy ' + found.length + ' người khớp “' + raw + '”';
+      if (!found.length) {
+        list.innerHTML = '<p class="hz-person-empty">Không tìm thấy ai khớp “<b>' + lookEsc(raw) + '</b>”.<br>' +
+          '<button class="hz-b sm ghost" type="button" onclick="adminWidget.lookupOutside()">Tìm ngoài lớp</button><br>' +
+          '<span>Thử tên ngắn hơn hoặc tìm trên Google, Facebook, TikTok.</span></p>';
+        return;
+      }
+      var html = '';
+      for (i = 0; i < found.length; i++) html += personCardHtml(found[i].st);
+      list.innerHTML = html;
+    }
+    function lookupPersonClear() {
+      if (!isAdmin()) return;
+      var input = el('hzPersonSearch');
+      if (input) input.value = '';
+      personMsg('');
+      lookupPeople('');
+      try { if (input) input.focus(); } catch (e) { }
+    }
+    function lookupCopyText(text, done) {
+      var s = String(text == null ? '' : text);
+      function fallback() {
+        try {
+          var ta = document.createElement('textarea');
+          ta.value = s; ta.setAttribute('readonly', '');
+          ta.style.position = 'fixed'; ta.style.top = '-1000px'; ta.style.left = '0'; ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          try { ta.setSelectionRange(0, s.length); } catch (e) { }
+          var ok = false;
+          try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+          if (ta.parentNode) ta.parentNode.removeChild(ta);
+          return !!ok;
+        } catch (e) { return false; }
+      }
+      try {
+        if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+          navigator.clipboard.writeText(s).then(function () { done(true); }, function () { done(fallback()); });
+          return;
+        }
+      } catch (e) { }
+      done(fallback());
+    }
+    function lookupSoi(btn) {
+      if (!isAdmin() || !btn) return;
+      var user = String(btn.getAttribute('data-soi') || '').trim();
+      if (!user) return;
+      var at = btn.getAttribute('data-at') === '1';
+      var tool = 'http://localhost:9005/app.html';
+      var shown = (at ? '@' : '') + user;
+      try { window.open(tool, '_blank', 'noopener'); } catch (e) { }
+      lookupCopyText(user, function (ok) {
+        if (ok) {
+          personMsg('Đã copy ' + lookEsc(shown) + '. Dán vào ô Enter Profile Name trong social-analyzer rồi bấm Analyze.<br>' +
+            'Nếu tool chưa tự mở, bấm <a href="' + tool + '" target="_blank" rel="noopener noreferrer">' + tool + '</a>.');
+        } else {
+          personMsg('Không copy tự động được. Bấm vào username bên dưới rồi copy thủ công (Ctrl+C).<br>' +
+            '<code class="hz-person-copy">' + lookEsc(user) + '</code><br>' +
+            'Tool: <a href="' + tool + '" target="_blank" rel="noopener noreferrer">' + tool + '</a>.', true);
+        }
+      });
+    }
+    function lookupOutside() {
+      if (!isAdmin()) return;
+      var input = el('hzPersonSearch'), nameEl = el('hzLookName'), box = el('hzLookOutside');
+      var kw = lookClean(input && input.value, 80);
+      if (kw.length < 2) {
+        personMsg('Nhập ít nhất 2 chữ cái của tên trước khi tìm ngoài lớp.', true);
+        try { if (input) input.focus(); } catch (e) { }
+        return;
+      }
+      if (nameEl) nameEl.value = kw;
+      if (box) {
+        box.open = true;
+        try { box.scrollIntoView({ block: 'nearest' }); } catch (e) { }
+      }
+      lookupAll();
+    }
+    function lookupTabIndex() {
+      var bar = el('hzAdminTabs');
+      if (!bar) return -1;
+      var tabs = bar.querySelectorAll('.hz-tab');
+      for (var i = 0; i < tabs.length; i++) if (tabs[i].getAttribute('data-hztab') === 'lookup') return i;
+      return -1;
+    }
+    function lookupRefreshPosButtons() {
+      var bar = el('hzAdminTabs');
+      var n = bar ? bar.querySelectorAll('.hz-tab').length : 0;
+      var i = lookupTabIndex();
+      var l = el('hzLookPosLeft'), r = el('hzLookPosRight');
+      if (l) l.disabled = !(i > 0);
+      if (r) r.disabled = !(i >= 0 && i < n - 1);
+    }
+    function lookupRestorePos() {
+      var bar = el('hzAdminTabs');
+      if (!bar) return;
+      var tabs = bar.querySelectorAll('.hz-tab');
+      if (!tabs.length) return;
+      var btn = bar.querySelector('.hz-tab[data-hztab="lookup"]');
+      if (!btn) return;
+      var idx = NaN;
+      try { idx = parseInt(localStorage.getItem(LOOKUP_POS_KEY), 10); } catch (e) { }
+      if (!isFinite(idx) || idx < 0 || idx >= tabs.length) { lookupRefreshPosButtons(); return; }
+      if (lookupTabIndex() !== idx) {
+        var others = [];
+        for (var i = 0; i < tabs.length; i++) if (tabs[i] !== btn) others.push(tabs[i]);
+        if (idx >= others.length) bar.appendChild(btn);
+        else bar.insertBefore(btn, others[idx]);
+      }
+      lookupRefreshPosButtons();
+    }
+    function lookupPos(dir) {
+      if (!isAdmin()) return;
+      var bar = el('hzAdminTabs');
+      if (!bar) return;
+      var btn = bar.querySelector('.hz-tab[data-hztab="lookup"]');
+      var i = lookupTabIndex();
+      var tabs = bar.querySelectorAll('.hz-tab');
+      var j = i + (dir < 0 ? -1 : 1);
+      if (!btn || i < 0 || j < 0 || j >= tabs.length) { lookupRefreshPosButtons(); return; }
+      var ref = tabs[j];
+      if (j > i) bar.insertBefore(btn, ref.nextSibling);
+      else bar.insertBefore(btn, ref);
+      try { localStorage.setItem(LOOKUP_POS_KEY, String(lookupTabIndex())); } catch (e) { }
+      lookupRefreshPosButtons();
+      try { btn.scrollIntoView({ block: 'nearest', inline: 'nearest' }); } catch (e) { }
+    }
+
+    window.adminWidget = { close: close, open: open, toggle: toggle, tab: setTab, zoom: zoomMenu, lookupBuild: lookupBuild, lookupAll: lookupAll, lookupClear: lookupClear, lookupPeople: lookupPeople, lookupPersonClear: lookupPersonClear, lookupSoi: lookupSoi, lookupOutside: lookupOutside, lookupPos: lookupPos, mastUi: function () { mastUi(); }, applyMast: applyMast, maxMast: maxMast, unlockUi: function () { unlockUi(); }, doUnlock: doUnlock, unlockAll: unlockAll, modelUi: function () { modelUi(); }, doModel: doModel, grantAllModels: grantAllModels, lockUi: function () { lockUi(); }, lockAll: lockAll, lockOpen: lockOpen, lockOpenAll: lockOpenAll, lockSelAll: lockSelAll, lockSelLocked: lockSelLocked, lockSecTick: lockSecTick, hintUi: function () { hintUi(); }, hintSave: hintSave, gasUi: function () { gasUi(); }, gasSave: gasSave };
 
     function setTab(id) {
       if (TABS.indexOf(id) < 0) return;
@@ -21903,6 +22304,9 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
         try { if (typeof window.aiCommandCenterOpen === 'function') window.aiCommandCenterOpen(); } catch (e) { }
       } else if (curTab === 'users') {
         try { if (typeof renderAdminUserManagement === 'function') renderAdminUserManagement(); } catch (e) { }
+      } else if (curTab === 'lookup') {
+        lookupPeople();
+        lookupRefreshPosButtons();
       } else if (curTab === 'iplog') {
         try { if (window.ipLogApi && typeof window.ipLogApi.render === 'function') window.ipLogApi.render(); } catch (e) { }
       } else if (curTab === 'mast') { mastUi(); } else if (curTab === 'unlock') { unlockUi(); }
@@ -22683,6 +23087,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       curTab = TABS.indexOf(saved) >= 0 ? saved : 'class';
       loadScale();
       loadPanelSize();
+      lookupRestorePos();
       applyTab();
       loadPos(); place();
       bindDrag(btn, false);
