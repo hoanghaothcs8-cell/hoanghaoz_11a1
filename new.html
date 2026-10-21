@@ -3176,6 +3176,17 @@
   overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .hz-ip-gps:hover { color:#bae6fd !important; text-decoration:underline; }
 .hz-ip-gps svg { width:11px; height:11px; flex:0 0 auto; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+.hz-hist-stack { display:inline-flex; flex-direction:column; align-items:center; gap:3px; max-width:100%; }
+.hz-gps-lv { display:inline-block; padding:1px 4px; border-radius:5px; border:1px solid transparent;
+  font-size:8.5px; line-height:1.4; font-weight:800; white-space:nowrap; letter-spacing:.1px; }
+.hz-gps-lv[data-tone="high"] { color:#86efac; background:rgba(34,197,94,.10); border-color:rgba(34,197,94,.26); }
+.hz-gps-lv[data-tone="mid"] { color:#fcd34d; background:rgba(245,158,11,.10); border-color:rgba(245,158,11,.26); }
+.hz-gps-lv[data-tone="low"] { color:#fca5a5; background:rgba(239,68,68,.10); border-color:rgba(239,68,68,.26); }
+.hz-gps-lv[data-tone="none"] { color:#94a3b8; background:rgba(148,163,184,.08); border-color:rgba(148,163,184,.2); }
+@media (max-width:760px) {
+  .hz-gps-lv { white-space:normal; overflow-wrap:anywhere; max-width:100%; box-sizing:border-box;
+    font-size:8px; line-height:1.3; text-align:center; }
+}
 .hz-note-gps { display:flex; align-items:center; gap:8px; margin:2px 0 9px; padding:8px 10px; border-radius:10px;
   background:rgba(56,189,248,.08); border:1px solid rgba(56,189,248,.22); color:#bae6fd !important; text-decoration:none; }
 .hz-note-gps:hover { background:rgba(56,189,248,.14); text-decoration:none; }
@@ -20583,6 +20594,22 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     if (changed) noteStore();
   }
 
+  function noteGpsLevel(acc) {
+    var a = Number(acc) || 0;
+    if (!a) return { label: 'chưa rõ', tone: 'none' };
+    if (a <= 30) return { label: 'cao', tone: 'high' };
+    if (a <= 100) return { label: 'trung bình', tone: 'mid' };
+    return { label: 'thấp', tone: 'low' };
+  }
+
+  function noteGpsAccTag(acc) {
+    var a = Number(acc) || 0;
+    var lv = noteGpsLevel(a);
+    return '<span class="hz-gps-lv" data-tone="' + lv.tone + '" title="Sai số ước lượng' +
+      (a ? ' ±' + a + ' m' : '') + ' — mức ' + lv.label + '">(' + lv.label + ')' +
+      (a ? ' - ±' + a + ' m' : '') + '</span>';
+  }
+
   function noteHistHtml(title, logs, gps) {
     var gpsHtml = '';
     if (gps && isFinite(Number(gps.lat)) && isFinite(Number(gps.lon))) {
@@ -20591,7 +20618,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       gpsHtml = '<a class="hz-note-gps" href="https://www.google.com/maps/search/?api=1&query=' +
         Number(gps.lat) + ',' + Number(gps.lon) + '" target="_blank" rel="noopener">' + NOTE_PIN +
         '<span><b>Vị trí chính xác do máy gửi</b><em>' +
-        escapeHtml((gt || 'Chưa rõ giờ') + (ga ? ' · sai số ±' + ga + ' m' : '') + ' · bấm để mở Google Maps') +
+        escapeHtml(gt || 'Chưa rõ giờ') + ' · ' + noteGpsAccTag(ga) + ' · bấm để mở Google Maps' +
         '</em></span>' + NOTE_OPEN + '</a>';
     }
     var items = (logs || []).map(function (r) {
@@ -20656,6 +20683,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       var fullWhen = ipInfo.at ? noteLogTime(ipInfo.at).full : '';
       var gps = ipInfo.gps || null;
       var gpsWhen = gps && gps.at ? noteShortWhen(gps.at) : '';
+      var gpsTag = gps ? noteGpsAccTag(gps.acc) : '';
       var gpsHtml = gps
         ? '<a class="hz-ip-gps" href="https://www.google.com/maps/search/?api=1&query=' + Number(gps.lat) + ',' + Number(gps.lon) +
           '" target="_blank" rel="noopener" title="Vị trí do máy học sinh gửi khi bấm Bật quyền' +
@@ -20696,7 +20724,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
           (lastAddr ? '<span class="hz-ip-where">' + escapeHtml(lastAddr) + '</span>' : '') +
           gpsHtml +
         '</div></td>' +
-        '<td class="hz-note-hist-cell">' + histBtn + '</td>' +
+        '<td class="hz-note-hist-cell"><div class="hz-hist-stack">' + histBtn + gpsTag + '</div></td>' +
         '<td class="hz-note-bts"><button class="hz-b sm danger" type="button" data-clear="' + escapeHtml(name) + '">Xóa ghi</button></td>' +
         '</tr>' + histRow;
     }).join('');
