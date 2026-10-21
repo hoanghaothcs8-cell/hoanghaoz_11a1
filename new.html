@@ -20681,7 +20681,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
   function hzGeoFetchJson(url, ms) {
     var ctl = window.AbortController ? new AbortController() : null;
     var timer = setTimeout(function () { if (ctl) { try { ctl.abort(); } catch (e) { } } }, ms || 8000);
-    var opts = { headers: { 'Accept': 'application/json' } };
+    var opts = { headers: { 'Accept': 'application/json' }, cache: 'no-store' };
     if (ctl) opts.signal = ctl.signal;
     return fetch(url, opts).then(function (r) {
       clearTimeout(timer);
