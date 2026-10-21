@@ -1425,99 +1425,169 @@
   @keyframes hzSplashZ { 0%,100% { transform:translateY(9%) scale(1); } 50% { transform:translateY(2%) scale(1.05); } }
 
   /* ============================================================
-     14. TRIAL — khu luyen tap phan cap 3 tang:
-         Mon hoc (1) > Khoi (2) > Danh sach bai tap (3).
-         CHI THEM MOI — khong ghi de bat ky quy tac nao o tren.
+     14. TRIAL — 6 môn > lớp > 2 tập > một mục lục gộp > bài học.
+         Điều hướng nằm trọn trong #trialTab (không mở tab mới).
          ============================================================ */
   #trialTab { --hz-tab:#fb923c; }
-  .trial-head { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+  #trialTab [hidden] { display:none !important; }
+  #trialTab button:focus-visible { outline:2px solid #fb923c; outline-offset:2px; }
+
+  .trial-head { display:flex; align-items:flex-start; justify-content:space-between; gap:10px 18px; flex-wrap:wrap; }
+  .trial-title { flex:1 1 280px; min-width:0; }
   .trial-head h2 { margin-bottom:0 !important; }
-  .trial-crumb { display:flex; align-items:center; gap:8px; flex-wrap:wrap; font-size:11px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:#6f677f; }
-  .trial-crumb button { padding:0 !important; border:0 !important; border-radius:0 !important; background:transparent !important; box-shadow:none !important; color:#8d84a0; font-size:11px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; }
-  .trial-crumb button:hover { background:transparent !important; color:#fdba74 !important; transform:none; }
-  .trial-crumb .here { color:var(--hz-tab); }
+  .trial-tip { color:var(--text-muted); font-size:11.5px; line-height:1.6; margin:7px 0 0; max-width:680px; }
+
+  .trial-crumb { display:flex; align-items:center; gap:6px; flex-wrap:wrap; min-width:0; max-width:100%; font-size:10.5px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#6f677f; }
   .trial-crumb .sep { color:#3f3b52; }
-  .trial-tip { color:var(--text-muted); font-size:11.5px; line-height:1.6; margin:8px 0 16px; }
+  .trial-crumb .here { color:var(--hz-tab); font-weight:900; overflow-wrap:anywhere; }
+  .trial-crumb button { padding:0 !important; border:0 !important; border-radius:0 !important; background:transparent !important; box-shadow:none !important; color:#8d84a0; font-size:10.5px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; }
+  .trial-crumb button:hover { background:transparent !important; color:#fdba74 !important; transform:none; }
+  .trial-crumb .crumb-mid, .trial-crumb .crumb-more-wrap { display:inline-flex; align-items:center; gap:6px; min-width:0; }
+  .trial-crumb .crumb-more-wrap { display:none; }
+  .trial-crumb button.crumb-more { padding:0 3px !important; color:#8d84a0 !important; font-size:13px !important; letter-spacing:0; line-height:1; }
+  .trial-crumb button.crumb-more:hover { color:#fdba74 !important; }
+
   .trial-level { display:none; }
   .trial-level.active { display:block; animation:hzTabIn .3s ease both; }
+  .trial-back { margin:0 0 12px; }
+  button.trial-ghost { padding:8px 14px !important; background:rgba(255,255,255,.05) !important; border:1px solid var(--hz-line) !important; box-shadow:none !important; color:#d4c9e2 !important; font-size:12px; font-weight:700; }
+  button.trial-ghost:hover { background:rgba(251,146,60,.13) !important; border-color:rgba(251,146,60,.38) !important; color:#fdba74 !important; }
 
   .trial-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
+  .trial-grid-2 { grid-template-columns:repeat(2,minmax(0,1fr)); }
   @media (max-width:900px) { .trial-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+  @media (max-width:760px) { .trial-grid-2 { grid-template-columns:1fr; } }
   @media (max-width:560px) { .trial-grid { grid-template-columns:1fr; } }
+
   button.trial-card { position:relative; display:flex; flex-direction:column; align-items:flex-start; gap:8px; width:100%; min-height:158px; text-align:left; padding:16px !important; border:1px solid rgba(192,132,252,.16) !important; border-radius:14px !important; background:linear-gradient(150deg,rgba(29,19,47,.9),rgba(12,8,20,.86)) !important; box-shadow:inset 0 1px 0 rgba(255,255,255,.04) !important; color:var(--text-main); }
   button.trial-card:hover { border-color:rgba(251,146,60,.45) !important; background:linear-gradient(150deg,rgba(38,24,58,.94),rgba(16,10,26,.9)) !important; box-shadow:0 16px 32px rgba(0,0,0,.34) !important; transform:translateY(-2px); }
   .trial-card::after { content:''; position:absolute; left:0; top:10px; bottom:10px; width:3px; border-radius:0 4px 4px 0; background:linear-gradient(180deg,var(--hz-tab),rgba(251,146,60,.1)); opacity:.6; }
   .trial-card-ico { display:inline-flex; align-items:center; justify-content:center; width:38px; height:38px; flex:0 0 38px; border-radius:12px; background:rgba(251,146,60,.13); color:#fdba74; border:1px solid rgba(251,146,60,.24); }
   .trial-card-ico svg { width:20px; height:20px; stroke:currentColor; fill:none; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
   .trial-card-name { font-size:15px; font-weight:800; letter-spacing:-.01em; color:#f3e8ff; }
-  .trial-card-sub { font-size:9.5px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:#8d84a0; }
-  .trial-card p { flex:1; width:100%; color:#c4b5d4; font-size:12px; line-height:1.55; }
-  .trial-card-foot { display:flex; align-items:center; gap:8px; flex-wrap:wrap; font-size:11px; color:#a99dbd; }
+  .trial-card-sub { font-size:9.5px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:#8d84a0; line-height:1.5; }
+  .trial-card-desc { display:block; flex:1; width:100%; color:#c4b5d4; font-size:12px; line-height:1.55; }
+  .trial-card-foot { display:flex; align-items:center; gap:8px; flex-wrap:wrap; width:100%; font-size:11px; color:#a99dbd; }
+  .trial-card-note { display:block; width:100%; font-size:10.5px; line-height:1.55; color:#8d84a0; }
+  .trial-card-badge { position:absolute; top:12px; right:12px; padding:3px 8px; border-radius:999px; font-size:9px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; color:#c4b5fd; background:rgba(129,140,248,.12); border:1px solid rgba(129,140,248,.28); }
+  button.trial-card.is-soon { border-style:dashed !important; border-color:rgba(192,132,252,.24) !important; background:rgba(17,11,28,.62) !important; }
+  button.trial-card.is-soon:hover { border-color:rgba(251,146,60,.35) !important; }
+  .trial-card.is-soon .trial-card-ico { background:rgba(192,132,252,.1); border-color:rgba(192,132,252,.2); color:#c4b5fd; }
+  .trial-card.is-soon .trial-card-name { color:#d8cfe6; }
   .trial-pill { padding:4px 10px; border-radius:999px; font-size:10.5px; font-weight:800; letter-spacing:.04em; color:#fdba74; background:rgba(251,146,60,.14); border:1px solid rgba(251,146,60,.28); }
+  .trial-pill.is-done { color:#86efac; background:rgba(34,197,94,.13); border-color:rgba(34,197,94,.3); }
+  .trial-bar { display:block; width:100%; height:6px; border-radius:999px; background:rgba(255,255,255,.07); overflow:hidden; }
+  .trial-bar > span { display:block; height:100%; border-radius:999px; background:linear-gradient(90deg,#ea580c,#fdba74); }
 
-  .trial-back { margin-bottom:14px; }
-  .trial-toolbar { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:14px; }
-  button.trial-ghost { padding:8px 14px !important; background:rgba(255,255,255,.05) !important; border:1px solid var(--hz-line) !important; box-shadow:none !important; color:#d4c9e2 !important; font-size:12px; font-weight:700; }
-  button.trial-ghost:hover { background:rgba(251,146,60,.13) !important; border-color:rgba(251,146,60,.38) !important; color:#fdba74 !important; }
-  .trial-filter { height:38px !important; width:auto !important; min-width:190px; flex:0 1 auto; margin-left:auto; padding:0 10px; font-size:12.5px; }
+  .trial-toc-head { margin:0 0 14px; padding:14px 16px; border:1px solid var(--hz-line); border-radius:14px; background:linear-gradient(150deg,rgba(30,19,48,.85),rgba(12,8,20,.8)); }
+  .trial-toc-title { margin:0; font-size:16px; font-weight:900; line-height:1.4; color:#f3e8ff; overflow-wrap:anywhere; }
+  .trial-toc-meta { display:flex; align-items:center; gap:5px 14px; flex-wrap:wrap; margin-top:6px; font-size:11.5px; color:#b9aecb; }
+  .trial-toc-meta b { color:#fdba74; }
+  .trial-toc-src { margin-top:7px; font-size:10.5px; line-height:1.6; color:#8d84a0; }
+  .trial-toc-note { margin-top:4px; font-size:10.5px; line-height:1.6; color:#7f7591; }
+
+  .trial-toc { display:flex; flex-direction:column; gap:13px; }
+  .trial-ch { border:1px solid rgba(192,132,252,.16); border-radius:14px; background:rgba(16,10,26,.5); overflow:hidden; }
+  .trial-ch-head { display:flex; align-items:flex-start; gap:10px; flex-wrap:wrap; padding:12px 14px; border-bottom:1px solid rgba(192,132,252,.12); background:rgba(255,255,255,.02); }
+  .trial-ch-main { flex:1 1 220px; min-width:0; }
+  .trial-ch-title { display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; font-size:13.5px; font-weight:900; line-height:1.5; color:#f3e8ff; overflow-wrap:anywhere; }
+  .trial-ch-no { color:#fdba74; font-size:10.5px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; }
+  .trial-ch-n { font-size:10.5px; font-weight:700; color:#8d84a0; white-space:nowrap; }
+  .trial-ch-rows { display:flex; flex-direction:column; gap:7px; margin:0 12px 12px 15px; padding:9px 0 0 12px; border-left:1px solid rgba(192,132,252,.17); }
+  button.trial-ch-kt { flex:0 0 auto; padding:6px 11px !important; border:1px solid rgba(251,146,60,.32) !important; border-radius:999px !important; background:rgba(251,146,60,.1) !important; box-shadow:none !important; color:#fdba74 !important; font-size:10.5px; font-weight:800; letter-spacing:.02em; white-space:nowrap; }
+  button.trial-ch-kt:hover { background:rgba(251,146,60,.2) !important; border-color:rgba(251,146,60,.5) !important; }
 
   .trial-list { display:flex; flex-direction:column; gap:9px; }
-  .trial-group { margin:12px 0 2px; font-size:10px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:#8d84a0; }
-  .trial-row { display:flex; align-items:center; gap:12px; padding:11px 14px; border:1px solid var(--hz-line); border-radius:13px; background:linear-gradient(150deg,rgba(24,15,42,.8),rgba(11,8,19,.78)); transition:border-color .2s ease, box-shadow .2s ease, transform .2s ease; }
-  .trial-row:hover { border-color:rgba(251,146,60,.38) !important; box-shadow:var(--hz-glow); transform:translateY(-2px); }
-  .trial-row.is-done { border-color:rgba(34,197,94,.3) !important; }
+  .trial-row { display:flex; align-items:center; gap:10px; padding:9px 12px; border:1px solid var(--hz-line); border-radius:11px; background:linear-gradient(150deg,rgba(24,15,42,.8),rgba(11,8,19,.78)); transition:border-color .2s ease, box-shadow .2s ease; }
+  .trial-row:hover { border-color:rgba(251,146,60,.32); }
+  .trial-row.is-done { border-color:rgba(34,197,94,.3); }
   .trial-row-main { flex:1; min-width:0; }
-  .trial-row-title { display:block; font-size:13.5px; font-weight:700; color:#f3e8ff; }
-  .trial-row.is-done .trial-row-title { color:#86efac; }
-  .trial-row-meta { display:flex; align-items:center; gap:7px; margin-top:6px; flex-wrap:wrap; }
-  .trial-tag { padding:3px 9px; border-radius:999px; font-size:10.5px; font-weight:700; letter-spacing:.03em; }
+  .trial-row-title { display:block; font-size:13px; font-weight:700; line-height:1.5; color:#f3e8ff; overflow-wrap:anywhere; }
+  .trial-row.is-done .trial-row-title { color:#bbf7d0; }
+  .trial-row-meta { display:flex; align-items:center; gap:7px; margin-top:5px; flex-wrap:wrap; }
+  .trial-tag { padding:3px 9px; border-radius:999px; font-size:10px; font-weight:700; letter-spacing:.03em; }
   .trial-tag.lt { color:#a5b4fc; background:rgba(129,140,248,.13); border:1px solid rgba(129,140,248,.3); }
   .trial-tag.tn { color:#67e8f9; background:rgba(34,211,238,.11); border:1px solid rgba(34,211,238,.28); }
   .trial-tag.tl { color:#f0abfc; background:rgba(217,70,239,.12); border:1px solid rgba(217,70,239,.3); }
   .trial-tag.gr { color:#c4b5d4; background:rgba(192,132,252,.09); border:1px solid rgba(192,132,252,.2); }
   .trial-actions { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
-  button.trial-status { padding:7px 12px !important; border:1px solid rgba(255,255,255,.1) !important; border-radius:999px !important; background:rgba(255,255,255,.04) !important; box-shadow:none !important; color:#a99dbd !important; font-size:11px; font-weight:800; letter-spacing:.04em; }
+  button.trial-status { padding:6px 11px !important; border:1px solid rgba(255,255,255,.1) !important; border-radius:999px !important; background:rgba(255,255,255,.04) !important; box-shadow:none !important; color:#a99dbd !important; font-size:10.5px; font-weight:800; letter-spacing:.03em; white-space:nowrap; }
   button.trial-status:hover { background:rgba(251,146,60,.14) !important; border-color:rgba(251,146,60,.4) !important; color:#fdba74 !important; }
   button.trial-status.is-done { background:rgba(34,197,94,.16) !important; border-color:rgba(34,197,94,.42) !important; color:#86efac !important; }
-  button.trial-open { padding:8px 14px !important; background:linear-gradient(135deg,#ea580c,#fb923c) !important; box-shadow:0 8px 18px rgba(251,146,60,.2) !important; color:#fff !important; font-size:11.5px; font-weight:800; white-space:nowrap; }
+  button.trial-open { padding:7px 13px !important; background:linear-gradient(135deg,#ea580c,#fb923c) !important; box-shadow:0 8px 18px rgba(251,146,60,.18) !important; color:#fff !important; font-size:11px; font-weight:800; white-space:nowrap; }
   button.trial-open:hover { background:linear-gradient(135deg,#f97316,#fdba74) !important; }
-  .trial-empty { padding:24px; text-align:center; color:#8d84a0; font-size:12.5px; border:1px dashed rgba(192,132,252,.22); border-radius:14px; }
-  @media (max-width:640px) {
-    .trial-row { flex-wrap:wrap; }
-    .trial-actions { width:100%; justify-content:space-between; }
-    .trial-filter { width:100% !important; min-width:0; margin-left:0; }
-  }
+  .trial-empty { padding:22px; text-align:center; color:#8d84a0; font-size:12.5px; line-height:1.7; border:1px dashed rgba(192,132,252,.22); border-radius:14px; }
+
+  .trial-soon { max-width:560px; padding:26px 22px; text-align:center; border:1px dashed rgba(192,132,252,.28); border-radius:16px; background:rgba(20,13,33,.6); }
+  .trial-soon-ico { display:flex; align-items:center; justify-content:center; width:46px; height:46px; margin:0 auto 12px; border-radius:14px; color:#c4b5fd; background:rgba(129,140,248,.1); border:1px solid rgba(129,140,248,.24); }
+  .trial-soon-ico svg { width:23px; height:23px; stroke:currentColor; fill:none; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; }
+  .trial-soon-title { margin:0 0 8px; font-size:16px; font-weight:900; color:#f3e8ff; }
+  .trial-soon p { margin:0 auto; max-width:430px; font-size:12.5px; line-height:1.7; color:#c4b5d4; }
+
+  .trial-lesson { padding:18px; border:1px solid var(--hz-line); border-radius:16px; background:linear-gradient(160deg,rgba(22,14,38,.9),rgba(10,7,18,.85)); }
+  .trial-lesson-top { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+  .trial-lesson-main { flex:1 1 260px; min-width:0; }
+  .trial-lesson-title { margin:0; font-size:18px; font-weight:900; line-height:1.4; color:#f3e8ff; overflow-wrap:anywhere; }
+  .trial-lesson-meta { display:flex; align-items:center; gap:5px 10px; flex-wrap:wrap; margin-top:9px; font-size:11.5px; color:#b9aecb; }
+  .trial-meta-item + .trial-meta-item::before { content:'·'; margin-right:10px; color:#4b4560; }
+  .trial-lesson-nav { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:12px; padding-bottom:12px; border-bottom:1px solid rgba(192,132,252,.14); flex-wrap:wrap; }
+  .trial-lesson-nav-btns { display:flex; align-items:center; gap:8px; }
+  .trial-lesson-nav-info { font-size:11px; font-weight:800; color:#a99dbd; padding:0 4px; }
+  .trial-lesson-body { margin-top:16px; padding-top:16px; border-top:1px solid rgba(192,132,252,.14); font-size:13.5px; line-height:1.8; color:#d8cfe6; white-space:pre-wrap; overflow-wrap:anywhere; }
+  .trial-lesson-body.is-rich { white-space:normal; }
+  .trial-lesson-body .kt-entry { margin-top:18px; padding-top:18px; border-top:1px solid rgba(192,132,252,.14); }
+  .trial-lesson-body .kt-entry:first-child { margin-top:0; padding-top:0; border-top:none; }
+  .trial-lesson-summary-box { margin-top:18px; padding:14px 16px; border:1px solid rgba(251,146,60,.3); border-radius:12px; background:rgba(251,146,60,.06); }
+  .trial-lesson-summary-box-title { font-size:12px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; color:#fdba74; margin-bottom:8px; }
 
   /* ============================================================
-     14b. KIEN THUC — kho cong thuc co giai thich (sach Ket noi tri
-          thuc, lop 10 - 11). Nam TRONG tab Trial: them 1 chuyen mach
-          "Bai tap / Kien thuc" va 4 tang rieng, tai noi dung tung
-          chuong tu may chu (kien-thuc/*.html) nen app khong phong to.
-          CHI THEM MOI — khong sua rule nao o tren, khong doi id cu.
-          ============================================================ */
-  #trialTab.hzk-on #trialLevelSubjects,
-  #trialTab.hzk-on #trialLevelGrades,
-  #trialTab.hzk-on #trialLevelLessons,
-  #trialTab.hzk-on .trial-tip { display:none !important; }
-  #trialTab:not(.hzk-on) .hzk-level { display:none !important; }
+     TAB SỔ TAY CÔNG THỨC TOÀN MÔN & THẺ CÔNG THỨC NỔI BẬT
+     ============================================================ */
+  .trial-mode-switch { display:flex; align-items:center; gap:8px; margin:14px 0 18px; padding:4px; background:rgba(255,255,255,.04); border:1px solid rgba(192,132,252,.18); border-radius:12px; }
+  .trial-mode-tab { flex:1; padding:9px 16px; border:none; border-radius:9px; background:transparent; color:#a99dbd; font-size:12.5px; font-weight:800; cursor:pointer; transition:all .2s ease; display:flex; align-items:center; justify-content:center; gap:8px; }
+  .trial-mode-tab:hover { color:#f3e8ff; background:rgba(255,255,255,.05); }
+  .trial-mode-tab.active { background:linear-gradient(135deg,#a855f7,#7c3aed); color:#fff; box-shadow:0 2px 12px rgba(168,85,247,.35); font-weight:900; }
 
-  .hzk-seg { display:inline-flex; gap:6px; padding:5px; margin:0 0 14px; border:1px solid var(--hz-line); border-radius:14px; background:rgba(255,255,255,.04); }
-  button.hzk-seg { display:inline-flex; align-items:center; gap:7px; padding:8px 16px !important; border:1px solid transparent !important; border-radius:10px !important; background:transparent !important; box-shadow:none !important; color:#a99dbd !important; font-size:12px; font-weight:800; letter-spacing:.02em; }
-  button.hzk-seg:hover { color:#fdba74 !important; background:rgba(251,146,60,.1) !important; }
-  button.hzk-seg.on { background:linear-gradient(135deg,#ea580c,#fb923c) !important; color:#fff !important; box-shadow:0 8px 18px rgba(251,146,60,.2) !important; }
-  button.hzk-seg svg { width:15px; height:15px; stroke:currentColor; fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
-  .hzk-tip { color:var(--text-muted); font-size:11.5px; line-height:1.6; margin:-6px 0 14px; }
-  .hzk-crumb { display:flex; align-items:center; gap:8px; flex-wrap:wrap; min-width:0; font-size:11px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:#6f677f; margin:0; }
-  .hzk-crumb .here { color:var(--hz-tab); }
-  .hzk-crumb .sep { color:#3f3b52; }
-  #trialTab:not(.hzk-on) #hzkCrumb { display:none !important; }
-  .hzk-crumb button { padding:0 !important; border:0 !important; border-radius:0 !important; background:transparent !important; box-shadow:none !important; color:#8d84a0; font-size:11px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; }
-  .hzk-crumb button:hover { background:transparent !important; color:#fdba74 !important; transform:none; }
+  /* Hộp công thức nổi bật (Formula Card) */
+  .kt-formula-card { margin:14px 0 16px; padding:16px 18px; background:linear-gradient(145deg,rgba(26,17,46,.85),rgba(12,8,22,.92)); border:1.5px solid rgba(251,146,60,.38); border-radius:14px; box-shadow:0 6px 24px rgba(0,0,0,.45),inset 0 0 20px rgba(251,146,60,.06); position:relative; overflow:hidden; }
+  .kt-formula-card::before { content:''; position:absolute; top:0; left:0; width:4px; height:100%; background:linear-gradient(180deg,#fb923c,#c084fc); }
+  .kt-formula-badge { display:inline-flex; align-items:center; gap:6px; padding:3px 10px; border-radius:999px; font-size:10.5px; font-weight:900; letter-spacing:.06em; text-transform:uppercase; color:#fdba74; background:rgba(251,146,60,.16); border:1px solid rgba(251,146,60,.35); margin-bottom:10px; }
+  .kt-formula-math { font-size:18px; font-weight:900; line-height:1.5; color:#fde047; text-shadow:0 0 14px rgba(253,224,71,.28); margin:6px 0 14px; padding:12px 16px; background:rgba(0,0,0,.45); border-radius:10px; border:1px solid rgba(255,255,255,.08); overflow-x:auto; scrollbar-width:thin; font-family:'Consolas','Courier New',monospace,system-ui; }
+  .kt-formula-vars-wrap { margin-top:12px; padding-top:12px; border-top:1px dashed rgba(192,132,252,.18); }
+  .kt-formula-vars-title { font-size:10.5px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; color:#c084fc; margin-bottom:8px; }
+  .kt-formula-vars { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:7px 12px; }
+  .kt-var-item { display:flex; align-items:center; gap:8px; padding:6px 10px; border-radius:8px; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.05); font-size:12.5px; line-height:1.45; color:#d8cfe6; flex-wrap:wrap; }
+  .kt-var-sym { font-weight:900; color:#38bdf8; font-size:13.5px; flex-shrink:0; font-family:'Consolas',monospace; }
+  .kt-var-desc { flex:1; min-width:120px; }
+  .kt-var-unit { display:inline-block; padding:1px 7px; border-radius:6px; font-size:11px; font-weight:900; color:#4ade80; background:rgba(74,222,128,.14); border:1px solid rgba(74,222,128,.32); margin-left:auto; flex-shrink:0; }
+  .kt-formula-cond { margin-top:10px; padding:9px 12px; border-radius:10px; background:rgba(168,85,247,.08); border:1px solid rgba(168,85,247,.2); font-size:12px; color:#e9d5ff; line-height:1.6; }
+  .kt-cond-item + .kt-cond-item { margin-top:5px; }
+
+  /* Màn hình Sổ tay toàn bộ công thức */
+  .trial-af-filter-bar { display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-bottom:12px; }
+  .trial-af-pill { padding:6px 13px; border-radius:999px; border:1px solid rgba(255,255,255,.1); background:rgba(255,255,255,.04); color:#a99dbd; font-size:11.5px; font-weight:800; cursor:pointer; transition:all .15s ease; }
+  .trial-af-pill:hover { background:rgba(251,146,60,.14); border-color:rgba(251,146,60,.4); color:#fdba74; }
+  .trial-af-pill.active { background:linear-gradient(135deg,#fb923c,#f97316); border-color:#fb923c; color:#fff; font-weight:900; box-shadow:0 2px 10px rgba(251,146,60,.35); }
+  .trial-af-search-wrap { margin-bottom:16px; }
+  .trial-af-search { width:100%; box-sizing:border-box; padding:11px 16px; border-radius:12px; border:1px solid rgba(192,132,252,.25); background:rgba(10,7,18,.6); color:#f3e8ff; font-size:13px; font-weight:600; outline:none; transition:border-color .2s; }
+  .trial-af-search:focus { border-color:#fb923c; box-shadow:0 0 14px rgba(251,146,60,.2); }
+  .trial-af-entry-card { margin-bottom:18px; padding:16px 18px; border:1px solid rgba(192,132,252,.18); border-radius:14px; background:linear-gradient(150deg,rgba(22,14,38,.85),rgba(12,8,22,.9)); }
+  .trial-af-entry-head { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:12px; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,.07); flex-wrap:wrap; }
+  .trial-af-entry-title { font-size:14px; font-weight:900; color:#f3e8ff; display:flex; align-items:center; gap:8px; }
+  .trial-af-entry-ch { font-size:11px; font-weight:800; color:#c084fc; background:rgba(192,132,252,.12); padding:2px 8px; border-radius:6px; }
+
+  .trial-lesson-empty { margin-top:16px; padding:22px 16px; border:1px dashed rgba(192,132,252,.24); border-radius:13px; text-align:center; color:#9b90ae; font-size:12.5px; line-height:1.7; }
+
+  /* ============================================================
+     14b. KIEN THUC — doc cong thuc 7 phan trong cung tab Trial.
+          Chi tai manifest (kien-thuc/manifest.json tren web,
+          kien-thuc-data.js khi mo file://) va dung 1 chuong khi
+          bam "Cong thuc chuong"; khong nhung ca kho vao new.html.
+         ============================================================ */
   .hzk-empty { padding:22px; text-align:center; color:#8d84a0; font-size:12.5px; line-height:1.7; border:1px dashed rgba(192,132,252,.22); border-radius:14px; }
   .hzk-empty b { display:block; margin-bottom:6px; color:#f3e8ff; font-size:13px; }
   .hzk-read-top { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:12px; }
-  .hzk-read-name { font-size:10.5px; font-weight:900; letter-spacing:.1em; text-transform:uppercase; color:#8d84a0; flex:1; min-width:0; }
-  @media (max-width:620px) { .hzk-read-name { display:none; } .hzk-read-top { gap:6px; } }
+  .hzk-read-name { font-size:10.5px; font-weight:900; letter-spacing:.1em; text-transform:uppercase; color:#8d84a0; flex:1; min-width:0; overflow-wrap:anywhere; }
   button.hzk-nav { padding:7px 12px !important; border:1px solid rgba(255,255,255,.1) !important; border-radius:999px !important; background:rgba(255,255,255,.04) !important; box-shadow:none !important; color:#a99dbd !important; font-size:11px; font-weight:800; letter-spacing:.04em; white-space:nowrap; }
   button.hzk-nav:hover { background:rgba(251,146,60,.14) !important; border-color:rgba(251,146,60,.4) !important; color:#fdba74 !important; }
   button.hzk-nav:disabled { opacity:.35; cursor:not-allowed; }
@@ -1549,9 +1619,19 @@
   .kt-tb tbody tr:nth-child(even) td { background:rgba(255,255,255,.02); }
   .kt-entry.kt-tail .kt-num { color:#a5b4fc; background:rgba(129,140,248,.14); border-color:rgba(129,140,248,.3); }
   @media (max-width:640px) {
-    .hzk-seg { display:flex; width:100%; }
-    button.hzk-seg { flex:1; justify-content:center; padding:8px 10px !important; }
-    .hzk-read { padding:13px 13px; }
+    .trial-head { display:block; }
+    .trial-crumb { margin-top:9px; }
+    .trial-crumb .crumb-mid { display:none; }
+    .trial-crumb .crumb-more-wrap { display:inline-flex; }
+    .trial-row { flex-wrap:wrap; }
+    .trial-actions { width:100%; justify-content:space-between; }
+    .trial-lesson { padding:14px; }
+    .trial-lesson-title { font-size:16px; }
+    .trial-ch-head { padding:11px 12px; }
+    .trial-ch-rows { margin:0 8px 10px 10px; padding-left:9px; }
+    .hzk-read { padding:13px 13px; max-height:none; }
+    .hzk-read-name { display:none; }
+    .hzk-read-top { gap:6px; }
     .kt-body p, .kt-ul li { font-size:12.5px; }
   }
 
@@ -3238,72 +3318,72 @@
     </div>
   </div>
 
-  <!-- TAB: TRIAL — luyen tap 3 tang (Mon > Khoi > Bai tap) -->
+  <!-- TAB: TRIAL — 6 môn > lớp > 2 tập > một mục lục gộp > bài học -->
   <div id="trialTab" class="tab-content">
     <div class="panel">
       <div class="trial-head">
-        <h2 style="font-size: 16px;">TRIAL</h2>
-        <div class="trial-crumb" id="trialCrumb"><span class="here">Trial</span></div>
-        <div class="hzk-crumb" id="hzkCrumb"></div>
-      </div>
-      <div class="trial-tip">Chọn môn &rarr; chọn khối &rarr; mở bài tập. Bấm &ldquo;Chưa làm / Đã làm&rdquo; để đánh dấu tiến độ; trạng thái được lưu ngay trên máy bạn, không gửi đi đâu.</div>
-
-      <!-- CHUYEN MACH (them moi): Bai tap / Kien thuc -->
-      <div class="hzk-seg" id="hzkSeg">
-        <button class="hzk-seg on" type="button" id="hzkSegBai"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 3.5h8L18.5 7.5v13H6.5z"/><path d="M14 3.5v4h4"/><path d="M9 12h6M9 15.5h6M9 19h3.5"/></svg><span>Bài tập</span></button>
-        <button class="hzk-seg" type="button" id="hzkSegKien"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6.6C10.6 5.1 8.4 4.3 5 4.3v13.4c3.4 0 5.6.8 7 2.3 1.4-1.5 3.6-2.3 7-2.3V4.3c-3.4 0-5.6.8-7 2.3z"/><path d="M12 6.6v13.4"/></svg><span>Kiến thức</span></button>
+        <div class="trial-title">
+          <h2 style="font-size:16px;">TRIAL</h2>
+          <div class="trial-tip">Chọn môn, lớp, tập rồi mở bài. Công thức của chương nằm ngay trong mục lục; tiến độ được lưu trên máy bạn.</div>
+        </div>
+        <nav class="trial-crumb" id="trialCrumb" aria-label="Đường dẫn"></nav>
       </div>
 
-      <!-- Tang 1: Danh sach mon -->
       <div class="trial-level active" id="trialLevelSubjects">
         <div class="trial-grid" id="trialSubjects"></div>
       </div>
 
-      <!-- Tang 2: Danh sach khoi cua mon da chon -->
       <div class="trial-level" id="trialLevelGrades">
-        <div class="trial-back"><button class="trial-ghost" onclick="trialShowSubjects()">&#8592; Quay lại danh sách môn</button></div>
+        <div class="trial-back"><button class="trial-ghost" type="button" data-back="subjects">&#8592; Danh sách môn</button></div>
         <div class="trial-grid" id="trialGrades"></div>
       </div>
 
-      <!-- Tang 3: Danh sach bai tap (toan bo lop 10 -> 12 cua mon) -->
-      <div class="trial-level" id="trialLevelLessons">
-        <div class="trial-toolbar">
-          <button class="trial-ghost" onclick="trialShowGrades()">&#8592; Quay lại</button>
-          <select id="trialGradeFilter" class="input-control trial-filter" onchange="trialSetFilter(this.value)"></select>
+      <div class="trial-level" id="trialLevelVolumes">
+        <div class="trial-back"><button class="trial-ghost" type="button" data-back="grades">&#8592; Về chọn lớp</button></div>
+        <div class="trial-toc-head" id="trialVolumesHead"></div>
+        <div class="trial-grid trial-grid-2" id="trialVolumes"></div>
+      </div>
+
+      <div class="trial-level" id="trialLevelSoon">
+        <div class="trial-back"><button class="trial-ghost" type="button" data-back="grades">&#8592; Về chọn lớp</button></div>
+        <div class="trial-soon" id="trialSoon"></div>
+      </div>
+
+      <div class="trial-level" id="trialLevelToc">
+        <div class="trial-back"><button class="trial-ghost" type="button" data-back="volumes">&#8592; Về danh sách tập</button></div>
+        <div class="trial-toc-head" id="trialTocHead"></div>
+        <div class="trial-toc" id="trialToc"></div>
+      </div>
+
+      <div class="trial-level" id="trialLevelLesson">
+        <div class="trial-back"><button class="trial-ghost" type="button" data-back="toc">&#8592; Về mục lục</button></div>
+        <article class="trial-lesson" id="trialLesson"></article>
+      </div>
+
+      <div class="trial-level" id="trialLevelFormulas">
+        <div class="trial-back"><button class="trial-ghost" type="button" data-back="toc">&#8592; Về mục lục</button></div>
+        <div class="trial-toc-head" id="trialFormulaHead"></div>
+        <div class="trial-list" id="trialFormulaList"></div>
+      </div>
+
+            <div class="trial-level" id="trialLevelAllFormulas">
+        <div class="trial-back"><button class="trial-ghost" type="button" data-back="volumes">&#8592; Quay lại danh sách tập</button></div>
+        <div class="trial-toc-head" id="trialAllFormulasHead"></div>
+        <div class="trial-af-filter-bar" id="trialAllFormulasFilter"></div>
+        <div class="trial-af-search-wrap">
+          <input type="text" class="trial-af-search" id="trialAfSearch" placeholder="🔍 Tìm công thức, định luật, đại lượng, đơn vị (vd: chu kì, A, vận tốc, ohm, pH...)" />
         </div>
-        <div class="trial-list" id="trialLessons"></div>
+        <div class="trial-af-list" id="trialAllFormulasList"></div>
       </div>
 
-      <!-- ============ KHO KIEN THUC (them moi, 4 tang) ============ -->
-      <!-- Tang K1: Danh sach mon -->
-      <div class="trial-level hzk-level" id="hzkLevelSubjects">
-        <div class="hzk-tip">Kho công thức có giải thích theo sách <b>Kết nối tri thức</b>: mỗi mục đủ 7 phần (công thức &middot; ý nghĩa &middot; cách chứng minh &middot; 3 ví dụ từ cơ bản đến nâng cao &middot; ghi chú sai lầm). Nội dung tải theo từng chương nên cần có mạng; đang offline thì mở mục đã đọc lần trước.</div>
-        <div class="trial-grid" id="hzkSubjects"></div>
-      </div>
-
-      <!-- Tang K2: Danh sach chuong -->
-      <div class="trial-level hzk-level" id="hzkLevelChapters">
-        <div class="trial-back"><button class="trial-ghost" type="button" id="hzkBackSubjects">&#8592; Quay lại danh sách môn</button></div>
-        <div class="trial-grid" id="hzkChapters"></div>
-      </div>
-
-      <!-- Tang K3: Danh sach muc trong chuong -->
-      <div class="trial-level hzk-level" id="hzkLevelEntries">
-        <div class="trial-toolbar">
-          <button class="trial-ghost" type="button" id="hzkBackChapters">&#8592; Quay lại danh sách chương</button>
-        </div>
-        <div class="trial-list" id="hzkEntries"></div>
-      </div>
-
-      <!-- Tang K4: Khong doc noi dung -->
-      <div class="trial-level hzk-level" id="hzkLevelReader">
+<div class="trial-level" id="trialLevelReader">
         <div class="hzk-read-top">
-          <button class="hzk-nav" type="button" id="hzkBackEntries">&#8592; Danh sách mục</button>
-          <span class="hzk-read-name" id="hzkReadName"></span>
-          <button class="hzk-nav" type="button" id="hzkPrev">&#8592; Mục trước</button>
-          <button class="hzk-nav" type="button" id="hzkNext">Mục sau &#8594;</button>
+          <button class="hzk-nav" type="button" data-back="formulas">&#8592; Danh sách mục</button>
+          <span class="hzk-read-name" id="trialReaderName"></span>
+          <button class="hzk-nav" type="button" data-reader="-1" id="trialReaderPrev">&#8592; Mục trước</button>
+          <button class="hzk-nav" type="button" data-reader="1" id="trialReaderNext">Mục sau &#8594;</button>
         </div>
-        <div class="hzk-read" id="hzkRead"></div>
+        <div class="hzk-read" id="trialReader"></div>
       </div>
     </div>
   </div>
@@ -5934,6 +6014,7 @@
     const x2Toggle = document.getElementById('x2SkillToggle');
     if (x2Toggle) x2Toggle.checked = state.x2SkillEnabled !== false;
     const tbody = document.getElementById('userTableBody');
+    if (!tbody) return;   // script chạy trước khi bảng tài khoản được dựng: bỏ qua, render() sau sẽ vẽ lại
     tbody.innerHTML = '';
 
     state.users.forEach(u => {
@@ -10271,612 +10352,1648 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
 
 <script>
 /* ==========================================================================
-   TRIAL — khu luyen tap phan cap 3 tang: Mon hoc > Khoi > Danh sach bai tap.
-   Chi THEM MOI: khong sua bat ky ham/tab cu nao. Toan bo dieu huong
-   nam ben trong #trialTab (3 div .trial-level dong/bat nhau).
-   Muon them bai: sua TRIAL_DATA o duoi (moi bai = 1 dong {title, type, link}).
+   TRIAL — 6 môn > lớp > 2 tập > một mục lục gộp > bài học.
+   Dữ liệu nằm trong window.TRIAL_DATA (môn > lớp > tập > chương > bài).
+   Tiến độ lưu ở localStorage['hoanghao_trial_status_v2'], khoá dạng
+   "toan|11|t1|b1" — không dùng tên bài làm khoá, không đọc khoá v1.
+   Công thức chương mở trong cùng tab qua window.HZK (IIFE bên dưới).
    ========================================================================== */
 (function () {
   'use strict';
 
-  var STORE_KEY = 'hoanghao_trial_status_v1';
-  var FILTER_ALL = 'all';
-  var TYPE_CLASS = { 'Lý thuyết': 'lt', 'Trắc nghiệm': 'tn', 'Tự luận': 'tl' };
-
-  var ICO = {
-    math: '<svg viewBox="0 0 24 24"><path d="M4 6h5M6.5 3.5v5M4 12h5M4.5 17l4.5 4.5M9 17 4.5 21.5"/><path d="M19.5 5.5H15l4.5 6.5L15 19h4.5"/></svg>',
-    phy: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1.7"/><ellipse cx="12" cy="12" rx="9.2" ry="3.6"/><ellipse cx="12" cy="12" rx="9.2" ry="3.6" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="9.2" ry="3.6" transform="rotate(120 12 12)"/></svg>',
-    chem: '<svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v5.2L4.9 16.9A3 3 0 0 0 7.6 21.5h8.8a3 3 0 0 0 2.7-4.6L14 8.2V3"/><path d="M7.4 14.2h9.2"/></svg>',
-    bio: '<svg viewBox="0 0 24 24"><path d="M20.5 3.5C12 3.5 6.5 7.6 6.5 14a5 5 0 0 0 5 5c6.4 0 9-5.4 9-15.5z"/><path d="M6 21c2.4-5.3 6-9 11-11.5"/></svg>',
-    ict: '<svg viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="12" rx="2"/><path d="M8.5 20.5h7M12 16.5v4"/><path d="m9.5 8.5-2 2.2 2 2.2M14.5 8.5l2 2.2-2 2.2"/></svg>',
-    eng: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.3 2.4 3.5 5.3 3.5 8.5s-1.2 6.1-3.5 8.5c-2.3-2.4-3.5-5.3-3.5-8.5S9.7 5.9 12 3.5z"/></svg>',
-    cap: '<svg viewBox="0 0 24 24"><path d="M12 3.5 21 8l-9 4.5L3 8z"/><path d="M6.5 10.4V15c0 1.7 2.5 3 5.5 3s5.5-1.3 5.5-3v-4.6M21 8.6v4.9"/></svg>'
+  var STORE_KEY = 'hoanghao_trial_status_v2';
+  var TYPE_LABEL = {
+    lt: 'Lý thuyết', tn: 'Trắc nghiệm', tl: 'Tự luận',
+    'Lý thuyết': 'Lý thuyết', 'Trắc nghiệm': 'Trắc nghiệm', 'Tự luận': 'Tự luận'
   };
-
-  /* ---------------- Du lieu (dang doc, co the them/sua tuy y) ------------- */
-  function L(title, type, link) { return { title: title, type: type, link: link || '' }; }
-
-  window.TRIAL_DATA = [
-    {
-      id: 'toan', name: 'Toán', icon: ICO.math,
-      desc: 'Hàm số, phương trình, hình học không gian, tổ hợp – xác suất.',
-      grades: [
-        { id: '10', lessons: [
-          L('Hàm số bậc hai và đồ thị', 'Lý thuyết'),
-          L('Phương trình quy về phương trình bậc nhất', 'Tự luận'),
-          L('Hệ bất phương trình bậc nhất hai ẩn', 'Trắc nghiệm'),
-          L('Định lý cô-sin và ứng dụng giải tam giác', 'Tự luận'),
-          L('Xác suất của biến cố', 'Trắc nghiệm')
-        ] },
-        { id: '11', lessons: [
-          L('Cấp số cộng, cấp số nhân', 'Trắc nghiệm'),
-          L('Giới hạn của dãy số', 'Lý thuyết'),
-          L('Phương trình lượng giác cơ bản', 'Tự luận'),
-          L('Đường thẳng song song với mặt phẳng', 'Lý thuyết'),
-          L('Bài toán đếm trong tổ hợp – xác suất', 'Trắc nghiệm')
-        ] },
-        { id: '12', lessons: [
-          L('Nguyên hàm và tích phân', 'Lý thuyết'),
-          L('Ứng dụng tích phân tính diện tích', 'Tự luận'),
-          L('Số phức và các phép toán số phức', 'Trắc nghiệm'),
-          L('Mặt nón, mặt trụ, mặt cầu', 'Lý thuyết'),
-          L('Phương trình mũ và phương trình logarit', 'Tự luận')
-        ] }
-      ]
-    },
-    {
-      id: 'ly', name: 'Lý', icon: ICO.phy,
-      desc: 'Cơ học, nhiệt học, điện – từ, dao động – sóng và vật lý hạt nhân.',
-      grades: [
-        { id: '10', lessons: [
-          L('Chuyển động thẳng biến đổi đều', 'Lý thuyết'),
-          L('Ba định luật Newton', 'Lý thuyết'),
-          L('Động lượng và định luật bảo toàn', 'Tự luận'),
-          L('Công, năng lượng và công suất', 'Trắc nghiệm'),
-          L('Nhiệt độ, nhiệt năng và truyền nhiệt', 'Trắc nghiệm')
-        ] },
-        { id: '11', lessons: [
-          L('Định luật Coulomb về tương tác tĩnh điện', 'Tự luận'),
-          L('Cường độ dòng điện và định luật Ohm', 'Trắc nghiệm'),
-          L('Từ trường của dòng điện', 'Lý thuyết'),
-          L('Cảm ứng điện từ và định luật Len-xơ', 'Lý thuyết'),
-          L('Dao động điều hòa của con lắc lò xo', 'Tự luận')
-        ] },
-        { id: '12', lessons: [
-          L('Con lắc đơn và con lắc lò xo', 'Tự luận'),
-          L('Sóng cơ và giao thoa sóng', 'Lý thuyết'),
-          L('Mạch điện xoay chiều RLC', 'Trắc nghiệm'),
-          L('Phản ứng phân hạch và nhiệt hạch', 'Lý thuyết'),
-          L('Giao thoa ánh sáng trong quang lý', 'Tự luận')
-        ] }
-      ]
-    },
-    {
-      id: 'hoa', name: 'Hóa', icon: ICO.chem,
-      desc: 'Cấu tạo nguyên tử, phản ứng oxi hóa – khử và hóa học hữu cơ.',
-      grades: [
-        { id: '10', lessons: [
-          L('Cấu hình electron nguyên tử', 'Trắc nghiệm'),
-          L('Bảng tuần hoàn và quy luật biến đổi', 'Lý thuyết'),
-          L('Liên kết ion và liên kết cộng hoá trị', 'Tự luận'),
-          L('Số oxi hoá và phản ứng oxi hóa – khử', 'Trắc nghiệm'),
-          L('Tốc độ phản ứng và cân bằng hoá học', 'Lý thuyết')
-        ] },
-        { id: '11', lessons: [
-          L('Sự điện li và pH của dung dịch', 'Tự luận'),
-          L('Nitơ, amoniac và muối amoni', 'Lý thuyết'),
-          L('Hợp chất của silic và công nghiệp silicat', 'Trắc nghiệm'),
-          L('Ankan và phản ứng thế', 'Tự luận'),
-          L('Ancol – phenol – anđehit', 'Trắc nghiệm')
-        ] },
-        { id: '12', lessons: [
-          L('Este và lipit', 'Lý thuyết'),
-          L('Cacbohiđrat: glucozơ, saccarozơ, tinh bột', 'Trắc nghiệm'),
-          L('Amin, amino axit và protein', 'Tự luận'),
-          L('Polime và vật liệu polime', 'Lý thuyết'),
-          L('Điện phân và điều chế kim loại', 'Trắc nghiệm')
-        ] }
-      ]
-    },
-    {
-      id: 'sinh', name: 'Sinh', icon: ICO.bio,
-      desc: 'Tế bào, sinh lý thực vật – động vật, di truyền và tiến hoá.',
-      grades: [
-        { id: '10', lessons: [
-          L('Các cấp độ tổ chức của thế giới sống', 'Lý thuyết'),
-          L('Thành phần hoá học của tế bào', 'Trắc nghiệm'),
-          L('Vận chuyển các chất qua màng sinh chất', 'Trắc nghiệm'),
-          L('Nguyên phân và giảm phân', 'Tự luận'),
-          L('Vi khuẩn và ứng dụng trong đời sống', 'Lý thuyết')
-        ] },
-        { id: '11', lessons: [
-          L('Cảm ứng ở thực vật và động vật', 'Lý thuyết'),
-          L('Quang hợp ở nhóm thực vật C3, C4, CAM', 'Trắc nghiệm'),
-          L('Hô hấp và tuần hoàn ở động vật', 'Lý thuyết'),
-          L('Sinh sản ở thực vật', 'Tự luận'),
-          L('Sinh sản ở động vật', 'Trắc nghiệm')
-        ] },
-        { id: '12', lessons: [
-          L('Quy luật di truyền Menđen', 'Tự luận'),
-          L('Liên kết gen và hoán vị gen', 'Trắc nghiệm'),
-          L('Điều hoà biểu hiện gen: operon', 'Lý thuyết'),
-          L('Di truyền học quần thể', 'Tự luận'),
-          L('Tiến hoá và nguồn gốc sự sống', 'Lý thuyết')
-        ] }
-      ]
-    },
-    {
-      id: 'tin', name: 'Tin', icon: ICO.ict,
-      desc: 'Biểu diễn thông tin, lập trình Python, cơ sở dữ liệu và AI.',
-      grades: [
-        { id: '10', lessons: [
-          L('Thông tin và đo lượng thông tin', 'Lý thuyết'),
-          L('Hệ điều hành và phần mềm ứng dụng', 'Trắc nghiệm'),
-          L('Biểu diễn dữ liệu: nhị phân, ảnh, âm thanh', 'Tự luận'),
-          L('Bảng tính điện tử và hàm thống kê', 'Tự luận'),
-          L('An toàn thông tin trên môi trường mạng', 'Lý thuyết')
-        ] },
-        { id: '11', lessons: [
-          L('Cấu trúc dữ liệu mảng và xâu', 'Tự luận'),
-          L('Hàm và tham số trong Python', 'Trắc nghiệm'),
-          L('Đọc – ghi tệp văn bản', 'Lý thuyết'),
-          L('Thuật toán tìm kiếm và sắp xếp', 'Tự luận'),
-          L('Cơ sở dữ liệu và hệ quản trị CSDL', 'Lý thuyết')
-        ] },
-        { id: '12', lessons: [
-          L('Giới thiệu trí tuệ nhân tạo', 'Lý thuyết'),
-          L('Học máy và xử lý dữ liệu', 'Trắc nghiệm'),
-          L('Phát triển ứng dụng trên nền tảng web', 'Tự luận'),
-          L('Mật mã và an toàn dữ liệu số', 'Lý thuyết'),
-          L('Dự án: xây dựng sản phẩm số', 'Tự luận')
-        ] }
-      ]
-    },
-    {
-      id: 'anh', name: 'Anh', icon: ICO.eng,
-      desc: 'Từ vựng theo chủ đề, ngữ pháp, bốn kỹ năng nghe – nói – đọc – viết.',
-      grades: [
-        { id: '10', lessons: [
-          L('Topic vocabulary: family and school life', 'Lý thuyết'),
-          L('Grammar: present and past tenses', 'Trắc nghiệm'),
-          L('Reading: main idea and supporting details', 'Tự luận'),
-          L('Writing: topic sentence and paragraph', 'Tự luận'),
-          L('Speaking: everyday interactions', 'Lý thuyết')
-        ] },
-        { id: '11', lessons: [
-          L('Topic vocabulary: health care and technology', 'Lý thuyết'),
-          L('Grammar: relative clauses and conditionals', 'Trắc nghiệm'),
-          L('Reading: skimming and scanning strategies', 'Tự luận'),
-          L('Writing: a cause-and-effect essay', 'Tự luận'),
-          L('Listening: note-taking practice', 'Lý thuyết')
-        ] },
-        { id: '12', lessons: [
-          L('Topic vocabulary: life skills and work', 'Lý thuyết'),
-          L('Grammar: inversion and cleft sentences', 'Trắc nghiệm'),
-          L('Reading: academic texts and inference', 'Tự luận'),
-          L('Writing: report and letter of application', 'Tự luận'),
-          L('Speaking: presenting and discussing ideas', 'Lý thuyết')
-        ] }
-      ]
-    }
-  ];
-
-  var TRIAL_DATA = window.TRIAL_DATA;
-  var state = { mi: null, gi: null, filter: FILTER_ALL };
-
-  /* ------------------------------ Duong ling ---------------------------- */
-  function el(id) { return document.getElementById(id); }
-  function esc(v) {
-    if (typeof window.escapeHtml === 'function') return window.escapeHtml(v);
-    return String(v).replace(/[&<>"']/g, function (c) {
-      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
-    });
-  }
-  function say(msg) { if (typeof window.notify === 'function') window.notify(msg); }
-  function store() {
-    try { return JSON.parse(localStorage.getItem(STORE_KEY)) || {}; } catch (err) { return {}; }
-  }
-  function keyOf(subId, gradeId, title) { return subId + '|' + gradeId + '|' + title; }
-  function isDone(subId, gradeId, title) { return !!store()[keyOf(subId, gradeId, title)]; }
-  function setDone(subId, gradeId, title, value) {
-    var map = store(), k = keyOf(subId, gradeId, title);
-    if (value) map[k] = 1; else delete map[k];
-    try { localStorage.setItem(STORE_KEY, JSON.stringify(map)); } catch (err) { say('Máy đang chặn lưu trạng thái nên tiến độ chỉ giữ trong phiên này.'); }
-  }
-  function countDone(subId, gradeId) {
-    var map = store(), n = 0;
-    TRIAL_DATA.forEach(function (s) {
-      if (subId && s.id !== subId) return;
-      s.grades.forEach(function (g) {
-        if (gradeId && g.id !== gradeId) return;
-        g.lessons.forEach(function (l) { if (map[keyOf(s.id, g.id, l.title)]) n++; });
-      });
-    });
-    return n;
-  }
-  function totalOf(subject) {
-    return subject.grades.reduce(function (n, g) { return n + g.lessons.length; }, 0);
-  }
-  function breakdown(lessons) {
-    var c = { 'Lý thuyết': 0, 'Trắc nghiệm': 0, 'Tự luận': 0 };
-    lessons.forEach(function (l) { c[l.type] = (c[l.type] || 0) + 1; });
-    return Object.keys(c).filter(function (t) { return c[t]; })
-      .map(function (t) { return c[t] + ' bài ' + t.toLowerCase(); }).join(' · ');
-  }
-
-  /* ------------------------------- Hien thi ------------------------------ */
-  function showLevel(which) {
-    ['Subjects', 'Grades', 'Lessons'].forEach(function (k) {
-      var node = el('trialLevel' + k);
-      if (node) node.classList.toggle('active', k === which);
-    });
-  }
-
-  function renderCrumb() {
-    var c = el('trialCrumb');
-    if (!c) return;
-    if (state.mi === null) { c.innerHTML = '<span class="here">Trial</span>'; return; }
-    var s = TRIAL_DATA[state.mi];
-    var html = '<button onclick="trialShowSubjects()">Trial</button><span class="sep">&rsaquo;</span>';
-    if (state.gi === null) { c.innerHTML = html + '<span class="here">' + esc(s.name) + '</span>'; return; }
-    var g = s.grades[state.gi];
-    html += '<button onclick="trialShowGrades()">' + esc(s.name) + '</button><span class="sep">&rsaquo;</span>' +
-            '<span class="here">' + esc(s.name + ' ' + g.id) + '</span>';
-    c.innerHTML = html;
-  }
-
-  function renderSubjects() {
-    var box = el('trialSubjects');
-    if (!box) return;
-    box.innerHTML = TRIAL_DATA.map(function (s, mi) {
-      var total = totalOf(s);
-      return '<button class="trial-card" onclick="trialOpenSubject(' + mi + ')">' +
-        '<span class="trial-card-ico">' + s.icon + '</span>' +
-        '<span class="trial-card-name">' + esc(s.name) + '</span>' +
-        '<span class="trial-card-sub">' + s.grades.length + ' khối · ' + total + ' bài</span>' +
-        '<p>' + esc(s.desc) + '</p>' +
-        '<span class="trial-card-foot"><span class="trial-pill">Đã làm ' + countDone(s.id, null) + '/' + total + '</span></span>' +
-      '</button>';
-    }).join('');
-  }
-
-  function renderGrades() {
-    var box = el('trialGrades');
-    if (!box || state.mi === null) return;
-    var s = TRIAL_DATA[state.mi];
-    box.innerHTML = s.grades.map(function (g, gi) {
-      return '<button class="trial-card" onclick="trialOpenGrade(' + state.mi + ',' + gi + ')">' +
-        '<span class="trial-card-ico">' + ICO.cap + '</span>' +
-        '<span class="trial-card-name">' + esc(s.name + ' ' + g.id) + '</span>' +
-        '<span class="trial-card-sub">Khối ' + esc(g.id) + ' · ' + g.lessons.length + ' bài</span>' +
-        '<p>' + esc(breakdown(g.lessons)) + '.</p>' +
-        '<span class="trial-card-foot"><span class="trial-pill">Đã làm ' + countDone(s.id, g.id) + '/' + g.lessons.length + '</span></span>' +
-      '</button>';
-    }).join('');
-  }
-
-  function renderFilter() {
-    var sel = el('trialGradeFilter');
-    if (!sel || state.mi === null) return;
-    var s = TRIAL_DATA[state.mi];
-    var html = '<option value="' + FILTER_ALL + '">' + esc(s.name) + ' — tất cả khối (' + totalOf(s) + ' bài)</option>';
-    html += s.grades.map(function (g) {
-      return '<option value="' + esc(g.id) + '">Khối ' + esc(g.id) + ' — ' + g.lessons.length + ' bài</option>';
-    }).join('');
-    sel.innerHTML = html;
-    sel.value = state.filter;
-  }
-
-  function lessonRow(s, g, l, mi, gi, li) {
-    var done = isDone(s.id, g.id, l.title);
-    return '<div class="trial-row' + (done ? ' is-done' : '') + '">' +
-      '<div class="trial-row-main">' +
-        '<span class="trial-row-title">' + esc(l.title) + '</span>' +
-        '<span class="trial-row-meta">' +
-          '<span class="trial-tag ' + (TYPE_CLASS[l.type] || 'lt') + '">' + esc(l.type) + '</span>' +
-          '<span class="trial-tag gr">Khối ' + esc(g.id) + '</span>' +
-        '</span>' +
-      '</div>' +
-      '<div class="trial-actions">' +
-        '<button class="trial-status' + (done ? ' is-done' : '') + '" onclick="trialToggleDone(' + mi + ',' + gi + ',' + li + ')">' + (done ? 'Đã làm' : 'Chưa làm') + '</button>' +
-        '<button class="trial-open" onclick="trialOpenLesson(' + mi + ',' + gi + ',' + li + ')">Mở bài</button>' +
-      '</div>' +
-    '</div>';
-  }
-
-  function renderLessons() {
-    var box = el('trialLessons');
-    if (!box || state.mi === null) return;
-    var s = TRIAL_DATA[state.mi], rows = [];
-    s.grades.forEach(function (g, gi) {
-      if (state.filter !== FILTER_ALL && state.filter !== g.id) return;
-      if (state.filter === FILTER_ALL) rows.push('<div class="trial-group">' + esc(s.name + ' ' + g.id) + '</div>');
-      g.lessons.forEach(function (l, li) { rows.push(lessonRow(s, g, l, state.mi, gi, li)); });
-    });
-    box.innerHTML = rows.length ? rows.join('') : '<div class="trial-empty">Khối này chưa có bài. Thêm vào TRIAL_DATA là bài sẽ hiện ra ngay.</div>';
-  }
-
-  function renderAll() {
-    renderCrumb();
-    renderSubjects();
-    if (state.mi !== null) { renderGrades(); renderFilter(); renderLessons(); }
-  }
-
-  /* ------------------------------- Dieu huong ---------------------------- */
-  window.openTrial = function () {
-    if (typeof window.goMenu === 'function') window.goMenu('trialTab');
-    else el('trialTab').classList.add('active');
-    // goMenu chi danh dau menu item co onclick === "goMenu('...')" -> tu danh dau lai cho Trial
-    document.querySelectorAll('.menu-item').forEach(function (b) {
-      b.classList.toggle('active', b.getAttribute('onclick') === 'openTrial()');
-    });
-    if (typeof window.toggleMenu === 'function') window.toggleMenu(false);
-    renderAll();
+  var TYPE_CLASS = {
+    lt: 'lt', tn: 'tn', tl: 'tl',
+    'Lý thuyết': 'lt', 'Trắc nghiệm': 'tn', 'Tự luận': 'tl'
   };
-
-  window.trialShowSubjects = function () {
-    state.mi = null; state.gi = null; state.filter = FILTER_ALL;
-    showLevel('Subjects'); renderAll();
-  };
-
-  window.trialOpenSubject = function (mi) {
-    state.mi = mi; state.gi = null;
-    showLevel('Grades'); renderAll();
-  };
-
-  window.trialShowGrades = function () {
-    if (state.mi === null) { window.trialShowSubjects(); return; }
-    state.gi = null;
-    showLevel('Grades'); renderAll();
-  };
-
-  window.trialOpenGrade = function (mi, gi) {
-    state.mi = mi; state.gi = gi;
-    state.filter = TRIAL_DATA[mi].grades[gi].id;
-    showLevel('Lessons'); renderAll();
-  };
-
-  window.trialSetFilter = function (value) {
-    state.filter = value || FILTER_ALL;
-    renderLessons();
-  };
-
-  window.trialToggleDone = function (mi, gi, li) {
-    var s = TRIAL_DATA[mi], g = s.grades[gi], l = g.lessons[li];
-    var done = !isDone(s.id, g.id, l.title);
-    setDone(s.id, g.id, l.title, done);
-    renderAll();
-  };
-
-  window.trialOpenLesson = function (mi, gi, li) {
-    var s = TRIAL_DATA[mi], g = s.grades[gi], l = g.lessons[li];
-    var url = l.link;
-    if (!url) {
-      url = 'https://www.google.com/search?q=' + encodeURIComponent(s.name + ' ' + g.id + ' ' + l.title);
-      say('Chưa có link riêng cho bài này nên app mở trang tìm kiếm tham khảo. Thêm link vào TRIAL_DATA để mở đúng bài.');
-    }
-    window.open(url, '_blank', 'noopener');
-  };
-
-  // San bang trang thai neu nguoi dung mo Trial bang phim/cach khac
-  document.addEventListener('DOMContentLoaded', function () {
-    if (el('trialTab') && el('trialSubjects') && !el('trialSubjects').innerHTML) renderSubjects();
-  });
-})();
-
-/* ==========================================================================
-   KIEN THUC — kho cong thuc co giai thich (sach Ket noi tri thuc, lop 10-11),
-   dinh ben TRONG tab Trial: 1 chuyen mach "Bai tap / Kien thuc" + 4 tang
-   (Mon > Chuong > Danh sach muc > Khong doc).
-
-   CHI THEM MOI: khong sua ham/tab cu, khong doi id cu. Tren web, moi chuong
-   tai rieng tu kien-thuc/<chuong>.html tren may chu, danh sach muc nam trong
-   kien-thuc/manifest.json (~40 KB).
-
-   Ban mo truc tiep (file://): doc kho tu window.__HZK_LOCAL, do tep
-   kien-thuc-data.js nam canh new.html nap vao. Ban mot tep thi khoi can tep
-   do vi du lieu da duoc nhung thang vao cuoi tep.
-
-   Muon them bai: them/sua .md trong Kien-thuc-Trial, chay hz-kienthuc.js
-   (cong kien-thuc/ ra), roi tai kien-thuc/ + new.html len lop.
-   ========================================================================== */
-(function () {
-  'use strict';
-
-  var DIR = 'kien-thuc/';
-  var LOCAL_SRC = 'kien-thuc-data.js';
-  var K = { on: false, si: null, ci: null, ei: null, man: null, files: {}, busy: false, err: false, localP: null };
+  var LV = ['Subjects', 'Grades', 'Volumes', 'Soon', 'Toc', 'Lesson', 'Formulas', 'Reader', 'AllFormulas'];
 
   function el(id) { return document.getElementById(id); }
   function esc(v) {
     if (typeof window.escapeHtml === 'function') return window.escapeHtml(v);
-    return String(v).replace(/[&<>"']/g, function (c) {
+    return String(v === null || v === undefined ? '' : v).replace(/[&<>"']/g, function (c) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
     });
   }
   function ico(p) { return '<svg viewBox="0 0 24 24" aria-hidden="true">' + p + '</svg>'; }
 
   var ICO = {
-    toan:  ico('<path d="M4 6h5M6.5 3.5v5M4 12h5M4.5 17l4.5 4.5M9 17 4.5 21.5"/><path d="M19.5 5.5H15l4.5 6.5L15 19h4.5"/>'),
-    ly:    ico('<circle cx="12" cy="12" r="1.7"/><ellipse cx="12" cy="12" rx="9.2" ry="3.6"/><ellipse cx="12" cy="12" rx="9.2" ry="3.6" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="9.2" ry="3.6" transform="rotate(120 12 12)"/>'),
-    hoa:   ico('<path d="M9 3h6M10 3v5.2L4.9 16.9A3 3 0 0 0 7.6 21.5h8.8a3 3 0 0 0 2.7-4.6L14 8.2V3"/><path d="M7.4 14.2h9.2"/>'),
-    sinh:  ico('<path d="M20.5 3.5C12 3.5 6.5 7.6 6.5 14a5 5 0 0 0 5 5c6.4 0 9-5.4 9-15.5z"/><path d="M6 21c2.4-5.3 6-9 11-11.5"/>'),
-    anh:   ico('<path d="M4 5.5h16v10.5H12l-4.5 4V16H4z"/><path d="M8 9h8M8 12h5"/>'),
-    van:   ico('<path d="M14.6 4.4 19.6 9.4 8.9 20.1H3.9v-5z"/><path d="M12.9 6.1 17.9 11.1"/><path d="M4 3.5h5"/>'),
-    su:    ico('<path d="M3.4 19.6h17.2M5.2 19.6V9.4M9.6 19.6V9.4M14.4 19.6V9.4M18.8 19.6V9.4M3 9.4h18L12 3.4z"/>'),
-    dia:   ico('<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.3 2.4 3.5 5.3 3.5 8.5s-1.2 6.1-3.5 8.5c-2.3-2.4-3.5-5.3-3.5-8.5S9.7 5.9 12 3.5z"/>'),
-    book:  ico('<path d="M12 6.6C10.6 5.1 8.4 4.3 5 4.3v13.4c3.4 0 5.6.8 7 2.3 1.4-1.5 3.6-2.3 7-2.3V4.3c-3.4 0-5.6.8-7 2.3z"/><path d="M12 6.6v13.4"/>'),
-    cap:   ico('<path d="M12 3.5 21 8l-9 4.5L3 8z"/><path d="M6.5 10.4V15c0 1.7 2.5 3 5.5 3s5.5-1.3 5.5-3v-4.6M21 8.6v4.9"/>')
+    math: ico('<path d="M4 6h5M6.5 3.5v5M4 12h5M4.5 17l4.5 4.5M9 17 4.5 21.5"/><path d="M19.5 5.5H15l4.5 6.5L15 19h4.5"/>'),
+    phy:  ico('<circle cx="12" cy="12" r="1.7"/><ellipse cx="12" cy="12" rx="9.2" ry="3.6"/><ellipse cx="12" cy="12" rx="9.2" ry="3.6" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="9.2" ry="3.6" transform="rotate(120 12 12)"/>'),
+    chem: ico('<path d="M9 3h6M10 3v5.2L4.9 16.9A3 3 0 0 0 7.6 21.5h8.8a3 3 0 0 0 2.7-4.6L14 8.2V3"/><path d="M7.4 14.2h9.2"/>'),
+    bio:  ico('<path d="M20.5 3.5C12 3.5 6.5 7.6 6.5 14a5 5 0 0 0 5 5c6.4 0 9-5.4 9-15.5z"/><path d="M6 21c2.4-5.3 6-9 11-11.5"/>'),
+    ict:  ico('<rect x="3" y="4.5" width="18" height="12" rx="2"/><path d="M8.5 20.5h7M12 16.5v4"/><path d="m9.5 8.5-2 2.2 2 2.2M14.5 8.5l2 2.2-2 2.2"/>'),
+    eng:  ico('<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.3 2.4 3.5 5.3 3.5 8.5s-1.2 6.1-3.5 8.5c-2.3-2.4-3.5-5.3-3.5-8.5S9.7 5.9 12 3.5z"/>'),
+    book: ico('<path d="M12 6.6C10.6 5.1 8.4 4.3 5 4.3v13.4c3.4 0 5.6.8 7 2.3 1.4-1.5 3.6-2.3 7-2.3V4.3c-3.4 0-5.6.8-7 2.3z"/><path d="M12 6.6v13.4"/>'),
+    soon: ico('<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5v5l3 2"/><path d="M4.5 4.5 7 7M19.5 4.5 17 7"/>')
   };
 
-  function sub() { return K.man && K.man.subjects[K.si]; }
-  function chap() { var s = sub(); return s && s.chapters[K.ci]; }
-  function mucCount(c) { return c.entries.filter(function (e) { return e.kind === 'muc'; }).length; }
-  function grades(s) {
-    var g = {}; s.chapters.forEach(function (c) { g[c.grade] = 1; });
-    return Object.keys(g).sort().join(' · ');
+  /* ------------------------------ Dữ liệu -------------------------------- */
+  function CH(id, name, kt, rows) {
+    var out = [], list = rows ? rows.split(';') : [], i, p;
+    for (i = 0; i < list.length; i++) {
+      p = list[i].split('|');
+      out.push({
+        id: p[0], title: p[1],
+        type: p[2] === 'tn' ? 'Trắc nghiệm' : (p[2] === 'tl' ? 'Tự luận' : 'Lý thuyết'),
+        content: ''
+      });
+    }
+    return { id: id, name: name, kt: kt || '', lessons: out };
+  }
+  function VOL(id, name, kind, sub, chapters) { return { id: id, name: name, kind: kind, sub: sub, chapters: chapters }; }
+  function SUBJ(id, name, icon, source, desc, volumes) {
+    return {
+      id: id, name: name, icon: icon, source: source, desc: desc,
+      grades: [
+        { id: '10', volumes: [] },
+        { id: '11', source: source, volumes: volumes },
+        { id: '12', volumes: [] }
+      ]
+    };
+  }
+  var EN_PARTS = [
+    ['Getting Started', 'lt'], ['Language', 'lt'], ['Reading', 'lt'], ['Speaking', 'lt'], ['Listening', 'lt'],
+    ['Writing', 'tl'], ['Communication and Culture', 'lt'], ['Looking Back', 'tn'], ['Project', 'tl']
+  ];
+  function enRows(n) {
+    var r = [], i;
+    for (i = 0; i < EN_PARTS.length; i++) r.push('u' + n + 'p' + (i + 1) + '|' + EN_PARTS[i][0] + '|' + EN_PARTS[i][1]);
+    return r.join(';');
   }
 
-  /* ------------------------- Nguon noi dung (2 kieu) ---------------------- */
+  window.TRIAL_DATA = [
+    SUBJ('toan', 'Toán', 'math', 'Sách Kết nối tri thức với cuộc sống',
+      'Hàm số lượng giác, dãy số – cấp số, mẫu số liệu ghép nhóm, quan hệ song song – vuông góc, xác suất, đạo hàm.',
+      [
+        VOL('t1', 'Tập 1', 'Sách 2 tập', 'Chương I – V', [
+          CH('c1', 'Chương I. Hàm số lượng giác và phương trình lượng giác', 'toan-11-chuong-1',
+            'b1|Bài 1. Giá trị lượng giác của một góc lượng giác;b2|Bài 2. Công thức lượng giác;b3|Bài 3. Hàm số lượng giác;b4|Bài 4. Phương trình lượng giác cơ bản;c1r|Bài tập cuối chương 1|tl'),
+          CH('c2', 'Chương II. Dãy số. Cấp số cộng và cấp số nhân', 'toan-11-chuong-2',
+            'b5|Bài 5. Dãy số;b6|Bài 6. Cấp số cộng;b7|Bài 7. Cấp số nhân;c2r|Bài tập cuối chương 2|tl'),
+          CH('c3', 'Chương III. Các số đặc trưng đo xu thế trung tâm của mẫu số liệu ghép nhóm', 'toan-11-chuong-3',
+            'b8|Bài 8. Mẫu số liệu ghép nhóm;b9|Bài 9. Các số đặc trưng đo xu thế trung tâm của mẫu số liệu ghép nhóm;c3r|Bài tập cuối chương 3|tl'),
+          CH('c4', 'Chương IV. Quan hệ song song trong không gian', '',
+            'b10|Bài 10. Đường thẳng và mặt phẳng trong không gian;b11|Bài 11. Hai đường thẳng song song;b12|Bài 12. Đường thẳng và mặt phẳng song song;b13|Bài 13. Hai mặt phẳng song song;b14|Bài 14. Phép chiếu song song;c4r|Bài tập cuối chương 4|tl'),
+          CH('c5', 'Chương V. Giới hạn. Hàm số liên tục', '',
+            'b15|Bài 15. Giới hạn của dãy số;b16|Bài 16. Giới hạn của hàm số;b17|Bài 17. Hàm số liên tục;c5r|Bài tập cuối chương 5|tl')
+        ]),
+        VOL('t2', 'Tập 2', 'Sách 2 tập', 'Chương VI – IX', [
+          CH('c6', 'Chương VI. Hàm số mũ và hàm số lôgarit', '',
+            'b18|Bài 18. Lũy thừa với số mũ thực;b19|Bài 19. Lôgarit;b20|Bài 20. Hàm số mũ và hàm số lôgarit;b21|Bài 21. Phương trình, bất phương trình mũ và lôgarit;c6r|Bài tập cuối chương 6|tl'),
+          CH('c7', 'Chương VII. Quan hệ vuông góc trong không gian. Phép chiếu vuông góc', '',
+            'b22|Bài 22. Hai đường thẳng vuông góc;b23|Bài 23. Đường thẳng vuông góc với mặt phẳng;b24|Bài 24. Phép chiếu vuông góc. Góc giữa đường thẳng và mặt phẳng;b25|Bài 25. Hai mặt phẳng vuông góc;b26|Bài 26. Khoảng cách;b27|Bài 27. Thể tích;c7r|Bài tập cuối chương 7|tl'),
+          CH('c8', 'Chương VIII. Các quy tắc tính xác suất', '',
+            'b28|Bài 28. Biến cố hợp, biến cố giao, biến cố độc lập;b29|Bài 29. Công thức cộng xác suất;b30|Bài 30. Công thức nhân xác suất cho hai biến cố độc lập;c8r|Bài tập cuối chương 8|tl'),
+          CH('c9', 'Chương IX. Đạo hàm', '',
+            'b31|Bài 31. Định nghĩa và ý nghĩa của đạo hàm;b32|Bài 32. Các quy tắc tính đạo hàm;b33|Bài 33. Đạo hàm cấp hai;c9r|Bài tập cuối chương 9|tl')
+        ])
+      ]),
+    SUBJ('ly', 'Vật lí', 'phy', 'Sách Kết nối tri thức với cuộc sống',
+      'Dao động, sóng, điện trường, dòng điện – mạch điện. Công thức của cả 4 chương có trong kho kiến thức.',
+      [
+        VOL('t1', 'Tập 1', 'Sách một tập', 'Học kỳ I', [
+          CH('c1', 'Chương I. Dao động', 'vat-li-11-chuong-1',
+            'b1|Bài 1. Dao động điều hoà;b2|Bài 2. Mô tả dao động điều hoà;b3|Bài 3. Vận tốc, gia tốc trong dao động điều hoà;b4|Bài 4. Bài tập về dao động điều hoà|tl;b5|Bài 5. Động năng. Thế năng. Sự chuyển hoá năng lượng trong dao động điều hoà;b6|Bài 6. Dao động tắt dần. Dao động cưỡng bức. Hiện tượng cộng hưởng;b7|Bài 7. Bài tập về sự chuyển hoá năng lượng trong dao động điều hoà|tl'),
+          CH('c2', 'Chương II. Sóng', 'vat-li-11-chuong-2',
+            'b8|Bài 8. Mô tả sóng;b9|Bài 9. Sóng ngang. Sóng dọc. Sự truyền năng lượng của sóng cơ;b10|Bài 10. Thực hành: Đo tần số của sóng âm|tl;b11|Bài 11. Sóng điện từ;b12|Bài 12. Giao thoa sóng;b13|Bài 13. Sóng dừng;b14|Bài 14. Bài tập về sóng|tl;b15|Bài 15. Thực hành: Đo tốc độ truyền âm|tl')
+        ]),
+        VOL('t2', 'Tập 2', 'Sách một tập', 'Học kỳ II', [
+          CH('c3', 'Chương III. Điện trường', 'vat-li-11-chuong-3',
+            'b16|Bài 16. Lực tương tác giữa hai điện tích;b17|Bài 17. Khái niệm điện trường;b18|Bài 18. Điện trường đều;b19|Bài 19. Thế năng điện;b20|Bài 20. Điện thế;b21|Bài 21. Tụ điện'),
+          CH('c4', 'Chương IV. Dòng điện – mạch điện', 'vat-li-11-chuong-4',
+            'b22|Bài 22. Cường độ dòng điện;b23|Bài 23. Điện trở. Định luật Ôm;b24|Bài 24. Nguồn điện;b25|Bài 25. Năng lượng và công suất điện;b26|Bài 26. Thực hành: Đo suất điện động và điện trở trong của pin điện hoá|tl')
+        ])
+      ]),
+    SUBJ('hoa', 'Hóa học', 'chem', 'Sách Kết nối tri thức với cuộc sống',
+      'Cân bằng hoá học, nitrogen – sulfur, đại cương hoá học hữu cơ, hydrocarbon và dẫn xuất.',
+      [
+        VOL('t1', 'Tập 1', 'Sách một tập', 'Học kỳ I', [
+          CH('c1', 'Chương I. Cân bằng hoá học', 'hoa-11-chuong-1',
+            'b1|Bài 1. Khái niệm về cân bằng hoá học;b2|Bài 2. Cân bằng trong dung dịch nước;c1r|Bài 3. Ôn tập chương 1|tn'),
+          CH('c2', 'Chương II. Nitrogen – Sulfur', 'hoa-11-chuong-2',
+            'b4|Bài 4. Nitrogen;b5|Bài 5. Ammonia. Muối ammonium;b6|Bài 6. Một số hợp chất của nitrogen với oxygen;b7|Bài 7. Sulfur và sulfur dioxide;b8|Bài 8. Sulfuric acid và muối sulfate;c2r|Bài 9. Ôn tập chương 2|tn'),
+          CH('c3', 'Chương III. Đại cương về hoá học hữu cơ', 'hoa-11-chuong-3',
+            'b10|Bài 10. Hợp chất hữu cơ và hoá học hữu cơ;b11|Bài 11. Phương pháp tách biệt và tinh chế hợp chất hữu cơ;b12|Bài 12. Công thức phân tử hợp chất hữu cơ;b13|Bài 13. Cấu tạo hoá học hợp chất hữu cơ;c3r|Bài 14. Ôn tập chương 3|tn')
+        ]),
+        VOL('t2', 'Tập 2', 'Sách một tập', 'Học kỳ II', [
+          CH('c4', 'Chương IV. Hydrocarbon', '',
+            'b15|Bài 15. Alkane;b16|Bài 16. Hydrocarbon không no;b17|Bài 17. Arene (Hydrocarbon thơm);c4r|Bài 18. Ôn tập chương 4|tn'),
+          CH('c5', 'Chương V. Dẫn xuất halogen – alcohol – phenol', '',
+            'b19|Bài 19. Dẫn xuất halogen;b20|Bài 20. Alcohol;b21|Bài 21. Phenol;c5r|Bài 22. Ôn tập chương 5|tn'),
+          CH('c6', 'Chương VI. Hợp chất carbonyl – carboxylic acid', '',
+            'b23|Bài 23. Hợp chất carbonyl;b24|Bài 24. Carboxylic acid;c6r|Bài 25. Ôn tập chương 6|tn')
+        ])
+      ]),
+    SUBJ('sinh', 'Sinh học', 'bio', 'Sách Kết nối tri thức với cuộc sống',
+      'Trao đổi chất và chuyển hoá năng lượng, cảm ứng, sinh trưởng – phát triển, sinh sản, mối quan hệ sinh lí.',
+      [
+        VOL('t1', 'Tập 1', 'Sách một tập', 'Học kỳ I', [
+          CH('c1', 'Chương I. Trao đổi chất và chuyển hoá năng lượng ở sinh vật', 'sinh-11-chuong-1',
+            'b1|Bài 1. Khái quát về trao đổi chất và chuyển hoá năng lượng;b2|Bài 2. Trao đổi nước và khoáng ở thực vật;b3|Bài 3. Thực hành: Trao đổi nước và khoáng ở thực vật|tl;b4|Bài 4. Quang hợp ở thực vật;b5|Bài 5. Thực hành: Quang hợp ở thực vật|tl;b6|Bài 6. Hô hấp ở thực vật;b7|Bài 7. Thực hành: Hô hấp ở thực vật|tl;b8|Bài 8. Dinh dưỡng và tiêu hoá ở động vật;b9|Bài 9. Hô hấp ở động vật;b10|Bài 10. Tuần hoàn ở động vật;b11|Bài 11. Thực hành: Một số thí nghiệm về tuần hoàn|tl;b12|Bài 12. Miễn dịch ở người và động vật;b13|Bài 13. Bài tiết và cân bằng nội môi'),
+          CH('c2', 'Chương II. Cảm ứng ở sinh vật', 'sinh-11-chuong-2',
+            'b14|Bài 14. Khái quát về cảm ứng ở sinh vật;b15|Bài 15. Cảm ứng ở thực vật;b16|Bài 16. Thực hành: Cảm ứng ở thực vật|tl;b17|Bài 17. Cảm ứng ở động vật;b18|Bài 18. Tập tính ở động vật')
+        ]),
+        VOL('t2', 'Tập 2', 'Sách một tập', 'Học kỳ II', [
+          CH('c3', 'Chương III. Sinh trưởng và phát triển ở sinh vật', 'sinh-11-chuong-3',
+            'b19|Bài 19. Khái quát về sinh trưởng và phát triển ở sinh vật;b20|Bài 20. Sinh trưởng và phát triển ở thực vật;b21|Bài 21. Thực hành: Bấm ngọn, tỉa cành, xử lí kích thích tố và tính tuổi cây|tl;b22|Bài 22. Sinh trưởng và phát triển ở động vật;b23|Bài 23. Thực hành: Quan sát biến thái ở động vật|tl'),
+          CH('c4', 'Chương IV. Sinh sản ở sinh vật', '',
+            'b24|Bài 24. Khái quát về sinh sản ở sinh vật;b25|Bài 25. Sinh sản ở thực vật;b26|Bài 26. Thực hành: Nhân giống vô tính và thụ phấn cho cây|tl;b27|Bài 27. Sinh sản ở động vật'),
+          CH('c5', 'Chương V. Mối quan hệ giữa các quá trình sinh lí trong cơ thể sinh vật và một số ngành nghề liên quan đến sinh học cơ thể', '',
+            'b28|Bài 28. Mối quan hệ giữa các quá trình sinh lí trong cơ thể sinh vật;b29|Bài 29. Một số ngành nghề liên quan đến sinh học cơ thể')
+        ])
+      ]),
+    SUBJ('tin', 'Tin học', 'ict', 'Sách Kết nối tri thức với cuộc sống · định hướng Khoa học máy tính',
+      'Hệ điều hành, mạng và internet, cơ sở dữ liệu, kĩ thuật lập trình theo định hướng Khoa học máy tính.',
+      [
+        VOL('t1', 'Tập 1', 'Sách một tập', 'Học kỳ I', [
+          CH('c1', 'Chủ đề 1. Máy tính và xã hội tri thức', '',
+            'b1|Bài 1. Hệ điều hành;b2|Bài 2. Thực hành sử dụng hệ điều hành|tl;b3|Bài 3. Phần mềm nguồn mở và phần mềm chạy trên Internet;b4|Bài 4. Bên trong máy tính;b5|Bài 5. Kết nối máy tính với các thiết bị số'),
+          CH('c2', 'Chủ đề 2. Tổ chức lưu trữ, tìm kiếm và trao đổi thông tin', '',
+            'b6|Bài 6. Lưu trữ và chia sẻ tệp tin trên internet;b7|Bài 7. Thực hành tìm kiếm thông tin trên Internet|tl;b8|Bài 8. Thực hành nâng cao sử dụng thư điện tử và mạng xã hội|tl'),
+          CH('c3', 'Chủ đề 3. Đạo đức, pháp luật và văn hoá trong môi trường số', '',
+            'b9|Bài 9. Giao tiếp an toàn trên internet'),
+          CH('c4', 'Chủ đề 4. Giới thiệu các hệ cơ sở dữ liệu', '',
+            'b10|Bài 10. Lưu trữ dữ liệu và khai thác thông tin phục vụ quản lí;b11|Bài 11. Cơ sở dữ liệu;b12|Bài 12. Hệ quản trị cơ sở dữ liệu và hệ cơ sở dữ liệu;b13|Bài 13. Cơ sở dữ liệu quan hệ;b14|Bài 14. SQL – Ngôn ngữ truy vấn có cấu trúc;b15|Bài 15. Bảo mật và an toàn hệ cơ sở dữ liệu')
+        ]),
+        VOL('t2', 'Tập 2', 'Sách một tập', 'Học kỳ II', [
+          CH('c5', 'Chủ đề 5. Hướng nghiệp với tin học', '',
+            'b16|Bài 16. Công việc quản trị cơ sở dữ liệu'),
+          CH('c6', 'Chủ đề 6. Kĩ thuật lập trình', '',
+            'b17|Bài 17. Dữ liệu mảng một chiều và hai chiều;b18|Bài 18. Thực hành dữ liệu mảng một chiều và hai chiều|tl;b19|Bài 19. Bài toán tìm kiếm;b20|Bài 20. Thực hành bài toán tìm kiếm|tl;b21|Bài 21. Các thuật toán sắp xếp đơn giản;b22|Bài 22. Thực hành bài toán sắp xếp|tl;b23|Bài 23. Kiểm thử và đánh giá chương trình;b24|Bài 24. Đánh giá độ phức tạp thời gian thuật toán;b25|Bài 25. Thực hành xác định độ phức tạp thời gian thuật toán|tl;b26|Bài 26. Phương pháp làm mịn dần trong thiết kế chương trình;b27|Bài 27. Thực hành thiết kế chương trình theo phương pháp làm mịn dần|tl;b28|Bài 28. Thiết kế chương trình theo mô đun;b29|Bài 29. Thực hành thiết kế chương trình theo mô đun|tl;b30|Bài 30. Thiết lập thư viện cho chương trình;b31|Bài 31. Thực hành thiết lập thư viện chương trình|tl')
+        ])
+      ]),
+    SUBJ('anh', 'Tiếng Anh', 'eng', 'Sách Tiếng Anh 11 · Global Success',
+      'Ngữ pháp và kỹ năng của 10 Unit theo sách Global Success; mỗi Unit tách 9 phần.',
+      [
+        VOL('t1', 'Tập 1', 'Sách 2 tập', 'Unit 1 → 5', [
+          CH('u1', 'Unit 1. A long and healthy life', 'tieng-anh-11-unit-1-5', enRows(1)),
+          CH('u2', 'Unit 2. The generation gap', 'tieng-anh-11-unit-1-5', enRows(2)),
+          CH('u3', 'Unit 3. Cities of the future', 'tieng-anh-11-unit-1-5', enRows(3)),
+          CH('u4', 'Unit 4. ASEAN and Viet Nam', 'tieng-anh-11-unit-1-5', enRows(4)),
+          CH('u5', 'Unit 5. Global warming', 'tieng-anh-11-unit-1-5', enRows(5))
+        ]),
+        VOL('t2', 'Tập 2', 'Sách 2 tập', 'Unit 6 → 10', [
+          CH('u6', 'Unit 6. Preserving our heritage', 'tieng-anh-11-unit-6-10', enRows(6)),
+          CH('u7', 'Unit 7. Education options for school-leavers', 'tieng-anh-11-unit-6-10', enRows(7)),
+          CH('u8', 'Unit 8. Becoming independent', 'tieng-anh-11-unit-6-10', enRows(8)),
+          CH('u9', 'Unit 9. Social issues', 'tieng-anh-11-unit-6-10', enRows(9)),
+          CH('u10', 'Unit 10. The ecosystem', 'tieng-anh-11-unit-6-10', enRows(10))
+        ])
+      ])
+  ];
+
+  /* -------------------------- Tìm dữ liệu -------------------------------- */
+  function findSubject(id) {
+    var a = window.TRIAL_DATA, i;
+    for (i = 0; i < a.length; i++) if (a[i].id === id) return a[i];
+    return null;
+  }
+  function findGrade(sub, id) {
+    var i;
+    if (!sub) return null;
+    for (i = 0; i < sub.grades.length; i++) if (sub.grades[i].id === id) return sub.grades[i];
+    return null;
+  }
+  function findVolume(grade, id) {
+    var i;
+    if (!grade) return null;
+    for (i = 0; i < grade.volumes.length; i++) if (grade.volumes[i].id === id) return grade.volumes[i];
+    return null;
+  }
+  function findChapter(vol, id) {
+    var i;
+    if (!vol) return null;
+    for (i = 0; i < vol.chapters.length; i++) if (vol.chapters[i].id === id) return vol.chapters[i];
+    return null;
+  }
+  function findLesson(ch, id) {
+    var i;
+    if (!ch) return null;
+    for (i = 0; i < ch.lessons.length; i++) if (ch.lessons[i].id === id) return ch.lessons[i];
+    return null;
+  }
+  function volLessons(v) {
+    var n = 0, i;
+    if (!v) return 0;
+    for (i = 0; i < v.chapters.length; i++) n += v.chapters[i].lessons.length;
+    return n;
+  }
+  function subLessons(s) {
+    var g = findGrade(s, '11'), n = 0, i;
+    if (!g) return 0;
+    for (i = 0; i < g.volumes.length; i++) n += volLessons(g.volumes[i]);
+    return n;
+  }
+
+  /* ---------------------------- Tiến độ ---------------------------------- */
+  var progress = {}, storageBlocked = false, warned = false;
+  function warnBlocked() {
+    if (warned) return;
+    warned = true;
+    try { if (typeof window.notify === 'function') window.notify('Trình duyệt đang chặn lưu trên máy nên tiến độ chỉ nhớ trong phiên này.', 'warn'); } catch (e) { }
+  }
+  function readProgress() {
+    try {
+      var raw = localStorage.getItem(STORE_KEY), obj;
+      if (raw) {
+        obj = JSON.parse(raw);
+        if (obj && typeof obj === 'object') progress = obj;
+      }
+    } catch (e) { storageBlocked = true; }
+  }
+  function writeProgress() {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(progress)); }
+    catch (e) { storageBlocked = true; warnBlocked(); }
+  }
+  function pkey(sub, grade, vol, lesson) {
+    return sub.id + '|' + grade.id + '|' + vol.id + '|' + lesson.id;
+  }
+  function isDone(sub, grade, vol, lesson) {
+    return !!progress[pkey(sub, grade, vol, lesson)];
+  }
+  function setDone(sub, grade, vol, lesson, done) {
+    var k = pkey(sub, grade, vol, lesson);
+    if (done) progress[k] = 1; else delete progress[k];
+    writeProgress();
+  }
+  function volDone(v) {
+    var s = S.sub, g = S.grade, n = 0, i, j, c;
+    if (!s || !g || !v) return 0;
+    for (i = 0; i < v.chapters.length; i++) {
+      c = v.chapters[i];
+      for (j = 0; j < c.lessons.length; j++) if (isDone(s, g, v, c.lessons[j])) n++;
+    }
+    return n;
+  }
+
+  var S = {
+    level: 'Subjects', sub: null, grade: null, vol: null, ch: null, les: null,
+    tocY: 0, formulaY: 0, entries: null, entryIdx: -1, entry: null, ktLoaded: false
+  };
+  var KT_CH = null;
+
+    /* ---------------------------- Hiển thị --------------------------------- */
+  function showLevel(name) {
+    S.level = name;
+    var i, n;
+    for (i = 0; i < LV.length; i++) {
+      n = el('trialLevel' + LV[i]);
+      if (n) n.classList.toggle('active', LV[i] === name);
+    }
+  }
+  function top() { try { window.scrollTo(0, 0); } catch (e) { } }
+  function toY(y) { try { window.scrollTo(0, y || 0); } catch (e) { } }
+
+  function countDone(s, g, v) {
+    var n = 0, i, j, c;
+    if (!s || !g || !v) return 0;
+    for (i = 0; i < v.chapters.length; i++) {
+      c = v.chapters[i];
+      for (j = 0; j < c.lessons.length; j++) if (isDone(s, g, v, c.lessons[j])) n++;
+    }
+    return n;
+  }
+  function pct(n, total) { return total ? Math.round(n * 100 / total) : 0; }
+  function oneBookNote(s) {
+    return (s.id === 'ly' || s.id === 'hoa' || s.id === 'sinh' || s.id === 'tin')
+      ? 'Sách in một tập; Tập 1–2 được chia theo thứ tự chương (Tập 1 = Học kỳ I, Tập 2 = Học kỳ II), không phải bản in hai tập.'
+      : '';
+  }
+  function chapterParts(name) {
+    var i = name.indexOf('. ');
+    if (i < 0) return { no: '', title: name };
+    return { no: name.slice(0, i), title: name.slice(i + 2) };
+  }
+  function statusPill(done, total) {
+    return '<span class="trial-pill' + (done ? ' is-done' : '') + '">Đã làm ' + done + '/' + total + '</span>';
+  }
+
+  function lessonCrumb(les) {
+    var m = /^(Bài|Unit|Chủ đề)\s+([0-9]+)/.exec(les.title || '');
+    return m ? m[1] + ' ' + m[2] : (les.title || 'Bài học');
+  }
+  function crumbTrail() {
+    var a = [{ label: 'Trial', act: 'subjects' }], parts;
+    if (S.sub) a.push({ label: S.sub.name, act: 'grades' });
+    if (S.grade) a.push({ label: 'Lớp ' + S.grade.id, act: 'volumes' });
+    if (S.vol) a.push({ label: S.vol.name, act: 'toc' });
+    if (S.level === 'Toc') a.push({ label: 'Mục lục' });
+    else if (S.level === 'AllFormulas') {
+      a.push({ label: 'Sổ tay toàn bộ công thức' });
+    } else if (S.level === 'Lesson' && S.les) {
+      a.push({ label: 'Mục lục', act: 'toc' });
+      a.push({ label: lessonCrumb(S.les) });
+    } else if (S.level === 'Formulas' && S.ch) {
+      parts = chapterParts(S.ch.name);
+      a.push({ label: 'Mục lục', act: 'toc' });
+      a.push({ label: 'Công thức · ' + (parts.no || 'chương') });
+    } else if (S.level === 'Reader' && S.entry) {
+      a.push({ label: 'Mục lục', act: 'toc' });
+      if (S.ch) {
+        parts = chapterParts(S.ch.name);
+        a.push({ label: 'Công thức · ' + (parts.no || 'chương'), act: 'formulas' });
+      }
+      a.push({ label: S.entry.num || S.entry.title });
+    }
+    return a;
+  }
+
+  function renderCrumb() {
+    var box = el('trialCrumb'), tr, h, i;
+    if (!box) return;
+    tr = crumbTrail();
+    h = tr.length === 1
+      ? '<span class="here">' + esc(tr[0].label) + '</span>'
+      : '<button type="button" data-crumb="' + esc(tr[0].act || 'subjects') + '">' + esc(tr[0].label) + '</button>';
+    for (i = 1; i < tr.length - 1; i++) {
+      h += '<span class="crumb-mid"><span class="sep">&rsaquo;</span>' +
+        (tr[i].act
+          ? '<button type="button" data-crumb="' + esc(tr[i].act) + '">' + esc(tr[i].label) + '</button>'
+          : '<span class="here">' + esc(tr[i].label) + '</span>') + '</span>';
+    }
+    if (tr.length > 2) {
+      h += '<span class="crumb-more-wrap"><span class="sep">&rsaquo;</span>' +
+        '<button class="crumb-more" type="button" data-crumb="up" aria-label="Lùi một cấp" title="Lùi một cấp">&hellip;</button></span>';
+    }
+    if (tr.length > 1) h += '<span class="sep">&rsaquo;</span><span class="here">' + esc(tr[tr.length - 1].label) + '</span>';
+    box.innerHTML = h;
+  }
+
+  function renderSubjects() {
+    var box = el('trialSubjects'), h = '', i, s, g, total, done;
+    if (!box) return;
+    for (i = 0; i < window.TRIAL_DATA.length; i++) {
+      s = window.TRIAL_DATA[i];
+      g = findGrade(s, '11');
+      if (!g || !g.volumes.length) continue;
+      total = subLessons(s);
+      done = 0;
+      for (var j = 0; j < g.volumes.length; j++) done += countDone(s, g, g.volumes[j]);
+      h += '<button class="trial-card" type="button" data-sub="' + esc(s.id) + '">' +
+        '<span class="trial-card-ico">' + (ICO[s.icon] || ICO.book) + '</span>' +
+        '<span class="trial-card-name">' + esc(s.name) + '</span>' +
+        '<span class="trial-card-sub">Lớp 11 · ' + g.volumes.length + ' tập · ' + total + ' bài</span>' +
+        '<span class="trial-card-desc">' + esc(s.desc) + '</span>' +
+        '<span class="trial-card-foot">' + statusPill(done, total) + '</span>' +
+        '</button>';
+    }
+    box.innerHTML = h;
+  }
+
+  function renderGrades() {
+    var box = el('trialGrades'), s = S.sub, h = '', i, g, total, done, note;
+    if (!box || !s) return;
+    var ids = ['10', '11', '12'];
+    for (i = 0; i < ids.length; i++) {
+      g = findGrade(s, ids[i]);
+      if (!g) continue;
+      if (g.volumes.length) {
+        total = 0;
+        done = 0;
+        for (var j = 0; j < g.volumes.length; j++) {
+          total += volLessons(g.volumes[j]);
+          done += countDone(s, g, g.volumes[j]);
+        }
+        h += '<button class="trial-card" type="button" data-grade="' + esc(g.id) + '">' +
+          '<span class="trial-card-ico">' + ICO.book + '</span>' +
+          '<span class="trial-card-name">Lớp ' + esc(g.id) + '</span>' +
+          '<span class="trial-card-sub">' + g.volumes.length + ' tập · ' + total + ' bài</span>' +
+          '<span class="trial-card-desc">Đã có nội dung lớp 11. Mở mục lục để xem toàn bộ bài của từng tập.</span>' +
+          '<span class="trial-card-foot">' + statusPill(done, total) + '</span>' +
+          '<span class="trial-card-note">Nguồn: ' + esc(s.source) + '</span>' +
+          '</button>';
+      } else {
+        note = g.id === '11' ? 'Nội dung lớp này chưa được biên soạn.' : 'Hiện app đã có nội dung Lớp 11.';
+        h += '<button class="trial-card is-soon" type="button" data-grade="' + esc(g.id) + '">' +
+          '<span class="trial-card-badge">Đang biên soạn</span>' +
+          '<span class="trial-card-ico">' + ICO.soon + '</span>' +
+          '<span class="trial-card-name">Lớp ' + esc(g.id) + '</span>' +
+          '<span class="trial-card-sub">Chưa có nội dung</span>' +
+          '<span class="trial-card-desc">' + esc(note) + '</span>' +
+          '<span class="trial-card-note">Bấm để xem ghi chú.</span>' +
+          '</button>';
+      }
+    }
+    box.innerHTML = h;
+  }
+
+  function renderVolumes() {
+    var box = el('trialVolumes'), head = el('trialVolumesHead'), s = S.sub, g = S.grade;
+    var h = '', i, v, total = 0, done = 0, vTotal, vDone, note;
+    if (!box || !head || !s || !g) return;
+    for (i = 0; i < g.volumes.length; i++) {
+      total += volLessons(g.volumes[i]);
+      done += countDone(s, g, g.volumes[i]);
+    }
+    note = oneBookNote(s);
+    var hasFormulas = (s.id === 'toan' || s.id === 'ly' || s.id === 'hoa' || s.id === 'sinh');
+    head.innerHTML = '<h3 class="trial-toc-title">' + esc(s.name + ' ' + g.id + ' · Chọn tập') + '</h3>' +
+      '<div class="trial-toc-meta"><span><b>' + g.volumes.length + ' tập</b></span><span><b>' + total + ' bài</b></span><span>Đã làm ' + done + '/' + total + '</span></div>' +
+      '<div class="trial-toc-src">Nguồn: ' + esc(s.source) + '</div>' +
+      (note ? '<div class="trial-toc-note">' + esc(note) + '</div>' : '') +
+      (hasFormulas ? '<div class="trial-mode-switch">' +
+        '<button class="trial-mode-tab active" type="button" data-trial-mode="lessons">📚 Bài học theo sách</button>' +
+        '<button class="trial-mode-tab" type="button" data-trial-mode="all-formulas">⚡ Sổ tay toàn bộ công thức</button>' +
+      '</div>' : '');
+    for (i = 0; i < g.volumes.length; i++) {
+      v = g.volumes[i];
+      vTotal = volLessons(v);
+      vDone = countDone(s, g, v);
+      h += '<button class="trial-card" type="button" data-vol="' + esc(v.id) + '">' +
+        '<span class="trial-card-ico">' + ICO.book + '</span>' +
+        '<span class="trial-card-name">' + esc(v.name) + '</span>' +
+        '<span class="trial-card-sub">' + esc(v.kind + ' · ' + v.sub) + '</span>' +
+        '<span class="trial-card-desc">' + v.chapters.length + ' chương · ' + vTotal + ' bài</span>' +
+        '<span class="trial-bar"><span style="width:' + pct(vDone, vTotal) + '%"></span></span>' +
+        '<span class="trial-card-foot">' + statusPill(vDone, vTotal) + '</span>' +
+        '</button>';
+    }
+    box.innerHTML = h;
+  }
+
+  function renderSoon() {
+    var box = el('trialSoon'), s = S.sub, g = S.grade;
+    if (!box || !s || !g) return;
+    box.innerHTML = '<div class="trial-soon">' +
+      '<div class="trial-soon-ico">' + ICO.soon + '</div>' +
+      '<div class="trial-soon-title">Lớp ' + esc(g.id) + ' đang được biên soạn</div>' +
+      '<p>Lớp ' + esc(g.id) + ' đang được biên soạn. Hiện app đã có nội dung Lớp 11.</p>' +
+      '<div style="margin-top:16px"><button class="trial-ghost" type="button" data-back="grades">&#8592; Về chọn lớp</button></div>' +
+      '</div>';
+  }
+
+  function revealFormulas() {
+    var box = el('trialToc'), btns, H = window.HZK, i, list;
+    if (!box || !H || typeof H.manifest !== 'function') return;
+    btns = box.querySelectorAll('[data-kt]');
+    if (!btns.length) return;
+    list = [];
+    for (i = 0; i < btns.length; i++) list.push(btns[i].getAttribute('data-kt'));
+    H.manifest().then(function (man) {
+      var files = {}, j, k, subs = (man && man.subjects) || [];
+      for (j = 0; j < subs.length; j++) {
+        for (k = 0; k < (subs[j].chapters || []).length; k++) files[subs[j].chapters[k].file] = 1;
+      }
+      for (i = 0; i < btns.length; i++) {
+        if (files[btns[i].getAttribute('data-kt')]) btns[i].removeAttribute('hidden');
+      }
+    }).catch(function () { /* giữ ẩn; mục lục vẫn dùng bình thường */ });
+  }
+
+  function renderToc() {
+    var box = el('trialToc'), head = el('trialTocHead'), s = S.sub, g = S.grade, v = S.vol;
+    var h = '', i, j, c, parts, done, total, note;
+    if (!box || !head || !s || !g || !v) return;
+    total = volLessons(v);
+    done = countDone(s, g, v);
+    note = oneBookNote(s);
+    var hasFormulas = (s.id === 'toan' || s.id === 'ly' || s.id === 'hoa' || s.id === 'sinh');
+    head.innerHTML = '<h3 class="trial-toc-title">' + esc(s.name + ' ' + g.id + ' · ' + v.name) + '</h3>' +
+      '<div class="trial-toc-meta"><span><b>' + v.chapters.length + ' chương</b></span><span><b>' + total + ' bài</b></span><span>Đã làm ' + done + '/' + total + '</span><span>' + esc(v.kind + ' · ' + v.sub) + '</span></div>' +
+      '<div class="trial-toc-src">Nguồn: ' + esc(s.source) + '</div>' +
+      (note ? '<div class="trial-toc-note">' + esc(note) + '</div>' : '') +
+      (hasFormulas ? '<div class="trial-mode-switch">' +
+        '<button class="trial-mode-tab active" type="button" data-trial-mode="lessons">📚 Bài học theo sách</button>' +
+        '<button class="trial-mode-tab" type="button" data-trial-mode="all-formulas">⚡ Sổ tay toàn bộ công thức</button>' +
+      '</div>' : '');
+    for (i = 0; i < v.chapters.length; i++) {
+      c = v.chapters[i];
+      parts = chapterParts(c.name);
+      h += '<section class="trial-ch">' +
+        '<div class="trial-ch-head"><div class="trial-ch-main">' +
+        '<div class="trial-ch-title"><span class="trial-ch-no">' + esc(parts.no) + '</span><span>' + esc(parts.title) + '</span><span class="trial-ch-n">' + c.lessons.length + ' bài</span></div>' +
+        '</div>' +
+        (c.kt ? '<button class="trial-ch-kt" type="button" data-ch="' + esc(c.id) + '" data-kt="' + esc(c.kt) + '" hidden>Công thức chương</button>' : '') +
+        '</div><div class="trial-ch-rows">';
+      for (j = 0; j < c.lessons.length; j++) {
+        var les = c.lessons[j], isDoneRow = isDone(s, g, v, les);
+        h += '<div class="trial-row' + (isDoneRow ? ' is-done' : '') + '" data-ch="' + esc(c.id) + '" data-les="' + esc(les.id) + '">' +
+          '<div class="trial-row-main">' +
+          '<span class="trial-row-title">' + esc(les.title) + '</span>' +
+          '<div class="trial-row-meta"><span class="trial-tag ' + TYPE_CLASS[les.type] + '">' + esc(TYPE_LABEL[les.type]) + '</span></div>' +
+          '</div>' +
+          '<div class="trial-actions">' +
+          '<button class="trial-status' + (isDoneRow ? ' is-done' : '') + '" type="button" data-status="1">' + (isDoneRow ? 'Đã làm' : 'Chưa làm') + '</button>' +
+          '<button class="trial-open" type="button" data-open="1">Mở bài</button>' +
+          '</div></div>';
+      }
+      h += '</div></section>';
+    }
+    box.innerHTML = h;
+    revealFormulas();
+  }
+
+  /* ------------------- BẢN ĐỒ LIÊN KẾT BÀI HỌC VÀ KHO KIẾN THỨC ------------------- */
+  var LESSON_KT_MAP = {
+    'toan-11-chuong-1': {
+      'b1': ['kt-1-1', 'kt-1-2', 'kt-1-3'],
+      'b2': ['kt-1-4', 'kt-1-5', 'kt-1-6', 'kt-1-7', 'kt-1-8'],
+      'b3': ['kt-1-9'],
+      'b4': ['kt-1-10', 'kt-1-11', 'kt-1-12'],
+      'c1r': ['kt-tail-13']
+    },
+    'toan-11-chuong-2': {
+      'b5': ['kt-2-1', 'kt-2-2', 'kt-2-3', 'kt-2-4', 'kt-2-5'],
+      'b6': ['kt-2-6', 'kt-2-7', 'kt-2-8', 'kt-2-9'],
+      'b7': ['kt-2-10', 'kt-2-11', 'kt-2-12', 'kt-2-13'],
+      'c2r': ['kt-tail-14']
+    },
+    'toan-11-chuong-3': {
+      'b8': ['kt-3-1', 'kt-3-9'],
+      'b9': ['kt-3-2', 'kt-3-3', 'kt-3-4', 'kt-3-5', 'kt-3-6', 'kt-3-7', 'kt-3-8'],
+      'c3r': ['kt-tail-10']
+    },
+    'vat-li-11-chuong-1': {
+      'b1': ['kt-1-1', 'kt-1-2'],
+      'b2': ['kt-1-2', 'kt-1-3'],
+      'b3': ['kt-1-4'],
+      'b4': ['kt-1-5'],
+      'b5': ['kt-1-6'],
+      'b6': ['kt-1-7'],
+      'b7': ['kt-1-8', 'kt-tail-9']
+    },
+    'vat-li-11-chuong-2': {
+      'b8': ['kt-2-1'],
+      'b9': ['kt-2-2', 'kt-2-3'],
+      'b10': ['kt-2-8'],
+      'b11': ['kt-2-4'],
+      'b12': ['kt-2-5', 'kt-2-6'],
+      'b13': ['kt-2-7'],
+      'b14': ['kt-2-9'],
+      'b15': ['kt-2-8', 'kt-tail-10']
+    },
+    'vat-li-11-chuong-3': {
+      'b16': ['kt-3-1'],
+      'b17': ['kt-3-2', 'kt-3-3'],
+      'b18': ['kt-3-4'],
+      'b19': ['kt-3-5'],
+      'b20': ['kt-3-6'],
+      'b21': ['kt-3-7', 'kt-3-8', 'kt-tail-9']
+    },
+    'vat-li-11-chuong-4': {
+      'b22': ['kt-4-1'],
+      'b23': ['kt-4-2', 'kt-4-3', 'kt-4-4'],
+      'b24': ['kt-4-5'],
+      'b25': ['kt-4-6', 'kt-4-7'],
+      'b26': ['kt-4-8', 'kt-4-9', 'kt-tail-10']
+    },
+    'hoa-11-chuong-1': {
+      'b1': ['kt-1-1', 'kt-1-2', 'kt-1-3', 'kt-1-4'],
+      'b2': ['kt-1-5', 'kt-1-6', 'kt-1-7', 'kt-1-8', 'kt-1-9', 'kt-1-10', 'kt-1-11', 'kt-1-12', 'kt-1-13'],
+      'c1r': ['kt-tail-14', 'kt-tail-15']
+    },
+    'hoa-11-chuong-2': {
+      'b4': ['kt-2-1', 'kt-2-2'],
+      'b5': ['kt-2-3', 'kt-2-4', 'kt-2-5', 'kt-2-6'],
+      'b6': ['kt-2-7', 'kt-2-8', 'kt-2-9', 'kt-2-10'],
+      'b7': ['kt-2-11', 'kt-2-12', 'kt-2-13'],
+      'b8': ['kt-2-14', 'kt-2-15', 'kt-2-16', 'kt-2-17'],
+      'c2r': ['kt-tail-20']
+    },
+    'hoa-11-chuong-3': {
+      'b10': ['kt-3-1', 'kt-3-2'],
+      'b11': ['kt-3-4'],
+      'b12': ['kt-3-3', 'kt-3-5', 'kt-3-6'],
+      'b13': ['kt-3-7', 'kt-3-8', 'kt-3-9'],
+      'c3r': ['kt-tail-10']
+    },
+    'sinh-11-chuong-1': {
+      'b1': ['kt-1-1'],
+      'b2': ['kt-1-2', 'kt-1-3'],
+      'b3': ['kt-1-2'],
+      'b4': ['kt-1-4', 'kt-1-5', 'kt-1-6'],
+      'b5': ['kt-1-5'],
+      'b6': ['kt-1-7', 'kt-1-8'],
+      'b7': ['kt-1-8'],
+      'b8': ['kt-1-9', 'kt-1-10'],
+      'b9': ['kt-1-11'],
+      'b10': ['kt-1-12'],
+      'b11': ['kt-1-12'],
+      'b12': ['kt-1-13'],
+      'b13': ['kt-1-14', 'kt-tail-15']
+    },
+    'sinh-11-chuong-2': {
+      'b14': ['kt-2-1'],
+      'b15': ['kt-2-2', 'kt-2-3', 'kt-2-4'],
+      'b16': ['kt-2-4'],
+      'b17': ['kt-2-5', 'kt-2-6', 'kt-2-7'],
+      'b18': ['kt-2-8', 'kt-2-9', 'kt-2-10', 'kt-tail-11']
+    },
+    'sinh-11-chuong-3': {
+      'b19': ['kt-3-1', 'kt-3-2'],
+      'b20': ['kt-3-3', 'kt-3-4', 'kt-3-5', 'kt-3-6', 'kt-3-7'],
+      'b21': ['kt-3-8'],
+      'b22': ['kt-3-9', 'kt-3-10', 'kt-3-11'],
+      'b23': ['kt-3-10', 'kt-tail-12']
+    },
+    'tieng-anh-11-unit-1-5': {
+      'u1p1': ['kt-1-1'], 'u1p2': ['kt-1-1', 'kt-1-8'], 'u1p3': ['kt-1-1'], 'u1p4': ['kt-1-1'], 'u1p5': ['kt-1-1'], 'u1p6': ['kt-1-6'], 'u1p7': ['kt-1-1'], 'u1p8': ['kt-1-1', 'kt-tail-9'], 'u1p9': ['kt-1-1'],
+      'u2p1': ['kt-1-2'], 'u2p2': ['kt-1-2', 'kt-1-8'], 'u2p3': ['kt-1-2'], 'u2p4': ['kt-1-2'], 'u2p5': ['kt-1-2'], 'u2p6': ['kt-1-6'], 'u2p7': ['kt-1-2'], 'u2p8': ['kt-1-2', 'kt-tail-9'], 'u2p9': ['kt-1-2'],
+      'u3p1': ['kt-1-3'], 'u3p2': ['kt-1-3', 'kt-1-8'], 'u3p3': ['kt-1-3'], 'u3p4': ['kt-1-3'], 'u3p5': ['kt-1-3'], 'u3p6': ['kt-1-6'], 'u3p7': ['kt-1-3'], 'u3p8': ['kt-1-3', 'kt-tail-9'], 'u3p9': ['kt-1-3'],
+      'u4p1': ['kt-1-4'], 'u4p2': ['kt-1-4', 'kt-1-8'], 'u4p3': ['kt-1-4'], 'u4p4': ['kt-1-4'], 'u4p5': ['kt-1-4'], 'u4p6': ['kt-1-7'], 'u4p7': ['kt-1-4'], 'u4p8': ['kt-1-4', 'kt-tail-9'], 'u4p9': ['kt-1-4'],
+      'u5p1': ['kt-1-5'], 'u5p2': ['kt-1-5', 'kt-1-8'], 'u5p3': ['kt-1-5'], 'u5p4': ['kt-1-5'], 'u5p5': ['kt-1-5'], 'u5p6': ['kt-1-7'], 'u5p7': ['kt-1-5'], 'u5p8': ['kt-1-5', 'kt-tail-9'], 'u5p9': ['kt-1-5']
+    },
+    'tieng-anh-11-unit-6-10': {
+      'u6p1': ['kt-6-1'], 'u6p2': ['kt-6-1', 'kt-6-6'], 'u6p3': ['kt-6-1'], 'u6p4': ['kt-6-1'], 'u6p5': ['kt-6-1'], 'u6p6': ['kt-6-7'], 'u6p7': ['kt-6-1'], 'u6p8': ['kt-6-1', 'kt-tail-9'], 'u6p9': ['kt-6-1'],
+      'u7p1': ['kt-6-2'], 'u7p2': ['kt-6-2', 'kt-6-6'], 'u7p3': ['kt-6-2'], 'u7p4': ['kt-6-2'], 'u7p5': ['kt-6-2'], 'u7p6': ['kt-6-7'], 'u7p7': ['kt-6-2'], 'u7p8': ['kt-6-2', 'kt-tail-9'], 'u7p9': ['kt-6-2'],
+      'u8p1': ['kt-6-3'], 'u8p2': ['kt-6-3', 'kt-6-6'], 'u8p3': ['kt-6-3'], 'u8p4': ['kt-6-3'], 'u8p5': ['kt-6-3'], 'u8p6': ['kt-6-8'], 'u8p7': ['kt-6-3'], 'u8p8': ['kt-6-3', 'kt-tail-9'], 'u8p9': ['kt-6-3'],
+      'u9p1': ['kt-6-4'], 'u9p2': ['kt-6-4', 'kt-6-6'], 'u9p3': ['kt-6-4'], 'u9p4': ['kt-6-4'], 'u9p5': ['kt-6-4'], 'u9p6': ['kt-6-8'], 'u9p7': ['kt-6-4'], 'u9p8': ['kt-6-4', 'kt-tail-9'], 'u9p9': ['kt-6-4'],
+      'u10p1': ['kt-6-5'], 'u10p2': ['kt-6-5', 'kt-6-6'], 'u10p3': ['kt-6-5'], 'u10p4': ['kt-6-5'], 'u10p5': ['kt-6-5'], 'u10p6': ['kt-6-8'], 'u10p7': ['kt-6-5'], 'u10p8': ['kt-6-5', 'kt-tail-9'], 'u10p9': ['kt-6-5']
+    }
+  };
+
+  /* ------------------- KIẾN THỨC BỔ SUNG MÔN TIN HỌC 11 ------------------- */
+  var TIN_KNOWLEDGE = {
+    'b1': {
+      title: 'HỆ ĐIỀU HÀNH (OPERATING SYSTEM)',
+      num: '1.1',
+      meaning: 'Hệ điều hành là phần mềm hệ thống giữ vai trò trung tâm chỉ huy toàn bộ tài nguyên máy tính, tạo môi trường trung gian thân thiện cho phép con người và phần mềm ứng dụng tương tác mượt mà với phần cứng.',
+      mechanism: '<b>Cơ chế và nhiệm vụ quản lý cốt lõi:</b><br>' +
+        '• <b>Quản lý tiến trình (CPU):</b> Điều phối và phân chia thời gian xử lý của CPU cho các tiến trình chạy song song (đa nhiệm - multitasking), ngăn ngừa tranh chấp và đóng băng hệ thống.<br>' +
+        '• <b>Quản lý bộ nhớ (RAM):</b> Cấp phát không gian ô nhớ riêng biệt cho từng chương trình khi nạp vào, giải phóng và thu hồi bộ nhớ ngay khi ứng dụng kết thúc.<br>' +
+        '• <b>Quản lý hệ thống tệp (File System):</b> Tổ chức dữ liệu dưới dạng cấu trúc cây thư mục (thư mục gốc, thư mục con, tệp tin), kiểm soát chặt chẽ quyền đọc (Read), ghi (Write) và thực thi (Execute).<br>' +
+        '• <b>Quản lý thiết bị ngoại vi:</b> Giao tiếp điều khiển bàn phím, chuột, màn hình, máy in thông qua các trình điều khiển tương ứng (Device Drivers).',
+      example: '• Máy tính để bàn và laptop: Microsoft Windows (thương mại phổ biến), macOS (Apple), Linux (Ubuntu, Debian, Fedora).<br>• Thiết bị di động: Android (mã nguồn mở phát triển bởi Google), iOS (Apple).',
+      table: '<tr><th>Phân loại HĐH</th><th>Đặc điểm vận hành</th><th>Ví dụ thực tế</th></tr>' +
+        '<tr><td>Đơn nhiệm</td><td>Chỉ nạp và chạy 1 tiến trình duy nhất tại một thời điểm</td><td>MS-DOS cổ điển</td></tr>' +
+        '<tr><td>Đa nhiệm</td><td>Chia sẻ thời gian CPU cho nhiều tiến trình cùng lúc</td><td>Windows 11, macOS, Linux</td></tr>' +
+        '<tr><td>Mã nguồn đóng</td><td>Bản quyền thương mại, mã nguồn bí mật được kiểm soát độc quyền</td><td>Windows, macOS, iOS</td></tr>' +
+        '<tr><td>Mã nguồn mở</td><td>Mã nguồn công khai, tự do phát triển, tùy biến và phân phối</td><td>Linux, Android AOSP</td></tr>'
+    },
+    'b4': {
+      title: 'BÊN TRONG MÁY TÍNH (KIẾN TRÚC PHẦN CỨNG)',
+      num: '1.4',
+      meaning: 'Nắm vững kiến trúc phần cứng Von Neumann giúp hiểu rõ quy trình tiếp nhận, xử lý và lưu chuyển dữ liệu giữa các linh kiện điện tử tốc độ cao.',
+      mechanism: '<b>Quy trình lưu chuyển và xử lý dữ liệu:</b><br>' +
+        '1. <b>CPU (Central Processing Unit):</b> Não bộ máy tính gồm Khối số học & logic (ALU), Khối điều khiển (CU) và các Thanh ghi (Registers - bộ nhớ siêu nhanh).<br>' +
+        '2. <b>Bộ nhớ trong:</b> Gồm ROM (chứa chương trình khởi động BIOS/UEFI, dữ liệu cố định không mất khi mất điện) và RAM (lưu trữ tạm thời lệnh và dữ liệu đang xử lý, mất sạch dữ liệu khi tắt máy).<br>' +
+        '3. <b>Bus hệ thống:</b> Tuyến đường truyền tín hiệu nhị phân nối CPU với bộ nhớ và thiết bị ngoại vi (gồm Bus địa chỉ, Bus dữ liệu, Bus điều khiển).<br>' +
+        '4. <b>Bo mạch chủ (Motherboard):</b> Bảng mạch in mạch điện chính kết nối và cấp nguồn cho toàn bộ linh kiện.',
+      example: 'Khi mở một phần mềm: Dữ liệu từ ổ cứng SSD được tải vào RAM → CPU nạp từng chỉ thị nhị phân qua Bus dữ liệu, giải mã và thực thi để hiển thị kết quả lên màn hình.',
+      table: '<tr><th>Linh kiện</th><th>Chức năng cốt lõi</th><th>Đặc tính lưu trữ</th></tr>' +
+        '<tr><td>CPU</td><td>Xử lý tính toán số học, logic và điều phối hệ thống</td><td>Thanh ghi siêu nhỏ, tốc độ nano-giây</td></tr>' +
+        '<tr><td>RAM</td><td>Lưu tạm thời chương trình và dữ liệu đang hoạt động</td><td>Khả biến (mất sạch khi mất điện)</td></tr>' +
+        '<tr><td>ROM</td><td>Lưu trữ firmware khởi động hệ thống (BIOS/UEFI)</td><td>Bất biến (không mất khi mất điện)</td></tr>' +
+        '<tr><td>Ổ đĩa SSD/HDD</td><td>Lưu trữ dữ liệu lâu dài, hệ điều hành và tệp tin</td><td>Bất biến, dung lượng lớn (GB / TB)</td></tr>'
+    },
+    'b11': {
+      title: 'CƠ SỞ DỮ LIỆU (CSDL) VÀ HỆ QUẢN TRỊ CSDL',
+      num: '4.2',
+      meaning: 'CSDL là một tập hợp các dữ liệu có cấu trúc, có mối liên hệ logic với nhau, được lưu trữ trên thiết bị nhớ để nhiều người dùng và nhiều ứng dụng có thể cùng khai thác một cách hiệu quả, tránh dư thừa lãng phí.',
+      mechanism: '<b>Mô hình hoạt động hệ thống:</b><br>' +
+        '• <b>Người dùng / Ứng dụng:</b> Gửi yêu cầu truy vấn (thông qua ngôn ngữ chuẩn SQL).<br>' +
+        '• <b>Hệ Quản trị CSDL (DBMS):</b> Phần mềm trung gian tiếp nhận yêu cầu, kiểm tra quyền truy cập, tối ưu hóa câu lệnh, đảm bảo tính toàn vẹn và trực tiếp đọc/ghi vào tệp CSDL vật lý trên đĩa.<br>' +
+        '• <b>Các tính chất bảo đảm:</b> Tính không dư thừa, tính độc lập dữ liệu (thay đổi lưu trữ không ảnh hưởng ứng dụng), tính nhất quán và tính an toàn bảo mật.',
+      example: 'Hệ thống Quản lý trường học: Bảng HọcSinh lưu thông tin cá nhân, Bảng ĐiểmSố lưu điểm thi. Cập nhật họ tên học sinh ở 1 nơi duy nhất thì mọi bảng điểm và học bạ tự động chuẩn xác.',
+      table: '<tr><th>Tính chất CSDL</th><th>Bản chất hoạt động</th><th>Điểm cần nhớ</th></tr>' +
+        '<tr><td>Không dư thừa</td><td>Dữ liệu được lưu trữ tập trung, không lặp lại vô ích</td><td>Tránh xung đột và sai lệch thông tin</td></tr>' +
+        '<tr><td>Toàn vẹn</td><td>Tuân thủ nghiêm ngặt các quy tắc ràng buộc logic</td><td>Điểm số chỉ được nằm trong đoạn [0, 10]</td></tr>' +
+        '<tr><td>Độc lập dữ liệu</td><td>Cấu trúc vật lý tách biệt với chương trình ứng dụng</td><td>Nâng cấp phần cứng không phải viết lại code</td></tr>' +
+        '<tr><td>Bảo mật & an toàn</td><td>Phân quyền chi tiết (đọc, thêm, sửa, xóa), sao lưu định kỳ</td><td>Chỉ giáo viên mới có quyền nhập điểm</td></tr>'
+    },
+    'b13': {
+      title: 'CƠ SỞ DỮ LIỆU QUAN HỆ (RDBMS)',
+      num: '4.4',
+      meaning: 'Mô hình CSDL quan hệ biểu diễn dữ liệu trực quan dưới dạng các bảng hai chiều gồm các dòng và cột. Đây là mô hình phổ biến và quan trọng nhất trong công nghiệp phần mềm hiện đại.',
+      mechanism: '<b>Các thành phần cấu trúc cơ bản:</b><br>' +
+        '• <b>Bảng (Quan hệ / Relation / Table):</b> Tập hợp các dòng và cột.<br>' +
+        '• <b>Hàng (Bản ghi / Record / Row / Tuple):</b> Mỗi hàng đại diện cho một đối tượng cụ thể duy nhất.<br>' +
+        '• <b>Cột (Trường / Field / Attribute):</b> Mỗi cột mô tả một thuộc tính xác định của đối tượng.<br>' +
+        '• <b>Khóa chính (Primary Key):</b> Một hoặc tập hợp các thuộc tính phân biệt duy nhất từng hàng (không trùng lặp, không được để trống NULL).<br>' +
+        '• <b>Khóa ngoại (Foreign Key):</b> Thuộc tính ở bảng này tham chiếu đến khóa chính của bảng khác để thiết lập mối quan hệ.',
+      example: 'Bảng LOP(<u>MaLop</u>, TenLop). Bảng HOCSINH(<u>MaHS</u>, HoTen, <i>MaLop</i>). Trong đó <i>MaLop</i> ở bảng HOCSINH là khóa ngoại tham chiếu đến khóa chính của bảng LOP.',
+      table: '<tr><th>Thuật ngữ</th><th>Ý nghĩa kỹ thuật</th><th>Quy tắc bắt buộc</th></tr>' +
+        '<tr><td>Primary Key</td><td>Khóa chính của bảng</td><td>Bắt buộc duy nhất và khác NULL</td></tr>' +
+        '<tr><td>Foreign Key</td><td>Khóa ngoại liên kết bảng</td><td>Giá trị phải tồn tại ở khóa chính bảng được trỏ</td></tr>' +
+        '<tr><td>Domain</td><td>Miền giá trị thuộc tính</td><td>Quy định kiểu dữ liệu (Số nguyên, Chuỗi, Ngày)</td></tr>'
+    },
+    'b14': {
+      title: 'SQL – NGÔN NGỮ TRUY VẤN CÓ CẤU TRÚC',
+      num: '4.5',
+      meaning: 'SQL là ngôn ngữ chuẩn quốc tế cho phép con người và phần mềm giao tiếp với Hệ quản trị CSDL quan hệ để tạo lập, truy vấn, cập nhật và quản lý dữ liệu một cách chính xác.',
+      mechanism: '<b>4 nhóm thao tác CRUD căn bản:</b><br>' +
+        '• <b>SELECT (Đọc dữ liệu):</b> <code>SELECT cot1, cot2 FROM ten_bang WHERE dieu_kien ORDER BY cot;</code><br>' +
+        '• <b>INSERT (Thêm dữ liệu):</b> <code>INSERT INTO ten_bang (cot1, cot2) VALUES (gt1, gt2);</code><br>' +
+        '• <b>UPDATE (Cập nhật dữ liệu):</b> <code>UPDATE ten_bang SET cot1 = gt_moi WHERE dieu_kien;</code><br>' +
+        '• <b>DELETE (Xóa dữ liệu):</b> <code>DELETE FROM ten_bang WHERE dieu_kien;</code> (Tuyệt đối không quên WHERE kẻo xóa toàn bộ bảng).',
+      example: 'Lấy danh sách học sinh đạt điểm giỏi môn Toán:<br><code>SELECT HoTen, DiemToan FROM HOCSINH WHERE DiemToan &gt;= 8.0 ORDER BY DiemToan DESC;</code>',
+      table: '<tr><th>Mệnh đề SQL</th><th>Chức năng</th><th>Ví dụ cú pháp</th></tr>' +
+        '<tr><td>SELECT ... FROM</td><td>Trích xuất các cột từ bảng chỉ định</td><td>SELECT Ten, Diem FROM HOCSINH</td></tr>' +
+        '<tr><td>WHERE</td><td>Lọc dữ liệu theo điều kiện logic</td><td>WHERE Diem &gt;= 5.0 AND Lop = &quot;11A1&quot;</td></tr>' +
+        '<tr><td>ORDER BY</td><td>Sắp xếp tăng dần (ASC) hoặc giảm dần (DESC)</td><td>ORDER BY Diem DESC</td></tr>' +
+        '<tr><td>GROUP BY</td><td>Gộp nhóm theo thuộc tính để tính tổng, đếm</td><td>SELECT Lop, COUNT(*) FROM HS GROUP BY Lop</td></tr>'
+    },
+    'b17': {
+      title: 'DỮ LIỆU MẢNG MỘT CHIỀU VÀ HAI CHIỀU (PYTHON)',
+      num: '6.1',
+      meaning: 'Mảng là cấu trúc dữ liệu cơ bản lưu giữ dãy các phần tử có thứ tự. Trong Python, mảng một chiều biểu diễn bằng <code>list</code>, mảng hai chiều là danh sách chứa các danh sách (list of lists) dùng làm ma trận hoặc bảng số liệu.',
+      mechanism: '<b>Cơ chế đánh chỉ số và truy cập:</b><br>' +
+        '• Đánh chỉ số từ 0 đến N-1. Chỉ số âm tính ngược từ cuối (-1 là phần tử cuối cùng).<br>' +
+        '• Truy cập phần tử: <code>a[i]</code> cho mảng 1 chiều, <code>a[hang][cot]</code> cho mảng 2 chiều.<br>' +
+        '• Thêm phần tử: <code>a.append(x)</code>; Độ dài mảng: <code>len(a)</code>.',
+      example: '<code># Mảng 1 chiều điểm số:<br>diem = [8.5, 9.0, 7.5]<br>print(diem[0]) # In ra 8.5<br><br># Mảng 2 chiều (ma trận 2x3):<br>matran = [[1, 2, 3], [4, 5, 6]]<br>print(matran[1][2]) # In ra phần tử hàng 1 cột 2 là 6</code>',
+      table: '<tr><th>Thao tác</th><th>Cú pháp trong Python</th><th>Độ phức tạp thời gian</th></tr>' +
+        '<tr><td>Truy cập chỉ số</td><td><code>a[i]</code> hoặc <code>a[r][c]</code></td><td>O(1) – Tức thì</td></tr>' +
+        '<tr><td>Thêm cuối mảng</td><td><code>a.append(gia_tri)</code></td><td>O(1)</td></tr>' +
+        '<tr><td>Duyệt toàn bộ mảng</td><td><code>for x in a:</code></td><td>O(n)</td></tr>' +
+        '<tr><td>Tìm kiếm tuần tự</td><td><code>gia_tri in a</code></td><td>O(n)</td></tr>'
+    },
+    'b19': {
+      title: 'BÀI TOÁN TÌM KIẾM (TUẦN TỰ & NHỊ PHÂN)',
+      num: '6.3',
+      meaning: 'Tìm kiếm là thao tác xác định vị trí của một phần tử có giá trị khóa X trong tập hợp dữ liệu. Đây là thao tác xuất hiện thường xuyên nhất trong các hệ thống tin học.',
+      mechanism: '<b>So sánh cơ chế vận hành:</b><br>' +
+        '• <b>Tìm kiếm tuần tự (Linear Search):</b> Bắt đầu từ đầu mảng, lần lượt so sánh từng phần tử với X. Dừng lại khi tìm thấy hoặc khi đã duyệt hết mảng mà không thấy.<br>' +
+        '• <b>Tìm kiếm nhị phân (Binary Search):</b> BẮT BUỘC dãy đã sắp xếp. So sánh X với phần tử chính giữa (mid). Nếu X &lt; a[mid], thu hẹp phạm vi sang nửa trái; nếu X &gt; a[mid], thu hẹp sang nửa phải. Mỗi bước loại bỏ 50% số phần tử còn lại.',
+      example: 'Tìm X = 23 trong dãy đã sắp xếp: [2, 5, 8, 12, 16, 23, 38, 56]<br>• Bước 1: Phần tử giữa là 12. Vì 23 &gt; 12 ➔ Bỏ hẳn nửa trái [2..12], chỉ xét nửa phải [16, 23, 38, 56].<br>• Bước 2: Phần tử giữa mới là 23 ➔ Tìm thấy ngay ở bước 2!',
+      table: '<tr><th>Thuật toán</th><th>Điều kiện áp dụng</th><th>Số phép so sánh tối đa</th><th>Độ phức tạp</th></tr>' +
+        '<tr><td>Tìm tuần tự</td><td>Dãy bất kỳ (chưa sắp xếp)</td><td>N phép so sánh</td><td>O(n)</td></tr>' +
+        '<tr><td>Tìm nhị phân</td><td>Bắt buộc dãy ĐÃ SẮP XẾP</td><td>log₂N phép so sánh (1 triệu số chỉ mất ~20 bước!)</td><td>O(log n)</td></tr>'
+    },
+    'b21': {
+      title: 'CÁC THUẬT TOÁN SẮP XẾP ĐƠN GIẢN',
+      num: '6.5',
+      meaning: 'Sắp xếp dãy phần tử theo thứ tự tăng dần (hoặc giảm dần) là tiền đề bắt buộc để thực hiện tìm kiếm nhị phân nhanh chóng và hiển thị báo cáo khoa học.',
+      mechanism: '<b>3 giải thuật kinh điển:</b><br>' +
+        '• <b>Sắp xếp nổi bọt (Bubble Sort):</b> So sánh liên tiếp từng cặp phần tử liền kề; nếu sai thứ tự thì đổi chỗ. Sau mỗi lượt duyệt, phần tử lớn nhất sẽ "nổi" về vị trí cuối cùng của dãy.<br>' +
+        '• <b>Sắp xếp chọn (Selection Sort):</b> Ở bước i, tìm phần tử nhỏ nhất trong đoạn từ i đến cuối dãy rồi đổi chỗ với phần tử ở vị trí i.<br>' +
+        '• <b>Sắp xếp chèn (Insertion Sort):</b> Lần lượt lấy từng phần tử từ vị trí 1 đến cuối, chèn vào đúng vị trí tương đối trong đoạn con đã được sắp xếp trước đó.',
+      example: 'Dãy ban đầu: [5, 2, 4].<br>Bước 1 (Bubble Sort): So sánh (5, 2) thấy 5 &gt; 2 ➔ đổi chỗ thành [2, 5, 4].<br>Bước 2: So sánh (5, 4) thấy 5 &gt; 4 ➔ đổi chỗ thành [2, 4, 5]. Hoàn tất dãy tăng dần!',
+      table: '<tr><th>Thuật toán</th><th>Tư tưởng cốt lõi</th><th>Độ phức tạp (TB/Tệ nhất)</th></tr>' +
+        '<tr><td>Bubble Sort</td><td>Đổi chỗ các cặp phần tử cạnh nhau bị nghịch thế</td><td>O(n²)</td></tr>' +
+        '<tr><td>Selection Sort</td><td>Chọn phần tử cực trị đưa về đúng vị trí đầu đoạn</td><td>O(n²)</td></tr>' +
+        '<tr><td>Insertion Sort</td><td>Chèn phần tử hiện tại vào vị trí đúng của đoạn con trước</td><td>O(n²) (Dãy đã gần xếp: O(n))</td></tr>'
+    },
+    'b24': {
+      title: 'ĐÁNH GIÁ ĐỘ PHỨC TẠP THỜI GIAN THUẬT TOÁN',
+      num: '6.8',
+      meaning: 'Độ phức tạp thời gian không đo bằng đơn vị giây (vì phụ thuộc cấu hình máy tính) mà đo bằng số lượng phép toán cơ bản tương quan với kích thước đầu vào N, được biểu diễn bằng ký hiệu Big-O.',
+      mechanism: '<b>Quy tắc suy diễn Big-O:</b><br>' +
+        '• Bỏ qua hằng số nhân và các số hạng bậc thấp (Ví dụ: f(n) = 3n² + 10n + 100 ➔ Độ phức tạp là O(n²)).<br>' +
+        '• Một lệnh gán hoặc phép tính đơn giản: O(1).<br>' +
+        '• Một vòng lặp chạy N lần: O(n).<br>' +
+        '• Hai vòng lặp lồng nhau chạy N lần: O(n²).<br>' +
+        '• Thuật toán chia đôi bài toán (nhị phân): O(log n).',
+      example: 'Với dữ liệu N = 1.000.000 phần tử:<br>• Thuật toán O(log n) chỉ tốn ≈ 20 phép tính (xử lý tức thì).<br>• Thuật toán O(n) tốn 1.000.000 phép tính (khoảng vài mili-giây).<br>• Thuật toán O(n²) tốn 1.000.000.000.000 phép tính (treo máy vài tiếng đồng hồ!).',
+      table: '<tr><th>Ký hiệu Big-O</th><th>Tên gọi tốc độ</th><th>Ví dụ thuật toán điển hình</th></tr>' +
+        '<tr><td>O(1)</td><td>Thời gian hằng số</td><td>Truy xuất phần tử mảng <code>a[i]</code>, phép cộng/trừ</td></tr>' +
+        '<tr><td>O(log n)</td><td>Thời gian lôgarit</td><td>Tìm kiếm nhị phân (Binary Search)</td></tr>' +
+        '<tr><td>O(n)</td><td>Thời gian tuyến tính</td><td>Tìm kiếm tuần tự, tìm Max/Min trong mảng</td></tr>' +
+        '<tr><td>O(n log n)</td><td>Tuyến tính nhân log</td><td>Sắp xếp nhanh (Quick Sort), Sắp xếp trộn (Merge Sort)</td></tr>' +
+        '<tr><td>O(n²)</td><td>Thời gian bậc hai</td><td>Sắp xếp nổi bọt (Bubble Sort), Sắp xếp chọn (Selection Sort)</td></tr>'
+    }
+  };
+
+  /* ------------------- HIỂN THỊ CHI TIẾT BÀI HỌC VỚI KHO KIẾN THỨC ------------------- */
+  function renderLesson() {
+    var box = el('trialLesson'), s = S.sub, g = S.grade, v = S.vol, c = S.ch, les = S.les;
+    var done, h, lesIdx = -1, i;
+    if (!box || !s || !g || !v || !c || !les) return;
+    done = isDone(s, g, v, les);
+    for (i = 0; i < c.lessons.length; i++) {
+      if (c.lessons[i].id === les.id) { lesIdx = i; break; }
+    }
+
+    h = '<div class="trial-lesson-top"><div class="trial-lesson-main">' +
+      '<h3 class="trial-lesson-title">' + esc(les.title) + '</h3>' +
+      '<div class="trial-lesson-meta">' +
+      '<span class="trial-meta-item">' + esc(s.name) + '</span>' +
+      '<span class="trial-meta-item">Lớp ' + esc(g.id) + '</span>' +
+      '<span class="trial-meta-item">' + esc(v.name) + '</span>' +
+      '<span class="trial-meta-item">' + esc(c.name) + '</span>' +
+      '<span class="trial-meta-item">' + esc(TYPE_LABEL[les.type]) + '</span>' +
+      '</div></div>' +
+      '<button class="trial-status' + (done ? ' is-done' : '') + '" type="button" data-lesson-status="1">' + (done ? 'Đã làm' : 'Chưa làm') + '</button>' +
+      '</div>';
+
+    var hasFormulas = (s.id === 'toan' || s.id === 'ly' || s.id === 'hoa' || s.id === 'sinh');
+    h += '<div class="trial-lesson-nav">' +
+      '<button class="hzk-nav" type="button" data-back="toc">&#8592; Về mục lục</button>' +
+      '<div class="trial-lesson-nav-btns">' +
+      '<button class="hzk-nav" type="button" data-lesson-step="-1"' + (lesIdx <= 0 ? ' disabled' : '') + '>&#8592; Bài trước</button>' +
+      '<span class="trial-lesson-nav-info">' + (lesIdx >= 0 ? (lesIdx + 1) + ' / ' + c.lessons.length : '') + '</span>' +
+      '<button class="hzk-nav" type="button" data-lesson-step="1"' + (lesIdx < 0 || lesIdx >= c.lessons.length - 1 ? ' disabled' : '') + '>Bài sau &#8594;</button>' +
+      (hasFormulas ? '<button class="hzk-nav" type="button" data-trial-mode="all-formulas" style="margin-left:8px;color:#fdba74!important;border-color:rgba(251,146,60,.3)!important;">⚡ Sổ tay công thức môn</button>' : '') +
+      '</div></div>';
+
+    h += '<div class="trial-lesson-body is-rich" id="trialLessonBody"><div class="trial-empty">Đang nạp kiến thức bài học…</div></div>';
+    box.innerHTML = h;
+
+    loadLessonContent(s, g, v, c, les);
+  }
+
+  function stepLesson(delta) {
+    if (!S.ch || !S.les) return;
+    var idx = -1, i;
+    for (i = 0; i < S.ch.lessons.length; i++) {
+      if (S.ch.lessons[i].id === S.les.id) { idx = i; break; }
+    }
+    if (idx + delta >= 0 && idx + delta < S.ch.lessons.length) {
+      openLesson(S.ch.id, S.ch.lessons[idx + delta].id);
+    }
+  }
+
+
+  /* ------------------- ĐÓNG KHUNG CÔNG THỨC & SỔ TAY TOÀN BỘ CÔNG THỨC ------------------- */
+  function enhanceFormulaCard(entryNode) {
+    if (!entryNode) return;
+    var labels = entryNode.querySelectorAll('.kt-label');
+    var formulaLabel = null, i;
+    for (i = 0; i < labels.length; i++) {
+      if (labels[i].getAttribute('data-step') === '1' || labels[i].textContent.indexOf('CÔNG THỨC') >= 0) {
+        formulaLabel = labels[i];
+        break;
+      }
+    }
+    if (!formulaLabel) return;
+
+    var cur = formulaLabel.nextElementSibling;
+    while (cur && cur.tagName !== 'UL' && !cur.classList.contains('kt-ul') && !cur.classList.contains('kt-label')) {
+      cur = cur.nextElementSibling;
+    }
+    if (!cur || cur.tagName !== 'UL') return;
+
+    var ul = cur;
+    var lis = ul.querySelectorAll('li');
+    if (!lis.length) return;
+
+    var formulas = [], vars = [], conds = [];
+    for (i = 0; i < lis.length; i++) {
+      var t = (lis[i].textContent || '').trim();
+      var low = t.toLowerCase();
+      if (low.indexOf('trong đó:') === 0 || low.indexOf('trong do:') === 0) {
+        vars.push(t.replace(/^trong đó:s*/i, ''));
+      } else if (low.indexOf('điều kiện') === 0 || low.indexOf('hệ quả') === 0 || low.indexOf('chú ý') === 0 || low.indexOf('lưu ý') === 0) {
+        conds.push(t);
+      } else {
+        formulas.push(t);
+      }
+    }
+
+    var card = document.createElement('div');
+    card.className = 'kt-formula-card';
+
+    var badge = document.createElement('div');
+    badge.className = 'kt-formula-badge';
+    badge.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="margin-right:4px;"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg> CÔNG THỨC CỐT LÕI';
+    card.appendChild(badge);
+
+    for (i = 0; i < formulas.length; i++) {
+      var math = document.createElement('div');
+      math.className = 'kt-formula-math';
+      math.textContent = formulas[i];
+      card.appendChild(math);
+    }
+
+    if (vars.length) {
+      var vWrap = document.createElement('div');
+      vWrap.className = 'kt-formula-vars-wrap';
+      var vTitle = document.createElement('div');
+      vTitle.className = 'kt-formula-vars-title';
+      vTitle.textContent = '📋 ĐẠI LƯỢNG, GIÁ TRỊ & ĐƠN VỊ ĐO:';
+      vWrap.appendChild(vTitle);
+
+      var vGrid = document.createElement('div');
+      vGrid.className = 'kt-formula-vars';
+
+      for (i = 0; i < vars.length; i++) {
+        var rawParts = vars[i].split(';');
+        for (var j = 0; j < rawParts.length; j++) {
+          var p = rawParts[j].trim();
+          if (!p) continue;
+
+          var row = document.createElement('div');
+          row.className = 'kt-var-item';
+
+          var unitMatch = /\b(?:đơn vị\s+([^,);]+)|\(([^)]*(?:rad|m|cm|s|hz|kg|n|j|w|v|a|ω|%|k|f|mol)[^)]*)\))/i.exec(p);
+          var unit = unitMatch ? (unitMatch[1] || unitMatch[2]) : '';
+
+          var symSplit = p.split(/—|–|-|:/);
+          if (symSplit.length >= 2) {
+            var symEl = document.createElement('span');
+            symEl.className = 'kt-var-sym';
+            symEl.textContent = symSplit[0].trim();
+            row.appendChild(symEl);
+
+            var descEl = document.createElement('span');
+            descEl.className = 'kt-var-desc';
+            descEl.textContent = symSplit.slice(1).join('—').trim();
+            row.appendChild(descEl);
+          } else {
+            row.textContent = p;
+          }
+
+          if (unit) {
+            var unitEl = document.createElement('span');
+            unitEl.className = 'kt-var-unit';
+            unitEl.textContent = unit.trim();
+            row.appendChild(unitEl);
+          }
+
+          vGrid.appendChild(row);
+        }
+      }
+      vWrap.appendChild(vGrid);
+      card.appendChild(vWrap);
+    }
+
+    if (conds.length) {
+      var cWrap = document.createElement('div');
+      cWrap.className = 'kt-formula-cond';
+      for (i = 0; i < conds.length; i++) {
+        var cItem = document.createElement('div');
+        cItem.className = 'kt-cond-item';
+        cItem.textContent = '💡 ' + conds[i];
+        cWrap.appendChild(cItem);
+      }
+      card.appendChild(cWrap);
+    }
+
+    ul.parentNode.replaceChild(card, ul);
+  }
+
+  var AF_STATE = { currentSub: null, chapters: [], activeFilter: 'all', query: '', allNodes: [] };
+
+  function openAllFormulas() {
+    var s = S.sub;
+    if (!s) return;
+    AF_STATE.currentSub = s;
+    AF_STATE.activeFilter = 'all';
+    AF_STATE.query = '';
+    AF_STATE.allNodes = [];
+
+    showLevel('AllFormulas');
+    renderCrumb();
+    top();
+
+    var head = el('trialAllFormulasHead');
+    var filterBox = el('trialAllFormulasFilter');
+    var listBox = el('trialAllFormulasList');
+    var searchInput = el('trialAfSearch');
+
+    if (searchInput) searchInput.value = '';
+
+    if (head) {
+      head.innerHTML = '<h3 class="trial-toc-title">⚡ Sổ tay toàn bộ công thức · ' + esc(s.name) + ' 11</h3>' +
+        '<div class="trial-toc-meta"><span>Đóng khung in đậm công thức, giá trị và đơn vị chuẩn SGK</span></div>' +
+        '<div class="trial-mode-switch">' +
+        '<button class="trial-mode-tab" type="button" data-trial-mode="lessons">📚 Bài học theo sách</button>' +
+        '<button class="trial-mode-tab active" type="button" data-trial-mode="all-formulas">⚡ Sổ tay toàn bộ công thức</button>' +
+        '</div>';
+    }
+
+    if (listBox) {
+      listBox.innerHTML = '<div class="trial-empty">Đang tập hợp tất cả công thức của môn ' + esc(s.name) + '…</div>';
+    }
+
+    var H = window.HZK;
+    if (!H || typeof H.manifest !== 'function') {
+      if (listBox) listBox.innerHTML = '<div class="trial-empty">Chưa thể tải sổ tay công thức lúc này.</div>';
+      return;
+    }
+
+    H.manifest().then(function (man) {
+      var subs = (man && man.subjects) || [], subData = null, i;
+      for (i = 0; i < subs.length; i++) {
+        if (subs[i].id === s.id) { subData = subs[i]; break; }
+      }
+      if (!subData || !subData.chapters || !subData.chapters.length) {
+        if (listBox) listBox.innerHTML = '<div class="trial-empty">Môn ' + esc(s.name) + ' chưa có tệp công thức trong kho.</div>';
+        return;
+      }
+
+      AF_STATE.chapters = subData.chapters;
+
+      // Render filter pills
+      if (filterBox) {
+        var fH = '<button class="trial-af-pill active" type="button" data-af-filter="all">Tất cả các chương (' + subData.chapters.length + ')</button>';
+        for (i = 0; i < subData.chapters.length; i++) {
+          var chTitle = subData.chapters[i].title || ('Chương ' + (i + 1));
+          var shortTitle = chTitle.replace(/^CHƯƠNG\s+([0-9IVXLCDM]+):?\s*/i, 'Chương $1: ');
+          fH += '<button class="trial-af-pill" type="button" data-af-filter="' + esc(subData.chapters[i].file) + '">' + esc(shortTitle) + '</button>';
+        }
+        filterBox.innerHTML = fH;
+      }
+
+      // Load all formula entries
+      var loadPromises = [];
+      for (i = 0; i < subData.chapters.length; i++) {
+        (function (ch) {
+          for (var j = 0; j < (ch.entries || []).length; j++) {
+            var ent = ch.entries[j];
+            if (ent.kind === 'muc') {
+              (function (chFile, chTitle, entryId, entryTitle, entryNum) {
+                var p = H.entry(chFile, entryId).then(function (node) {
+                  return { chFile: chFile, chTitle: chTitle, id: entryId, title: entryTitle, num: entryNum, node: node };
+                }).catch(function () { return null; });
+                loadPromises.push(p);
+              })(ch.file, ch.title, ent.id, ent.title, ent.num);
+            }
+          }
+        })(subData.chapters[i]);
+      }
+
+      Promise.all(loadPromises).then(function (results) {
+        AF_STATE.allNodes = [];
+        for (var k = 0; k < results.length; k++) {
+          if (results[k] && results[k].node) {
+            enhanceFormulaCard(results[k].node);
+            AF_STATE.allNodes.push(results[k]);
+          }
+        }
+        renderAllFormulasList();
+      });
+    }).catch(function () {
+      if (listBox) listBox.innerHTML = '<div class="trial-empty">Không thể nạp dữ liệu sổ tay công thức.</div>';
+    });
+  }
+
+  function renderAllFormulasList() {
+    var listBox = el('trialAllFormulasList');
+    if (!listBox) return;
+
+    var filter = AF_STATE.activeFilter;
+    var q = (AF_STATE.query || '').trim().toLowerCase();
+    var count = 0;
+
+    listBox.innerHTML = '';
+
+    for (var i = 0; i < AF_STATE.allNodes.length; i++) {
+      var item = AF_STATE.allNodes[i];
+      if (filter !== 'all' && item.chFile !== filter) continue;
+
+      if (q) {
+        var textContent = (item.title + ' ' + (item.num || '') + ' ' + (item.node.textContent || '')).toLowerCase();
+        if (textContent.indexOf(q) === -1) continue;
+      }
+
+      count++;
+      var card = document.createElement('div');
+      card.className = 'trial-af-entry-card';
+
+      var cardHead = document.createElement('div');
+      cardHead.className = 'trial-af-entry-head';
+      cardHead.innerHTML = '<div class="trial-af-entry-title">' +
+        (item.num ? '<span class="kt-num">' + esc(item.num) + '</span> ' : '') +
+        '<span>' + esc(item.title) + '</span>' +
+        '</div>' +
+        '<div class="trial-af-entry-ch">' + esc(item.chTitle) + '</div>';
+
+      card.appendChild(cardHead);
+      card.appendChild(item.node.cloneNode(true));
+      listBox.appendChild(card);
+    }
+
+    if (count === 0) {
+      listBox.innerHTML = '<div class="trial-empty">' + (q ? 'Không tìm thấy công thức nào phù hợp từ khóa "' + esc(q) + '".' : 'Chưa có công thức cho mục này.') + '</div>';
+    }
+  }
+
+  function loadLessonContent(s, g, v, c, les) {
+    var body = el('trialLessonBody');
+    if (!body) return;
+
+    // 1. Nếu bài học đã có content riêng sẵn
+    if (les.content) {
+      if (les.content.indexOf('<') >= 0) body.innerHTML = les.content;
+      else body.innerHTML = '<div style="white-space:pre-wrap;">' + esc(les.content) + '</div>';
+      return;
+    }
+
+    // 2. Nếu là môn Tin học có kiến thức bổ sung
+    if (s.id === 'tin') {
+      var tin = TIN_KNOWLEDGE[les.id];
+      if (tin) {
+        body.innerHTML = '<div class="kt-entry">' +
+          '<div class="kt-entry-h"><span class="kt-num">' + esc(tin.num) + '</span><span class="kt-t">' + esc(tin.title) + '</span></div>' +
+          '<div class="kt-body">' +
+          '<p class="kt-label" data-step="1">1. Ý NGHĨA VÀ ĐỊNH NGHĨA TRỌNG TÂM</p>' +
+          '<p>' + tin.meaning + '</p>' +
+          '<p class="kt-label" data-step="2">2. CƠ CHẾ VÀ NGUYÊN LÝ HOẠT ĐỘNG</p>' +
+          '<p>' + tin.mechanism + '</p>' +
+          '<p class="kt-label" data-step="4">3. VÍ DỤ MINH HỌA THỰC TẾ</p>' +
+          '<div class="kt-eg"><span class="kt-egtag">VÍ DỤ THỰC TẾ</span>' + tin.example + '</div>' +
+          '<div class="trial-lesson-summary-box">' +
+          '<div class="trial-lesson-summary-box-title">BẢNG TÓM TẮT CỐT LÕI CUỐI BÀI</div>' +
+          '<div class="kt-tbwrap"><table class="kt-tb">' + tin.table + '</table></div>' +
+          '</div></div></div>';
+        return;
+      }
+    }
+
+    // 3. Tra cứu từ kho kiến thức theo LESSON_KT_MAP
+    var ktCode = c.kt;
+    if (!ktCode && s.id === 'anh') {
+      ktCode = v.id === 't1' ? 'tieng-anh-11-unit-1-5' : 'tieng-anh-11-unit-6-10';
+    }
+
+    var map = ktCode ? LESSON_KT_MAP[ktCode] : null;
+    var entryIds = map ? map[les.id] : null;
+
+    // Nếu không khớp chính xác les.id, thử tìm theo số bài (ví dụ "Bài 1", "Bài 2")
+    if (!entryIds && map) {
+      var m = /^b([0-9]+)/.exec(les.id);
+      if (m && map['b' + m[1]]) entryIds = map['b' + m[1]];
+    }
+
+    if (!ktCode || !entryIds || !entryIds.length) {
+      var noteText = (c.kt)
+        ? 'Nội dung chi tiết của bài này đang được cập nhật thêm. Bạn có thể bấm nút <b>Công thức chương</b> ở đầu mục lục để tra cứu toàn bộ chuyên đề của chương.'
+        : 'Nội dung bài học đang được biên soạn theo chương trình GDPT 2018.';
+      body.innerHTML = '<div class="trial-lesson-empty">' + noteText + '</div>';
+      return;
+    }
+
+    var H = window.HZK;
+    if (!H || typeof H.entry !== 'function') {
+      body.innerHTML = '<div class="trial-empty">Chưa thể tải kiến thức bài học lúc này.</div>';
+      return;
+    }
+
+    // Tải tất cả các mục kiến thức thuộc bài học này
+    var promises = [];
+    for (var k = 0; k < entryIds.length; k++) {
+      promises.push(H.entry(ktCode, entryIds[k]));
+    }
+
+    Promise.all(promises).then(function (nodes) {
+      if (!S.les || S.les.id !== les.id) return;
+      body.innerHTML = '';
+      var hasAny = false;
+      for (var j = 0; j < nodes.length; j++) {
+        if (nodes[j]) {
+          enhanceFormulaCard(nodes[j]);
+          body.appendChild(nodes[j]);
+          hasAny = true;
+        }
+      }
+      if (!hasAny) {
+        body.innerHTML = '<div class="trial-lesson-empty">Nội dung bài học đang biên soạn.</div>';
+      }
+    }).catch(function () {
+      if (S.les && S.les.id === les.id) {
+        body.innerHTML = '<div class="trial-empty">Chưa thể nạp bài học lúc này. Vui lòng bấm vào <b>Công thức chương</b> trên đầu mục lục để đọc.</div>';
+      }
+    });
+  }
+
+  function paintFormulaHead(n) {
+    var head = el('trialFormulaHead');
+    if (!head || !S.ch) return;
+    head.innerHTML = '<h3 class="trial-toc-title">Công thức · ' + esc(S.ch.name) + '</h3>' +
+      '<div class="trial-toc-meta"><span><b>' + (n || 0) + ' mục</b></span><span>Mỗi mục đủ 7 phần: công thức, ý nghĩa, cách chứng minh, ví dụ, ghi chú sai lầm</span></div>' +
+      '<div class="trial-toc-src">Nguồn: kho kiến thức ' + esc(S.sub ? S.sub.name : '') + ' 11 · ' + esc(S.ch.kt) + '</div>';
+  }
+
+  function renderFormulaList() {
+    var box = el('trialFormulaList'), h = '', i, e, tag;
+    if (!box) return;
+    if (!S.entries || !S.entries.length) {
+      box.innerHTML = '<div class="trial-empty">Chương này chưa có mục công thức.</div>';
+      paintFormulaHead(0);
+      return;
+    }
+    for (i = 0; i < S.entries.length; i++) {
+      e = S.entries[i];
+      tag = e.kind === 'muc'
+        ? '<span class="trial-tag gr">' + esc(e.num || 'Mục') + '</span>'
+        : '<span class="trial-tag lt">Tổng hợp</span>';
+      h += '<div class="trial-row" data-entry="' + i + '">' +
+        '<div class="trial-row-main"><span class="trial-row-title">' + esc(e.title) + '</span>' +
+        '<div class="trial-row-meta">' + tag + '<span class="trial-tag lt">7 phần</span></div></div>' +
+        '<div class="trial-actions"><button class="trial-open" type="button" data-read-entry="1">Đọc</button></div>' +
+        '</div>';
+    }
+    box.innerHTML = h;
+    paintFormulaHead(S.entries.length);
+  }
+
+  function formulaFail() {
+    var box = el('trialFormulaList');
+    if (box) box.innerHTML = '<div class="trial-empty">Chưa mở được công thức chương này. <button class="hzk-nav" type="button" data-retry-formula="1">Thử lại</button></div>';
+    paintFormulaHead(0);
+  }
+
+  function loadFormula() {
+    var box = el('trialFormulaList'), H = window.HZK, code;
+    if (!box || !S.ch) return;
+    if (!S.ch.kt) {
+      box.innerHTML = '<div class="trial-empty">Chương này chưa có công thức trong kho.</div>';
+      paintFormulaHead(0);
+      return;
+    }
+    code = S.ch.kt;
+    box.innerHTML = '<div class="trial-empty">Đang mở công thức chương…</div>';
+    paintFormulaHead(0);
+    if (!H || typeof H.chapter !== 'function') { formulaFail(); return; }
+    H.chapter(code).then(function (ch) {
+      if (!S.ch || S.ch.kt !== code) return;
+      if (!ch) { formulaFail(); return; }
+      S.entries = ch.entries || [];
+      renderFormulaList();
+    }).catch(function () {
+      if (S.ch && S.ch.kt === code) formulaFail();
+    });
+  }
+
+  function readerButtons() {
+    var p = el('trialReaderPrev'), n = el('trialReaderNext');
+    if (p) p.disabled = S.entryIdx <= 0;
+    if (n) n.disabled = !S.entries || S.entryIdx >= S.entries.length - 1;
+  }
+
+  function openEntry(idx) {
+    var box = el('trialReader'), name = el('trialReaderName'), H = window.HZK;
+    var les, code;
+    if (!S.entries || idx < 0 || idx >= S.entries.length) return;
+    if (S.level !== 'Reader') S.formulaY = window.scrollY;
+    S.entryIdx = idx;
+    S.entry = S.entries[idx];
+    if (name) name.textContent = (S.entry.num ? S.entry.num + ' — ' : '') + S.entry.title;
+    showLevel('Reader');
+    renderCrumb();
+    readerButtons();
+    if (!box) return;
+    box.innerHTML = '<div class="trial-empty">Đang tải mục…</div>';
+    if (!H || typeof H.entry !== 'function' || !S.ch) {
+      box.innerHTML = '<div class="trial-empty">Chưa mở được mục này. <button class="hzk-nav" type="button" data-retry-entry="1">Thử lại</button></div>';
+      return;
+    }
+    les = S.entry;
+    code = S.ch.kt;
+    H.entry(code, les.id).then(function (node) {
+      if (!S.entry || S.entry.id !== les.id) return;
+      box.innerHTML = '';
+      if (node) box.appendChild(node);
+      else box.innerHTML = '<div class="trial-empty">Mục này chưa có trong tệp chương.</div>';
+      box.scrollTop = 0;
+    }).catch(function () {
+      if (!S.entry || S.entry.id !== les.id) return;
+      box.innerHTML = '<div class="trial-empty">Chưa mở được mục này. <button class="hzk-nav" type="button" data-retry-entry="1">Thử lại</button></div>';
+    });
+  }
+
+  function stepEntry(d) {
+    if (!S.entries) return;
+    openEntry(S.entryIdx + d);
+  }
+
+    /* --------------------------- Điều hướng -------------------------------- */
+  function resetState() {
+    S.sub = null; S.grade = null; S.vol = null; S.ch = null; S.les = null;
+    S.tocY = 0; S.formulaY = 0; S.entries = null; S.entryIdx = -1; S.entry = null;
+  }
+
+  function openSubject(id) {
+    var s = findSubject(id);
+    if (!s) return;
+    S.sub = s; S.grade = null; S.vol = null; S.ch = null; S.les = null;
+    renderGrades();
+    showLevel('Grades');
+    renderCrumb();
+    top();
+  }
+
+  function openGrade(id) {
+    var g = findGrade(S.sub, id);
+    if (!g) return;
+    S.grade = g; S.vol = null; S.ch = null; S.les = null;
+    if (!g.volumes.length) {
+      renderSoon();
+      showLevel('Soon');
+      renderCrumb();
+      top();
+      return;
+    }
+    renderVolumes();
+    showLevel('Volumes');
+    renderCrumb();
+    top();
+  }
+
+  function openVolume(id) {
+    var v = findVolume(S.grade, id);
+    if (!v) return;
+    S.vol = v; S.ch = null; S.les = null; S.tocY = 0;
+    renderToc();
+    showLevel('Toc');
+    renderCrumb();
+    top();
+  }
+
+  function openLesson(chId, lesId) {
+    var c = findChapter(S.vol, chId), les = findLesson(c, lesId);
+    if (!c || !les) return;
+    S.tocY = window.scrollY;
+    S.ch = c; S.les = les;
+    renderLesson();
+    showLevel('Lesson');
+    renderCrumb();
+    top();
+  }
+
+  function openFormulas(chId) {
+    var c = findChapter(S.vol, chId);
+    if (!c) return;
+    S.tocY = window.scrollY;
+    S.ch = c; S.les = null; S.entries = null; S.entry = null; S.entryIdx = -1; S.formulaY = 0;
+    paintFormulaHead(0);
+    showLevel('Formulas');
+    renderCrumb();
+    top();
+    loadFormula();
+  }
+
+  function backToToc() {
+    S.ch = null; S.les = null; S.entries = null; S.entry = null; S.entryIdx = -1;
+    renderToc();
+    showLevel('Toc');
+    renderCrumb();
+    toY(S.tocY);
+  }
+
+  function backToFormulas() {
+    S.entry = null; S.entryIdx = -1;
+    if (S.entries && S.entries.length) renderFormulaList();
+    else loadFormula();
+    showLevel('Formulas');
+    renderCrumb();
+    toY(S.formulaY);
+  }
+
+  function navigate(where) {
+    if (where === 'subjects') {
+      resetState();
+      renderSubjects();
+      showLevel('Subjects');
+      renderCrumb();
+      top();
+      return;
+    }
+    if (where === 'grades') {
+      if (!S.sub) { navigate('subjects'); return; }
+      S.grade = null; S.vol = null; S.ch = null; S.les = null;
+      renderGrades();
+      showLevel('Grades');
+      renderCrumb();
+      top();
+      return;
+    }
+    if (where === 'volumes') {
+      if (!S.grade) { navigate('grades'); return; }
+      S.vol = null; S.ch = null; S.les = null;
+      renderVolumes();
+      showLevel('Volumes');
+      renderCrumb();
+      top();
+      return;
+    }
+    if (where === 'toc') { backToToc(); return; }
+    if (where === 'formulas') { backToFormulas(); return; }
+  }
+
+  function upLevel() {
+    if (S.level === 'Grades') return 'subjects';
+    if (S.level === 'Volumes' || S.level === 'Soon') return 'grades';
+    if (S.level === 'Toc' || S.level === 'AllFormulas') return 'volumes';
+    if (S.level === 'Lesson' || S.level === 'Formulas') return 'toc';
+    if (S.level === 'Reader') return 'formulas';
+    return 'subjects';
+  }
+
+  function toggleTocStatus(chId, lesId) {
+    var c = findChapter(S.vol, chId), les = findLesson(c, lesId), y;
+    if (!c || !les) return;
+    y = window.scrollY;
+    setDone(S.sub, S.grade, S.vol, les, !isDone(S.sub, S.grade, S.vol, les));
+    renderToc();
+    toY(y);
+  }
+
+  function toggleLessonStatus() {
+    if (!S.ch || !S.les) return;
+    setDone(S.sub, S.grade, S.vol, S.les, !isDone(S.sub, S.grade, S.vol, S.les));
+    renderLesson();
+  }
+
+  window.openTrial = function () {
+    if (typeof window.goMenu === 'function') window.goMenu('trialTab');
+    else {
+      var tab = el('trialTab');
+      if (tab) tab.classList.add('active');
+    }
+    try {
+      document.querySelectorAll('.menu-item').forEach(function (b) {
+        b.classList.toggle('active', b.getAttribute('onclick') === 'openTrial()');
+      });
+    } catch (e) { }
+    if (typeof window.toggleMenu === 'function') window.toggleMenu(false);
+    resetState();
+    renderSubjects();
+    showLevel('Subjects');
+    renderCrumb();
+    top();
+  };
+
+  /* Cho mã cũ / liên kết ngoài gọi được màn gốc */
+  window.trialShowSubjects = function () { navigate('subjects'); };
+
+  /* ---------------------------- Sự kiện ---------------------------------- */
+  function onClick(ev) {
+    var t = ev.target, hit, row;
+    if (!t) return;
+    if (t.nodeType !== 1) t = t.parentElement;
+    if (!t || !t.closest) return;
+
+    hit = t.closest('[data-back]');
+    if (hit) { navigate(hit.getAttribute('data-back')); return; }
+
+    hit = t.closest('[data-crumb]');
+    if (hit) {
+      var where = hit.getAttribute('data-crumb');
+      navigate(where === 'up' ? upLevel() : where);
+      return;
+    }
+
+    hit = t.closest('[data-sub]');
+    if (hit) { openSubject(hit.getAttribute('data-sub')); return; }
+
+    hit = t.closest('[data-grade]');
+    if (hit) { openGrade(hit.getAttribute('data-grade')); return; }
+
+    hit = t.closest('[data-vol]');
+    if (hit) { openVolume(hit.getAttribute('data-vol')); return; }
+
+    hit = t.closest('[data-trial-mode]');
+    if (hit) {
+      var mode = hit.getAttribute('data-trial-mode');
+      if (mode === 'all-formulas') { openAllFormulas(); return; }
+      if (mode === 'lessons') {
+        if (S.vol) { openVolume(S.vol.id); return; }
+        if (S.grade) { openGrade(S.grade.id); return; }
+        navigate('grades');
+        return;
+      }
+    }
+
+    hit = t.closest('[data-af-filter]');
+    if (hit) {
+      var fCode = hit.getAttribute('data-af-filter');
+      AF_STATE.activeFilter = fCode;
+      var pills = document.querySelectorAll('.trial-af-pill');
+      for (var pIdx = 0; pIdx < pills.length; pIdx++) {
+        pills[pIdx].classList.toggle('active', pills[pIdx].getAttribute('data-af-filter') === fCode);
+      }
+      renderAllFormulasList();
+      return;
+    }
+
+    hit = t.closest('[data-lesson-step]');
+    if (hit) { stepLesson(+hit.getAttribute('data-lesson-step')); return; }
+
+    hit = t.closest('[data-lesson-status]');
+    if (hit) { toggleLessonStatus(); return; }
+
+    hit = t.closest('[data-status]');
+    if (hit) {
+      row = hit.closest('.trial-row[data-les]');
+      if (row) toggleTocStatus(row.getAttribute('data-ch'), row.getAttribute('data-les'));
+      return;
+    }
+
+    hit = t.closest('[data-open]');
+    if (hit) {
+      row = hit.closest('.trial-row[data-les]');
+      if (row) openLesson(row.getAttribute('data-ch'), row.getAttribute('data-les'));
+      return;
+    }
+
+    hit = t.closest('[data-kt]');
+    if (hit) { openFormulas(hit.getAttribute('data-ch')); return; }
+
+    hit = t.closest('[data-retry-formula]');
+    if (hit) { loadFormula(); return; }
+
+    hit = t.closest('[data-retry-entry]');
+    if (hit) { if (S.entryIdx >= 0) openEntry(S.entryIdx); return; }
+
+    hit = t.closest('[data-reader]');
+    if (hit) { stepEntry(+hit.getAttribute('data-reader')); return; }
+
+    hit = t.closest('[data-entry]');
+    if (hit) { openEntry(+hit.getAttribute('data-entry')); return; }
+  }
+
+  function bind() {
+    var tab = el('trialTab');
+    if (!tab) return;
+    readProgress();
+    renderSubjects();
+    showLevel('Subjects');
+    renderCrumb();
+    tab.addEventListener('click', onClick);
+    tab.addEventListener('input', function (ev) {
+      if (ev.target && ev.target.id === 'trialAfSearch') {
+        AF_STATE.query = ev.target.value;
+        renderAllFormulasList();
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind);
+  else bind();
+})();
+</script>
+
+<script>
+/* ==========================================================================
+   KHO KIẾN THỨC — chỉ còn là API đọc công thức cho tab Trial.
+   Nguồn (giữ nguyên cơ chế cũ, không thêm nguồn thứ ba):
+     • web: kien-thuc/manifest.json + kien-thuc/<chương>.html (tải lười)
+     • file://: kien-thuc-data.js cạnh new.html (window.__HZK_LOCAL)
+     • bản một tệp: window.__HZK_LOCAL đã nhúng sẵn
+   Không nhúng cả kho vào new.html. Lỗi tải chỉ trả promise lỗi để
+   màn Trial hiện thông báo nhỏ; mục lục không phụ thuộc lần tải này.
+   ========================================================================== */
+(function () {
+  'use strict';
+
+  var DIR = 'kien-thuc/';
+  var LOCAL_SRC = 'kien-thuc-data.js';
+  var ALLOWED = { toan: 1, ly: 1, hoa: 1, sinh: 1, tin: 1, anh: 1 };
+  var man = null, manP = null, localP = null, hosts = {};
+
   function isLocalFile() { return location.protocol === 'file:'; }
   function localData() { return window.__HZK_LOCAL || null; }
-
-  /* Ban mo truc tiep: nap kien-thuc-data.js nam canh new.html.
-     Ban mot tep: window.__HZK_LOCAL da duoc nhung san, khong can tep nay. */
-  function loadLocalData() {
-    if (localData()) return Promise.resolve(localData());
-    if (K.localP) return K.localP;
-    K.localP = new Promise(function (resolve, reject) {
-      var s = document.createElement('script');
-      s.src = LOCAL_SRC;
-      s.onload = function () {
-        var d = localData();
-        if (d && d.manifest && d.chapters) resolve(d);
-        else { K.localP = null; reject(new Error('local-data')); }
-      };
-      s.onerror = function () { K.localP = null; reject(new Error('local-data')); };
-      (document.head || document.documentElement).appendChild(s);
-    });
-    return K.localP;
-  }
-
   function localChapter(file) {
     var d = localData();
     return (d && d.chapters && d.chapters[file]) || null;
   }
 
-  /* ------------------------------- Hien thi ------------------------------- */
-  function level(which) {
-    ['Subjects', 'Chapters', 'Entries', 'Reader'].forEach(function (k) {
-      var n = el('hzkLevel' + k);
-      if (n) n.classList.toggle('active', k === which);
-    });
-  }
-
-  function crumb() {
-    var c = el('hzkCrumb');
-    if (!c) return;
-    if (!K.on) { c.innerHTML = ''; return; }
-    if (!K.man) { c.innerHTML = '<span class="here">Kiến thức</span>'; return; }
-    if (K.si === null) { c.innerHTML = '<span class="here">Kiến thức</span>'; return; }
-    var s = sub(), h = '<button type="button" data-hzk-go="subjects">Kiến thức</button><span class="sep">&rsaquo;</span>';
-    if (K.ci === null) { c.innerHTML = h + '<span class="here">' + esc(s.name) + '</span>'; return; }
-    var ch = chap();
-    h += '<button type="button" data-hzk-go="chapters">' + esc(s.name) + '</button><span class="sep">&rsaquo;</span>';
-    if (K.ei === null) { c.innerHTML = h + '<span class="here">' + esc(ch.title) + '</span>'; return; }
-    h += '<button type="button" data-hzk-go="entries">' + esc(ch.title) + '</button><span class="sep">&rsaquo;</span>';
-    var e = ch.entries[K.ei];
-    c.innerHTML = h + '<span class="here">' + esc((e.num ? e.num + ' — ' : '') + e.title) + '</span>';
-  }
-
-  function failBox(txt) {
-    var note = isLocalFile()
-      ? 'Bản này đang mở trực tiếp trong máy nên kho cần tệp <b>kien-thuc-data.js</b> nằm cạnh new.html (bản một tệp thì nội dung đã nhúng sẵn). Kiểm tra tệp đó, hoặc mở bằng địa chỉ web của lớp.'
-      : 'Kho Kiến thức tải nội dung từ máy chủ nên cần có mạng (đăng nhập và các mục khác của app vẫn dùng bình thường khi mất mạng). Kiểm tra kết nối rồi bấm thử lại.';
-    return '<div class="hzk-empty"><b>' + esc(txt) + '</b>' + note + '<br><br>' +
-      '<button class="hzk-nav" type="button" data-hzk-retry="1">Thử lại</button></div>';
-  }
-
-  function renderSubjects() {
-    var box = el('hzkSubjects');
-    if (!box) return;
-    if (K.err) { box.innerHTML = failBox('Máy chưa mở được kho Kiến thức'); return; }
-    if (!K.man) { box.innerHTML = '<div class="hzk-empty"><b>Đang mở kho Kiến thức…</b>Lần mở đầu cần tải danh sách chương.</div>'; return; }
-    box.innerHTML = K.man.subjects.map(function (s, si) {
-      var muc = s.chapters.reduce(function (n, c) { return n + mucCount(c); }, 0);
-      return '<button class="trial-card" type="button" data-hzk-sub="' + si + '">' +
-        '<span class="trial-card-ico">' + (ICO[s.id] || ICO.book) + '</span>' +
-        '<span class="trial-card-name">' + esc(s.name) + '</span>' +
-        '<span class="trial-card-sub">' + s.chapters.length + ' chương · ' + muc + ' mục</span>' +
-        '<p>' + esc(s.desc || 'Mỗi mục đủ 7 phần: công thức, ý nghĩa, cách chứng minh, 3 ví dụ, ghi chú sai lầm.') + '</p>' +
-        '<span class="trial-card-foot"><span class="trial-pill">Lớp ' + esc(grades(s)) + '</span></span>' +
-      '</button>';
-    }).join('');
-  }
-
-  function tailTag(t) {
-    if (/^BẢNG/.test(t)) return 'Bảng tổng hợp';
-    if (/^PHẦN/.test(t)) return 'Phần';
-    if (/^ÔN TẬP/.test(t)) return 'Ôn tập';
-    return 'Ghi chú';
-  }
-
-  function renderChapters() {
-    var box = el('hzkChapters'), s = sub();
-    if (!box || !s) return;
-    box.innerHTML = s.chapters.map(function (c, ci) {
-      var short = c.title.split(':')[0];
-      var rest = c.title.length > short.length ? c.title.slice(short.length + 1).trim() : '';
-      var hasSum = c.entries.some(function (e) {
-        return e.kind !== 'muc' && /^(BẢNG|ÔN TẬP)/.test(e.title);
-      });
-      return '<button class="trial-card" type="button" data-hzk-chap="' + ci + '">' +
-        '<span class="trial-card-ico">' + ICO.book + '</span>' +
-        '<span class="trial-card-name">' + esc(short) + '</span>' +
-        '<span class="trial-card-sub">Lớp ' + esc(c.grade) + ' · ' + mucCount(c) + ' mục</span>' +
-        '<p>' + esc(rest || s.name + ' ' + c.grade) + '</p>' +
-        '<span class="trial-card-foot"><span class="trial-pill">' + (hasSum ? 'Có bảng tóm tắt' : 'Công thức + ví dụ') + '</span></span>' +
-      '</button>';
-    }).join('');
-  }
-
-  function renderEntries() {
-    var box = el('hzkEntries'), c = chap();
-    if (!box || !c) return;
-    box.innerHTML = c.entries.map(function (e, ei) {
-      var tag = e.kind === 'muc'
-        ? '<span class="trial-tag gr">' + esc(e.num) + '</span>'
-        : '<span class="trial-tag lt">' + esc(tailTag(e.title)) + '</span>';
-      return '<div class="trial-row"><div class="trial-row-main">' +
-        '<span class="trial-row-title">' + esc(e.title) + '</span>' +
-        '<span class="trial-row-meta">' + tag + '</span></div>' +
-        '<div class="trial-actions"><button class="trial-open" type="button" data-hzk-entry="' + ei + '">Đọc</button></div>' +
-        '</div>';
-    }).join('');
-  }
-
-  function paintEntry() {
-    var c = chap(), box = el('hzkRead');
-    if (!c || !box) return;
-    var e = c.entries[K.ei];
-    if (!e) { K.ei = null; level('Entries'); renderEntries(); crumb(); return; }
-    var name = el('hzkReadName'); if (name) name.textContent = c.title;
-    var host = K.files[c.file];
-    if (!host) return;
-    var src = host.querySelector('[id="' + e.id + '"]');
-    box.innerHTML = '';
-    if (!src) { box.innerHTML = '<div class="hzk-empty"><b>Mục này chưa có trong tệp chương</b>Kho bị lệch danh sách — cô chạy lại máy đóng gói (hz-kienthuc.js) rồi tải tệp mới lên lớp là hết.</div>'; }
-    else {
-      var node = src.cloneNode(true);
-      node.removeAttribute('id');
-      box.appendChild(node);
-    }
-    var p = el('hzkPrev'), n = el('hzkNext');
-    if (p) p.disabled = K.ei <= 0;
-    if (n) n.disabled = K.ei >= c.entries.length - 1;
-    box.scrollTop = 0;
-    crumb();
-  }
-
-  function showByState() {
-    if (!K.man) { if (!K.busy) loadManifest(); renderSubjects(); level('Subjects'); crumb(); return; }
-    if (K.si === null) { renderSubjects(); level('Subjects'); }
-    else if (K.ci === null) { renderChapters(); level('Chapters'); }
-    else if (K.ei === null) { renderEntries(); level('Entries'); }
-    else { level('Reader'); paintEntry(); }
-    crumb();
-  }
-
-  /* ------------------------------- Tai lieu ------------------------------- */
-  function getManifest() {
-    if (isLocalFile()) return loadLocalData().then(function (d) { return d.manifest; });
-    return fetch(DIR + 'manifest.json', { cache: 'no-store' })
-      .then(function (r) { if (!r.ok) throw new Error('http'); return r.json(); })
-      .catch(function (e) {
+  function loadLocalData() {
+    if (localData()) return Promise.resolve(localData());
+    if (localP) return localP;
+    localP = new Promise(function (resolve, reject) {
+      var s = document.createElement('script');
+      s.src = LOCAL_SRC;
+      s.onload = function () {
         var d = localData();
-        if (d && d.manifest) return d.manifest;
-        throw e;
-      });
+        if (d && d.manifest && d.chapters) resolve(d);
+        else { localP = null; reject(new Error('local-data')); }
+      };
+      s.onerror = function () { localP = null; reject(new Error('local-data')); };
+      (document.head || document.documentElement).appendChild(s);
+    });
+    return localP;
+  }
+
+  function cleanManifest(raw) {
+    var out = { v: (raw && raw.v) || 1, updated: (raw && raw.updated) || '', subjects: [] };
+    var subs = (raw && raw.subjects) || [], i, j, s, chs, c;
+    for (i = 0; i < subs.length; i++) {
+      s = subs[i];
+      if (!s || !ALLOWED[s.id]) continue;
+      chs = [];
+      for (j = 0; j < (s.chapters || []).length; j++) {
+        c = s.chapters[j];
+        if (!c || String(c.grade) !== '11') continue;
+        chs.push(c);
+      }
+      if (!chs.length) continue;
+      out.subjects.push({ id: s.id, name: s.name, desc: s.desc || '', chapters: chs });
+    }
+    return out;
+  }
+
+  function getManifest() {
+    var p;
+    if (man) return Promise.resolve(man);
+    if (manP) return manP;
+    if (isLocalFile()) {
+      p = loadLocalData().then(function (d) { return d.manifest; });
+    } else {
+      p = fetch(DIR + 'manifest.json', { cache: 'no-store' })
+        .then(function (r) { if (!r.ok) throw new Error('http'); return r.json(); })
+        .catch(function (e) {
+          var d = localData();
+          if (d && d.manifest) return d.manifest;
+          throw e;
+        });
+    }
+    manP = p.then(function (raw) {
+      man = cleanManifest(raw);
+      manP = null;
+      return man;
+    }, function (e) {
+      manP = null;
+      throw e;
+    });
+    return manP;
   }
 
   function getChapterText(file) {
@@ -10898,104 +12015,57 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       });
   }
 
-  function loadManifest() {
-    if (K.busy || K.man) return;
-    K.busy = true; K.err = false;
-    renderSubjects();
-    getManifest()
-      .then(function (j) {
-        K.busy = false; K.man = j;
-        if (K.ei !== null && K.si !== null && K.ci !== null) openEntry(K.ei);
-        else if (K.si !== null || K.ci !== null) showByState();
-        else renderSubjects();
-        crumb();
-      })
-      .catch(function () { K.busy = false; K.err = true; renderSubjects(); });
-  }
-
-  function openEntry(ei) {
-    var c = chap();
-    if (!c) return;
-    K.ei = ei; level('Reader'); crumb();
-    if (K.files[c.file]) { paintEntry(); return; }
-    var box = el('hzkRead');
-    if (box) box.innerHTML = '<div class="hzk-empty"><b>Đang tải nội dung…</b>' + esc(c.title) + '</div>';
-    getChapterText(c.file)
-      .then(function (t) {
-        var host = document.createElement('div');
-        host.innerHTML = t;
-        K.files[c.file] = host;
-        paintEntry();
-      })
-      .catch(function () { if (box) box.innerHTML = failBox('Máy chưa tải được chương này'); });
-  }
-
-  function stepEntry(d) {
-    var c = chap();
-    if (!c) return;
-    var nx = K.ei + d;
-    if (nx < 0 || nx >= c.entries.length) return;
-    openEntry(nx);
-  }
-
-  /* ------------------------------ Dieu huong ------------------------------ */
-  function setMode(kien) {
-    K.on = !!kien;
-    var tab = el('trialTab');
-    if (tab) tab.classList.toggle('hzk-on', K.on);
-    var b = el('hzkSegBai'), k = el('hzkSegKien');
-    if (b) b.classList.toggle('on', !K.on);
-    if (k) k.classList.toggle('on', K.on);
-    if (K.on) {
-      loadManifest();
-      if (K.ei !== null && K.man) openEntry(K.ei);
-      else showByState();
-    }
-    else if (typeof window.trialShowSubjects === 'function') window.trialShowSubjects();
-  }
-
-  window.hzkGo = function (si, ci, ei) {
-    K.si = si === undefined ? null : si;
-    K.ci = ci === undefined ? null : ci;
-    K.ei = ei === undefined ? null : ei;
-    if (!K.on) setMode(true);
-    else if (K.ei !== null) openEntry(K.ei);
-    else showByState();
-  };
-
-  function bind() {
-    var tab = el('trialTab');
-    if (!tab || !el('hzkSeg')) return;
-    var bai = el('hzkSegBai'), kien = el('hzkSegKien');
-    if (bai) bai.addEventListener('click', function () { setMode(false); });
-    if (kien) kien.addEventListener('click', function () { setMode(true); });
-    var bs = el('hzkBackSubjects'), bc = el('hzkBackChapters'), be = el('hzkBackEntries');
-    if (bs) bs.addEventListener('click', function () { K.si = null; K.ci = null; K.ei = null; showByState(); });
-    if (bc) bc.addEventListener('click', function () { K.ci = null; K.ei = null; showByState(); });
-    if (be) be.addEventListener('click', function () { K.ei = null; showByState(); });
-    var p = el('hzkPrev'), n = el('hzkNext');
-    if (p) p.addEventListener('click', function () { stepEntry(-1); });
-    if (n) n.addEventListener('click', function () { stepEntry(1); });
-    tab.addEventListener('click', function (ev) {
-      var t = ev.target;
-      if (!t || !t.closest) return;
-      var hit = t.closest('[data-hzk-sub],[data-hzk-chap],[data-hzk-entry],[data-hzk-go],[data-hzk-retry]');
-      if (!hit) return;
-      if (hit.hasAttribute('data-hzk-sub')) { K.si = +hit.getAttribute('data-hzk-sub'); K.ci = null; K.ei = null; showByState(); }
-      else if (hit.hasAttribute('data-hzk-chap')) { K.ci = +hit.getAttribute('data-hzk-chap'); K.ei = null; showByState(); }
-      else if (hit.hasAttribute('data-hzk-entry')) openEntry(+hit.getAttribute('data-hzk-entry'));
-      else if (hit.hasAttribute('data-hzk-retry')) { K.err = false; if (!K.man) loadManifest(); else openEntry(K.ei); }
-      else {
-        var where = hit.getAttribute('data-hzk-go');
-        if (where === 'subjects') { K.si = null; K.ci = null; K.ei = null; showByState(); }
-        if (where === 'chapters') { K.ci = null; K.ei = null; showByState(); }
-        if (where === 'entries') { K.ei = null; showByState(); }
+  function findInManifest(code) {
+    var i, j, s, c;
+    if (!man) return null;
+    for (i = 0; i < man.subjects.length; i++) {
+      s = man.subjects[i];
+      for (j = 0; j < s.chapters.length; j++) {
+        c = s.chapters[j];
+        if (c.file === code) return { subject: s, chapter: c };
       }
+    }
+    return null;
+  }
+
+  function getHost(file) {
+    if (hosts[file]) return Promise.resolve(hosts[file]);
+    return getChapterText(file).then(function (html) {
+      var host = document.createElement('div');
+      host.innerHTML = html;
+      hosts[file] = host;
+      return host;
     });
   }
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind);
-  else bind();
+  function chapter(code) {
+    return getManifest().then(function () {
+      var hit = findInManifest(code);
+      if (!hit) throw new Error('chapter');
+      return hit.chapter;
+    });
+  }
+
+  function entry(code, id) {
+    return getManifest().then(function () {
+      var hit = findInManifest(code);
+      if (!hit) throw new Error('chapter');
+      return getHost(hit.chapter.file);
+    }).then(function (host) {
+      var all = host.querySelectorAll('.kt-entry'), i, src = null;
+      for (i = 0; i < all.length; i++) if (all[i].id === id) { src = all[i]; break; }
+      if (!src) throw new Error('entry');
+      var node = src.cloneNode(true);
+      node.removeAttribute('id');
+      return node;
+    });
+  }
+
+  window.HZK = {
+    manifest: getManifest,
+    chapter: chapter,
+    entry: entry
+  };
 })();
 </script>
 
