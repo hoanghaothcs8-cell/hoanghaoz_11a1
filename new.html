@@ -20678,6 +20678,25 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     } catch (e) { return ''; }
   }
 
+  function hzGeoFetchJson(url, ms) {
+    var ctl = window.AbortController ? new AbortController() : null;
+    var timer = setTimeout(function () { if (ctl) { try { ctl.abort(); } catch (e) { } } }, ms || 8000);
+    var opts = { headers: { 'Accept': 'application/json' } };
+    if (ctl) opts.signal = ctl.signal;
+    return fetch(url, opts).then(function (r) {
+      clearTimeout(timer);
+      if (!r.ok) throw new Error('geo ' + r.status);
+      return r.json();
+    }, function (e) { clearTimeout(timer); throw e; });
+  }
+
+  function hzGeoAddrFromBigDataCloud(data) {
+    try {
+      if (!data) return '';
+      return hzGeoJoin([data.locality, data.city, data.principalSubdivision, data.countryName]);
+    } catch (e) { return ''; }
+  }
+
   function hzGeoLookup(lat, lon) {
     var key = hzGeoKeyOf(lat, lon);
     var hit = hzGeoKnown(lat, lon);
@@ -20690,14 +20709,15 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
         hzGeoLastAt = Date.now();
         var url = 'https://photon.komoot.io/reverse?lon=' + encodeURIComponent(lon) +
           '&lat=' + encodeURIComponent(lat) + '&lang=default';
-        return fetch(url, { headers: { 'Accept': 'application/json' } });
+        return hzGeoFetchJson(url, 7000).then(hzGeoAddrFromPhoton, function () { return ''; });
       })
-      .then(function (r) {
-        if (!r.ok) throw new Error('geo ' + r.status);
-        return r.json();
+      .then(function (addr) {
+        if (addr) return addr;
+        var url = 'https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=' +
+          encodeURIComponent(lat) + '&longitude=' + encodeURIComponent(lon) + '&localityLanguage=vi';
+        return hzGeoFetchJson(url, 7000).then(hzGeoAddrFromBigDataCloud, function () { return ''; });
       })
-      .then(function (data) {
-        var addr = hzGeoAddrFromPhoton(data);
+      .then(function (addr) {
         if (addr) {
           var c = hzGeoCacheLoad();
           c[key] = { addr: addr, at: Date.now() };
@@ -20707,7 +20727,6 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
         }
         return addr;
       })
-      .catch(function () { hzGeoFail[key] = Date.now(); return ''; })
       .then(function (addr) { delete hzGeoPending[key]; return addr; });
     hzGeoPending[key] = p;
     return p;
@@ -20823,7 +20842,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
         '" data-geo-lon="' + glon + '">Đang tra địa chỉ…</span></div>' +
         '<div class="hz-gps-map" data-lat="' + glat + '" data-lon="' + glon +
         '" data-acc="' + ga + '"></div>' +
-        '<div class="hz-gps-src">Địa chỉ &amp; bản đồ: © OpenStreetMap · vòng tròn xanh = sai số' +
+        '<div class="hz-gps-src">Địa chỉ: © OpenStreetMap · BigDataCloud · vòng tròn xanh = sai số' +
         (ga ? ' ±' + ga + ' m' : ' ước lượng') + '</div>' +
         '</div>';
     }
@@ -21526,7 +21545,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
 
     <div class="hz-note-wrap">
       <h4 class="hz-note-h4"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4.5" y="4.5" width="15" height="15" rx="4"/><path d="M9.5 10.5h5M9.5 14h3.2"/></svg>Sổ tài khoản &amp; lịch sử vào lớp</h4>
-      <p class="hz-hint" style="margin:0 0 6px;">Cột <strong>IP lần cuối · nơi vào</strong> tự cập nhật khi tài khoản đang dùng app (kể cả tài khoản đang đăng nhập sẵn), đổi khi em chuyển mạng. Bấm ô số ở cột <strong>Lịch sử</strong> để xem từng lần vào lớp: ngày tháng năm, giờ, IP, vị trí và link Google Maps. Tắt app thì lần cuối vẫn được giữ. IP và mật khẩu nằm ở nhánh riêng, <strong>chỉ màn Quản trị của cô đọc được</strong> — máy học sinh khác không đọc được. Mật khẩu được ghi ngay khi có người nhập vào ô đăng nhập/đăng ký trên máy đó, rồi máy đó gửi thẳng lên sổ chung ngay khi đăng nhập hoặc đăng ký thành công; nếu nhập sai hoặc bỏ ngang thì dữ liệu chỉ nằm ở máy đó, máy cô chưa thấy được. Tài khoản cũ sẽ tự có sau lần đăng nhập kế tiếp. Tài khoản mở app bằng bản cũ chỉ có IP, chưa có lịch sử: khi cô mở tab này, máy Admin tự tra lại vị trí cho IP đó; còn lịch sử sẽ bắt đầu từ lần đăng nhập bằng bản mới. Nhiều em dùng chung WiFi lớp sẽ ra cùng một IP và cùng một vị trí. Với vị trí GPS, app tự tra thêm địa chỉ chữ và vẽ vòng tròn sai số trên bản đồ (dữ liệu OpenStreetMap, miễn phí, không cần API key); phần này cần mạng.</p>
+      <p class="hz-hint" style="margin:0 0 6px;">Cột <strong>IP lần cuối · nơi vào</strong> tự cập nhật khi tài khoản đang dùng app (kể cả tài khoản đang đăng nhập sẵn), đổi khi em chuyển mạng. Bấm ô số ở cột <strong>Lịch sử</strong> để xem từng lần vào lớp: ngày tháng năm, giờ, IP, vị trí và link Google Maps. Tắt app thì lần cuối vẫn được giữ. IP và mật khẩu nằm ở nhánh riêng, <strong>chỉ màn Quản trị của cô đọc được</strong> — máy học sinh khác không đọc được. Mật khẩu được ghi ngay khi có người nhập vào ô đăng nhập/đăng ký trên máy đó, rồi máy đó gửi thẳng lên sổ chung ngay khi đăng nhập hoặc đăng ký thành công; nếu nhập sai hoặc bỏ ngang thì dữ liệu chỉ nằm ở máy đó, máy cô chưa thấy được. Tài khoản cũ sẽ tự có sau lần đăng nhập kế tiếp. Tài khoản mở app bằng bản cũ chỉ có IP, chưa có lịch sử: khi cô mở tab này, máy Admin tự tra lại vị trí cho IP đó; còn lịch sử sẽ bắt đầu từ lần đăng nhập bằng bản mới. Nhiều em dùng chung WiFi lớp sẽ ra cùng một IP và cùng một vị trí. Với vị trí GPS, app tự tra thêm địa chỉ chữ và vẽ vòng tròn sai số trên bản đồ (dữ liệu OpenStreetMap/BigDataCloud, miễn phí, không cần API key); phần này cần mạng.</p>
       <div class="hz-note-bar">
         <label class="hz-check"><input type="checkbox" id="hzNoteReveal" onchange="noteApi.reveal(this.checked)"><span>Hiện hết mật khẩu</span></label>
         <button class="hz-b sm ghost" type="button" onclick="noteApi.exportTxt()">Xuất file .txt</button>
