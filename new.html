@@ -20286,16 +20286,6 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     background:rgba(255,255,255,.055) !important; border:1px solid rgba(245,158,11,.28) !important;
     color:#fde68a !important; font-size:12px; font-family:inherit; }
   .hz-look-input:focus { outline:none; border-color:rgba(245,158,11,.6) !important; }
-  .hz-look-apps { display:flex; flex-wrap:wrap; gap:6px; margin:7px 0 10px; }
-  .hz-look-apps .hz-check { margin:0; padding:5px 8px; border:1px solid rgba(245,158,11,.24);
-    border-radius:8px; background:rgba(255,255,255,.045); font-size:11px; color:#fde68a; }
-  .hz-look-apps .hz-check input { accent-color:#f59e0b; }
-  .hz-look-links { display:grid; gap:6px; margin-top:8px; }
-  .hz-look-link { display:flex; flex-direction:column; gap:1px; padding:8px 10px; border-radius:9px;
-    border:1px solid rgba(245,158,11,.28); background:rgba(245,158,11,.07); text-decoration:none; }
-  .hz-look-link:hover { background:rgba(245,158,11,.15); }
-  .hz-look-link b { font-size:11.5px; color:#fde68a; }
-  .hz-look-link span { font-size:9px; line-height:1.4; color:#a98c4d; overflow-wrap:anywhere; }
 
   .hz-person-bar { display:flex; align-items:stretch; gap:6px; }
   .hz-person-bar .hz-look-input { flex:1 1 auto; min-width:0; }
@@ -20336,19 +20326,14 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
   .hz-person-nolink { font-size:10px; font-style:italic; line-height:1.4; color:#a98c4d; }
   .hz-person-soi-wrap { flex:1 1 100%; display:flex; flex-wrap:wrap; align-items:center; gap:4px; min-width:0; }
   .hz-person-why { flex:1 1 100%; font-size:9.5px; line-height:1.45; color:#c9ad72; }
+  .hz-person-roster { display:flex; align-items:flex-start; gap:5px; margin:5px 0 0; font-size:9.5px; line-height:1.5; color:#c9ad72; overflow-wrap:anywhere; }
+  .hz-person-roster b { flex:0 0 auto; margin-top:1px; padding:0 4px; border:1px solid rgba(245,158,11,.32); border-radius:4px;
+    font-size:8.5px; letter-spacing:.04em; line-height:1.5; color:#fde68a; }
+  .hz-person-roster span { min-width:0; }
   .hz-person-note { margin:8px 0 2px; font-size:10.5px; line-height:1.55; color:#a98c4d; }
   .hz-person-copy { display:inline-block; margin-top:4px; padding:4px 7px; border-radius:7px; user-select:all;
     background:rgba(255,255,255,.08); border:1px dashed rgba(245,158,11,.42); color:#fde68a;
     font-family:ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace; font-size:11px; overflow-wrap:anywhere; }
-  .hz-look-outside { margin-top:10px; border:1px solid rgba(245,158,11,.22); border-radius:10px; background:rgba(255,255,255,.03); }
-  .hz-look-outside > summary { display:flex; align-items:center; gap:6px; padding:8px 10px; list-style:none; cursor:pointer;
-    border-radius:10px; font-size:11px; font-weight:800; color:#e0a92e; }
-  .hz-look-outside > summary::-webkit-details-marker { display:none; }
-  .hz-look-outside > summary:hover { background:rgba(245,158,11,.09); }
-  .hz-look-outside > summary svg { width:13px; height:13px; flex:0 0 auto; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
-  .hz-look-outside > summary .hz-look-chev { margin-left:auto; transition:transform .18s; }
-  .hz-look-outside[open] > summary .hz-look-chev { transform:rotate(180deg); }
-  .hz-look-outside-body { padding:0 10px 10px; border-top:1px dashed rgba(245,158,11,.16); }
   .hz-person-pos { display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-top:12px; padding-top:9px;
     border-top:1px dashed rgba(245,158,11,.18); }
   .hz-person-pos-lab { font-size:10.5px; font-weight:800; letter-spacing:.3px; text-transform:uppercase; color:#b9a06a; }
@@ -20363,8 +20348,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
   #hzAdminPanel .hz-person-link:focus-visible,
   #hzAdminPanel button.hz-person-clear:focus-visible,
   #hzAdminPanel button.hz-person-soi:focus-visible,
-  #hzAdminPanel button.hz-person-pos-btn:focus-visible,
-  #hzAdminPanel .hz-look-outside > summary:focus-visible { outline:2px solid #fbbf24; outline-offset:2px; }
+  #hzAdminPanel button.hz-person-pos-btn:focus-visible { outline:2px solid #fbbf24; outline-offset:2px; }
 </style>
 
 <style>
@@ -21648,7 +21632,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
 
   <div class="hz-sec" data-hzsec="lookup">
     <h4><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.3"/><path d="m15.2 15.2 4.3 4.3"/><circle cx="10.5" cy="8.9" r="1.7"/><path d="M7.6 14.1c.4-1.3 1.5-2 2.9-2s2.5.7 2.9 2"/></svg>Tra cứu người trong lớp</h4>
-    <p class="hz-hint" style="margin:0 0 8px;">Gõ tên để lọc học sinh trong lớp. App chỉ đọc <strong>tên, ảnh, link Facebook/TikTok</strong> đã lưu trong hồ sơ, không sửa dữ liệu và không gửi gì lên mạng. Khi mở link, hãy đối chiếu ảnh/trường/lớp trước khi kết luận.</p>
+    <p class="hz-hint" style="margin:0 0 8px;">Gõ tên để lọc học sinh trong lớp. App đã gộp <strong>36 hồ sơ từ danh sách lớp 10A1 (2025–2026)</strong> — chỉ gồm <strong>họ tên và thành tích HSG</strong>, không có CCCD, số điện thoại hay địa chỉ. Khi tìm ra, app chỉ đọc thêm <strong>ảnh và link Facebook/TikTok</strong> đã lưu trong hồ sơ, không sửa dữ liệu và không gửi gì lên mạng.</p>
 
     <label class="hz-lb" for="hzPersonSearch">Tìm trong lớp</label>
     <div class="hz-person-bar">
@@ -21659,37 +21643,6 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     <div class="hz-person-list" id="hzPersonList" role="group" aria-label="Kết quả tìm trong lớp"></div>
     <p class="hz-note-msg" id="hzPersonMsg" role="status" aria-live="polite"></p>
     <p class="hz-person-note">Cần bật social-analyzer trên máy cô. Kết quả của tool chỉ để tham khảo — Facebook/TikTok hay báo sai, phải mở link kiểm tra.</p>
-
-    <details class="hz-look-outside" id="hzLookOutside">
-      <summary>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.7 12h16.6M12 3.5c2.4 2.3 3.6 5.1 3.6 8.5S14.4 18.2 12 20.5c-2.4-2.3-3.6-5.1-3.6-8.5S9.6 5.8 12 3.5z"/></svg>
-        <span>Tìm ngoài lớp (Google, Facebook, TikTok)</span>
-        <svg class="hz-look-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
-      </summary>
-      <div class="hz-look-outside-body">
-        <p class="hz-hint" style="margin:8px 0;">Nhập tên rồi bấm <strong>Mở Google gộp 4 nền tảng</strong> để xem kết quả Facebook, TikTok, Instagram, Threads trên cùng một trang Google. Hoặc chọn nền tảng và bấm <strong>Tạo link riêng</strong>. App <strong>không tự lấy tài khoản, không lưu tên, không dùng IP hay vị trí</strong>. Kết quả có thể trùng tên người khác — mở xem, đối chiếu ảnh/trường/lớp rồi mới kết luận.</p>
-        <label class="hz-lb" for="hzLookName">Tên cần tra</label>
-        <input class="hz-look-input" id="hzLookName" type="text" autocomplete="off" maxlength="80" placeholder="Ví dụ: Nguyễn Minh Anh" onkeydown="if(event.key==='Enter')adminWidget.lookupBuild()">
-        <label class="hz-lb" for="hzLookExtra">Từ khoá thêm — không bắt buộc</label>
-        <input class="hz-look-input" id="hzLookExtra" type="text" autocomplete="off" maxlength="60" placeholder="Ví dụ: Quảng Ngãi, tên trường, lớp" onkeydown="if(event.key==='Enter')adminWidget.lookupBuild()">
-        <label class="hz-lb">Nền tảng cần mở</label>
-        <div class="hz-look-apps" id="hzLookApps">
-          <label class="hz-check"><input type="checkbox" value="facebook" checked><span>Facebook</span></label>
-          <label class="hz-check"><input type="checkbox" value="tiktok" checked><span>TikTok</span></label>
-          <label class="hz-check"><input type="checkbox" value="instagram" checked><span>Instagram</span></label>
-          <label class="hz-check"><input type="checkbox" value="threads"><span>Threads</span></label>
-          <label class="hz-check"><input type="checkbox" value="google" checked><span>Google</span></label>
-        </div>
-        <div class="hz-row" style="margin-top:0;">
-          <button class="hz-b" type="button" onclick="adminWidget.lookupAll()">Mở Google gộp 4 nền tảng</button>
-          <button class="hz-b ghost" type="button" onclick="adminWidget.lookupBuild()">Tạo link riêng</button>
-          <button class="hz-b ghost" type="button" onclick="adminWidget.lookupClear()">Xoá</button>
-        </div>
-        <p class="hz-note-msg" id="hzLookMsg" role="status" aria-live="polite"></p>
-        <div class="hz-look-links" id="hzLookLinks"></div>
-        <p class="hz-hint">Facebook, TikTok, Instagram và Threads thường bắt đăng nhập mới xem được. Instagram không có ô tìm theo tên khi chưa đăng nhập nên app lọc qua Google. <strong>Zalo</strong> không có trang tìm người theo tên công khai — chỉ tìm được bằng số điện thoại trong app. Chỉ mở để tự đối chiếu, không thu thập hay chuyển tiếp thông tin của học sinh.</p>
-      </div>
-    </details>
 
     <div class="hz-person-pos" role="group" aria-label="Vị trí tab Tra cứu trong Menu Admin">
       <span class="hz-person-pos-lab">Vị trí tab:</span>
@@ -21876,13 +21829,6 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       try { localStorage.setItem(SCALE_KEY, String(uiScale)); } catch (e) { }
     }
     function toggle() { isOpen() ? close() : open(); }
-    var LOOK_PLATFORMS = {
-      facebook: 'Facebook · tìm bài và trang công khai',
-      tiktok: 'TikTok · tìm tài khoản',
-      instagram: 'Instagram · lọc qua Google',
-      threads: 'Threads · tìm bài công khai',
-      google: 'Google · tìm toàn web'
-    };
 
     function lookEsc(s) {
       return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
@@ -21896,91 +21842,48 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       var s = String(url || '').replace(/^https?:\/\/(www\.)?/, '');
       try { return decodeURIComponent(s); } catch (e) { return s; }
     }
-    function lookUrls(name, extra) {
-      var withExtra = extra ? name + ' ' + extra : name;
-      var enc = encodeURIComponent(withExtra);
-      var quoted = '"' + name.replace(/["“”]/g, '').trim() + '"' + (extra ? ' ' + extra : '');
-      return {
-        facebook: 'https://www.facebook.com/search/top?q=' + enc,
-        tiktok: 'https://www.tiktok.com/search?q=' + enc,
-        instagram: 'https://www.google.com/search?q=' + encodeURIComponent('site:instagram.com ' + quoted),
-        threads: 'https://www.threads.net/search?q=' + enc,
-        google: 'https://www.google.com/search?q=' + encodeURIComponent(quoted)
-      };
-    }
-    function lookPicked() {
-      var box = el('hzLookApps');
-      if (!box) return [];
-      var out = [], ins = box.querySelectorAll('input[type="checkbox"]');
-      for (var i = 0; i < ins.length; i++) if (ins[i].checked) out.push(ins[i].value);
-      return out;
-    }
-    function lookMsg(text, warn) {
-      var m = el('hzLookMsg');
-      if (!m) return;
-      m.textContent = text || '';
-      m.classList.toggle('warn', !!warn);
-    }
-    function lookupBuild() {
-      var nameEl = el('hzLookName'), extraEl = el('hzLookExtra'), out = el('hzLookLinks');
-      if (!nameEl || !out) return [];
-      var name = lookClean(nameEl.value, 80);
-      var extra = lookClean(extraEl && extraEl.value, 60);
-      var picked = lookPicked();
-      if (name.length < 2) {
-        out.innerHTML = '';
-        lookMsg('Nhập ít nhất 2 chữ cái của tên cần tra.', true);
-        try { nameEl.focus(); } catch (e) { }
-        return [];
-      }
-      if (!picked.length) {
-        out.innerHTML = '';
-        lookMsg('Chọn ít nhất một nền tảng cần mở.', true);
-        return [];
-      }
-      var urls = lookUrls(name, extra), html = '', made = [];
-      for (var i = 0; i < picked.length; i++) {
-        var k = picked[i];
-        if (!LOOK_PLATFORMS[k] || !urls[k]) continue;
-        made.push({ key: k, label: LOOK_PLATFORMS[k], url: urls[k] });
-        html += '<a class="hz-look-link" href="' + lookEsc(urls[k]) + '" target="_blank" rel="noopener noreferrer">' +
-          '<b>' + lookEsc(LOOK_PLATFORMS[k]) + '</b><span>' + lookEsc(lookShow(urls[k])) + '</span></a>';
-      }
-      out.innerHTML = html;
-      lookMsg('Đã tạo ' + made.length + ' link cho “' + name + (extra ? ' · ' + extra : '') + '”. Bấm từng link để mở trang tìm kiếm.');
-      return made;
-    }
-    function lookAllUrl(name, extra) {
-      var quoted = '"' + name.replace(/["“”]/g, '').trim() + '"' + (extra ? ' ' + extra : '');
-      return 'https://www.google.com/search?q=' + encodeURIComponent('(site:facebook.com OR site:tiktok.com OR site:instagram.com OR site:threads.net) ' + quoted);
-    }
-    function lookupAll() {
-      var nameEl = el('hzLookName'), extraEl = el('hzLookExtra'), out = el('hzLookLinks');
-      var name = lookClean(nameEl && nameEl.value, 80);
-      var extra = lookClean(extraEl && extraEl.value, 60);
-      if (name.length < 2) {
-        if (out) out.innerHTML = '';
-        lookMsg('Nhập ít nhất 2 chữ cái của tên cần tra.', true);
-        try { if (nameEl) nameEl.focus(); } catch (e) { }
-        return '';
-      }
-      var url = lookAllUrl(name, extra);
-      if (out) {
-        out.innerHTML = '<a class="hz-look-link" href="' + lookEsc(url) + '" target="_blank" rel="noopener noreferrer">' +
-          '<b>Google · gộp Facebook + TikTok + Instagram + Threads</b><span>' + lookEsc(lookShow(url)) + '</span></a>';
-      }
-      try { window.open(url, '_blank', 'noopener'); } catch (e) { }
-      lookMsg('Đã mở Google gộp 4 nền tảng cho “' + name + (extra ? ' · ' + extra : '') + '”. Nếu trình duyệt chặn tab mới, bấm thẻ link bên dưới.');
-      return url;
-    }
-    function lookupClear() {
-      var nameEl = el('hzLookName'), extraEl = el('hzLookExtra'), out = el('hzLookLinks');
-      if (nameEl) nameEl.value = '';
-      if (extraEl) extraEl.value = '';
-      if (out) out.innerHTML = '';
-      lookMsg('');
-      try { if (nameEl) nameEl.focus(); } catch (e) { }
-    }
+    var LOOKUP_ROSTER = [
+      { n: "Bùi Thiên Nhật Minh", a: "HSG Toán: Nhì Huyện 8 - Ba Huyện 9 - Ba Tỉnh 9" },
+      { n: "Nguyễn Thành Đạt", a: "HSG Toán: Nhì huyện 8, khuyến khích huyện 9" },
+      { n: "Nguyễn Hoàng Gia Huy", a: "HSG Anh : Nhì huyện 8 , Ba huyện 9" },
+      { n: "Huỳnh Phước Khang", a: "Giải nhì toán 8 cấp huyện-Giải ba toán 9 cấp huyện-Giải nhất toán 9 cấp tỉnh" },
+      { n: "Đoàn Xuân Lâm", a: "Nhất huyện toán 8,nhì huyện toán 9, khuyến khích tỉnh toán 9" },
+      { n: "Nguyễn Phương Uyên", a: "Giải khuyến khích Toán huyện 8" },
+      { n: "Lê Trung Khang", a: "Giải khuyến khích Toán huyện 8, giải khuyến khích Toán huyện 9" },
+      { n: "Thái Xuân Khải", a: "Giải Ba tiếng anh huyện" },
+      { n: "Nguyễn Cao Hiền Trang", a: "Giải Ba HSG Toán huyện 8, Giải Khuyến Khích HSG Lý huyện 9" },
+      { n: "Trịnh Nguyễn Gia Khang", a: "Giải ba HSG Anh huyện 8, giải ba HSG Anh huyện 9" },
+      { n: "Võ Huỳnh Minh Kiệt", a: "giải ba tiếng anh huyện, giải khuyến khích tiếng anh 9" },
+      { n: "Nguyễn Anh Thư", a: "giải ba địa lí cấp huyện lớp 9" },
+      { n: "Trần Thanh Hoài", a: "" },
+      { n: "Ngô Hữu Huy", a: "Lớp 8: thi HSG tiếng anh giải khuyến khích · Lớp 9: thi toán máy tính cầm tay giải ba, thi học sinh giỏi lý cấp tỉnh giải khuyến khích" },
+      { n: "Nguyễn Thị Trà My", a: "giải ba hsg sinh cấp huyện, giải khuyến khích cấp tỉnh" },
+      { n: "Nguyễn Hoàng Việt", a: "Giải ba huyện toán 8, giải khuyến khích huyện toán 9" },
+      { n: "Trần Nguyễn Hoàng Dũng", a: "Giải khuyến khích hsg tiếng anh cấp huyện lớp 8 và 9" },
+      { n: "Nguyễn Trần Chinh", a: "Giải khuyến khích tiếng anh huyện 8, giải khuyến khích tiếng anh huyện 9" },
+      { n: "Ngô Vũ Gia Khiêm", a: "từng thi HSG Sử , giải khuyến khích lớp 9 cấp huyện" },
+      { n: "Trần Lê Bảo Thy", a: "Giải 3 môn Hóa học 9 cấp huyện" },
+      { n: "Lê Huỳnh Trâm", a: "Giải nhất môn lịch sử cấp huyện, giải nhì môn lịch sử cấp tỉnh." },
+      { n: "Trần Như Hoàng Lịnh", a: "Giải nhì môn toán 8 cấp huyện, giải nhì môn toán 9 cấp tỉnh, giải khuyến khích môn toán 9 cấp tỉnh" },
+      { n: "Bùi Tây Vương", a: "Lớp 8 : giải KK HSG văn; Lớp 9: Nhì Huyện hsg sinh học; Ba tỉnh HSG sinh học" },
+      { n: "Huỳnh Gia Đại", a: "Thi môn toán" },
+      { n: "Nguyễn Phạm Văn Thiên", a: "Hsg Hoá Học: Giải nhất cấp huyện 9-giải ba cấp tỉnh 9" },
+      { n: "Bạch Thúy Hằng", a: "Giải nhì huyện hsg Hóa, khuyến khích tỉnh hsg Hóa" },
+      { n: "Trần Anh Khôi", a: "Giải 3 hsg hoá cấp huyện" },
+      { n: "Nguyễn Lê Như Bảo", a: "Giải 3 môn Vật Lí 9 cấp huyện" },
+      { n: "Trần Ngọc Thanh Phương", a: "giải 3 môn văn 9 cấp huyện" },
+      { n: "Trần Thị Như Chí", a: "" },
+      { n: "Nguyễn Trung Kiên", a: "Khuyến Khích huyện văn 8,Khuyến khích huyện sinh 9" },
+      { n: "Lê Trần Bảo Châu", a: "Giải nhì huyện hsg sinh 9, giải ba tỉnh hsg sinh 9" },
+      { n: "Lê Hoàng Hảo", a: "Giải nhì huyện hsg sinh 9 , giải ba tỉnh hsg sinh 9" },
+      { n: "Lương Minh Quốc", a: "giải 3 huyện vật lí,khuyến khích tỉnh vật lí" },
+      { n: "Bùi Anh Kiệt", a: "Giải khuyến khích lịch sử 9 cấp huyện" },
+      { n: "Võ Nguyễn Ngọc Diệp", a: "Giải ba huyện Vật Lí 9, khuyến khích tỉnh Vật Lí 9" }
+    ];
+    var LOOKUP_ROSTER_MAP = {};
+    (function () {
+      for (var i = 0; i < LOOKUP_ROSTER.length; i++) LOOKUP_ROSTER_MAP[personNorm(LOOKUP_ROSTER[i].n)] = LOOKUP_ROSTER[i];
+    })();
 
     var PERSON_FB_RESERVED = {
       'profile.php': 1, 'share': 1, 'people': 1, 'watch': 1, 'groups': 1, 'reel': 1, 'reels': 1,
@@ -22105,12 +22008,16 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       if (soiHtml) actions += '<span class="hz-person-soi-wrap">' + soiHtml + '</span>';
       if (!actions) actions = '<span class="hz-person-nolink">Chưa cập nhật Facebook/TikTok</span>';
       else if (reasons.length) actions += '<span class="hz-person-why">' + lookEsc(reasons.join(' ')) + '</span>';
+      var roster = st && st.roster;
+      var rosterHtml = roster && roster.a
+        ? '<p class="hz-person-roster"><b>HSG</b><span>' + lookEsc(roster.a) + '</span></p>'
+        : '';
       var av = avatar
         ? '<img src="' + lookEsc(avatar) + '" alt="">'
         : lookEsc(personInitial(name));
       return '<div class="hz-person-card"><span class="hz-person-av">' + av + '</span>' +
         '<div class="hz-person-main"><p class="hz-person-name">' + lookEsc(name) + '</p>' +
-        '<div class="hz-person-actions">' + actions + '</div></div></div>';
+        '<div class="hz-person-actions">' + actions + '</div>' + rosterHtml + '</div></div>';
     }
     function personMsg(html, warn) {
       var m = el('hzPersonMsg');
@@ -22126,29 +22033,49 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       if (clr) clr.disabled = !raw;
       var arr = [];
       try { arr = (typeof state !== 'undefined' && state && Array.isArray(state.students)) ? state.students : []; } catch (e) { arr = []; }
-      if (!arr.length) {
-        if (count) count.textContent = 'Chưa tải được danh sách lớp.';
-        list.innerHTML = '<p class="hz-person-empty">Chưa tải được danh sách lớp.</p>';
+      var all = [], seen = {}, i;
+      for (i = 0; i < arr.length; i++) {
+        var st = arr[i];
+        var name = lookClean(st && st.name, 80);
+        if (!name) continue;
+        var key = personNorm(name);
+        if (seen[key]) continue;
+        seen[key] = true;
+        all.push({
+          name: name,
+          avatar: st && st.avatar,
+          links: st && st.links,
+          roster: LOOKUP_ROSTER_MAP[key] || null
+        });
+      }
+      for (i = 0; i < LOOKUP_ROSTER.length; i++) {
+        var rr = LOOKUP_ROSTER[i];
+        var rk = personNorm(rr.n);
+        if (seen[rk]) continue;
+        seen[rk] = true;
+        all.push({ name: rr.n, avatar: '', links: null, roster: rr });
+      }
+      if (!all.length) {
+        if (count) count.textContent = 'Chưa có hồ sơ nào để tra cứu.';
+        list.innerHTML = '<p class="hz-person-empty">Chưa có hồ sơ nào để tra cứu.</p>';
         return;
       }
       var kw = personNorm(raw);
       if (kw.length < 2) {
         if (count) count.textContent = raw
           ? 'Gõ thêm một chữ cái nữa để tìm trong lớp.'
-          : 'Có ' + arr.length + ' học sinh trong lớp. Gõ ít nhất 2 chữ cái để tìm.';
+          : 'Có ' + all.length + ' hồ sơ trong lớp. Gõ ít nhất 2 chữ cái để tìm.';
         list.innerHTML = '';
         return;
       }
-      var found = [], i;
-      for (i = 0; i < arr.length; i++) {
-        var st = arr[i];
-        var name = lookClean(st && st.name, 80);
-        if (!name) continue;
-        var n = personNorm(name), rank = -1;
+      var found = [];
+      for (i = 0; i < all.length; i++) {
+        var p = all[i];
+        var n = personNorm(p.name), rank = -1;
         if (n === kw) rank = 0;
         else if (n.indexOf(kw) === 0) rank = 1;
         else if (n.indexOf(kw) > 0) rank = 2;
-        if (rank >= 0) found.push({ st: st, name: name, rank: rank });
+        if (rank >= 0) found.push({ st: p, name: p.name, rank: rank });
       }
       found.sort(function (a, b) {
         if (a.rank !== b.rank) return a.rank - b.rank;
@@ -22157,8 +22084,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       if (count) count.textContent = 'Tìm thấy ' + found.length + ' người khớp “' + raw + '”';
       if (!found.length) {
         list.innerHTML = '<p class="hz-person-empty">Không tìm thấy ai khớp “<b>' + lookEsc(raw) + '</b>”.<br>' +
-          '<button class="hz-b sm ghost" type="button" onclick="adminWidget.lookupOutside()">Tìm ngoài lớp</button><br>' +
-          '<span>Thử tên ngắn hơn hoặc tìm trên Google, Facebook, TikTok.</span></p>';
+          '<span>Thử tên ngắn hơn, gõ không dấu hoặc kiểm tra lại họ tên trong danh sách lớp.</span></p>';
         return;
       }
       var html = '';
@@ -22216,22 +22142,6 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
         }
       });
     }
-    function lookupOutside() {
-      if (!isAdmin()) return;
-      var input = el('hzPersonSearch'), nameEl = el('hzLookName'), box = el('hzLookOutside');
-      var kw = lookClean(input && input.value, 80);
-      if (kw.length < 2) {
-        personMsg('Nhập ít nhất 2 chữ cái của tên trước khi tìm ngoài lớp.', true);
-        try { if (input) input.focus(); } catch (e) { }
-        return;
-      }
-      if (nameEl) nameEl.value = kw;
-      if (box) {
-        box.open = true;
-        try { box.scrollIntoView({ block: 'nearest' }); } catch (e) { }
-      }
-      lookupAll();
-    }
     function lookupTabIndex() {
       var bar = el('hzAdminTabs');
       if (!bar) return -1;
@@ -22282,7 +22192,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       try { btn.scrollIntoView({ block: 'nearest', inline: 'nearest' }); } catch (e) { }
     }
 
-    window.adminWidget = { close: close, open: open, toggle: toggle, tab: setTab, zoom: zoomMenu, lookupBuild: lookupBuild, lookupAll: lookupAll, lookupClear: lookupClear, lookupPeople: lookupPeople, lookupPersonClear: lookupPersonClear, lookupSoi: lookupSoi, lookupOutside: lookupOutside, lookupPos: lookupPos, mastUi: function () { mastUi(); }, applyMast: applyMast, maxMast: maxMast, unlockUi: function () { unlockUi(); }, doUnlock: doUnlock, unlockAll: unlockAll, modelUi: function () { modelUi(); }, doModel: doModel, grantAllModels: grantAllModels, lockUi: function () { lockUi(); }, lockAll: lockAll, lockOpen: lockOpen, lockOpenAll: lockOpenAll, lockSelAll: lockSelAll, lockSelLocked: lockSelLocked, lockSecTick: lockSecTick, hintUi: function () { hintUi(); }, hintSave: hintSave, gasUi: function () { gasUi(); }, gasSave: gasSave };
+    window.adminWidget = { close: close, open: open, toggle: toggle, tab: setTab, zoom: zoomMenu, lookupPeople: lookupPeople, lookupPersonClear: lookupPersonClear, lookupSoi: lookupSoi, lookupPos: lookupPos, mastUi: function () { mastUi(); }, applyMast: applyMast, maxMast: maxMast, unlockUi: function () { unlockUi(); }, doUnlock: doUnlock, unlockAll: unlockAll, modelUi: function () { modelUi(); }, doModel: doModel, grantAllModels: grantAllModels, lockUi: function () { lockUi(); }, lockAll: lockAll, lockOpen: lockOpen, lockOpenAll: lockOpenAll, lockSelAll: lockSelAll, lockSelLocked: lockSelLocked, lockSecTick: lockSecTick, hintUi: function () { hintUi(); }, hintSave: hintSave, gasUi: function () { gasUi(); }, gasSave: gasSave };
 
     function setTab(id) {
       if (TABS.indexOf(id) < 0) return;
