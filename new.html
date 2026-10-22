@@ -20282,73 +20282,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
   #menuDrawer .menu-item.hz-locked { opacity:.45; }
   #menuDrawer .menu-item.hz-locked .hz-lock-ic { display:inline-flex; }
 
-  .hz-look-input { width:100%; box-sizing:border-box; padding:8px 10px !important; border-radius:9px !important;
-    background:rgba(255,255,255,.055) !important; border:1px solid rgba(245,158,11,.28) !important;
-    color:#fde68a !important; font-size:12px; font-family:inherit; }
-  .hz-look-input:focus { outline:none; border-color:rgba(245,158,11,.6) !important; }
 
-  .hz-person-bar { display:flex; align-items:stretch; gap:6px; }
-  .hz-person-bar .hz-look-input { flex:1 1 auto; min-width:0; }
-  button.hz-person-clear { flex:0 0 auto; min-height:0 !important; padding:0 10px !important; border-radius:9px !important;
-    background:rgba(255,255,255,.06) !important; border:1px solid rgba(245,158,11,.3) !important;
-    color:#fcd34d !important; box-shadow:none !important; font-size:11px !important; font-weight:800; line-height:1.2; }
-  button.hz-person-clear:hover:not(:disabled) { background:rgba(245,158,11,.16) !important; color:#fff !important; }
-  button.hz-person-clear:disabled { opacity:.38; cursor:not-allowed; }
-  .hz-person-count { margin:7px 0 6px; font-size:11px; line-height:1.5; color:#c9ad72; overflow-wrap:anywhere; }
-  .hz-person-list { display:grid; grid-template-columns:minmax(0, 1fr); gap:6px; max-height:min(340px, 42vh); overflow:auto; overscroll-behavior:contain; padding-right:2px; }
-  .hz-person-empty { margin:0; padding:13px 11px; text-align:center; font-size:11.5px; line-height:1.6; color:#a98c4d;
-    border:1px dashed rgba(245,158,11,.24); border-radius:10px; background:rgba(255,255,255,.025); overflow-wrap:anywhere; }
-  .hz-person-empty b { color:#fde68a; }
-  .hz-person-empty .hz-b { margin-top:7px; }
-  .hz-person-card { display:flex; align-items:flex-start; gap:8px; min-width:0; padding:8px; border-radius:10px;
-    border:1px solid rgba(245,158,11,.24); background:rgba(245,158,11,.055); }
-  .hz-person-av { flex:0 0 auto; width:34px; height:34px; border-radius:9px; overflow:hidden; display:flex; align-items:center; justify-content:center;
-    background:linear-gradient(135deg,#7c3aed,#c084fc); color:#fff; font-size:13px; font-weight:900; line-height:1; }
-  .hz-person-av img { display:block; width:100%; height:100%; object-fit:cover; }
-  .hz-person-main { flex:1 1 auto; min-width:0; }
-  .hz-person-name { margin:0 0 5px; font-size:12.5px; font-weight:800; line-height:1.35; color:#fef3c7; overflow-wrap:anywhere; }
-  .hz-person-actions { display:flex; flex-wrap:wrap; align-items:center; gap:4px; min-width:0; }
-  .hz-person-link { display:inline-flex; flex:0 1 auto; align-items:center; gap:4px; max-width:100%; min-width:0; padding:4px 7px; border-radius:7px;
-    border:1px solid rgba(245,158,11,.3); background:rgba(245,158,11,.08); color:#fde68a !important; text-decoration:none;
-    font-size:10px; line-height:1.3; }
-  .hz-person-link:hover { background:rgba(245,158,11,.18); color:#fff !important; }
-  .hz-person-link svg { width:11px; height:11px; flex:0 0 auto; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
-  .hz-person-link b { flex:0 0 auto; font-weight:800; }
-  .hz-person-link span { min-width:0; max-width:190px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:#c9ad72; }
-  button.hz-person-soi { display:inline-flex; flex:0 1 auto; align-items:center; gap:4px; max-width:100%; min-width:0; min-height:0 !important; padding:4px 7px !important;
-    border-radius:7px !important; font-size:10px !important; font-weight:800; line-height:1.3;
-    background:linear-gradient(150deg,rgba(245,158,11,.24),rgba(180,83,9,.2)) !important;
-    border:1px solid rgba(245,158,11,.46) !important; color:#fef3c7 !important; box-shadow:none !important; }
-  button.hz-person-soi:hover { background:rgba(245,158,11,.3) !important; color:#fff !important; }
-  button.hz-person-soi svg { width:11px; height:11px; flex:0 0 auto; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
-  button.hz-person-soi span { flex:0 0 auto; }
-  button.hz-person-soi b { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:#fff; }
-  .hz-person-nolink { font-size:10px; font-style:italic; line-height:1.4; color:#a98c4d; }
-  .hz-person-soi-wrap { flex:1 1 100%; display:flex; flex-wrap:wrap; align-items:center; gap:4px; min-width:0; }
-  .hz-person-why { flex:1 1 100%; font-size:9.5px; line-height:1.45; color:#c9ad72; }
-  .hz-person-roster { display:flex; align-items:flex-start; gap:5px; margin:5px 0 0; font-size:9.5px; line-height:1.5; color:#c9ad72; overflow-wrap:anywhere; }
-  .hz-person-roster b { flex:0 0 auto; margin-top:1px; padding:0 4px; border:1px solid rgba(245,158,11,.32); border-radius:4px;
-    font-size:8.5px; letter-spacing:.04em; line-height:1.5; color:#fde68a; }
-  .hz-person-roster span { min-width:0; }
-  .hz-person-note { margin:8px 0 2px; font-size:10.5px; line-height:1.55; color:#a98c4d; }
-  .hz-person-copy { display:inline-block; margin-top:4px; padding:4px 7px; border-radius:7px; user-select:all;
-    background:rgba(255,255,255,.08); border:1px dashed rgba(245,158,11,.42); color:#fde68a;
-    font-family:ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace; font-size:11px; overflow-wrap:anywhere; }
-  .hz-person-pos { display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-top:12px; padding-top:9px;
-    border-top:1px dashed rgba(245,158,11,.18); }
-  .hz-person-pos-lab { font-size:10.5px; font-weight:800; letter-spacing:.3px; text-transform:uppercase; color:#b9a06a; }
-  button.hz-person-pos-btn { display:inline-flex; align-items:center; justify-content:center; width:26px; height:24px; min-height:0 !important;
-    padding:0 !important; border-radius:7px !important; background:rgba(255,255,255,.06) !important;
-    border:1px solid rgba(245,158,11,.3) !important; color:#fcd34d !important; box-shadow:none !important; }
-  button.hz-person-pos-btn:hover:not(:disabled) { background:rgba(245,158,11,.18) !important; color:#fff !important; }
-  button.hz-person-pos-btn:disabled { opacity:.35; cursor:not-allowed; }
-  .hz-person-pos-btn svg { width:13px; height:13px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
-  .hz-person-pos-hint { font-size:9.5px; color:#8f7a45; }
-  #hzAdminPanel .hz-person-bar input:focus-visible,
-  #hzAdminPanel .hz-person-link:focus-visible,
-  #hzAdminPanel button.hz-person-clear:focus-visible,
-  #hzAdminPanel button.hz-person-soi:focus-visible,
-  #hzAdminPanel button.hz-person-pos-btn:focus-visible { outline:2px solid #fbbf24; outline-offset:2px; }
 </style>
 
 <style>
@@ -21471,8 +21405,6 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 20 6v5c0 5-3.4 8.3-8 10-4.6-1.7-8-5-8-10V6z"/><path d="m9 12 2 2 4-4"/></svg>Lớp học</button>
     <button class="hz-tab" type="button" role="tab" data-hztab="users" onclick="adminWidget.tab('users')">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3.5 19c.7-3 2.5-4.5 5.5-4.5s4.8 1.5 5.5 4.5M16 11a3 3 0 1 0-1.5-5.6M16 14.5c2.4.1 3.9 1.6 4.5 4.5"/></svg>Tài khoản</button>
-    <button class="hz-tab" type="button" role="tab" data-hztab="lookup" onclick="adminWidget.tab('lookup')">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.3"/><path d="m15.2 15.2 4.3 4.3"/><circle cx="10.5" cy="8.9" r="1.7"/><path d="M7.6 14.1c.4-1.3 1.5-2 2.9-2s2.5.7 2.9 2"/></svg>Tra cứu</button>
     <button class="hz-tab" type="button" role="tab" data-hztab="iplog" onclick="adminWidget.tab('iplog')">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s6.4-5.5 6.4-10.4a6.4 6.4 0 0 0-12.8 0C5.6 15.5 12 21 12 21z"/><circle cx="12" cy="10.4" r="2.3"/><path d="M4 7.5A8.8 8.8 0 0 1 9 4.2M20 7.5a8.8 8.8 0 0 0-5-3.3"/></svg>Nhật ký IP</button>
     <button class="hz-tab" type="button" role="tab" data-hztab="mast" onclick="adminWidget.tab('mast')">
@@ -21630,32 +21562,6 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     </div>
   </div>
 
-  <div class="hz-sec" data-hzsec="lookup">
-    <h4><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.3"/><path d="m15.2 15.2 4.3 4.3"/><circle cx="10.5" cy="8.9" r="1.7"/><path d="M7.6 14.1c.4-1.3 1.5-2 2.9-2s2.5.7 2.9 2"/></svg>Tra cứu người trong lớp</h4>
-    <p class="hz-hint" style="margin:0 0 8px;">Gõ tên để lọc học sinh trong lớp. App đã gộp <strong>36 hồ sơ từ danh sách lớp 10A1 (2025–2026)</strong> — chỉ gồm <strong>họ tên và thành tích HSG</strong>, không có CCCD, số điện thoại hay địa chỉ. Khi tìm ra, app chỉ đọc thêm <strong>ảnh và link Facebook/TikTok</strong> đã lưu trong hồ sơ, không sửa dữ liệu và không gửi gì lên mạng.</p>
-
-    <label class="hz-lb" for="hzPersonSearch">Tìm trong lớp</label>
-    <div class="hz-person-bar">
-      <input class="hz-look-input" id="hzPersonSearch" type="text" autocomplete="off" maxlength="80" placeholder="Ví dụ: Nguyễn Minh Anh" aria-describedby="hzPersonCount" aria-controls="hzPersonList" oninput="adminWidget.lookupPeople(this.value)">
-      <button class="hz-person-clear" id="hzPersonClear" type="button" onclick="adminWidget.lookupPersonClear()" aria-label="Xoá nội dung tìm trong lớp" title="Xoá nội dung tìm" disabled>Xoá</button>
-    </div>
-    <p class="hz-person-count" id="hzPersonCount" role="status" aria-live="polite"></p>
-    <div class="hz-person-list" id="hzPersonList" role="group" aria-label="Kết quả tìm trong lớp"></div>
-    <p class="hz-note-msg" id="hzPersonMsg" role="status" aria-live="polite"></p>
-    <p class="hz-person-note">Cần bật social-analyzer trên máy cô. Kết quả của tool chỉ để tham khảo — Facebook/TikTok hay báo sai, phải mở link kiểm tra.</p>
-
-    <div class="hz-person-pos" role="group" aria-label="Vị trí tab Tra cứu trong Menu Admin">
-      <span class="hz-person-pos-lab">Vị trí tab:</span>
-      <button class="hz-person-pos-btn" id="hzLookPosLeft" type="button" onclick="adminWidget.lookupPos(-1)" aria-label="Chuyển tab Tra cứu sang trái" title="Chuyển sang trái">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
-      </button>
-      <button class="hz-person-pos-btn" id="hzLookPosRight" type="button" onclick="adminWidget.lookupPos(1)" aria-label="Chuyển tab Tra cứu sang phải" title="Chuyển sang phải">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
-      </button>
-      <span class="hz-person-pos-hint">Lưu trên máy này</span>
-    </div>
-  </div>
-
   <div class="hz-sec" data-hzsec="iplog">
     <h4><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s6.4-5.5 6.4-10.4a6.4 6.4 0 0 0-12.8 0C5.6 15.5 12 21 12 21z"/><circle cx="12" cy="10.4" r="2.3"/></svg>Nhật ký IP &amp; nơi đăng nhập</h4>
     <p class="hz-hint" style="margin:0 0 8px;">Mỗi lần đăng nhập, và mỗi khi IP đổi trong lúc đang dùng app, máy của người đó tự ghi <strong>IP + ngày giờ</strong> lên Firebase — tải lại trang hay tắt máy không mất, chỉ mất khi cô bấm xóa. Tắt app thì IP cuối cùng vẫn được giữ lại. Vị trí là <strong>ước lượng theo IP</strong> (thường tới thành phố/quận, có thể lệch vài km), không phải GPS. Nhiều em dùng chung WiFi trường sẽ ra cùng một vị trí. Tài khoản đang đăng nhập sẵn cũng tự ghi sau khi mở lại app.</p>
@@ -21705,10 +21611,9 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     var POS_KEY = 'hoanghao_admin_widget_pos';
     var OPEN_KEY = 'hoanghao_admin_widget_open';
     var TAB_KEY = 'hoanghao_admin_widget_tab';
-    var LOOKUP_POS_KEY = 'hoanghao_admin_lookup_pos';
     var SIZE_KEY = 'hoanghao_admin_widget_size';
     var SCALE_KEY = 'hoanghao_admin_widget_scale';
-    var TABS = ['class', 'users', 'lookup', 'iplog', 'mast', 'unlock', 'model', 'lock', 'caro', 'gas', 'ai'];
+    var TABS = ['class', 'users', 'iplog', 'mast', 'unlock', 'model', 'lock', 'caro', 'gas', 'ai'];
     var curTab = 'class';
     var BTN = 46, PAD = 8, MAX_LEVEL = 999999;
     var btn, head, panel, grip, pos = { x: 0, y: 0 }, adminSeen = null;
@@ -21789,7 +21694,6 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     }
     function isOpen() { return panel.classList.contains('show'); }
     function open() {
-      lookupRestorePos();
       applyPanelSize();
       panel.classList.add('show'); btn.classList.add('show');
       if (grip) grip.classList.add('show');
@@ -21830,369 +21734,7 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
     }
     function toggle() { isOpen() ? close() : open(); }
 
-    function lookEsc(s) {
-      return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
-        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
-      });
-    }
-    function lookClean(s, max) {
-      return String(s == null ? '' : s).replace(/\s+/g, ' ').trim().slice(0, max || 80);
-    }
-    function lookShow(url) {
-      var s = String(url || '').replace(/^https?:\/\/(www\.)?/, '');
-      try { return decodeURIComponent(s); } catch (e) { return s; }
-    }
-    var LOOKUP_ROSTER = [
-      { n: "Bùi Thiên Nhật Minh", a: "HSG Toán: Nhì Huyện 8 - Ba Huyện 9 - Ba Tỉnh 9" },
-      { n: "Nguyễn Thành Đạt", a: "HSG Toán: Nhì huyện 8, khuyến khích huyện 9" },
-      { n: "Nguyễn Hoàng Gia Huy", a: "HSG Anh : Nhì huyện 8 , Ba huyện 9" },
-      { n: "Huỳnh Phước Khang", a: "Giải nhì toán 8 cấp huyện-Giải ba toán 9 cấp huyện-Giải nhất toán 9 cấp tỉnh" },
-      { n: "Đoàn Xuân Lâm", a: "Nhất huyện toán 8,nhì huyện toán 9, khuyến khích tỉnh toán 9" },
-      { n: "Nguyễn Phương Uyên", a: "Giải khuyến khích Toán huyện 8" },
-      { n: "Lê Trung Khang", a: "Giải khuyến khích Toán huyện 8, giải khuyến khích Toán huyện 9" },
-      { n: "Thái Xuân Khải", a: "Giải Ba tiếng anh huyện" },
-      { n: "Nguyễn Cao Hiền Trang", a: "Giải Ba HSG Toán huyện 8, Giải Khuyến Khích HSG Lý huyện 9" },
-      { n: "Trịnh Nguyễn Gia Khang", a: "Giải ba HSG Anh huyện 8, giải ba HSG Anh huyện 9" },
-      { n: "Võ Huỳnh Minh Kiệt", a: "giải ba tiếng anh huyện, giải khuyến khích tiếng anh 9" },
-      { n: "Nguyễn Anh Thư", a: "giải ba địa lí cấp huyện lớp 9" },
-      { n: "Trần Thanh Hoài", a: "" },
-      { n: "Ngô Hữu Huy", a: "Lớp 8: thi HSG tiếng anh giải khuyến khích · Lớp 9: thi toán máy tính cầm tay giải ba, thi học sinh giỏi lý cấp tỉnh giải khuyến khích" },
-      { n: "Nguyễn Thị Trà My", a: "giải ba hsg sinh cấp huyện, giải khuyến khích cấp tỉnh" },
-      { n: "Nguyễn Hoàng Việt", a: "Giải ba huyện toán 8, giải khuyến khích huyện toán 9" },
-      { n: "Trần Nguyễn Hoàng Dũng", a: "Giải khuyến khích hsg tiếng anh cấp huyện lớp 8 và 9" },
-      { n: "Nguyễn Trần Chinh", a: "Giải khuyến khích tiếng anh huyện 8, giải khuyến khích tiếng anh huyện 9" },
-      { n: "Ngô Vũ Gia Khiêm", a: "từng thi HSG Sử , giải khuyến khích lớp 9 cấp huyện" },
-      { n: "Trần Lê Bảo Thy", a: "Giải 3 môn Hóa học 9 cấp huyện" },
-      { n: "Lê Huỳnh Trâm", a: "Giải nhất môn lịch sử cấp huyện, giải nhì môn lịch sử cấp tỉnh." },
-      { n: "Trần Như Hoàng Lịnh", a: "Giải nhì môn toán 8 cấp huyện, giải nhì môn toán 9 cấp tỉnh, giải khuyến khích môn toán 9 cấp tỉnh" },
-      { n: "Bùi Tây Vương", a: "Lớp 8 : giải KK HSG văn; Lớp 9: Nhì Huyện hsg sinh học; Ba tỉnh HSG sinh học" },
-      { n: "Huỳnh Gia Đại", a: "Thi môn toán" },
-      { n: "Nguyễn Phạm Văn Thiên", a: "Hsg Hoá Học: Giải nhất cấp huyện 9-giải ba cấp tỉnh 9" },
-      { n: "Bạch Thúy Hằng", a: "Giải nhì huyện hsg Hóa, khuyến khích tỉnh hsg Hóa" },
-      { n: "Trần Anh Khôi", a: "Giải 3 hsg hoá cấp huyện" },
-      { n: "Nguyễn Lê Như Bảo", a: "Giải 3 môn Vật Lí 9 cấp huyện" },
-      { n: "Trần Ngọc Thanh Phương", a: "giải 3 môn văn 9 cấp huyện" },
-      { n: "Trần Thị Như Chí", a: "" },
-      { n: "Nguyễn Trung Kiên", a: "Khuyến Khích huyện văn 8,Khuyến khích huyện sinh 9" },
-      { n: "Lê Trần Bảo Châu", a: "Giải nhì huyện hsg sinh 9, giải ba tỉnh hsg sinh 9" },
-      { n: "Lê Hoàng Hảo", a: "Giải nhì huyện hsg sinh 9 , giải ba tỉnh hsg sinh 9" },
-      { n: "Lương Minh Quốc", a: "giải 3 huyện vật lí,khuyến khích tỉnh vật lí" },
-      { n: "Bùi Anh Kiệt", a: "Giải khuyến khích lịch sử 9 cấp huyện" },
-      { n: "Võ Nguyễn Ngọc Diệp", a: "Giải ba huyện Vật Lí 9, khuyến khích tỉnh Vật Lí 9" }
-    ];
-    var LOOKUP_ROSTER_MAP = {};
-    (function () {
-      for (var i = 0; i < LOOKUP_ROSTER.length; i++) LOOKUP_ROSTER_MAP[personNorm(LOOKUP_ROSTER[i].n)] = LOOKUP_ROSTER[i];
-    })();
-
-    var PERSON_FB_RESERVED = {
-      'profile.php': 1, 'share': 1, 'people': 1, 'watch': 1, 'groups': 1, 'reel': 1, 'reels': 1,
-      'stories': 1, 'photo': 1, 'video': 1, 'p': 1, 'events': 1, 'pages': 1, 'marketplace': 1,
-      'gaming': 1, 'login': 1, 'help': 1, 'privacy': 1, 'policies': 1, 'settings': 1,
-      'friends': 1, 'messages': 1, 'notifications': 1, 'search': 1, 'bookmarks': 1,
-      'live': 1, 'hashtag': 1, 'ads': 1
-    };
-
-    function personNorm(v) {
-      var s = String(v == null ? '' : v);
-      try { s = s.normalize('NFD').replace(/[\u0300-\u036f]/g, ''); } catch (e) { }
-      return s.replace(/[đĐ]/g, 'd').toLowerCase().replace(/\s+/g, ' ').trim();
-    }
-    function personInitial(name) {
-      var s = String(name || '').trim();
-      if (!s) return '?';
-      try { return Array.from(s)[0].toUpperCase(); } catch (e) { return s.charAt(0).toUpperCase(); }
-    }
-    function personHref(value) {
-      var raw = String(value == null ? '' : value).trim();
-      if (!raw) return '';
-      var href = '';
-      try { href = typeof safeSocialHref === 'function' ? safeSocialHref(raw) : ''; } catch (e) { href = ''; }
-      if (!href) {
-        var guess = /^https?:\/\//i.test(raw) ? raw : 'https://' + raw;
-        try {
-          var u0 = new URL(guess);
-          if (u0.protocol === 'http:' || u0.protocol === 'https:') href = guess;
-        } catch (e) { }
-      }
-      if (!href) return '';
-      try {
-        var u = new URL(href);
-        return (u.protocol === 'http:' || u.protocol === 'https:') ? u.href : '';
-      } catch (e) { return ''; }
-    }
-    function personAvatarSrc(v) {
-      var s = String(v == null ? '' : v).trim();
-      if (!s) return '';
-      if (/^data:image\/(?:png|jpe?g|webp|gif);base64,[A-Za-z0-9+/=\s]+$/i.test(s)) return s;
-      if (/^https?:\/\//i.test(s)) {
-        try {
-          var u = new URL(s);
-          if (u.protocol === 'http:' || u.protocol === 'https:') return u.href;
-        } catch (e) { }
-      }
-      return '';
-    }
-    function personParse(kind, value) {
-      var href = personHref(value);
-      if (!href) return null;
-      var u;
-      try { u = new URL(href); } catch (e) { return null; }
-      var host = u.hostname.toLowerCase(), user = '', why = '';
-      if (kind === 'facebook') {
-        if (!/^(?:www\.|m\.|web\.)?facebook\.com$/.test(host)) return null;
-        var parts = u.pathname.split('/').filter(Boolean);
-        var first = parts.length ? parts[0] : '';
-        var low = first.toLowerCase();
-        var decoded = first;
-        try { decoded = decodeURIComponent(first); } catch (e) { }
-        if (!first) why = 'Link Facebook này không có tên trang cá nhân nên không lấy được username.';
-        else if (/\.php$/i.test(first) || PERSON_FB_RESERVED[low]) why = 'Link Facebook dạng profile.php, share, people… không phải trang cá nhân nên không lấy được username.';
-        else if (!/^[A-Za-z0-9._-]{2,80}$/.test(decoded) || /^\d+$/.test(decoded)) why = 'Link Facebook này không phải trang cá nhân nên không lấy được username.';
-        else user = decoded;
-      } else {
-        if (!/^(?:www\.|m\.)?tiktok\.com$/.test(host)) return null;
-        var m = /^\/(@[A-Za-z0-9._]{2,24})(?:\/(?:video|photo)\/[^/]+)?\/?$/i.exec(u.pathname);
-        if (!m) why = 'Link TikTok này không phải trang cá nhân nên không lấy được username.';
-        else user = m[1].slice(1);
-      }
-      return { href: href, user: user, why: why };
-    }
-    function personLinkHtml(kind, p, name) {
-      var label = kind === 'facebook' ? 'Facebook' : 'TikTok';
-      var icon = kind === 'facebook'
-        ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8.5h2.2V5.4h-2.2c-2.3 0-3.8 1.5-3.8 3.9v1.9H8v3.1h2.2V21h3.2v-6.7h2.4l.5-3.1h-2.9V9.5c0-.7.3-1 .6-1z"/></svg>'
-        : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4v9.6a4.2 4.2 0 1 1-3.7-4.2"/><path d="M14 4c.5 2.3 2 3.8 4.4 4.1"/></svg>';
-      return '<a class="hz-person-link" href="' + lookEsc(p.href) + '" target="_blank" rel="noopener noreferrer" title="Mở ' + label + ' của ' + lookEsc(name) + '">' +
-        icon + '<b>' + label + '</b><span>' + lookEsc(lookShow(p.href)) + '</span></a>';
-    }
-    function personSoiButtons(items) {
-      var seen = {}, out = [], i;
-      for (i = 0; i < items.length; i++) {
-        var it = items[i];
-        if (!it || !it.user) continue;
-        var key = it.user.toLowerCase();
-        if (seen[key]) { if (it.at) seen[key].at = true; continue; }
-        var rec = { user: it.user, at: !!it.at };
-        seen[key] = rec; out.push(rec);
-      }
-      var html = '';
-      for (i = 0; i < out.length; i++) {
-        var shown = (out[i].at ? '@' : '') + out[i].user;
-        html += '<button class="hz-person-soi" type="button" onclick="adminWidget.lookupSoi(this)" data-soi="' + lookEsc(out[i].user) + '"' +
-          (out[i].at ? ' data-at="1"' : '') + ' aria-label="Soi username ' + lookEsc(shown) + ' trên social-analyzer" title="Copy username và mở social-analyzer">' +
-          '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="5.8"/><path d="m14.8 14.8 4.2 4.2"/></svg>' +
-          '<span>Soi username</span><b>' + lookEsc(shown) + '</b></button>';
-      }
-      return html;
-    }
-    function personCardHtml(st) {
-      var name = lookClean(st && st.name, 80);
-      if (!name) return '';
-      var avatar = personAvatarSrc(st && st.avatar);
-      var links = (st && st.links && typeof st.links === 'object') ? st.links : {};
-      var fb = personParse('facebook', links.facebook);
-      var tt = personParse('tiktok', links.tiktok);
-      var actions = '', soi = [], reasons = [];
-      if (fb) {
-        actions += personLinkHtml('facebook', fb, name);
-        if (fb.user) soi.push({ user: fb.user, at: false });
-        else if (fb.why) reasons.push(fb.why);
-      }
-      if (tt) {
-        actions += personLinkHtml('tiktok', tt, name);
-        if (tt.user) soi.push({ user: tt.user, at: true });
-        else if (tt.why) reasons.push(tt.why);
-      }
-      var soiHtml = personSoiButtons(soi);
-      if (soiHtml) actions += '<span class="hz-person-soi-wrap">' + soiHtml + '</span>';
-      if (!actions) actions = '<span class="hz-person-nolink">Chưa cập nhật Facebook/TikTok</span>';
-      else if (reasons.length) actions += '<span class="hz-person-why">' + lookEsc(reasons.join(' ')) + '</span>';
-      var roster = st && st.roster;
-      var rosterHtml = roster && roster.a
-        ? '<p class="hz-person-roster"><b>HSG</b><span>' + lookEsc(roster.a) + '</span></p>'
-        : '';
-      var av = avatar
-        ? '<img src="' + lookEsc(avatar) + '" alt="">'
-        : lookEsc(personInitial(name));
-      return '<div class="hz-person-card"><span class="hz-person-av">' + av + '</span>' +
-        '<div class="hz-person-main"><p class="hz-person-name">' + lookEsc(name) + '</p>' +
-        '<div class="hz-person-actions">' + actions + '</div>' + rosterHtml + '</div></div>';
-    }
-    function personMsg(html, warn) {
-      var m = el('hzPersonMsg');
-      if (!m) return;
-      m.innerHTML = html || '';
-      m.classList.toggle('warn', !!warn);
-    }
-    function lookupPeople(value) {
-      if (!isAdmin()) return;
-      var input = el('hzPersonSearch'), list = el('hzPersonList'), count = el('hzPersonCount'), clr = el('hzPersonClear');
-      if (!input || !list) return;
-      var raw = lookClean(value === undefined ? input.value : value, 80);
-      if (clr) clr.disabled = !raw;
-      var arr = [];
-      try { arr = (typeof state !== 'undefined' && state && Array.isArray(state.students)) ? state.students : []; } catch (e) { arr = []; }
-      var all = [], seen = {}, i;
-      for (i = 0; i < arr.length; i++) {
-        var st = arr[i];
-        var name = lookClean(st && st.name, 80);
-        if (!name) continue;
-        var key = personNorm(name);
-        if (seen[key]) continue;
-        seen[key] = true;
-        all.push({
-          name: name,
-          avatar: st && st.avatar,
-          links: st && st.links,
-          roster: LOOKUP_ROSTER_MAP[key] || null
-        });
-      }
-      for (i = 0; i < LOOKUP_ROSTER.length; i++) {
-        var rr = LOOKUP_ROSTER[i];
-        var rk = personNorm(rr.n);
-        if (seen[rk]) continue;
-        seen[rk] = true;
-        all.push({ name: rr.n, avatar: '', links: null, roster: rr });
-      }
-      if (!all.length) {
-        if (count) count.textContent = 'Chưa có hồ sơ nào để tra cứu.';
-        list.innerHTML = '<p class="hz-person-empty">Chưa có hồ sơ nào để tra cứu.</p>';
-        return;
-      }
-      var kw = personNorm(raw);
-      if (kw.length < 2) {
-        if (count) count.textContent = raw
-          ? 'Gõ thêm một chữ cái nữa để tìm trong lớp.'
-          : 'Có ' + all.length + ' hồ sơ trong lớp. Gõ ít nhất 2 chữ cái để tìm.';
-        list.innerHTML = '';
-        return;
-      }
-      var found = [];
-      for (i = 0; i < all.length; i++) {
-        var p = all[i];
-        var n = personNorm(p.name), rank = -1;
-        if (n === kw) rank = 0;
-        else if (n.indexOf(kw) === 0) rank = 1;
-        else if (n.indexOf(kw) > 0) rank = 2;
-        if (rank >= 0) found.push({ st: p, name: p.name, rank: rank });
-      }
-      found.sort(function (a, b) {
-        if (a.rank !== b.rank) return a.rank - b.rank;
-        try { return a.name.localeCompare(b.name, 'vi'); } catch (e) { return a.name < b.name ? -1 : (a.name > b.name ? 1 : 0); }
-      });
-      if (count) count.textContent = 'Tìm thấy ' + found.length + ' người khớp “' + raw + '”';
-      if (!found.length) {
-        list.innerHTML = '<p class="hz-person-empty">Không tìm thấy ai khớp “<b>' + lookEsc(raw) + '</b>”.<br>' +
-          '<span>Thử tên ngắn hơn, gõ không dấu hoặc kiểm tra lại họ tên trong danh sách lớp.</span></p>';
-        return;
-      }
-      var html = '';
-      for (i = 0; i < found.length; i++) html += personCardHtml(found[i].st);
-      list.innerHTML = html;
-    }
-    function lookupPersonClear() {
-      if (!isAdmin()) return;
-      var input = el('hzPersonSearch');
-      if (input) input.value = '';
-      personMsg('');
-      lookupPeople('');
-      try { if (input) input.focus(); } catch (e) { }
-    }
-    function lookupCopyText(text, done) {
-      var s = String(text == null ? '' : text);
-      function fallback() {
-        try {
-          var ta = document.createElement('textarea');
-          ta.value = s; ta.setAttribute('readonly', '');
-          ta.style.position = 'fixed'; ta.style.top = '-1000px'; ta.style.left = '0'; ta.style.opacity = '0';
-          document.body.appendChild(ta);
-          ta.select();
-          try { ta.setSelectionRange(0, s.length); } catch (e) { }
-          var ok = false;
-          try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
-          if (ta.parentNode) ta.parentNode.removeChild(ta);
-          return !!ok;
-        } catch (e) { return false; }
-      }
-      try {
-        if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
-          navigator.clipboard.writeText(s).then(function () { done(true); }, function () { done(fallback()); });
-          return;
-        }
-      } catch (e) { }
-      done(fallback());
-    }
-    function lookupSoi(btn) {
-      if (!isAdmin() || !btn) return;
-      var user = String(btn.getAttribute('data-soi') || '').trim();
-      if (!user) return;
-      var at = btn.getAttribute('data-at') === '1';
-      var tool = 'http://localhost:9005/app.html';
-      var shown = (at ? '@' : '') + user;
-      try { window.open(tool, '_blank', 'noopener'); } catch (e) { }
-      lookupCopyText(user, function (ok) {
-        if (ok) {
-          personMsg('Đã copy ' + lookEsc(shown) + '. Dán vào ô Enter Profile Name trong social-analyzer rồi bấm Analyze.<br>' +
-            'Nếu tool chưa tự mở, bấm <a href="' + tool + '" target="_blank" rel="noopener noreferrer">' + tool + '</a>.');
-        } else {
-          personMsg('Không copy tự động được. Bấm vào username bên dưới rồi copy thủ công (Ctrl+C).<br>' +
-            '<code class="hz-person-copy">' + lookEsc(user) + '</code><br>' +
-            'Tool: <a href="' + tool + '" target="_blank" rel="noopener noreferrer">' + tool + '</a>.', true);
-        }
-      });
-    }
-    function lookupTabIndex() {
-      var bar = el('hzAdminTabs');
-      if (!bar) return -1;
-      var tabs = bar.querySelectorAll('.hz-tab');
-      for (var i = 0; i < tabs.length; i++) if (tabs[i].getAttribute('data-hztab') === 'lookup') return i;
-      return -1;
-    }
-    function lookupRefreshPosButtons() {
-      var bar = el('hzAdminTabs');
-      var n = bar ? bar.querySelectorAll('.hz-tab').length : 0;
-      var i = lookupTabIndex();
-      var l = el('hzLookPosLeft'), r = el('hzLookPosRight');
-      if (l) l.disabled = !(i > 0);
-      if (r) r.disabled = !(i >= 0 && i < n - 1);
-    }
-    function lookupRestorePos() {
-      var bar = el('hzAdminTabs');
-      if (!bar) return;
-      var tabs = bar.querySelectorAll('.hz-tab');
-      if (!tabs.length) return;
-      var btn = bar.querySelector('.hz-tab[data-hztab="lookup"]');
-      if (!btn) return;
-      var idx = NaN;
-      try { idx = parseInt(localStorage.getItem(LOOKUP_POS_KEY), 10); } catch (e) { }
-      if (!isFinite(idx) || idx < 0 || idx >= tabs.length) { lookupRefreshPosButtons(); return; }
-      if (lookupTabIndex() !== idx) {
-        var others = [];
-        for (var i = 0; i < tabs.length; i++) if (tabs[i] !== btn) others.push(tabs[i]);
-        if (idx >= others.length) bar.appendChild(btn);
-        else bar.insertBefore(btn, others[idx]);
-      }
-      lookupRefreshPosButtons();
-    }
-    function lookupPos(dir) {
-      if (!isAdmin()) return;
-      var bar = el('hzAdminTabs');
-      if (!bar) return;
-      var btn = bar.querySelector('.hz-tab[data-hztab="lookup"]');
-      var i = lookupTabIndex();
-      var tabs = bar.querySelectorAll('.hz-tab');
-      var j = i + (dir < 0 ? -1 : 1);
-      if (!btn || i < 0 || j < 0 || j >= tabs.length) { lookupRefreshPosButtons(); return; }
-      var ref = tabs[j];
-      if (j > i) bar.insertBefore(btn, ref.nextSibling);
-      else bar.insertBefore(btn, ref);
-      try { localStorage.setItem(LOOKUP_POS_KEY, String(lookupTabIndex())); } catch (e) { }
-      lookupRefreshPosButtons();
-      try { btn.scrollIntoView({ block: 'nearest', inline: 'nearest' }); } catch (e) { }
-    }
-
-    window.adminWidget = { close: close, open: open, toggle: toggle, tab: setTab, zoom: zoomMenu, lookupPeople: lookupPeople, lookupPersonClear: lookupPersonClear, lookupSoi: lookupSoi, lookupPos: lookupPos, mastUi: function () { mastUi(); }, applyMast: applyMast, maxMast: maxMast, unlockUi: function () { unlockUi(); }, doUnlock: doUnlock, unlockAll: unlockAll, modelUi: function () { modelUi(); }, doModel: doModel, grantAllModels: grantAllModels, lockUi: function () { lockUi(); }, lockAll: lockAll, lockOpen: lockOpen, lockOpenAll: lockOpenAll, lockSelAll: lockSelAll, lockSelLocked: lockSelLocked, lockSecTick: lockSecTick, hintUi: function () { hintUi(); }, hintSave: hintSave, gasUi: function () { gasUi(); }, gasSave: gasSave };
+    window.adminWidget = { close: close, open: open, toggle: toggle, tab: setTab, zoom: zoomMenu, mastUi: function () { mastUi(); }, applyMast: applyMast, maxMast: maxMast, unlockUi: function () { unlockUi(); }, doUnlock: doUnlock, unlockAll: unlockAll, modelUi: function () { modelUi(); }, doModel: doModel, grantAllModels: grantAllModels, lockUi: function () { lockUi(); }, lockAll: lockAll, lockOpen: lockOpen, lockOpenAll: lockOpenAll, lockSelAll: lockSelAll, lockSelLocked: lockSelLocked, lockSecTick: lockSecTick, hintUi: function () { hintUi(); }, hintSave: hintSave, gasUi: function () { gasUi(); }, gasSave: gasSave };
 
     function setTab(id) {
       if (TABS.indexOf(id) < 0) return;
@@ -22216,9 +21758,6 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
         try { if (typeof window.aiCommandCenterOpen === 'function') window.aiCommandCenterOpen(); } catch (e) { }
       } else if (curTab === 'users') {
         try { if (typeof renderAdminUserManagement === 'function') renderAdminUserManagement(); } catch (e) { }
-      } else if (curTab === 'lookup') {
-        lookupPeople();
-        lookupRefreshPosButtons();
       } else if (curTab === 'iplog') {
         try { if (window.ipLogApi && typeof window.ipLogApi.render === 'function') window.ipLogApi.render(); } catch (e) { }
       } else if (curTab === 'mast') { mastUi(); } else if (curTab === 'unlock') { unlockUi(); }
@@ -22999,7 +22538,6 @@ Yêu cầu cụ thể từ người dùng hoặc tài liệu đính kèm: ${mess
       curTab = TABS.indexOf(saved) >= 0 ? saved : 'class';
       loadScale();
       loadPanelSize();
-      lookupRestorePos();
       applyTab();
       loadPos(); place();
       bindDrag(btn, false);
