@@ -2,8 +2,8 @@
    Nhờ tệp này mà mất wifi lớp vẫn mở được app và chơi tiếp.
    Mỗi lần phát hành bản mới: đổi VERSION bên dưới thành 'hz-v2', 'hz-v3'... */
 
-const VERSION = 'hz-v2';
-const SHELL = ['new.html', 'manifest.json', 'icon-512.png', 'splash-character.png'];
+const VERSION = 'hz-v7';
+const SHELL = ['index.html', 'manifest.json', 'icon-512.png', 'splash-character.png'];
 
 /* Chỉ những nơi này được lưu lại. Database Firebase và máy AI không bị chạm tới. */
 const CACHE_HOSTS = [
@@ -11,7 +11,8 @@ const CACHE_HOSTS = [
   'fonts.googleapis.com',
   'fonts.gstatic.com',
   'www.gstatic.com',
-  'cdn.jsdelivr.net'
+  'cdn.jsdelivr.net',
+  'unpkg.com'
 ];
 
 function cacheable(url) {
@@ -49,22 +50,22 @@ self.addEventListener('fetch', (e) => {
   try { url = new URL(req.url); } catch (_) { return; }
   if (!cacheable(url)) return;
 
-  /* Mở trang: thử xin mạng trước. Mất mạng mới lấy bản đã lưu ra cho chơi. */
+  /* Mở trang: thử xin mạng trước. Mất mạng mới lấy bản đã lưu ra cho chơi.
+     Moi trang luu dung ten cua no — khong luu MD1.html vao ke cua index.html. */
   if (req.mode === 'navigate' || req.destination === 'document') {
     e.respondWith(
       fetch(req, { cache: 'no-store' })
         .then((res) => {
           if (res && res.ok) {
-            caches.open(VERSION).then((c) => {
-              c.put('./new.html', res.clone());
-              c.put(req.url, res.clone());
-            });
+            const name = url.pathname.split('/').pop() || 'index.html';
+            caches.open(VERSION).then((c) => c.put('./' + name, res.clone()));
           }
           return res;
         })
         .catch(async () => {
           const c = await caches.open(VERSION);
-          return (await c.match(req.url)) || (await c.match('./new.html'));
+          const name = url.pathname.split('/').pop() || 'index.html';
+          return (await c.match('./' + name)) || (await c.match(req.url)) || (await c.match('./index.html'));
         })
     );
     return;
