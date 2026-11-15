@@ -23696,10 +23696,14 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
       uiScale = Math.round((uiScale + (dir > 0 ? 0.1 : -0.1)) * 10) / 10;
       applyScale();
       try { localStorage.setItem(SCALE_KEY, String(uiScale)); } catch (e) { }
-    window.adminWidget = { close: close, open: open, toggle: toggle, tab: setTab, zoom: zoomMenu, mastUi: function () { mastUi(); }, applyMast: applyMast, maxMast: maxMast, unlockUi: function () { unlockUi(); }, doUnlock: doUnlock, unlockAll: unlockAll, modelUi: function () { modelUi(); }, doModel: doModel, grantAllModels: grantAllModels, lockUi: function () { lockUi(); }, lockAllNow: lockAllNow, lockOpenAll: lockOpenAll, lockToggle: lockToggle, lockRowClick: lockRowClick, hintUi: function () { hintUi(); }, hintSave: hintSave, gasUi: function () { gasUi(); }, gasSave: gasSave };
+    }
+    function toggle() { isOpen() ? close() : open(); }
+    function setTab(id) {
+      if (TABS.indexOf(id) < 0) return;
       curTab = id;
       applyTab();
     }
+    window.adminWidget = { close: close, open: open, toggle: toggle, tab: setTab, zoom: zoomMenu, mastUi: function () { mastUi(); }, applyMast: applyMast, maxMast: maxMast, unlockUi: function () { unlockUi(); }, doUnlock: doUnlock, unlockAll: unlockAll, modelUi: function () { modelUi(); }, doModel: doModel, grantAllModels: grantAllModels, lockUi: function () { lockUi(); }, lockAllNow: lockAllNow, lockOpenAll: lockOpenAll, lockToggle: lockToggle, lockRowClick: lockRowClick, hintUi: function () { hintUi(); }, hintSave: hintSave, gasUi: function () { gasUi(); }, gasSave: gasSave };
     function applyTab() {
       if (!panel) return;
       var nodes = panel.querySelectorAll('[data-hzsec]'), i;
