@@ -2735,6 +2735,40 @@
   #gameTab .pz-stick{left:8px;width:80px;height:80px;}
   #gameTab .pz-touch-act{right:109px;}
 }
+
+/* Quần đảo, túi đồ và thương mại — đều thuộc HUD Game. */
+#gameTab .pz-world-chip,#gameTab .pz-gear-chip{position:absolute;bottom:170px;pointer-events:auto;display:flex;flex-direction:column;gap:3px;width:auto;max-width:145px;padding:8px 10px !important;border:1px solid #386378 !important;border-radius:11px;background:rgba(8,28,43,.9) !important;box-shadow:0 4px 16px #0003 !important;color:#eaf4f7 !important;line-height:1.2;text-align:left;transform:none !important;font:600 11px system-ui;}
+#gameTab .pz-world-chip{left:12px;}#gameTab .pz-gear-chip{right:12px;text-align:right;}
+#gameTab .pz-world-chip span,#gameTab .pz-gear-chip span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%;}
+#gameTab .pz-world-chip small,#gameTab .pz-gear-chip small{font-size:8px;color:#9bbdc9;font-weight:400;}
+#gameTab .pz-sk:disabled{opacity:.42;cursor:not-allowed;}
+#gameTab .pz-bag-card,#gameTab .pz-map-card{width:min(600px,100%);max-width:600px;box-sizing:border-box;}
+#gameTab .pz-item-list{display:grid;gap:8px;margin:14px 0;}
+#gameTab .pz-item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px;border:1px solid #315268;border-radius:10px;background:#0b2235;}
+#gameTab .pz-item.equipped{border-color:#66c9ba;background:#12353d;}
+#gameTab .pz-item>div{min-width:0;display:flex;flex-direction:column;gap:5px;}
+#gameTab .pz-item b{font-size:12px;color:#ecf2f4;}#gameTab .pz-item small{font-size:10px;line-height:1.5;color:#abc1cf;}
+#gameTab .pz-item .pz-btn{flex-shrink:0;padding:8px 11px !important;font-size:11px;min-width:65px;}
+#gameTab .pz-map-drawing{width:100%;max-height:220px;display:block;background:radial-gradient(ellipse at center,#164b60,#0a2339);border:1px solid #35586b;border-radius:12px;margin:12px 0;}
+#gameTab .pz-island-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
+#gameTab .pz-route{display:flex;flex-direction:column;gap:6px;min-width:0;text-align:left;padding:11px !important;background:#102b3f !important;color:#edf4f6 !important;border:1px solid #375b6f !important;border-radius:10px;box-shadow:none !important;transform:none !important;}
+#gameTab .pz-route b{font-size:12px;}#gameTab .pz-route span{font-size:10px;color:#aac6d1;line-height:1.45;}#gameTab .pz-route small{font-size:9px;color:#e7c18a;line-height:1.4;}
+#gameTab .pz-route.current{border-color:#ba996a !important;opacity:.8;}
+#gameTab .pz-dialog{max-height:calc(100% - 40px);overflow:auto;}
+#gameTab .pz-d-acts{max-height:260px;overflow:auto;}
+@media(max-width:560px){
+  #gameTab .pz-world-chip,#gameTab .pz-gear-chip{bottom:125px;max-width:135px;padding:7px 9px !important;font-size:10px;}
+  #gameTab .pz-world-chip{left:10px;}#gameTab .pz-gear-chip{right:10px;}
+  #gameTab .pz-interact{bottom:176px;}
+  #gameTab .pz-bag-card,#gameTab .pz-map-card{padding:18px 14px;}
+  #gameTab .pz-island-list{grid-template-columns:1fr;gap:6px;}
+  #gameTab .pz-map-drawing{max-height:180px;}
+  #gameTab .pz-route{padding:9px !important;gap:4px;}
+  #gameTab .pz-panel-actions{flex-wrap:wrap;}
+  #gameTab .pz-d-acts{max-height:230px;}
+}
+@media(max-width:340px){#gameTab .pz-world-chip,#gameTab .pz-gear-chip{max-width:132px;font-size:9px;}#gameTab .pz-world-chip{left:8px;}#gameTab .pz-gear-chip{right:8px;}}
+@media(max-height:450px){#gameTab .pz-map-drawing{max-height:125px;}#gameTab .pz-d-acts{max-height:145px;}#gameTab .pz-world-chip,#gameTab .pz-gear-chip{bottom:160px;}#gameTab .pz-quest{top:104px;max-height:65px;padding:8px;overflow:hidden;}#gameTab .pz-quest p{font-size:9px;margin:5px 0;}#gameTab .pz-quest #pzQHint{display:none;}}
 </style>
 
   <!-- TAB: GAME — TRIỀU TINH SA: phiêu lưu hành động 3D nguyên bản (Three.js), thay game pixel farm 2D ngày 16/11/2026 -->
@@ -2778,17 +2812,19 @@
           <button class="pz-sk s1" id="pzS1Btn" type="button" title="Z — Combat: lướt lên đá, 12 mana" aria-label="Combat lướt lên đá"><svg viewBox="0 0 24 24"><path d="m6 3 6 7 8-4 2 3-10 7-6-6M3 18h6M2 21h4"/></svg><kbd>Z</kbd><b>Lướt đá</b><i class="pz-cd"></i></button>
           <button class="pz-sk s2" id="pzS2Btn" type="button" title="X — Combat: đập xuống đất, 20 mana" aria-label="Combat đập xuống đất"><svg viewBox="0 0 24 24"><path d="M12 3v11M7 9l5 5 5-5M3 20l4-3 5 3 5-3 4 3"/></svg><kbd>X</kbd><b>Đập đất</b><i class="pz-cd"></i></button>
         </div>
+        <button class="pz-world-chip" id="pzMapBtn" type="button" title="Hải đồ (N)"><span id="pzLocation">Đảo Neo Sao</span><small>Hải đồ · 5 đảo</small></button>
+        <button class="pz-gear-chip" id="pzBagBtn" type="button" title="Túi đồ (I)"><span id="pzGearName">Combat · 1</span><small>Túi đồ · 1/2/3/4</small></button>
         <div class="pz-stick" id="pzStick" aria-label="Joystick di chuyển"><i id="pzKnob"></i></div>
         <button class="pz-touch-act" id="pzTouchAct" type="button" aria-label="Tương tác" hidden><svg viewBox="0 0 24 24"><path d="M8 13V5.5a1.5 1.5 0 0 1 3 0V11l6 1.2 1 2-.5 4.2-2 1.8H10l-5-5c-.6-.8-.4-1.9.4-2.4.6-.4 1.4-.3 2 .2z"/></svg></button>
-        <div class="pz-hint" id="pzHint">WASD đi · kéo chuột xoay · lăn chuột zoom · bấm chuột đấm · Q lướt · Space nhảy · Z/X Combat · E/J/U Haki (Admin cấp) · B chỉ số · C nhân vật · F nói chuyện</div>
+        <div class="pz-hint" id="pzHint">WASD đi · kéo chuột xoay · lăn chuột zoom · bấm chuột đấm · Q lướt · Space nhảy · Z/X Combat · E/J/U Haki (Admin cấp) · B chỉ số · I túi đồ · N hải đồ · 1–4 trang bị · F tương tác</div>
       </div>
       <div class="pz-dialog" id="pzDialog" hidden role="dialog" aria-label="Đối thoại"><div class="pz-d-ava" id="pzDAva" aria-hidden="true"></div><div class="pz-d-body"><b id="pzDName">—</b><p id="pzDText">—</p><div class="pz-d-acts" id="pzDActs"></div></div><button class="pz-d-x" id="pzDX" type="button" aria-label="Đóng đối thoại">×</button></div>
       <div class="pz-ovl" id="pzLoad" hidden><div class="pz-load-in"><div class="pz-spin" aria-hidden="true"></div><b>Đang dựng biển sao…</b><span id="pzLoadT">Tải bộ máy 3D</span></div></div>
       <div class="pz-ovl start" id="pzStart" hidden>
         <div class="pz-start-in">
           <div class="pz-logo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 8.4 6.5 11 12 5.2 17.5 11 21 8.4l-1.6 8.9H4.6z"/><path d="M4.8 19.6h14.4"/></svg></div>
-          <h2>TRIỀU TINH SA</h2><p class="pz-sub">Tân nhân vật · Võ Combat · Đảo Neo Sao</p>
-          <p class="pz-lore">Bạn vừa cập bến Đảo Neo Sao. Bắt đầu bằng <b>võ Combat</b>, khám phá đảo với lướt và nhảy. Combat chỉ có hai chiêu: <b>lướt lên đá</b> và <b>đập xuống đất</b>. Kiếm, súng, trái ác quỷ và cả ba Haki đều khóa; Haki chỉ Admin cấp. Chưa có nhiệm vụ mở Haki.</p>
+          <h2>TRIỀU TINH SA</h2><p class="pz-sub">5 đảo nguyên bản · Hải trình · Chợ Kim Sa</p>
+          <p class="pz-lore">Bạn vừa cập bến Đảo Neo Sao. Bắt đầu bằng <b>võ Combat</b>, khám phá đảo với lướt và nhảy. Combat chỉ có hai chiêu: <b>lướt lên đá</b> và <b>đập xuống đất</b>. Kiếm, súng và trái cần mua tại Cảng Kim Sa. Khám phá <b>5 đảo</b> bằng thuyền miễn phí. Ba Haki vẫn khóa; Haki chỉ Admin cấp. Chưa có nhiệm vụ mở Haki.</p>
           <div class="pz-start-btns"><button class="pz-btn main" id="pzPlayBtn" type="button">Tạo nhân vật &amp; ra khơi</button><button class="pz-btn ghost" id="pzResetBtn" type="button" hidden>Chơi lại từ đầu</button></div>
           <div class="pz-keys"><span><kbd>WASD</kbd> đi</span><span><kbd>Q</kbd> lướt</span><span><kbd>Space</kbd> nhảy</span><span><kbd>Chuột</kbd> đấm / kéo xoay</span><span><kbd>Z</kbd><kbd>X</kbd> Combat</span><span><kbd>B</kbd> chỉ số</span><span><kbd>E</kbd><kbd>J</kbd><kbd>U</kbd> Haki khóa</span></div>
           <p class="pz-touch-note">Điện thoại: joystick trái, cụm nút phải. Chạm “Chỉ số” để xem nhân vật và Haki.</p>
@@ -2799,8 +2835,8 @@
           <h3 id="pzCreateTitle">Tạo nhân vật</h3><p>Chọn ngoại hình đơn giản. Không thay đổi cấp, EXP hay hành trình đang lưu.</p>
           <div class="pz-char-layout">
             <div class="pz-char-preview" id="pzCharPreview" aria-label="Xem trước màu ngoại hình">
-              <svg viewBox="0 0 120 190" aria-hidden="true"><ellipse cx="60" cy="180" rx="33" ry="6" fill="#03131e"/><path d="M43 115v54h14v-48h6v48h14v-54" fill="#1f2937"/><path d="M39 166h21v11H36zm25 0h20v11H63" fill="#111827"/><path d="m39 64-12 42 13 5 8-28h25l8 28 13-5-12-42z" style="fill:var(--char-coat)"/><path d="M45 68h31l7 55H38z" style="fill:var(--char-coat)"/><path d="M54 67h13v29H54" fill="#f8fafc"/><path d="M39 99h43v9H39" fill="#dc2626"/><circle cx="60" cy="44" r="23" style="fill:var(--char-skin)"/><path d="M37 45c-5-36 50-38 46 0L70 29l-11 6-14-4z" style="fill:var(--char-hair)"/><circle cx="52" cy="45" r="2.4" fill="#101826"/><circle cx="69" cy="45" r="2.4" fill="#101826"/><path d="M56 56h9" stroke="#9a3412" stroke-width="2"/><g class="pz-preview-hat" style="fill:var(--char-coat)"><ellipse cx="60" cy="24" rx="31" ry="5"/><path d="M41 24V14q19-15 38 0v10z"/><path d="M41 21h38" stroke="#fbbf24" stroke-width="3"/></g></svg>
-              <span>Võ Combat · Tay không</span>
+              <svg viewBox="0 0 120 190" aria-hidden="true"><ellipse cx="60" cy="182" rx="33" ry="5" fill="#03131e"/><path d="M44 119h14v27H44zm19 0h14v27H63zM44 153h14v22H44zm19 0h14v22H63z" fill="#1f2937"/><circle cx="51" cy="149" r="6" fill="#515966"/><circle cx="70" cy="149" r="6" fill="#515966"/><path d="M41 172h18v9H41zm21 0h18v9H62z" fill="#111827"/><path d="M24 67h14v26H24zm61 0h14v26H85zM26 102h12v22H26zm59 0h12v22H85zM41 66h40v53H41z" style="fill:var(--char-coat)"/><g style="fill:var(--char-skin)"><circle cx="31" cy="97" r="5"/><circle cx="91" cy="97" r="5"/><path d="M26 125h12v10H26zm59 0h12v10H85z"/><rect x="39" y="24" width="43" height="37" rx="3"/></g><path d="M54 68h14v32H54" fill="#f8fafc"/><path d="M41 105h40v9H41" fill="#dc2626"/><path d="M38 21h46v11H38zm0 10h13v7H38zm37 0h9v6h-9z" style="fill:var(--char-hair)"/><path d="M51 41v6m18-6v6" stroke="#101826" stroke-width="3"/><path d="M56 53h9" stroke="#9a3412" stroke-width="2"/><g class="pz-preview-hat" style="fill:var(--char-coat)"><rect x="31" y="18" width="59" height="5" rx="2"/><rect x="43" y="6" width="35" height="15" rx="2"/><path d="M43 17h35" stroke="#fbbf24" stroke-width="3"/></g></svg>
+              <span>Xem trước màu ngoại hình</span>
             </div>
             <div class="pz-char-form">
               <label for="pzCharName">Tên nhân vật</label><input id="pzCharName" type="text" maxlength="24" autocomplete="off" placeholder="1–24 ký tự">
@@ -2820,19 +2856,28 @@
           <div class="pz-stat-list">
             <div><span>Máu</span><b id="pzStatHp">100 / 100</b></div><div><span>Mana</span><b id="pzStatMana">60 / 60</b></div>
             <div><span>Võ Combat</span><b id="pzStatCombat">10 sát thương cơ bản</b></div>
-            <div class="locked"><span>Kiếm</span><b>0 · Khóa</b></div><div class="locked"><span>Súng</span><b>0 · Khóa</b></div><div class="locked"><span>Trái ác quỷ</span><b>0 · Khóa</b></div>
+            <div><span>Kiếm</span><b id="pzStatSword">0 · Khóa</b></div><div><span>Súng</span><b id="pzStatGun">0 · Khóa</b></div><div><span>Trái ác quỷ</span><b id="pzStatFruit">0 · Khóa</b></div>
           </div>
-          <p class="pz-help-tip">Combat: Z lướt lên đá (12 mana, hồi 3s) · X đập xuống đất (20 mana, hồi 5s). Kiếm, súng và trái ác quỷ chưa mở.</p>
+          <p class="pz-help-tip">Combat: Z lướt lên đá (12 mana, hồi 3s) · X đập xuống đất (20 mana, hồi 5s). Mua kiếm, súng và trái tại Cảng Kim Sa, rồi chọn dùng trong Túi đồ.</p>
           <div class="pz-haki-list"><button class="pz-btn ghost locked" id="pzObsBtn" type="button" aria-disabled="true">E · Quan sát — Khóa</button><button class="pz-btn ghost locked" id="pzArmBtn" type="button" aria-disabled="true">J · Vũ trang — Khóa</button><button class="pz-btn ghost locked" id="pzConBtn" type="button" aria-disabled="true">U · Bá vương — Khóa</button></div>
           <p id="pzHakiHint" class="pz-help-tip">Chỉ Admin cấp. Chưa có nhiệm vụ mở Haki.</p>
-          <div class="pz-panel-actions"><button class="pz-btn ghost" id="pzEditChar" type="button">Đổi ngoại hình</button><button class="pz-btn main" id="pzStatsClose" type="button">Trở lại chơi</button></div>
+          <div class="pz-panel-actions"><button class="pz-btn ghost" id="pzOpenBag" type="button">Túi đồ</button><button class="pz-btn ghost" id="pzOpenMap" type="button">Hải đồ</button><button class="pz-btn ghost" id="pzEditChar" type="button">Đổi ngoại hình</button><button class="pz-btn main" id="pzStatsClose" type="button">Trở lại chơi</button></div>
         </div>
       </div>
-      <div class="pz-ovl" id="pzDead" hidden><div class="pz-card"><h3>Gục ngã giữa triều…</h3><p>Sóng đưa bạn về Bến Neo Sao. Không mất tiến trình hay quyền Haki đã được cấp.</p><button class="pz-btn main" id="pzRespawnBtn" type="button">Đứng dậy chơi tiếp</button></div></div>
+      <div class="pz-ovl" id="pzBag" hidden role="dialog" aria-modal="true" aria-labelledby="pzBagTitle"><div class="pz-card pz-bag-card">
+        <h3 id="pzBagTitle">Túi đồ &amp; trang bị</h3><p id="pzBagMoney"></p><div class="pz-item-list" id="pzBagList"></div>
+        <p class="pz-help-tip">1 Combat · 2 kiếm · 3 súng · 4 trái đã ăn. Mua ở Cảng Kim Sa; ăn trái mới sẽ thay sức mạnh trái cũ. Z/X hiện chỉ dành cho Combat. Kiếm, súng và trái có đòn đánh thường; chưa có bộ chiêu riêng.</p><button class="pz-btn main" id="pzBagClose" type="button">Trở lại chơi</button>
+      </div></div>
+      <div class="pz-ovl" id="pzMap" hidden role="dialog" aria-modal="true" aria-labelledby="pzMapTitle"><div class="pz-card pz-map-card">
+        <h3 id="pzMapTitle">Hải đồ Biển Sao</h3><p id="pzMapCaption"></p><svg id="pzMapDrawing" class="pz-map-drawing" viewBox="0 0 500 330" role="img" aria-label="Vị trí năm đảo trong quần đảo"></svg><div class="pz-island-list" id="pzIslandList"></div>
+        <p class="pz-help-tip">Không khóa đảo theo cấp. Tới Thuyền Trưởng ở bến để đi theo tuyến miễn phí hoặc lái tự do bằng WASD / joystick. Gần bờ: F hoặc nút tương tác để lên bờ. Tự lưu đảo vừa cập bến.</p>
+        <div class="pz-panel-actions"><button class="pz-btn ghost" id="pzBoatManual" type="button" hidden>Chuyển sang tự lái</button><button class="pz-btn main" id="pzMapClose" type="button">Trở lại chơi</button></div>
+      </div></div>
+      <div class="pz-ovl" id="pzDead" hidden><div class="pz-card"><h3>Gục ngã giữa triều…</h3><p>Sóng đưa bạn về bến trên đảo vừa cập. Giữ tiến trình, trang bị, trái đã ăn và quyền Haki.</p><button class="pz-btn main" id="pzRespawnBtn" type="button">Đứng dậy chơi tiếp</button></div></div>
       <div class="pz-ovl" id="pzWin" hidden><div class="pz-card win"><div class="pz-win-star" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m12 2 2.4 6.2L21 9l-5 4.4 1.6 6.8L12 16.6 6.4 20.2 8 13.4 3 9l6.6-.8z"/></svg></div><h3>CHƯƠNG 1 HOÀN THÀNH</h3><p>Biển lặng, hải đăng sáng tỏ. Đảo Neo Sao đã nhận bạn làm người giữ triều. Hoàn thành chương không tự mở Haki hay vũ khí.</p><div class="pz-win-stats" id="pzWinStats"></div><button class="pz-btn main" id="pzWinBtn" type="button">Tiếp tục tuần tra biển</button></div></div>
       <div class="pz-ovl" id="pzHelp" hidden><div class="pz-card help"><h3>Hướng dẫn nhanh</h3><div class="pz-help-grid">
-        <span><kbd>WASD</kbd> / joystick — di chuyển</span><span><kbd>Kéo chuột</kbd> / kéo nền — xoay camera</span><span><kbd>Lăn chuột</kbd> / chụm 2 ngón — zoom</span><span><kbd>Bấm chuột</kbd> / nút Đấm — Combat thường</span><span><kbd>Q</kbd> — lướt né (8 mana)</span><span><kbd>Space</kbd> — nhảy, không tốn mana</span><span><kbd>Z</kbd> — Combat: lướt lên đá (12 mana)</span><span><kbd>X</kbd> — Combat: đập xuống đất (20 mana)</span><span><kbd>E</kbd> — Haki quan sát (Admin cấp)</span><span><kbd>J</kbd> — Haki vũ trang (Admin cấp), không phải đấm</span><span><kbd>U</kbd> — Haki bá vương (Admin cấp)</span><span><kbd>B</kbd> chỉ số · <kbd>C</kbd> ngoại hình</span><span><kbd>F</kbd> — nói chuyện / đọc biển</span><span><kbd>H</kbd> hướng dẫn · <kbd>M</kbd> âm thanh · <kbd>Esc</kbd> đóng bảng</span>
-        </div><p class="pz-help-tip">Chỉ võ Combat có sẵn với hai chiêu Z/X. Ba Haki chỉ Admin cấp; chưa có nhiệm vụ mở. Sau khi được cấp: Quan sát né tối đa 3 đòn trong 10s; Vũ trang tăng 25% lực Combat trong 12s; Bá vương làm choáng quái gần, không gây sát thương. Mana tự hồi; máu hồi khi thoát chiến đấu 5s.</p><button class="pz-btn main" id="pzHelpClose" type="button">Đã hiểu</button></div></div>
+        <span><kbd>WASD</kbd> / joystick — di chuyển</span><span><kbd>Kéo chuột</kbd> / kéo nền — xoay camera</span><span><kbd>Lăn chuột</kbd> / chụm 2 ngón — zoom</span><span><kbd>Bấm chuột</kbd> / nút Đấm — Combat thường</span><span><kbd>Q</kbd> — lướt né (8 mana)</span><span><kbd>Space</kbd> — nhảy, không tốn mana</span><span><kbd>Z</kbd> — Combat: lướt lên đá (12 mana)</span><span><kbd>X</kbd> — Combat: đập xuống đất (20 mana)</span><span><kbd>E</kbd> — Haki quan sát (Admin cấp)</span><span><kbd>J</kbd> — Haki vũ trang (Admin cấp), không phải đấm</span><span><kbd>U</kbd> — Haki bá vương (Admin cấp)</span><span><kbd>B</kbd> chỉ số · <kbd>C</kbd> ngoại hình</span><span><kbd>I</kbd> / Túi đồ — trang bị / ăn trái</span><span><kbd>N</kbd> / Hải đồ — xem 5 đảo</span><span><kbd>1/2/3/4</kbd> — Combat / kiếm / súng / trái</span><span><kbd>F</kbd> — nói chuyện / lên bờ</span><span><kbd>H</kbd> hướng dẫn · <kbd>M</kbd> âm thanh · <kbd>Esc</kbd> đóng bảng</span>
+        </div><p class="pz-help-tip">Chỉ võ Combat có sẵn với hai chiêu Z/X. Ba Haki chỉ Admin cấp; chưa có nhiệm vụ mở. Sau khi được cấp: Quan sát né tối đa 3 đòn trong 10s; Vũ trang tăng 25% lực Combat và kiếm trong 12s; Bá vương làm choáng quái gần, không gây sát thương. Mana tự hồi; máu hồi khi thoát chiến đấu 5s.</p><button class="pz-btn main" id="pzHelpClose" type="button">Đã hiểu</button></div></div>
       <div class="pz-ovl" id="pzFail" hidden><div class="pz-card"><h3>Chưa dựng được biển 3D</h3><p id="pzFailT">Trình duyệt hoặc máy này không hỗ trợ WebGL.</p><p class="pz-help-tip">Thử Chrome / Edge / Safari mới, bật tăng tốc phần cứng hoặc tải lại trang. Các tab khác vẫn dùng bình thường.</p><button class="pz-btn main" id="pzRetryBtn" type="button">Thử lại</button></div></div>
     </div>
   </div>
@@ -13520,6 +13565,248 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
 
 <script>
 /* ===== TRIỀU TINH SA — engine game 3D mới của tab Game (16/11/2026) ===== */
+/* TRIỀU TINH SA — quần đảo và thị trường nguyên bản; không có tiền thật. */
+(function () {
+  'use strict';
+  var islands = [
+    {id:0,name:'Đảo Neo Sao',x:0,z:0,r:43,level:1,color:0x43995a,sand:0xf2d8a0,desc:'Hải đăng, làng chài và nhiệm vụ khởi đầu.'},
+    {id:1,name:'Cảng Kim Sa',x:140,z:8,r:38,level:1,color:0x72a873,sand:0xf1ddac,desc:'Chợ trái, quay trái, cửa hàng kiếm và súng.'},
+    {id:2,name:'Rừng Lục Ảnh',x:-125,z:-108,r:42,level:5,color:0x276c4a,sand:0xdccf93,desc:'Rừng lớn, phế tích và Xương Rong mạnh hơn.'},
+    {id:3,name:'Đảo Băng Sương',x:25,z:-170,r:36,level:10,color:0xd5ecf2,sand:0x99d3e2,desc:'Đất tuyết, tháp băng và đàn Sứa Lôi Quang.'},
+    {id:4,name:'Đảo Tro Hồng',x:-128,z:100,r:40,level:15,color:0x675457,sand:0xb28c72,desc:'Đá bazan, miệng núi lửa và Cua Giáp lớn.'}
+  ];
+  islands.forEach(function(i){
+    var a=i.id===0?-.25:.55;
+    i.port={x:i.x+Math.sin(a)*(i.r-7),z:i.z+Math.cos(a)*(i.r-7)};
+    i.dock={x:i.x+Math.sin(a)*(i.r+10),z:i.z+Math.cos(a)*(i.r+10)};
+    i.spawn=i.id===0?{x:0,z:14}:{x:i.port.x-3,z:i.port.z-3};
+  });
+  var catalog={
+    sword:[{id:'neo',name:'Kiếm Neo',price:20,power:16,factor:.5,desc:'Kiếm thép gọn · tầm 2,8m.'},{id:'gon',name:'Kiếm Gợn Sao',price:55,power:24,factor:.55,desc:'Lưỡi xanh ngọc · tầm 2,8m.'}],
+    gun:[{id:'song',name:'Súng Sóng Nâu',price:25,power:14,factor:.35,desc:'Súng một nòng · tầm 30m.'},{id:'ong',name:'Ống Sao',price:65,power:23,factor:.4,desc:'Súng đồng · đạn sao tầm 30m.'}],
+    fruit:[{id:'wind',name:'Trái Gió Lốc',price:40,weight:55,power:8,factor:1.5,color:0x69e1d4,desc:'Bắn luồng gió xuyên tối đa 3 quái · 10 mana.'},{id:'stone',name:'Trái Tinh Thạch',price:75,weight:30,power:10,factor:1.7,color:0xba9af3,desc:'Bắn tinh thạch, đẩy lùi quái · 10 mana.'},{id:'fire',name:'Trái Hỏa Triều',price:120,weight:15,power:15,factor:1.2,color:0xff9758,desc:'Bắn cầu lửa nổ trong bán kính 2,5m · 10 mana.'}]
+  };
+  function find(kind,id){return (catalog[kind]||[]).find(function(a){return a.id===id;});}
+  function fresh(){return {world:{island:0,visited:[0]},bag:{sword:[],gun:[],fruit:{wind:0,stone:0,fire:0}},gear:{mode:'combat',sword:'',gun:'',fruit:''},market:{rollAt:0}};}
+  function normalize(o){
+    var n=fresh();o=o||{};
+    if(o.world){var id=o.world.island;if(Number.isInteger(id)&&islands[id])n.world.island=id;if(Array.isArray(o.world.visited))n.world.visited=o.world.visited.filter(function(v,i,a){return Number.isInteger(v)&&islands[v]&&a.indexOf(v)===i;});}
+    [0,n.world.island].forEach(function(id){if(n.world.visited.indexOf(id)<0)n.world.visited.push(id);});
+    if(o.bag){['sword','gun'].forEach(function(k){if(Array.isArray(o.bag[k]))n.bag[k]=o.bag[k].filter(function(v,i,a){return !!find(k,v)&&a.indexOf(v)===i;});});catalog.fruit.forEach(function(f){var v=o.bag.fruit&&o.bag.fruit[f.id];if(Number.isInteger(v)&&v>=0&&v<=99)n.bag.fruit[f.id]=v;});}
+    if(o.gear){['sword','gun'].forEach(function(k){n.gear[k]=n.bag[k].indexOf(o.gear[k])>=0?o.gear[k]:n.bag[k][0]||'';});n.gear.fruit=find('fruit',o.gear.fruit)?o.gear.fruit:'';var m=o.gear.mode;if(m==='combat'||(['sword','gun','fruit'].indexOf(m)>=0&&n.gear[m]))n.gear.mode=m;}
+    if(o.market&&Number.isSafeInteger(o.market.rollAt)&&o.market.rollAt>=0&&o.market.rollAt<=Date.now()+60000)n.market.rollAt=o.market.rollAt;
+    return n;
+  }
+  function result(s,fn){var n=JSON.parse(JSON.stringify(s));var e=fn(n);return e?{ok:false,msg:e}:{ok:true,next:n};}
+  function purchase(s,kind,id,u,now){
+    now=now===undefined?Date.now():now;
+    var random=kind==='random',it;
+    if(random){if(typeof u!=='number'||!Number.isFinite(u)||u<0||u>=1)return {ok:false,msg:'Chưa tạo được lượt ngẫu nhiên.'};it=catalog.fruit[u<.55?0:u<.85?1:2];kind='fruit';}
+    else it=find(kind,id);
+    if(!it)return {ok:false,msg:'Vật phẩm không tồn tại.'};
+    var cost=random?25:it.price;
+    var r=result(s,function(n){
+      if(!Number.isSafeInteger(n.shards)||n.shards<cost)return 'Không đủ Mảnh Sao (cần '+cost+').';
+      if(random&&now<n.market.rollAt+60000)return 'Quay trái hồi sau '+Math.ceil((n.market.rollAt+60000-now)/1000)+'s.';
+      if(kind!=='fruit'&&n.bag[kind].indexOf(it.id)>=0)return 'Bạn đã sở hữu món này.';
+      if(kind==='fruit'&&n.bag.fruit[it.id]>=99)return 'Túi đã có 99 trái loại này.';
+      n.shards-=cost;
+      if(kind==='fruit')n.bag.fruit[it.id]++;else{n.bag[kind].push(it.id);if(!n.gear[kind])n.gear[kind]=it.id;}
+      if(random)n.market.rollAt=now;
+    });r.item=it;r.cost=cost;return r;
+  }
+  function equip(s,mode,id){return result(s,function(n){
+    if(['combat','sword','gun','fruit'].indexOf(mode)<0)return 'Chế độ không hợp lệ.';
+    if(mode==='fruit'&&!n.gear.fruit)return 'Chưa ăn trái. Mở Túi đồ để chọn trái.';
+    if(mode==='sword'||mode==='gun'){id=id||n.gear[mode];if(n.bag[mode].indexOf(id)<0)return 'Chưa sở hữu món này.';n.gear[mode]=id;}
+    n.gear.mode=mode;
+  });}
+  function eat(s,id){return result(s,function(n){if(!find('fruit',id)||!n.bag.fruit[id])return 'Không có trái này trong túi.';n.bag.fruit[id]--;n.gear.fruit=id;n.gear.mode='fruit';});}
+  function nearest(x,z){var best=islands[0],d=Infinity;islands.forEach(function(i){var q=Math.hypot(x-i.x,z-i.z)-i.r;if(q<d){d=q;best=i;}});return best;}
+  function height(x,z){
+    var i=nearest(x,z),lx=x-i.x,lz=z-i.z,r=Math.hypot(lx,lz)*43/i.r;
+    var n=Math.sin(lx*.35)*Math.cos(lz*.3)*.18+Math.sin(lx*.11+lz*.17)*.22;
+    var rise=i.id===2?Math.max(0,1-r/24)*1.7:i.id===3?Math.max(0,1-r/21)*.7:0;
+    if(r<26)return 1.5+n+rise;
+    if(r<40){var t=(r-26)/14;t=t*t*(3-2*t);return 1.5+n*(1-t)-t*1.35;}
+    if(r<46)return .15-(r-40)/6*.85;
+    return -2.2;
+  }
+  function segmentDistance(c,a,b){var dx=b.x-a.x,dz=b.z-a.z,L=dx*dx+dz*dz;var t=L?Math.max(0,Math.min(1,((c.x-a.x)*dx+(c.z-a.z)*dz)/L)):0;return Math.hypot(c.x-a.x-t*dx,c.z-a.z-t*dz);}
+  function clearSea(a,b){return islands.every(function(i){return segmentDistance(i,a,b)>=i.r+4-.001;});}
+  // Visibility graph quanh bờ biển: thuyền đi vòng đảo, không xuyên đất liền.
+  function seaRoute(a,b){
+    var nodes=[{x:a.x,z:a.z},{x:b.x,z:b.z}];
+    islands.forEach(function(i){for(var j=0;j<12;j++){var t=j*Math.PI/6;nodes.push({x:i.x+Math.sin(t)*(i.r+14),z:i.z+Math.cos(t)*(i.r+14)});}});
+    var dist=nodes.map(function(){return Infinity;}),prev=[],done=[];dist[0]=0;
+    for(var s=0;s<nodes.length;s++){
+      var k=-1;for(var j=0;j<nodes.length;j++)if(!done[j]&&(k<0||dist[j]<dist[k]))k=j;
+      if(k<0||!isFinite(dist[k]))break;if(k===1)break;done[k]=true;
+      for(var v=0;v<nodes.length;v++)if(!done[v]&&v!==k&&clearSea(nodes[k],nodes[v])){var d=dist[k]+Math.hypot(nodes[k].x-nodes[v].x,nodes[k].z-nodes[v].z);if(d<dist[v]){dist[v]=d;prev[v]=k;}}
+    }
+    if(!isFinite(dist[1]))return null;var route=[],q=1;while(q!==undefined){route.unshift(nodes[q]);if(q===0)break;q=prev[q];}return route;
+  }
+  function buildTerrain(T,scene,mat){
+    islands.forEach(function(i){
+      var seg=i.id===0?110:64,size=i.r*2+18;
+      var g=new T.PlaneGeometry(size,size,seg,seg);g.rotateX(-Math.PI/2);g.translate(i.x,0,i.z);
+      var p=g.attributes.position,colors=[],grass=new T.Color(i.color).convertSRGBToLinear(),sand=new T.Color(i.sand).convertSRGBToLinear(),deep=new T.Color(0x1d6a8a).convertSRGBToLinear();
+      for(var n=0;n<p.count;n++){var x=p.getX(n),z=p.getZ(n),h=height(x,z);p.setY(n,h);var c=h<-.2?deep:h<.9?sand:grass;var shade=.88+.12*Math.sin(x*.71+z*.53);colors.push(c.r*shade,c.g*shade,c.b*shade);}
+      g.setAttribute('color',new T.Float32BufferAttribute(colors,3));g.computeVertexNormals();var m=new T.Mesh(g,mat(0xffffff,{vertexColors:true}));m.receiveShadow=true;m.name='terrain-'+i.id;scene.add(m);
+    });
+  }
+  function boat(T,mat){
+    var g=new T.Group();function add(geo,c,x,y,z){var m=new T.Mesh(geo,mat(c));m.position.set(x||0,y||0,z||0);m.castShadow=true;m.receiveShadow=true;g.add(m);return m;}
+    add(new T.BoxGeometry(1.9,.36,3.8),0x694935,0,.25,0);
+    add(new T.BoxGeometry(1.68,.12,3.3),0xbd9868,0,.49,0);
+    [-1,1].forEach(function(s){add(new T.BoxGeometry(.12,.4,3.4),0x99694a,s*.92,.53,0);});
+    var bow=add(new T.ConeGeometry(1.1,1.4,3),0x694935,0,.27,2.2);bow.rotation.x=Math.PI/2;bow.rotation.z=Math.PI;
+    add(new T.CylinderGeometry(.07,.09,4.5,6),0x694935,0,2.45,-.65);
+    var sail=add(new T.PlaneGeometry(2.8,2.6,3,3),0xeee6ca,0,3.1,-.65);sail.material=mat(0xeee6ca,{side:T.DoubleSide});
+    add(new T.BoxGeometry(2.95,.08,.08),0x694935,0,1.75,-.65);
+    add(new T.OctahedronGeometry(.22),0x199c98,0,3.1,-.55);
+    g.name='Thuyen-Gon-Sao';return g;
+  }
+  function buildProps(ctx){
+    var T=ctx.T,scene=ctx.scene,mat=ctx.mat,mesh=ctx.mesh;
+    islands.forEach(function(i){
+      var p=i.port,d=i.dock,angle=Math.atan2(d.x-p.x,d.z-p.z);
+      var pier=new T.Group();pier.position.set(p.x,.65,p.z);pier.rotation.y=angle;
+      for(var j=0;j<9;j++)mesh(new T.BoxGeometry(2.6,.16,1.8),mat(0x92664b),0,0,j*1.85,pier);
+      [-1,1].forEach(function(s){for(var j=0;j<4;j++)mesh(new T.CylinderGeometry(.12,.14,2,6),mat(0x583d2a),s*1.18,-.5,j*4,pier);});scene.add(pier);
+      var vessel=boat(T,mat);vessel.position.set(d.x,0,d.z);vessel.rotation.y=angle;vessel.name='dock-boat-'+i.id;scene.add(vessel);
+      ctx.sign(p.x-3,p.z-5,angle,i.name);
+      if(i.id===0)return;
+      var R=ctx.rng(810+i.id);
+      if(i.id===1){
+        [[-12,-8,0xb77963],[-2,-10,0x588bad],[10,-8,0xa182b2],[-10,10,0xe0b25d]].forEach(function(q,j){ctx.house(i.x+q[0],i.z+q[1],0,q[2],j%2?0x31567b:0x884c43);});
+        for(var j=0;j<4;j++){var x=i.x-15+j*10,z=i.z+3;mesh(new T.BoxGeometry(4,.15,2),mat(0xb8986c),x,height(x,z)+.8,z);ctx.colliders.push({x:x,z:z,r:1.4});}
+        ctx.sign(i.x,i.z+14,0,'CHỢ KIM SA');
+      }
+      if(i.id===2){
+        for(var j=0;j<15;j++){var a=R()*Math.PI*2,r=12+R()*17,x=i.x+Math.sin(a)*r,z=i.z+Math.cos(a)*r;if(Math.hypot(x-p.x,z-p.z)<7)continue;var g=new T.Group();g.position.set(x,height(x,z),z);mesh(new T.CylinderGeometry(.28,.55,5,7),mat(0x65573c),0,2.5,0,g);for(var h=0;h<3;h++)mesh(new T.DodecahedronGeometry(2.6-h*.35),mat(h%2?0x225e41:0x32815b),h*.3,4.7+h*.6,0,g);scene.add(g);ctx.colliders.push({x:x,z:z,r:.8});}
+        for(var j=0;j<5;j++){var x=i.x-7+j*3,z=i.z-7;mesh(new T.BoxGeometry(1.4,4.5,1.4),mat(0x93978c),x,height(x,z)+2.25,z);ctx.colliders.push({x:x,z:z,r:1});}
+        mesh(new T.BoxGeometry(15,.65,1.8),mat(0x858c7c),i.x-1,height(i.x,i.z-7)+4.8,i.z-7);
+      }
+      if(i.id===3){
+        for(var j=0;j<11;j++){var a=R()*Math.PI*2,r=12+R()*15,x=i.x+Math.sin(a)*r,z=i.z+Math.cos(a)*r;if(Math.hypot(x-p.x,z-p.z)<7)continue;var h=2+R()*4;mesh(new T.ConeGeometry(1.7,h,5),mat(0x80bed5),x,height(x,z)+h/2,z);ctx.colliders.push({x:x,z:z,r:1.4});}
+        mesh(new T.CylinderGeometry(2.4,3.8,7,6),mat(0xaad8e3),i.x,height(i.x,i.z)+3.5,i.z);ctx.colliders.push({x:i.x,z:i.z,r:3.8});
+        mesh(new T.ConeGeometry(3.4,3,6),mat(0xf2faff),i.x,height(i.x,i.z)+8,i.z);
+      }
+      if(i.id===4){
+        var g=new T.Group();g.position.set(i.x,height(i.x,i.z),i.z);
+        mesh(new T.CylinderGeometry(4.8,8,7,10,1,true),mat(0x4c4145,{side:T.DoubleSide}),0,3.5,0,g);
+        var lava=mesh(new T.CircleGeometry(4.6,24),mat(0xf06a32,{emissive:0xf05e22,emissiveIntensity:.8}),0,5.8,0,g);lava.rotation.x=-Math.PI/2;scene.add(g);ctx.colliders.push({x:i.x,z:i.z,r:8.6});
+        for(var j=0;j<10;j++){var a=R()*Math.PI*2,r=14+R()*13,x=i.x+Math.sin(a)*r,z=i.z+Math.cos(a)*r;if(Math.hypot(x-p.x,z-p.z)>7)ctx.rock(x,z,1+R(),0x53464a);}
+      }
+      if(i.id===1)for(var j=0;j<6;j++){var a=j*Math.PI/3;ctx.palm(i.x+Math.sin(a)*25,i.z+Math.cos(a)*25,.9,R);}
+    });
+  }
+  function attachGear(T,g,gear,mat){
+    var p=g.userData.parts,m=gear.mode;if(m==='combat')return;var root=new T.Group();root.position.set(0,-.07,.02);p.wristR.add(root);
+    function add(geo,c,x,y,z){var q=new T.Mesh(geo,mat(c));q.position.set(x||0,y||0,z||0);q.castShadow=true;root.add(q);return q;}
+    if(m==='sword'){
+      add(new T.BoxGeometry(.085,.18,.085),0x4c3029,0,-.08,0);add(new T.BoxGeometry(.31,.05,.12),0xd4a74c,0,-.19,0);
+      add(new T.BoxGeometry(.1,.75,.17),gear.sword==='gon'?0x8edbdc:0xcbd4dc,0,-.58,0);var tip=add(new T.ConeGeometry(.095,.19,4),0xcbd4dc,0,-1.02,0);tip.rotation.z=Math.PI;p.sword=root;
+    }else if(m==='gun'){
+      add(new T.BoxGeometry(.17,.31,.16),0x8d6046,0,-.14,0);var b=add(new T.CylinderGeometry(.065,.085,.48,8),gear.gun==='ong'?0xbc9250:0x636b75,0,-.32,.09);add(new T.BoxGeometry(.12,.05,.2),0xbca77b,0,-.03,.06);p.gun=root;
+    }else{
+      var f=find('fruit',gear.fruit),q=add(new T.DodecahedronGeometry(.19),f.color,0,-.14,.08);q.rotation.z=.4;add(new T.CylinderGeometry(.018,.023,.1,5),0x4b8153,0,.08,.08);p.fruit=root;
+    }
+  }
+  window.PZExpansion={islands:islands,catalog:catalog,find:find,fresh:fresh,normalize:normalize,purchase:purchase,equip:equip,eat:eat,nearest:nearest,height:height,clearSea:clearSea,seaRoute:seaRoute,buildTerrain:buildTerrain,buildProps:buildProps,boat:boat,attachGear:attachGear};
+})();
+/* Avatar khối nguyên bản, các khớp thật trong scenegraph, Three.js r149. */
+(function(){
+  'use strict';
+  function build(T,pal,opts,mat,phong){
+    opts=opts||{};var g=new T.Group(),p={};g.name='Avatar-Khop';
+    function part(parent,key,x,y,z){var a=new T.Group();a.name=key;a.position.set(x||0,y||0,z||0);parent.add(a);p[key]=a;return a;}
+    function box(parent,w,h,d,c,x,y,z){var m=new T.Mesh(new T.BoxGeometry(w,h,d),mat(c));m.position.set(x||0,y||0,z||0);m.castShadow=true;parent.add(m);return m;}
+    function ball(parent,r,c,x,y,z){var m=new T.Mesh(new T.SphereGeometry(r,7,5),mat(c));m.position.set(x||0,y||0,z||0);m.castShadow=true;parent.add(m);return m;}
+    ['L','R'].forEach(function(s){
+      var hip=part(g,'leg'+s,s==='L'?-.175:.175,.86,0);
+      box(hip,.23,.34,.25,pal.pants,0,-.17,0);
+      var knee=part(hip,'knee'+s,0,-.36,0);ball(knee,.104,0x515966);
+      box(knee,.21,.32,.23,pal.pants,0,-.18,0);
+      var ankle=part(knee,'ankle'+s,0,-.35,0);
+      box(ankle,.24,.15,.37,pal.boot,0,-.075,.07);
+    });
+    var torso=part(g,'torso',0,.94,0);
+    box(torso,.64,.62,.4,pal.coat,0,.31,0);
+    box(torso,.26,.42,.025,pal.shirt,0,.35,.213);
+    box(torso,.65,.12,.43,pal.sash,0,.055,0);
+    box(torso,.09,.09,.035,0xd5ad5c,0,.055,.23);
+    p.coat=box(torso,.65,.12,.41,pal.coat,0,-.06,-.015);
+    ['L','R'].forEach(function(s){
+      var shoulder=part(torso,'arm'+s,s==='L'?-.43:.43,.54,0);ball(shoulder,.105,pal.coat);
+      box(shoulder,.23,.3,.25,pal.coat,0,-.16,0);
+      var elbow=part(shoulder,'elbow'+s,0,-.32,0);ball(elbow,.094,pal.skin);
+      box(elbow,.205,.26,.22,pal.coat,0,-.14,0);
+      var wrist=part(elbow,'wrist'+s,0,-.28,0);
+      box(wrist,.215,.05,.23,0xd5ad5c,0,0,0);
+      p['hand'+s]=box(wrist,.2,.16,.21,pal.skin,0,-.075,0);
+    });
+    box(torso,.14,.12,.16,pal.skin,0,.68,0);
+    var head=part(torso,'head',0,.91,0);
+    box(head,.47,.46,.43,pal.skin,0,0,0);
+    box(head,.49,.13,.45,pal.hair,0,.215,-.01);
+    box(head,.49,.22,.08,pal.hair,0,.07,-.2);
+    box(head,.19,.1,.09,pal.hair,-.14,.13,.22);
+    box(head,.1,.13,.07,pal.hair,.16,.15,.22);
+    [-.10,.10].forEach(function(x){box(head,.035,.065,.012,0x18202b,x,.005,.222);});
+    box(head,.09,.017,.014,0x934737,0,-.115,.222);
+    if(opts.hat!==false){
+      var brim=new T.Mesh(new T.CylinderGeometry(.34,.36,.055,10),mat(pal.hat||pal.coat));brim.position.y=.285;brim.castShadow=true;head.add(brim);
+      box(head,.39,.18,.35,pal.hat||pal.coat,0,.39,-.025);
+      box(head,.4,.04,.36,0xd5ad5c,0,.33,-.025);
+    }
+    if(opts.prop==='staff'){
+      var st=new T.Mesh(new T.CylinderGeometry(.035,.045,1.7,6),mat(0x6b4a2f));st.position.set(0,0,.13);p.wristL.add(st);ball(p.wristL,.12,0xfde68a,0,.87,.13);
+    }
+    if(opts.prop==='hammer'){
+      var hd=new T.Mesh(new T.CylinderGeometry(.035,.04,.6,6),mat(0x6b4a2f));hd.position.set(0,-.15,.1);p.wristR.add(hd);box(p.wristR,.26,.18,.2,0x6b7280,0,-.48,.1);
+    }
+    if(opts.prop==='spyglass'){
+      var sg=new T.Mesh(new T.CylinderGeometry(.04,.065,.4,7),mat(0xb88b43));sg.rotation.x=Math.PI/2;sg.position.set(0,-.05,.18);p.wristR.add(sg);
+    }
+    g.userData.parts=p;g.userData.rig='hip-knee-ankle / shoulder-elbow-wrist';return g;
+  }
+  function animate(g,st,t,mode){
+    var p=g.userData.parts,mov=st.moving||0,sw=Math.sin(st.phase||0),cw=Math.cos(st.phase||0),breathe=Math.sin(t*2.1)*.012;
+    p.legL.rotation.x=sw*.56*mov;p.legR.rotation.x=-sw*.56*mov;
+    p.kneeL.rotation.x=.035+Math.max(0,-sw)*.86*mov;p.kneeR.rotation.x=.035+Math.max(0,sw)*.86*mov;
+    p.ankleL.rotation.x=-p.kneeL.rotation.x*.28;p.ankleR.rotation.x=-p.kneeR.rotation.x*.28;
+    p.armL.rotation.x=-sw*.46*mov+breathe;p.armR.rotation.x=sw*.46*mov+breathe;
+    p.armL.rotation.z=-.055;p.armR.rotation.z=.055;
+    p.elbowL.rotation.x=-.18-Math.max(0,sw)*.24*mov;p.elbowR.rotation.x=-.18-Math.max(0,-sw)*.24*mov;
+    p.wristL.rotation.x=p.wristR.rotation.x=0;p.torso.rotation.y=0;
+    if(mode==='sword'){p.armR.rotation.x=-.5+sw*.1*mov;p.elbowR.rotation.x=-.65;}
+    if(mode==='gun'){p.armR.rotation.x=-1.08;p.elbowR.rotation.x=-.48;}
+    if(mode==='fruit'){p.armR.rotation.x=-.45;p.elbowR.rotation.x=-.9;}
+    if(st.airY>.05){p.legL.rotation.x=-.5;p.legR.rotation.x=-.3;p.kneeL.rotation.x=1.05;p.kneeR.rotation.x=.72;p.armL.rotation.x=-.6;p.armR.rotation.x=-.6;p.elbowL.rotation.x=p.elbowR.rotation.x=-.5;}
+    if(st.atkT>0){
+      var hit=Math.sin(Math.max(0,Math.min(1,1-st.atkT/.34))*Math.PI);
+      if(mode==='gun'){p.armR.rotation.x=-1.08+hit*.15;p.elbowR.rotation.x=-.48;}
+      else if(mode==='fruit'){p.armR.rotation.x=-.8-hit*.55;p.elbowR.rotation.x=-.7+hit*.5;}
+      else if(mode==='sword'){p.armR.rotation.x=-1.1+hit*1.8;p.armR.rotation.z=.4-hit*.7;p.elbowR.rotation.x=-.7+hit*.5;p.torso.rotation.y=hit*.3;}
+      else{var side=st.combo%2?'L':'R';p['arm'+side].rotation.x=-.9-hit*.55;p['elbow'+side].rotation.x=-1+hit*.95;p.torso.rotation.y=(side==='L'?-1:1)*hit*.24;}
+    }
+    if(st.kickT>0){p.legR.rotation.x=-1.45;p.kneeR.rotation.x=.08;p.legL.rotation.x=.5;p.kneeL.rotation.x=1.15;p.armL.rotation.x=p.armR.rotation.x=-.65;}
+    if(st.slam){p.armL.rotation.x=p.armR.rotation.x=st.vy>0?-2.7:-1.1;p.elbowL.rotation.x=p.elbowR.rotation.x=-.25;p.legL.rotation.x=p.legR.rotation.x=-.7;p.kneeL.rotation.x=p.kneeR.rotation.x=1.25;}
+    var plant=0;
+    if(!(st.airY>.05)&&!st.kickT&&!st.slam){
+      var side=sw>=0?'L':'R',a=p['leg'+side].rotation.x,b=p['knee'+side].rotation.x,c=p['ankle'+side].rotation.x,r=a+b+c;
+      var lowest=.86-.36*Math.cos(a)-.35*Math.cos(a+b)-.075*Math.cos(r)-.07*Math.sin(r)-.075*Math.abs(Math.cos(r))-.185*Math.abs(Math.sin(r));
+      plant=-lowest;
+    }
+    p.legL.position.y=p.legR.position.y=.86+plant;
+    p.torso.position.y=.94+plant+breathe;p.coat.rotation.x=.04+mov*.08;
+    p.head.rotation.y=Math.sin(t*.6)*.055;g.rotation.z=st.hurtT>0?Math.sin(st.hurtT*40)*.10:0;
+    if(st.deadT>0)g.rotation.x=-Math.min(1,st.deadT*3)*Math.PI/2;
+  }
+  window.PZRig={build:build,animate:animate};
+})();
 /* ==========================================================================
    TRIỀU TINH SA — game phiêu lưu hành động 3D góc nhìn thứ ba, nguyên bản.
    - Three.js nạp lười từ three.min.js cùng thư mục (offline vẫn chơi được).
@@ -13533,6 +13820,8 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
   var DEV = /[?&]pzdev=1/.test(location.search);
   var SAVE_KEY = 'hoanghao_pirate3d_v1';
   var TAU = Math.PI * 2;
+  var E = window.PZExpansion, ISLANDS = E.islands;
+  var boat = null, ride = null, navPort = false, playerShots = [];
 
   /* ------------------------------ DOM refs ------------------------------ */
   function el(id) { return document.getElementById(id); }
@@ -13548,7 +13837,8 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
       'pzAtkBtn', 'pzDashBtn', 'pzJumpBtn', 'pzS1Btn', 'pzS2Btn',
       'pzStatsBtn', 'pzStats', 'pzStatsClose', 'pzStatHp', 'pzStatMana', 'pzStatCombat', 'pzEditChar',
       'pzObsBtn', 'pzArmBtn', 'pzConBtn', 'pzHakiHint', 'pzCreate', 'pzCharName', 'pzCharSkin', 'pzCharHair', 'pzCharCoat', 'pzCharHat',
-      'pzCharSave', 'pzCharCancel', 'pzCharMsg', 'pzCharPreview'].forEach(function (k) { ui[k] = el(k); });
+      'pzCharSave', 'pzCharCancel', 'pzCharMsg', 'pzCharPreview',
+      'pzStatSword','pzStatGun','pzStatFruit','pzBag','pzBagList','pzBagMoney','pzBagClose','pzMap','pzMapCaption','pzMapDrawing','pzIslandList','pzMapClose','pzBoatManual','pzOpenBag','pzOpenMap','pzBagBtn','pzMapBtn','pzGearName','pzLocation'].forEach(function (k) { ui[k] = el(k); });
   }
 
   /* ------------------------------ save data ----------------------------- */
@@ -13558,8 +13848,8 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
       q: { stage: 0, kills: 0, boss: false }, stats: { kills: 0, deaths: 0, time: 0 },
       set: { sound: true, quality: 'high' }, name: '',
       char: { made: false, skin: 0, hair: 0, coat: 0, hat: false },
-      haki: { observation: false, armament: false, conqueror: false }
-      // Kiếm, súng và trái ác quỷ chưa có hệ mở khóa; không tự cấp theo cấp/nhiệm vụ.
+      haki: { observation: false, armament: false, conqueror: false },
+      world: E.fresh().world, bag: E.fresh().bag, gear: E.fresh().gear, market: E.fresh().market
     };
   }
   var S = blankSave();
@@ -13586,6 +13876,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
       if (o.haki && typeof o.haki === 'object') {
         Object.keys(S.haki).forEach(function (k) { S.haki[k] = o.haki[k] === true; });
       }
+      Object.assign(S, E.normalize(o));
       return true;
     } catch (e) { return false; }
   }
@@ -13616,7 +13907,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
       var old = S, next = JSON.parse(JSON.stringify(S)), changedQuest = next.q.stage !== v.quest;
       next.lv = v.lv; next.exp = v.exp; next.shards = v.shards;
       next.up = { hp: v.hp, atk: v.atk, en: v.en };
-      if (changedQuest) next.q = { stage: v.quest, kills: 0, boss: v.quest === 7 };
+      if (changedQuest) { next.q = { stage: v.quest, kills: 0, boss: v.quest === 7 }; next.world.island = 0; }
       S = next;
       if (!save()) { S = old; return { ok: false, msg: 'Không lưu được: bộ nhớ máy đầy hoặc bị chặn.' }; }
       if (inited) {
@@ -13755,17 +14046,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
   }
 
   /* ------------------------------ world data ---------------------------- */
-  var ISLE_R = 43;             // gioi han di bo (bo bien nong)
-  function groundH(x, z) {
-    var r = Math.sqrt(x * x + z * z);
-    var n = Math.sin(x * 0.35) * Math.cos(z * 0.3) * 0.18 + Math.sin(x * 0.11 + z * 0.17) * 0.22;
-    var h;
-    if (r < 26) h = 1.5 + n;
-    else if (r < 40) { var t = (r - 26) / 14; t = t * t * (3 - 2 * t); h = 1.5 + n * (1 - t) - t * 1.35; }
-    else if (r < 46) { var t2 = (r - 40) / 6; h = 0.15 - t2 * 0.85; }
-    else h = -2.2;
-    return h;
-  }
+  function groundH(x,z) { return E.height(x,z); }
   function rng(seed) { var a = seed >>> 0; return function () { a |= 0; a = a + 0x6D2B79F5 | 0; var t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
 
   var colliders = [];   // {x,z,r}
@@ -13773,7 +14054,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
   var boss = null;
   var player = null;
   var P = { x: 0, z: 14, yaw: Math.PI, vx: 0, vz: 0, hp: 100, en: 60, iframe: 0, dashT: 0, dashCd: 0, atkT: 0, atkHit: false, combo: 0, comboT: 0, castT: 0, hurtT: 0, lastHurt: -99, dead: false, phase: 0, moving: 0,
-    airY: 0, vy: 0, kickT: 0, kickHit: false, slam: false,
+    airY: 0, vy: 0, kickT: 0, kickHit: false, slam: false, boat: false, weaponCd: 0,
     cd: { s1: 0, s2: 0 }, hakiT: { observation: 0, armament: 0 }, hakiCd: { observation: 0, armament: 0, conqueror: 0 }, dodges: 0 };
   var cam = { yaw: Math.PI, pitch: 0.42, dist: 8.5, shake: 0 };
   var timeScale = 1, hitstop = 0;
@@ -13801,7 +14082,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
   }
   function show(node, on) { if (node) node.hidden = !on; }
   function syncOverlays() {
-    overlayOpen = !ui.pzStart.hidden || !ui.pzDead.hidden || !ui.pzWin.hidden || !ui.pzHelp.hidden || !ui.pzFail.hidden || !ui.pzLoad.hidden || !ui.pzCreate.hidden || !ui.pzStats.hidden;
+    overlayOpen = !ui.pzStart.hidden || !ui.pzDead.hidden || !ui.pzWin.hidden || !ui.pzHelp.hidden || !ui.pzFail.hidden || !ui.pzLoad.hidden || !ui.pzCreate.hidden || !ui.pzStats.hidden || !ui.pzBag.hidden || !ui.pzMap.hidden;
   }
 
   /* damage numbers + enemy bars + npc labels (projected divs) */
@@ -13851,17 +14132,20 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     if (st.type === 'kill') obj += '  (' + Math.min(S.q.kills, st.need) + '/' + st.need + ')';
     ui.pzQObj.textContent = obj;
     ui.pzQBar.style.width = (st.type === 'kill' ? Math.min(1, S.q.kills / st.need) * 100 : (st.type === 'boss' && boss ? (1 - boss.hp / boss.maxHp) * 100 : 0)) + '%';
-    ui.pzQHint.textContent = st.hint;
+    ui.pzQHint.textContent = navPort ? 'Theo la bàn tới Thuyền Trưởng ở bến.' : S.world.island!==0 && S.q.stage<7 ? 'Nhiệm vụ chương 1 ở Đảo Neo Sao; đi thuyền về khi muốn làm tiếp.' : st.hint;
   }
   function questTarget() {
+    if (ride) return ISLANDS[ride.dest].dock;
+    if (P.boat) return null;
+    if (navPort || (S.world.island!==0 && S.q.stage<7)) return islandNow().port;
     var st = curStage();
     if (st.type === 'boss' && boss && !boss.dead) return { x: boss.x, z: boss.z };
     return st.target;
   }
-  function onKill(kind) {
+  function onKill(kind, island) {
     S.stats.kills++;
     var st = curStage();
-    if (st.type === 'kill' && (st.kind === 'any' || st.kind === kind)) {
+    if (st.type === 'kill' && (st.repeat || !island) && (st.kind === 'any' || st.kind === kind)) {
       S.q.kills++;
       if (S.q.kills >= st.need) {
         if (st.repeat) {
@@ -13892,11 +14176,11 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     }
     hudBars();
   }
-  function playerPos(y) { return { x: P.x, y: (y || 0) + groundH(P.x, P.z) + P.airY, z: P.z }; }
+  function playerPos(y) { return { x: P.x, y: (y || 0) + baseH() + P.airY, z: P.z }; }
 
   /* ------------------------------- dialog ------------------------------- */
   function openDialog(name, color, initial, text, acts) {
-    dialogOpen = true;
+    clearMovement(); dialogOpen = true;
     ui.pzDName.textContent = name;
     ui.pzDAva.textContent = initial;
     ui.pzDAva.style.background = 'linear-gradient(150deg,' + color + ',#0b1f33)';
@@ -13938,14 +14222,14 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     if (st === 1 || st === 3) acts.push({ label: 'Con đang làm đây', cls: 'ghost', fn: closeDialog });
     if (st === 5) acts.push({ label: 'Con đã sẵn sàng', fn: closeDialog });
     if (st === 6 || st === 7) acts.push({ label: 'Con ra biển đây', cls: 'ghost', fn: closeDialog });
-    acts.push({ label: 'Hỏi về Tinh Sa', cls: 'ghost', fn: function () { openDialog('Lão Hải Đăng', '#f59e0b', 'L', 'Tinh Sa là cát sao của đảo, chưa phải sức mạnh con sử dụng. Hiện con chỉ có võ Combat: Z lướt lên đá, X đập xuống đất. Q để lướt, Space để nhảy. Kiếm, súng và trái ác quỷ còn khóa. E/J/U là ba Haki, chỉ Admin cấp; chưa có nhiệm vụ mở Haki.', [{ label: 'Con nhớ rồi', fn: elderDialog }]); } });
+    acts.push({ label: 'Hỏi về Tinh Sa', cls: 'ghost', fn: function () { openDialog('Lão Hải Đăng', '#f59e0b', 'L', 'Tinh Sa là cát sao của đảo, chưa phải sức mạnh con sử dụng. Hiện con chỉ có võ Combat: Z lướt lên đá, X đập xuống đất. Q để lướt, Space để nhảy. Mua kiếm, súng hoặc trái ở Cảng Kim Sa, rồi mở Túi đồ để dùng. E/J/U là ba Haki, chỉ Admin cấp; chưa có nhiệm vụ mở Haki.', [{ label: 'Con nhớ rồi', fn: elderDialog }]); } });
     openDialog('Lão Hải Đăng', '#f59e0b', 'L', (L[st] || L[7])[0], acts);
   }
   function smithCost(k) { return 8 + S.up[k] * 6; }
   function smithDialog() {
     var acts = [
       { shop: true, label: 'Giáp Sao (+20 máu tối đa)', desc: 'Đã rèn ' + S.up.hp + ' lần', cost: smithCost('hp'), disabled: S.shards < smithCost('hp'), fn: function () { buy('hp'); } },
-      { shop: true, label: 'Lưỡi Sao (+3 công kích)', desc: 'Đã rèn ' + S.up.atk + ' lần', cost: smithCost('atk'), disabled: S.shards < smithCost('atk'), fn: function () { buy('atk'); } },
+      { shop: true, label: 'Lực Sao (+3 công kích)', desc: 'Đã rèn ' + S.up.atk + ' lần', cost: smithCost('atk'), disabled: S.shards < smithCost('atk'), fn: function () { buy('atk'); } },
       { shop: true, label: 'Lõi Sao (+10 mana)', desc: 'Đã rèn ' + S.up.en + ' lần', cost: smithCost('en'), disabled: S.shards < smithCost('en'), fn: function () { buy('en'); } },
       { label: 'Để sau nhé', cls: 'ghost', fn: closeDialog }
     ];
@@ -13954,7 +14238,8 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
   function buy(k) {
     var c = smithCost(k);
     if (S.shards < c) { toast('Không đủ Mảnh Sao.', 'warn'); return; }
-    S.shards -= c; S.up[k]++;
+    var old = S; S = JSON.parse(JSON.stringify(S)); S.shards -= c; S.up[k]++;
+    if (!save()) { S = old; toast('Chưa lưu được, chưa trừ tiền.', 'warn'); return; }
     if (k === 'hp') P.hp = Math.min(maxHp(), P.hp + 20);
     if (k === 'en') P.en = Math.min(maxEn(), P.en + 10);
     save(); hudBars(); sfx.shard();
@@ -14027,7 +14312,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     rim = new THREE.DirectionalLight(0x67e8f9, 0.35); rim.position.set(-35, 22, 45); scene.add(rim);
 
     buildSky(); buildTerrain(); buildWater(); buildProps(); buildParticles();
-    buildPlayer(); buildNpcs(); buildEnemies();
+    buildExtraWorld(); buildPlayer(); buildNpcs(); buildEnemies();
     resize();
   }
 
@@ -14065,12 +14350,6 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
       grp.userData.sp = 0.4 + R() * 0.7;
       scene.add(grp); clouds.push(grp);
     }
-    // distant islands
-    var im = phong(0x2b5d7a);
-    [[150, 0.6, 26], [-190, 2.2, 34], [60, -210, 22]].forEach(function (p) {
-      var c = new THREE.Mesh(new THREE.ConeGeometry(p[2], p[2] * 0.62, 7), im);
-      c.position.set(p[0], -2, p[1]); scene.add(c);
-    });
     // seagulls
     var bm = new THREE.MeshBasicMaterial({ color: 0xf8fafc, side: THREE.DoubleSide });
     for (var k = 0; k < 3; k++) {
@@ -14083,31 +14362,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     }
   }
 
-  function buildTerrain() {
-    var seg = 110, size = 150;
-    var g = new THREE.PlaneGeometry(size, size, seg, seg);
-    g.rotateX(-Math.PI / 2);
-    var pos = g.attributes.position, colors = [];
-    var cGrass = new THREE.Color(0x3f9d5f).convertSRGBToLinear(), cGrass2 = new THREE.Color(0x2c7a4b).convertSRGBToLinear(), cSand = new THREE.Color(0xf2d8a0).convertSRGBToLinear(), cSand2 = new THREE.Color(0xe8c37e).convertSRGBToLinear(), cDeep = new THREE.Color(0x1d6a8a).convertSRGBToLinear();
-    var R = rng(1234), tmp = new THREE.Color();
-    for (var i = 0; i < pos.count; i++) {
-      var x = pos.getX(i), z = pos.getZ(i);
-      var h = groundH(x, z);
-      pos.setY(i, h);
-      var r = Math.sqrt(x * x + z * z), n = R();
-      if (h > 0.9) tmp.copy(n > 0.5 ? cGrass : cGrass2);
-      else if (h > 0.05) tmp.copy(n > 0.5 ? cSand : cSand2);
-      else if (h > -1) tmp.copy(cSand2).lerp(cDeep, Math.min(1, -h * 1.1));
-      else tmp.copy(cDeep);
-      colors.push(tmp.r, tmp.g, tmp.b);
-    }
-    g.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
-    g.computeVertexNormals();
-    var m = new THREE.MeshLambertMaterial({ vertexColors: true });
-    var t = new THREE.Mesh(g, m);
-    t.receiveShadow = true;
-    scene.add(t);
-  }
+  function buildTerrain() { E.buildTerrain(THREE,scene,mat); }
 
   function buildWater() {
     var g = new THREE.PlaneGeometry(520, 520, 90, 90);
@@ -14115,6 +14370,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     var m = new THREE.ShaderMaterial({
       uniforms: {
         uTime: { value: 0 },
+        uIslands: { value: ISLANDS.map(function(i){return new THREE.Vector3(i.x,i.z,i.r);}) },
         uDeep: { value: new THREE.Color(0x0b4a6f) },
         uShal: { value: new THREE.Color(0x2dd4bf) },
         uFoam: { value: new THREE.Color(0xe0f2fe) },
@@ -14125,11 +14381,11 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
         ' float w = sin(p.x*0.16 + uTime*1.1)*0.10 + sin(p.z*0.13 - uTime*0.8)*0.09 + sin((p.x+p.z)*0.07 + uTime*0.5)*0.07;\n' +
         ' p.y += w; vWv = w; vec4 wp = modelMatrix * vec4(p,1.0); vW = wp.xyz;\n' +
         ' gl_Position = projectionMatrix * viewMatrix * wp; }',
-      fragmentShader: 'uniform float uTime; uniform vec3 uDeep; uniform vec3 uShal; uniform vec3 uFoam; uniform vec3 uFog; varying vec3 vW; varying float vWv;\n' +
-        'void main(){ float r = length(vW.xz);\n' +
-        ' float sh = 1.0 - smoothstep(38.0, 52.0, r);\n' +
+      fragmentShader: 'uniform vec3 uIslands[5]; uniform float uTime; uniform vec3 uDeep; uniform vec3 uShal; uniform vec3 uFoam; uniform vec3 uFog; varying vec3 vW; varying float vWv;\n' +
+        'void main(){ float r = 10000.0; for(int i=0;i<5;i++){r=min(r,length(vW.xz-uIslands[i].xy)-uIslands[i].z); }\n' +
+        ' float sh = 1.0 - smoothstep(-1.0, 12.0, r);\n' +
         ' vec3 c = mix(uDeep, uShal, sh*0.75);\n' +
-        ' float band = smoothstep(47.0,44.5,r) * (1.0 - smoothstep(41.0,43.0,r));\n' +
+        ' float band = smoothstep(-3.0,-1.0,r) * (1.0 - smoothstep(1.0,4.0,r));\n' +
         ' float foam = band * (0.55 + 0.45*sin(r*2.6 - uTime*2.2));\n' +
         ' c = mix(c, uFoam, clamp(foam,0.0,1.0)*0.8);\n' +
         ' float glit = pow(max(sin(vW.x*0.7+uTime*1.4)*sin(vW.z*0.63-uTime*1.1),0.0), 10.0);\n' +
@@ -14299,148 +14555,14 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
   }
 
   /* ------------------------- humanoid builder --------------------------- */
-  function humanoid(pal, opts) {
-    opts = opts || {};
-    var g = new THREE.Group();
-    var parts = {};
-    var skin = mat(pal.skin), boot = mat(pal.boot);
-    // legs
-    ['L', 'R'].forEach(function (side) {
-      var piv = new THREE.Group();
-      piv.position.set(side === 'L' ? -0.13 : 0.13, 0.55, 0);
-      var leg = new THREE.Mesh(new THREE.CapsuleGeometry(0.085, 0.3, 3, 6), mat(pal.pants));
-      leg.position.y = -0.24; leg.castShadow = true; piv.add(leg);
-      var bt = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.12, 0.26), boot);
-      bt.position.set(0, -0.46, 0.05); bt.castShadow = true; piv.add(bt);
-      g.add(piv); parts['leg' + side] = piv;
-    });
-    // torso
-    var torso = new THREE.Group(); torso.position.y = 0.98; g.add(torso); parts.torso = torso;
-    var body = new THREE.Mesh(new THREE.CapsuleGeometry(0.23, 0.32, 4, 8), mat(pal.coat));
-    body.position.y = 0.26; body.castShadow = true; torso.add(body);
-    var shirt = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.3, 0.1), mat(pal.shirt));
-    shirt.position.set(0, 0.28, 0.2); torso.add(shirt);
-    var sash = new THREE.Mesh(new THREE.BoxGeometry(0.48, 0.12, 0.42), mat(pal.sash));
-    sash.position.y = 0.05; sash.castShadow = true; torso.add(sash);
-    var buckle = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.1, 0.06), mat(0xfbbf24, { emissive: 0xb45309, emissiveIntensity: 0.4 }));
-    buckle.position.set(0, 0.05, 0.22); torso.add(buckle);
-    // coat skirt
-    var coat = new THREE.Mesh(new THREE.CylinderGeometry(0.26, 0.44, 0.62, 8, 1, true), mat(pal.coat, { side: THREE.DoubleSide }));
-    coat.position.set(0, -0.16, -0.06); coat.rotation.x = 0.14; coat.castShadow = true;
-    torso.add(coat); parts.coat = coat;
-    var trim = new THREE.Mesh(new THREE.TorusGeometry(0.43, 0.03, 6, 12), mat(0xfbbf24));
-    trim.position.set(0, -0.45, -0.1); trim.rotation.x = Math.PI / 2 + 0.14; torso.add(trim);
-    // arms
-    ['L', 'R'].forEach(function (side) {
-      var piv = new THREE.Group();
-      piv.position.set(side === 'L' ? -0.3 : 0.3, 0.44, 0);
-      var arm = new THREE.Mesh(new THREE.CapsuleGeometry(0.07, 0.3, 3, 6), mat(pal.coat));
-      arm.position.y = -0.2; arm.castShadow = true; piv.add(arm);
-      var hand = new THREE.Mesh(new THREE.SphereGeometry(0.08, 6, 5), skin);
-      hand.position.y = -0.4; piv.add(hand); parts['hand' + side] = hand;
-      var cuff = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.1, 0.1, 6), mat(0xfbbf24));
-      cuff.position.y = -0.32; piv.add(cuff);
-      torso.add(piv); parts['arm' + side] = piv;
-    });
-    // head
-    var head = new THREE.Group(); head.position.y = 0.72; torso.add(head); parts.head = head;
-    var skull = new THREE.Mesh(new THREE.SphereGeometry(0.3, 12, 10), skin);
-    skull.scale.set(1, 1.05, 0.95); skull.castShadow = true; head.add(skull);
-    var hair = new THREE.Mesh(new THREE.SphereGeometry(0.315, 12, 10), mat(pal.hair));
-    hair.scale.set(1, 0.85, 1); hair.position.set(0, 0.07, -0.04); head.add(hair);
-    for (var i = 0; i < 5; i++) {
-      var sp = new THREE.Mesh(new THREE.ConeGeometry(0.07, 0.22, 4), mat(pal.hair));
-      var a = -0.9 + i * 0.45;
-      sp.position.set(Math.sin(a) * 0.24, 0.2, Math.cos(a) * 0.2 - 0.08);
-      sp.rotation.set(Math.cos(a) * 0.7, 0, -Math.sin(a) * 0.7);
-      head.add(sp);
-    }
-    var eyeM = mat(0x101826);
-    [-0.11, 0.11].forEach(function (ex) {
-      var e = new THREE.Mesh(new THREE.SphereGeometry(0.038, 6, 5), eyeM);
-      e.position.set(ex, 0.0, 0.27); head.add(e);
-      var br = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.02, 0.02), mat(pal.hair));
-      br.position.set(ex, 0.09, 0.28); head.add(br);
-    });
-    var mouth = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.018, 0.02), mat(0x9a3412));
-    mouth.position.set(0, -0.12, 0.28); head.add(mouth);
-    // hat
-    if (opts.hat !== false) {
-      var brim = new THREE.Mesh(new THREE.CylinderGeometry(0.36, 0.4, 0.06, 10), mat(pal.hat));
-      brim.position.y = 0.24; brim.castShadow = true; head.add(brim);
-      var crown = new THREE.Mesh(new THREE.SphereGeometry(0.24, 10, 8, 0, TAU, 0, Math.PI / 2), mat(pal.hat));
-      crown.position.y = 0.25; head.add(crown);
-      var band = new THREE.Mesh(new THREE.TorusGeometry(0.24, 0.03, 6, 12), mat(0xfbbf24));
-      band.position.y = 0.27; band.rotation.x = Math.PI / 2; head.add(band);
-      var feather = new THREE.Mesh(new THREE.ConeGeometry(0.05, 0.4, 4), mat(pal.feather || 0x22d3ee, { emissive: pal.feather || 0x22d3ee, emissiveIntensity: 0.35 }));
-      feather.position.set(0.2, 0.42, -0.05); feather.rotation.z = -0.5; head.add(feather);
-      var star = new THREE.Mesh(new THREE.OctahedronGeometry(0.06, 0), mat(0xfde68a, { emissive: 0xfbbf24, emissiveIntensity: 0.9 }));
-      star.position.set(0, 0.3, 0.24); head.add(star);
-    }
-    // weapon
-    if (opts.weapon !== false) {
-      var sw = new THREE.Group();
-      var grip = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.035, 0.2, 6), mat(0x41291a));
-      sw.add(grip);
-      var guard = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.04, 0.08), mat(0xfbbf24));
-      guard.position.y = 0.11; sw.add(guard);
-      var blade = new THREE.Mesh(new THREE.BoxGeometry(0.055, 0.72, 0.13), mat(0xe2e8f0));
-      blade.position.y = 0.48; blade.castShadow = true; sw.add(blade);
-      var edge = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.7, 0.03), mat(0x67e8f9, { emissive: 0x22d3ee, emissiveIntensity: 1.1 }));
-      edge.position.set(0.035, 0.48, 0); sw.add(edge);
-      sw.position.set(0, -0.42, 0.06); sw.rotation.x = -0.35;
-      parts.armR.add(sw); parts.sword = sw;
-    }
-    if (opts.prop === 'staff') {
-      var st = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.045, 1.7, 6), mat(0x6b4a2f));
-      st.position.set(0, -0.2, 0.1); parts.armL.add(st);
-      var orb = new THREE.Mesh(new THREE.SphereGeometry(0.12, 8, 6), mat(0xfde68a, { emissive: 0xfbbf24, emissiveIntensity: 1.6 }));
-      orb.position.set(0, 0.68, 0.1); parts.armL.add(orb);
-    }
-    if (opts.prop === 'hammer') {
-      var hd = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.04, 0.7, 6), mat(0x6b4a2f));
-      hd.position.set(0, -0.4, 0.08); parts.armR.add(hd);
-      var hh = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.16, 0.16), phong(0x6b7280));
-      hh.position.set(0, -0.75, 0.08); parts.armR.add(hh);
-    }
-    if (opts.prop === 'spyglass') {
-      var sg = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.06, 0.5, 8), mat(0xb45309));
-      sg.rotation.x = Math.PI / 2; sg.position.set(0, -0.4, 0.2); parts.armR.add(sg);
-    }
-    g.userData.parts = parts;
-    return g;
-  }
-  function animHumanoid(g, st, t) {
-    var p = g.userData.parts;
-    var mov = st.moving || 0;
-    var ph = st.phase || 0;
-    var sw = Math.sin(ph), cw = Math.cos(ph);
-    p.legL.rotation.x = sw * 0.75 * mov;
-    p.legR.rotation.x = -sw * 0.75 * mov;
-    p.armL.rotation.x = -sw * 0.55 * mov + Math.sin(t * 1.7) * 0.05;
-    var armR = sw * 0.55 * mov + Math.sin(t * 1.7 + 1) * 0.05;
-    p.armR.rotation.z = 0; p.torso.rotation.y = 0;
-    if (st.airY > 0.05) { p.legL.rotation.x = -0.45; p.legR.rotation.x = 0.55; p.armL.rotation.x = -0.65; armR = -0.65; }
-    if (st.atkT > 0) {
-      var pr = 1 - st.atkT / 0.34, punch = Math.sin(pr * Math.PI);
-      if (st.combo % 2) p.armL.rotation.x = -0.7 - punch * 1.2;
-      else armR = -0.7 - punch * 1.2;
-      p.torso.rotation.y = (st.combo % 2 ? -1 : 1) * punch * 0.3;
-    }
-    if (st.kickT > 0) { p.legR.rotation.x = -1.6; p.legL.rotation.x = 0.9; p.armL.rotation.x = -0.8; armR = -0.8; }
-    if (st.slam) { p.armL.rotation.x = st.vy > 0 ? -2.7 : -1.1; armR = p.armL.rotation.x; p.legL.rotation.x = -0.65; p.legR.rotation.x = -0.65; }
-    p.armR.rotation.x = armR;
-    p.torso.position.y = 0.98 + Math.abs(cw) * 0.06 * mov + Math.sin(t * 2.2) * 0.015;
-    p.coat.rotation.x = 0.14 + Math.sin(t * 2.4) * 0.05 + mov * 0.3;
-    p.head.rotation.y = Math.sin(t * 0.7) * 0.08;
-    if (st.hurtT > 0) { g.rotation.z = Math.sin(st.hurtT * 40) * 0.12; } else g.rotation.z = 0;
-    if (st.deadT > 0) { g.rotation.x = -Math.min(1, st.deadT * 3) * Math.PI / 2; g.position.y -= 0; }
-  }
+  function humanoid(pal,opts){return window.PZRig.build(THREE,pal,opts,mat,phong);}
+  function animHumanoid(g,st,t){window.PZRig.animate(g,st,t,g===player?S.gear.mode:'combat');}
 
   var charColors = { skin: [0xfcd9b8, 0xc58a61, 0x805237], hair: [0x16324f, 0xe6c885, 0x783e31], coat: [0x0f766e, 0x334f94, 0x88405b] };
   function buildPlayer() {
     var c = S.char;
     var g = humanoid({ skin: charColors.skin[c.skin], hair: charColors.hair[c.hair], coat: charColors.coat[c.coat], shirt: 0xf8fafc, sash: 0xdc2626, pants: 0x1f2937, boot: 0x111827, hat: charColors.coat[c.coat], feather: 0x22d3ee }, { weapon: false, hat: c.hat });
+    E.attachGear(THREE,g,S.gear,mat);
     ['handL', 'handR'].forEach(function (k) { var m = g.userData.parts[k]; m.material = m.material.clone(); m.userData.baseColor = m.material.color.clone(); });
     scene.add(g); player = g;
   }
@@ -14461,12 +14583,12 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     ui.pzCharPreview.classList.toggle('has-hat', c.hat);
   }
   function openCreator() {
-    if (!inited || P.dead || dialogOpen) return;
+    if (!inited || P.dead || P.boat || dialogOpen) return;
     clearMovement();
     ui.pzCharName.value = S.name || heroName();
     ['skin', 'hair', 'coat'].forEach(function (k) { ui['pzChar' + k.charAt(0).toUpperCase() + k.slice(1)].value = S.char[k]; });
     ui.pzCharHat.value = S.char.hat ? 'yes' : 'no'; ui.pzCharMsg.textContent = '';
-    previewCharacter(); show(ui.pzStats, false); show(ui.pzStart, false); show(ui.pzCreate, true); syncOverlays();
+    previewCharacter(); closePanels(); show(ui.pzStart, false); show(ui.pzCreate, true); syncOverlays();
   }
   function cancelCreator() {
     show(ui.pzCreate, false); if (!playing) show(ui.pzStart, true); syncOverlays();
@@ -14491,15 +14613,13 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     show(ui.pzStart, false); syncOverlays(); clearMovement(); playing = true; audioInit();
     hudBars(); questUi(); if (S.q.stage === 0) banner('ĐẢO NEO SAO', 'Tân nhân vật · Võ Combat đã sẵn sàng');
   }
-  function openStats() {
-    if (!inited || !playing || P.dead || dialogOpen || (overlayOpen && ui.pzStats.hidden)) return;
-    clearMovement(); statsUi(); show(ui.pzStats, ui.pzStats.hidden); syncOverlays();
-  }
+  function openStats() { if(openPanel('pzStats'))statsUi(); }
   function statsUi() {
     if (!ui.pzStatHp) return;
     ui.pzStatHp.textContent = Math.ceil(P.hp) + ' / ' + maxHp();
     ui.pzStatMana.textContent = Math.floor(P.en) + ' / ' + maxEn();
     ui.pzStatCombat.textContent = atk() + ' sát thương cơ bản';
+    [['sword','pzStatSword'],['gun','pzStatGun'],['fruit','pzStatFruit']].forEach(function(a){var f=E.find(a[0],S.gear[a[0]]);ui[a[1]].textContent=f?itemDamage(a[0])+' · '+f.name:'0 · Khóa';ui[a[1]].parentNode.classList.toggle('locked',!f);});
     [['observation', 'pzObsBtn', 'E', 'Quan sát'], ['armament', 'pzArmBtn', 'J', 'Vũ trang'], ['conqueror', 'pzConBtn', 'U', 'Bá vương']].forEach(function (a) {
       var b = ui[a[1]], unlocked = S.haki[a[0]], active = P.hakiT[a[0]] > 0;
       b.classList.toggle('locked', !unlocked); b.setAttribute('aria-disabled', String(!unlocked));
@@ -14512,7 +14632,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
       { key: 'elder', pos: ELDER, pal: { skin: 0xfcd9b8, hair: 0xe5e7eb, coat: 0xb45309, shirt: 0xfef3c7, sash: 0x7c2d12, pants: 0x57534e, boot: 0x292524, hat: 0x78350f, feather: 0xfde68a }, prop: 'staff', name: 'Lão Hải Đăng', color: '#f59e0b', ini: 'L', talk: elderDialog },
       { key: 'smith', pos: SMITH, pal: { skin: 0xe8b88a, hair: 0x7c2d12, coat: 0x9f1239, shirt: 0xfecdd3, sash: 0x374151, pants: 0x44403c, boot: 0x1c1917, hat: false }, prop: 'hammer', name: 'Thợ Rèn Sóng', color: '#fb7185', ini: 'R', talk: smithDialog },
       { key: 'navi', pos: NAVI, pal: { skin: 0xfcd9b8, hair: 0x0e7490, coat: 0x0e7490, shirt: 0xe0f2fe, sash: 0xfbbf24, pants: 0x1e3a5f, boot: 0x111827, hat: 0x164e63, feather: 0xfde68a }, prop: 'spyglass', name: 'Hoa Tiêu Muối', color: '#22d3ee', ini: 'H', talk: naviDialog }
-    ];
+    ].concat(extraNpcDefs());
     defs.forEach(function (d) {
       var g = humanoid(d.pal, { prop: d.prop, hat: d.pal.hat !== false, weapon: false });
       var h = groundH(d.pos.x, d.pos.z);
@@ -14619,6 +14739,10 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     if (kind === 'crab') { g = crabMesh(1); e = { kind: kind, hp: 30, maxHp: 30, spd: 2.6, dmg: 8, exp: 12, range: 1.7, aggro: 7, wind: 0.5, sh: 1 }; }
     else if (kind === 'skel') { g = skelMesh(); e = { kind: kind, hp: 55, maxHp: 55, spd: 3.6, dmg: 12, exp: 20, range: 1.9, aggro: 8.5, wind: 0.42, sh: 1 }; }
     else { g = jellyMesh(); e = { kind: 'jelly', hp: 40, maxHp: 40, spd: 2.2, dmg: 14, exp: 26, range: 9, aggro: 10, wind: 0.7, sh: 1 }; }
+    var home=E.nearest(x,z);e.island=home.id;var mul=home.id>1?1+home.id*.55:1;
+    e.hp=e.maxHp=Math.round(e.hp*mul);e.dmg=Math.round(e.dmg*(1+(home.id>1?home.id*.25:0)));e.exp=Math.round(e.exp*mul);
+    e.sh=home.id>1?1+home.id*.09:1;g.scale.setScalar(e.sh);
+    g.traverse(function(o){if(o.isMesh&&o.material.emissive){o.material=o.material.clone();o.userData.privateMat=true;}});
     var h = groundH(x, z);
     g.position.set(x, h, z);
     scene.add(g);
@@ -14633,14 +14757,16 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     for (var i = 0; i < 5; i++) spawnEnemy('crab', BEACH.x + (R() - 0.5) * 9, BEACH.z + (R() - 0.5) * 9);
     for (var j = 0; j < 4; j++) spawnEnemy('skel', RUINS.x + (R() - 0.5) * 8, RUINS.z + (R() - 0.5) * 10);
     for (var k = 0; k < 3; k++) spawnEnemy('jelly', 2 + (R() - 0.5) * 12, -33 + (R() - 0.5) * 6);
+    ISLANDS.slice(2).forEach(function(i){for(var n=0;n<5;n++){var a=2+n*.53;spawnEnemy(i.id===2?'skel':i.id===3?'jelly':'crab',i.x+Math.sin(a)*22,i.z+Math.cos(a)*22);}});
   }
   function spawnBoss() {
     if (boss) return;
     var g = crabMesh(2.6, true);
+    g.traverse(function(o){if(o.isMesh&&o.material.emissive){o.material=o.material.clone();o.userData.privateMat=true;}});
     var x = CAVE.x, z = CAVE.z + 3;
     g.position.set(x, groundH(x, z), z);
     scene.add(g);
-    boss = { kind: 'boss', g: g, x: x, z: z, hx: x, hz: z, hp: 600 + S.lv * 40, maxHp: 600 + S.lv * 40, spd: 2.4, dmg: 22, exp: 200, range: 3.4, aggro: 14, wind: 1.0, yaw: 0, state: 'idle', t: 1.5, flash: 0, dead: false, deadT: 0, kx: 0, kz: 0, phase: 0, bar: null, barT: 0, sh: 2.6, mode: 0, summoned: false, tele: null };
+    boss = { island:0, kind: 'boss', g: g, x: x, z: z, hx: x, hz: z, hp: 600 + S.lv * 40, maxHp: 600 + S.lv * 40, spd: 2.4, dmg: 22, exp: 200, range: 3.4, aggro: 14, wind: 1.0, yaw: 0, state: 'idle', t: 1.5, flash: 0, dead: false, deadT: 0, kx: 0, kz: 0, phase: 0, bar: null, barT: 0, sh: 2.6, mode: 0, summoned: false, tele: null };
     enemies.push(boss);
     show(ui.pzBoss, true);
     banner('VUA CUA THỦY TRIỀU', 'Kẻ nuốt Tinh Sa của Đảo Neo Sao');
@@ -14733,7 +14859,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     if (e.hp <= 0) killEnemy(e);
   }
   function killEnemy(e) {
-    e.dead = true; e.deadT = 0.001; e.state = 'dead';
+    e.dead = true; e.diedAt=playT; e.deadT = 0.001; e.state = 'dead';
     var p = { x: e.x, y: groundH(e.x, e.z) + 0.8, z: e.z };
     burst(p, 26, e.kind === 'jelly' ? 0x67e8f9 : 0xfbbf24, 4.5, 0.8);
     sfx.die();
@@ -14754,7 +14880,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
       show(ui.pzWin, true); syncOverlays();
       banner('TRIỀU ĐÃ LẶNG', 'Chương 1 hoàn thành');
     } else {
-      onKill(e.kind);
+      onKill(e.kind,e.island);
     }
   }
   function fmtTime(s) { var m = Math.floor(s / 60), ss = Math.floor(s % 60); return m + 'p' + (ss < 10 ? '0' : '') + ss; }
@@ -14793,25 +14919,27 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
   }
   function respawn() {
     P.dead = false; P.hp = maxHp(); P.en = maxEn();
-    P.x = 0; P.z = 14; resetActions(); P.iframe = 1.5;
+    var sp=islandNow().spawn;P.x=sp.x;P.z=sp.z;resetActions();P.iframe=1.5;
     player.position.set(P.x, groundH(P.x, P.z), P.z);
     enemies.forEach(function (e) { if (!e.dead && e.state !== 'idle') { e.state = 'return'; } });
     show(ui.pzDead, false); syncOverlays();
     ui.pzVignette.classList.remove('on');
     hudBars();
-    toast('Sóng đưa bạn về Bến Neo Sao.', 'good');
+    toast('Sóng đưa bạn về bến '+islandNow().name+'.', 'good');
   }
 
   /* ------------------------------ actions ------------------------------- */
   function tryAttack() {
     if (combatBusy() || P.airY > 1.4) return;
+    if(S.gear.mode==='gun'||S.gear.mode==='fruit'){if(P.weaponCd<=0)weaponShot();return;}
     P.combo = P.comboT > 0 ? (P.combo + 1) % 3 : 0;
     P.comboT = 0.9; P.atkT = 0.34; P.atkHit = false;
     sfx.slash();
   }
   function applyAttackHit() {
-    var base = meleePower() * (P.combo === 2 ? 1.6 : 1);
-    var reach = 1.8, arc = 1.15;
+    if(S.gear.mode!=='combat'&&S.gear.mode!=='sword')return;
+    var base = (S.gear.mode==='sword'?itemDamage('sword')*(P.hakiT.armament>0?1.25:1):meleePower()) * (P.combo === 2 ? 1.6 : 1);
+    var reach = S.gear.mode==='sword'?2.8:1.8, arc = 1.15;
     enemies.forEach(function (e) {
       if (e.dead) return;
       var d = Math.hypot(e.x - P.x, e.z - P.z);
@@ -14840,6 +14968,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
   function tryDash() {
     if (!playing || P.dead || dialogOpen || overlayOpen || P.dashCd > 0 || P.kickT > 0 || P.slam) return;
     if (P.en < 8) { toast('Không đủ mana để lướt.', 'warn'); return; }
+    if(P.boat){if(ride)return;P.en-=8;P.dashT=.7;P.dashCd=1.1;hudBars();return;}
     P.en -= 8; P.dashCd = 1.1; P.dashT = 0.22; P.iframe = Math.max(P.iframe, 0.4);
     var mx = moveX, mz = moveZ;
     if (!mx && !mz) { mx = Math.sin(P.yaw); mz = Math.cos(P.yaw); }
@@ -14858,13 +14987,15 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     scene.add(g);
     ghosts.push({ g: g, t: -delay, life: 0.3 });
   }
-  function combatBusy() { return !playing || P.dead || dialogOpen || overlayOpen || P.atkT > 0 || P.kickT > 0 || P.slam; }
+  function combatBusy() { return !playing || P.dead || P.boat || dialogOpen || overlayOpen || P.atkT > 0 || P.kickT > 0 || P.slam; }
   function tryJump() {
+    if(P.boat){if(!overlayOpen&&!dialogOpen)disembark();return;}
     if (!playing || P.dead || dialogOpen || overlayOpen || P.airY > 0.01 || P.vy > 0 || P.slam || P.kickT > 0) return;
     P.vy = 7.2; sfx.dash();
     burst(playerPos(0.08), 7, 0xe0f2fe, 1.5, 0.25, 0);
   }
   function castS1() {
+    if(S.gear.mode!=='combat')return;
     if (combatBusy() || P.cd.s1 > 0 || P.dashT > 0) return;
     if (P.en < 12) { toast('Lướt lên đá cần 12 mana.', 'warn'); return; }
     P.en -= 12; P.cd.s1 = 3; P.kickT = 0.38; P.kickHit = false;
@@ -14872,6 +15003,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     sfx.dash(); burst(playerPos(0.5), 12, 0xe0f2fe, 2, 0.35); hudBars();
   }
   function castS2() {
+    if(S.gear.mode!=='combat')return;
     if (combatBusy() || P.cd.s2 > 0 || P.dashT > 0) return;
     if (P.en < 20) { toast('Đập xuống đất cần 20 mana.', 'warn'); return; }
     P.en -= 20; P.cd.s2 = 5; P.slam = true;
@@ -14899,6 +15031,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
   var impactMesh = null;
   var hakiNames = { observation: 'Haki quan sát', armament: 'Haki vũ trang', conqueror: 'Haki bá vương' };
   function useHaki(k) {
+    if(overlayOpen&&ui.pzStats.hidden)return;
     if (!playing || P.dead || dialogOpen || !ui.pzCreate.hidden || !ui.pzStart.hidden || !ui.pzHelp.hidden || !ui.pzWin.hidden || !ui.pzDead.hidden) return;
     if (!S.haki[k]) { toast(hakiNames[k] + ' đang khóa — chỉ Admin được cấp.', 'warn'); return; }
     if (P.hakiT[k] > 0) { P.hakiT[k] = 0; hakiVisual(); statsUi(); return; }
@@ -14923,6 +15056,8 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     root.classList.toggle('pz-observing', P.hakiT.observation > 0);
   }
   function resetActions() {
+    P.boat=false;ride=null;navPort=false;P.weaponCd=0;if(boat)boat.visible=false;
+    if(scene)ISLANDS.forEach(function(i){var g=scene.getObjectByName('dock-boat-'+i.id);if(g)g.visible=true;});
     clearMovement(); P.airY = P.vy = P.kickT = P.atkT = P.dashT = P.dashCd = 0; P.slam = false;
     P.comboT = 0; P.cd.s1 = P.cd.s2 = 0; P.dodges = 0;
     Object.keys(P.hakiCd).forEach(function (k) { P.hakiCd[k] = 0; });
@@ -14944,13 +15079,16 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
       var c = e.code;
       if (c === 'Escape') {
         if (!ui.pzCreate.hidden) cancelCreator();
-        else if (!ui.pzStats.hidden) { show(ui.pzStats, false); syncOverlays(); }
+        else if (!ui.pzStats.hidden || !ui.pzBag.hidden || !ui.pzMap.hidden) closePanels();
         else if (dialogOpen) closeDialog(); else if (!ui.pzHelp.hidden) { show(ui.pzHelp, false); syncOverlays(); }
         return;
       }
-      if (e.repeat && ['Space', 'KeyQ', 'KeyZ', 'KeyX', 'KeyE', 'KeyJ', 'KeyU', 'KeyB', 'KeyC', 'KeyF', 'KeyH', 'KeyM'].indexOf(c) >= 0) { e.preventDefault(); return; }
+      if (e.repeat && ['Space', 'KeyQ', 'KeyZ', 'KeyX', 'KeyE', 'KeyJ', 'KeyU', 'KeyB', 'KeyC', 'KeyF', 'KeyH', 'KeyM','KeyI','KeyN','Digit1','Digit2','Digit3','Digit4'].indexOf(c) >= 0) { e.preventDefault(); return; }
       if (c === 'KeyB') { e.preventDefault(); openStats(); return; }
+      if (c === 'KeyI') {e.preventDefault();openBag();return;}
+      if (c === 'KeyN') {e.preventDefault();openMap();return;}
       if (overlayOpen) return;
+      if (/^Digit[1-4]$/.test(c)) {e.preventDefault();equipMode(['combat','sword','gun','fruit'][Number(c.slice(-1))-1]);return;}
       if (c === 'KeyC') { openCreator(); e.preventDefault(); return; }
       if (c === 'KeyH') { clearMovement(); show(ui.pzHelp, true); syncOverlays(); e.preventDefault(); return; }
       if (c === 'KeyM') { setSound(!S.set.sound); return; }
@@ -15050,6 +15188,9 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     press(ui.pzJumpBtn, tryJump);
     press(ui.pzS1Btn, castS1);
     press(ui.pzS2Btn, castS2);
+    [['pzBagBtn',openBag],['pzOpenBag',openBag],['pzMapBtn',openMap],['pzOpenMap',openMap]].forEach(function(a){ui[a[0]].addEventListener('click',a[1]);});
+    ['pzBagClose','pzMapClose'].forEach(function(k){ui[k].addEventListener('click',closePanels);});
+    ui.pzBoatManual.addEventListener('click',function(){closePanels();ride=null;questUi();});
     ui.pzStatsBtn.addEventListener('click', openStats);
     ui.pzStatsClose.addEventListener('click', function () { show(ui.pzStats, false); syncOverlays(); });
     ui.pzEditChar.addEventListener('click', openCreator);
@@ -15112,6 +15253,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
   function interact() {
     if (!playing || P.dead || overlayOpen) return;
     if (dialogOpen) { closeDialog(); return; }
+    if(P.boat){disembark();return;}
     var best = null, bd = 2.6;
     npcs.forEach(function (n) { var d = Math.hypot(n.x - P.x, n.z - P.z); if (d < bd) { bd = d; best = n; } });
     if (best) { sfx.ui(); best.talk(); return; }
@@ -15135,6 +15277,8 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     ui.pzLv.textContent = 'Lv ' + S.lv;
     ui.pzShard.textContent = S.shards;
     ui.pzName.textContent = heroName();
+    ui.pzGearName.textContent=gearLabel()+' · '+({combat:1,sword:2,gun:3,fruit:4}[S.gear.mode]);
+    ui.pzLocation.textContent=P.boat?'Biển Sao':islandNow().name;
     statsUi();
   }
   function heroName() {
@@ -15146,7 +15290,15 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
   }
   var cdPrev = {};
   function hudSkills(dt) {
-    var list = [['pzAtkBtn', P.atkT > 0 ? P.atkT / 0.34 : 0, 0, 0.34], ['pzDashBtn', P.dashCd / 1.1, 8, 1.1], ['pzJumpBtn', P.airY > 0.01 || P.vy > 0 ? 1 : 0, 0, 0], ['pzS1Btn', P.cd.s1 / 3, 12, 3], ['pzS2Btn', P.cd.s2 / 5, 20, 5]];
+    var ranged=S.gear.mode==='gun'||S.gear.mode==='fruit',cooldown=S.gear.mode==='fruit'?.9:.55;
+    var list = [['pzAtkBtn', ranged?P.weaponCd/cooldown:P.atkT > 0 ? P.atkT / 0.34 : 0, S.gear.mode==='fruit'?10:0, ranged?cooldown:.34], ['pzDashBtn', P.dashCd / 1.1, 8, 1.1], ['pzJumpBtn', P.airY > 0.01 || P.vy > 0 ? 1 : 0, 0, 0], ['pzS1Btn', P.cd.s1 / 3, 12, 3], ['pzS2Btn', P.cd.s2 / 5, 20, 5]];
+    var locked=P.boat||S.gear.mode!=='combat';ui.pzS1Btn.disabled=ui.pzS2Btn.disabled=locked;ui.pzAtkBtn.disabled=P.boat;
+    var label={combat:'Đấm',sword:'Chém',gun:'Bắn',fruit:'Trái'}[S.gear.mode],atkBtn=ui.pzAtkBtn;
+    if(atkBtn.dataset.mode!==S.gear.mode){
+      atkBtn.dataset.mode=S.gear.mode;atkBtn.querySelector('b').textContent=label;atkBtn.setAttribute('aria-label',label+' · '+gearLabel());atkBtn.title=label+' thường · '+gearLabel();
+      var icons={combat:'<path d="M5 12V8a2 2 0 0 1 4 0V6a2 2 0 0 1 4 0v1a2 2 0 0 1 4 0v2a2 2 0 0 1 4 0v5l-4 6H9l-5-5a2 2 0 0 1 1-3z"/><path d="M9 8v4M13 7v5M17 9v3"/>',sword:'<path d="m6 18 13-13 2-2-1 6L9 20M4 14l6 6M3 21l4-4"/>',gun:'<path d="M3 7h18v5H11l-1 8H5l1-8H3zM11 12v4h4v-4M17 7V5"/>',fruit:'<path d="M12 7C6 3 2 9 5 16s11 7 14 0-1-13-7-9zM12 8V4l4-2M11 4 7 2"/>'};atkBtn.querySelector('svg').innerHTML=icons[S.gear.mode];
+    }
+    var jumpLabel=P.boat?'Lên bờ':'Nhảy';if(ui.pzJumpBtn.querySelector('b').textContent!==jumpLabel)ui.pzJumpBtn.querySelector('b').textContent=jumpLabel;
     list.forEach(function (r) {
       var b = ui[r[0]], cd = b.querySelector('.pz-cd');
       var f = Math.max(0, Math.min(1, r[1]));
@@ -15165,15 +15317,18 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
   function hudWorld() {
     // interact prompt
     var best = null, bd = 2.6, label = '';
-    npcs.forEach(function (n) { var d = Math.hypot(n.x - P.x, n.z - P.z); if (d < bd) { bd = d; best = n; label = 'Nói chuyện với ' + n.name; } });
+    if(!P.boat)npcs.forEach(function (n) { var d = Math.hypot(n.x - P.x, n.z - P.z); if (d < bd) { bd = d; best = n; label = 'Nói chuyện với ' + n.name; } });
     if (!best) signs.forEach(function (s) { var d = Math.hypot(s.x - P.x, s.z - P.z); if (d < 2.4) { best = s; label = 'Đọc biển: ' + s.text; } });
+    if(P.boat&&!ride&&canLand()){best={};label='Lên bờ '+canLand().name;}
+    var locationLabel=P.boat?'Biển Sao':islandNow().name;if(ui.pzLocation.textContent!==locationLabel)ui.pzLocation.textContent=locationLabel;
+    show(ui.pzBoss,!!(boss&&!boss.dead&&!P.boat&&S.world.island===0));
     if (best && !dialogOpen && !overlayOpen && playing) {
       show(ui.pzInteract, true); ui.pzInteractT.textContent = label;
       show(ui.pzTouchAct, isTouch());
     } else { show(ui.pzInteract, false); show(ui.pzTouchAct, false); }
     // npc labels + markers
     npcs.forEach(function (n) {
-      var p = project(n.x, groundH(n.x, n.z) + 2.35, n.z);
+      var p = Math.hypot(n.x-P.x,n.z-P.z)<42?project(n.x, groundH(n.x, n.z) + 2.35, n.z):null;
       if (!p) { if (n.lp) { n.lbl.style.display = 'none'; n.lp = null; } return; }
       var lx = Math.round(p.x), ly = Math.round(p.y);
       if (!n.lp || n.lp[0] !== lx || n.lp[1] !== ly) { n.lbl.style.display = ''; n.lbl.style.left = lx + 'px'; n.lbl.style.top = ly + 'px'; n.lp = [lx, ly]; }
@@ -15183,6 +15338,8 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
         else if (S.q.stage === 2 || S.q.stage === 4) { mk = '?'; done = true; }
       } else if (n.key === 'smith') { mk = '✦'; done = S.shards >= smithCost('hp') || S.shards >= smithCost('atk'); }
       else if (n.key === 'navi') { mk = '✚'; done = P.hp < maxHp() * 0.6; }
+      else if(n.key.indexOf('captain')===0)mk='B';
+      else if(n.key.indexOf('shop-')===0)mk=n.key==='shop-random'?'Q':'$';
       if (n.lm !== mk + done) { n.qm.textContent = mk; n.qm.style.display = mk ? '' : 'none'; n.qm.classList.toggle('done', done); n.lm = mk + done; }
     });
     // enemy bars
@@ -15252,6 +15409,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
   }
   function updatePlayer(dt) {
     if (P.dead) return;
+    if(P.boat){updateBoat(dt);return;}
     computeMove();
     var spd = 6.2;
     if (P.slam) { P.vx = P.vz = 0; }
@@ -15272,8 +15430,8 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
       var dx = P.x - c.x, dz = P.z - c.z, d = Math.hypot(dx, dz), min = c.r + 0.45;
       if (d < min && d > 0.0001) { P.x = c.x + dx / d * min; P.z = c.z + dz / d * min; }
     }
-    var r = Math.hypot(P.x, P.z);
-    if (r > ISLE_R) { P.x *= ISLE_R / r; P.z *= ISLE_R / r; }
+    var home=islandNow(),dx=P.x-home.x,dz=P.z-home.z,r=Math.hypot(dx,dz),limit=home.r*.94;
+    if(r>limit){P.x=home.x+dx/r*limit;P.z=home.z+dz/r*limit;}
     var mov = Math.min(1, Math.hypot(P.vx, P.vz) / 6.2);
     P.moving += (mov - P.moving) * Math.min(1, dt * 10);
     if (mov > 0.1) {
@@ -15284,6 +15442,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     }
     P.phase += dt * (6 + mov * 6) * (mov > 0.05 ? 1 : 0);
     // timers
+    P.weaponCd=Math.max(0,P.weaponCd-dt);
     P.iframe = Math.max(0, P.iframe - dt);
     P.dashCd = Math.max(0, P.dashCd - dt);
     P.cd.s1 = Math.max(0, P.cd.s1 - dt); P.cd.s2 = Math.max(0, P.cd.s2 - dt);
@@ -15324,7 +15483,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
   function updateEnemy(e, dt) {
     if (e.dead) {
       e.deadT += dt;
-      e.g.scale.setScalar(Math.max(0.001, 1 - e.deadT * 1.6));
+      e.g.scale.setScalar(Math.max(0.001, 1 - e.deadT * 1.6)*(e.sh||1));
       e.g.position.y -= dt * 1.2;
       if (e.deadT > 0.7) { scene.remove(e.g); if (e.bar && e.bar.el.parentNode) e.bar.el.parentNode.removeChild(e.bar.el); e.gone = true; }
       return;
@@ -15333,6 +15492,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     e.flash = Math.max(0, e.flash - dt);
     e.barT = Math.max(0, e.barT - dt);
     var dP = Math.hypot(P.x - e.x, P.z - e.z);
+    if(P.boat||e.island!==S.world.island){if(e.state!=='idle')e.state='return';dP=999;}
     var aP = angleTo(e.x, e.z, P.x, P.z);
     e.t -= dt;
     // knockback decay
@@ -15403,8 +15563,8 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
       } else if (e.tele) e.tele.visible = false;
     }
     // keep on island
-    var rr = Math.hypot(e.x, e.z);
-    if (rr > ISLE_R + 1) { e.x *= (ISLE_R + 1) / rr; e.z *= (ISLE_R + 1) / rr; }
+    var home=ISLANDS[e.island||0],dx=e.x-home.x,dz=e.z-home.z,rr=Math.hypot(dx,dz),limit=home.r*.94;
+    if(rr>limit){e.x=home.x+dx/rr*limit;e.z=home.z+dz/rr*limit;}
     // animate
     var h = groundH(e.x, e.z);
     e.phase += dt * (e.state === 'chase' ? 9 : 4);
@@ -15483,7 +15643,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
       g.t += dt;
       if (g.t < 0) continue;
       var f = 1 - g.t / g.life;
-      if (f <= 0) { scene.remove(g.g); ghosts.splice(i, 1); continue; }
+      if (f <= 0) { scene.remove(g.g); g.g.traverse(function(o){if(o.isMesh)o.material.dispose();}); ghosts.splice(i, 1); continue; }
       g.g.traverse(function (o) { if (o.isMesh) o.material.opacity = 0.35 * f; });
     }
   }
@@ -15491,7 +15651,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     var cp = Math.cos(cam.pitch), sp = Math.sin(cam.pitch);
     var tx = P.x + Math.sin(cam.yaw) * cp * cam.dist;
     var tz = P.z + Math.cos(cam.yaw) * cp * cam.dist;
-    var ty = groundH(P.x, P.z) + P.airY + 1.3 + sp * cam.dist;
+    var ty = baseH() + P.airY + 1.3 + sp * cam.dist;
     ty = Math.max(ty, groundH(tx, tz) + 0.7);
     for (var i = 0; i < colliders.length; i++) {
       var c = colliders[i];
@@ -15501,7 +15661,8 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     cam.shake = Math.max(0, cam.shake - dt * 1.6);
     var sh = cam.shake * cam.shake * 0.35;
     camera.position.set(tx + (Math.random() - 0.5) * sh, ty + (Math.random() - 0.5) * sh, tz + (Math.random() - 0.5) * sh);
-    camera.lookAt(P.x, groundH(P.x, P.z) + P.airY + 1.25, P.z);
+    camera.lookAt(P.x, baseH() + P.airY + 1.25, P.z);
+    sun.position.set(P.x+42,62,P.z-28);sun.target.position.set(P.x,0,P.z);
   }
   function updateAmbient(dt) {
     water.material.uniforms.uTime.value = tGlobal;
@@ -15536,9 +15697,9 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     tick(t);
   }
   function tick(t) {
-    var rdt = (t - lastT) / 1000 || 0.016;
+    var rdt = Math.max(0, (t - lastT) / 1000);
     var dt = Math.min(0.05, rdt);
-    lastT = t;
+    lastT = Math.max(lastT, t);
     dtGlobal = dt;
     if (!noRender) {
       perfAcc += Math.min(0.25, rdt); perfN++;
@@ -15556,7 +15717,8 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
       playT += dt; S.stats.time += dt;
       if (!dialogOpen) updatePlayer(dt);
       else { P.vx *= 0.8; P.vz *= 0.8; animHumanoid(player, P, tGlobal); player.position.set(P.x, groundH(P.x, P.z) + P.airY, P.z); }
-      enemies.forEach(function (e) { if (!e.gone) updateEnemy(e, dt); });
+      enemies.forEach(function (e) { e.g.visible=!e.gone&&Math.hypot(e.x-P.x,e.z-P.z)<85; if (!e.gone&&(e.dead||Math.hypot(e.x-P.x,e.z-P.z)<65)) updateEnemy(e, dt); });
+      farmRespawn();updatePlayerShots(dt);
       updateShots(dt); updateDrops(dt); updateGhosts(dt);
       naviCd = Math.max(0, naviCd - dt);
       saveT += dt; if (saveT > 10) { saveT = 0; save(); }
@@ -15569,9 +15731,11 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     if (renderer.shadowMap.enabled && (frameN & 1)) renderer.shadowMap.needsUpdate = true;
     updateParticles(dt);
     updateAmbient(dt);
+    npcs.forEach(function(n){var near=Math.hypot(n.x-P.x,n.z-P.z)<65;n.g.visible=near;if(near)animHumanoid(n.g,{phase:n.phase},tGlobal+n.phase);});
     updateCamera(dt);
     hudSkills(dt);
     hudWorld();
+    updateRandomCooldown();
     if (!noRender) renderer.render(scene, camera);
   }
   function pause() {
@@ -15605,14 +15769,15 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
   }
   function resetRun() {
     // reset positions & enemies without rebuilding scene
-    P.x = 0; P.z = 14; P.yaw = Math.PI; P.vx = P.vz = 0;
+    var sp=islandNow().spawn;P.x=sp.x;P.z=sp.z;P.yaw=Math.PI;P.vx=P.vz=0;
     P.hp = maxHp(); P.en = maxEn(); P.dead = false; P.iframe = 1;
     resetActions();
     player.position.set(P.x, groundH(P.x, P.z), P.z);
-    enemies.forEach(function (e) { if (e.g) scene.remove(e.g); if (e.bar && e.bar.el.parentNode) e.bar.el.parentNode.removeChild(e.bar.el); if (e.tele) scene.remove(e.tele); });
+    enemies.forEach(function (e) { if (e.g) scene.remove(e.g); disposeFoe(e); if (e.bar && e.bar.el.parentNode) e.bar.el.parentNode.removeChild(e.bar.el); if (e.tele) scene.remove(e.tele); });
     enemies.length = 0; boss = null;
     drops.forEach(function (d) { scene.remove(d.g); }); drops.length = 0;
     shots.forEach(function (s) { scene.remove(s.g); }); shots.length = 0;
+    playerShots.forEach(function(s){scene.remove(s.g);s.g.geometry.dispose();});playerShots.length=0;
     buildEnemies();
     show(ui.pzBoss, false);
     if (S.q.stage === 6 && !S.q.boss) spawnBoss();
@@ -15632,6 +15797,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     root.classList.toggle('pz-touch', !!touch);
     if (touch && !had) S.set.quality = 'low';
     P.hp = maxHp(); P.en = maxEn();
+    var sp=islandNow().spawn;P.x=sp.x;P.z=sp.z;
     hudBars(); questUi();
     show(ui.pzLoad, true); syncOverlays();
     ui.pzLoadT.textContent = 'Tải bộ máy 3D';
@@ -15651,7 +15817,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
       ui.pzLoadT.textContent = 'Dựng đảo, biển và nhân vật…';
       setTimeout(function () {
         try {
-          buildWorld();
+          buildWorld();player.position.set(P.x,groundH(P.x,P.z),P.z);
           applyQuality();
           bindInput();
           inited = true;
@@ -15689,13 +15855,192 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     else { resume(); resize(); }
   };
 
+  /* --------------------- quần đảo / giao dịch / túi đồ ------------------- */
+  function islandNow(){return ISLANDS[S.world.island];}
+  function baseH(){return P.boat ? .62 + waterWave(P.x,P.z) : groundH(P.x,P.z);}
+  function waterWave(x,z){return Math.sin(x*.16+tGlobal*1.1)*.10+Math.sin(z*.13-tGlobal*.8)*.09+Math.sin((x+z)*.07+tGlobal*.5)*.07;}
+  function nearPort(){var p=islandNow().port;return !P.boat&&Math.hypot(P.x-p.x,P.z-p.z)<9;}
+  function itemDamage(kind){var f=E.find(kind,S.gear[kind]);return f?Math.round(f.power+atk()*f.factor):0;}
+  function gearLabel(){var m=S.gear.mode,f=E.find(m,S.gear[m]);return m==='combat'?'Combat':f?f.name:'Combat';}
+  function marketApply(r){
+    if(!r.ok){if(inited)toast(r.msg,'warn');return r;}
+    var old=S;S=r.next;
+    if(!save()){S=old;var fail={ok:false,msg:'Chưa lưu được: không trừ tiền hay vật phẩm.'};if(inited)toast(fail.msg,'warn');return fail;}
+    if(inited){hudBars();if(!ui.pzBag.hidden)bagUi();}
+    return {ok:true,item:r.item,cost:r.cost};
+  }
+  function randomUnit(){if(window.crypto&&window.crypto.getRandomValues){var a=new Uint32Array(1);window.crypto.getRandomValues(a);return a[0]/4294967296;}return Math.random();}
+  function shopPurchase(kind,id){
+    if(!playing||P.dead||!dialogOpen)return;
+    var r=marketApply(E.purchase(S,kind,id,kind==='random'?randomUnit():0));
+    if(r.ok){toast('Đã mua '+r.item.name+' · -'+r.cost+' Mảnh Sao','gold');sfx.shard();}
+    if(kind==='random')randomDialog();else vendorDialog(kind);
+    return r;
+  }
+  function vendorDialog(kind){
+    var names={fruit:'Người Bán Trái',sword:'Người Bán Kiếm',gun:'Người Bán Súng'};
+    var acts=E.catalog[kind].map(function(f){var owned=kind==='fruit'?S.bag.fruit[f.id]:S.bag[kind].indexOf(f.id)>=0;return {shop:true,label:f.name,desc:f.desc+' · '+(kind==='fruit'?'Trong túi: '+owned:owned?'Đã sở hữu':'Chưa sở hữu'),cost:f.price,disabled:S.shards<f.price||(kind!=='fruit'&&owned)||(kind==='fruit'&&owned>=99),fn:function(){shopPurchase(kind,f.id);}};});
+    acts.push({label:'Mở Túi đồ / trang bị',fn:function(){closeDialog();openBag();}},{label:'Để sau',cls:'ghost',fn:closeDialog});
+    openDialog(names[kind],kind==='fruit'?'#70d7bd':kind==='sword'?'#c4ab77':'#9ab9d8',kind==='fruit'?'T':kind==='sword'?'K':'S','Mua bằng Mảnh Sao kiếm trong game. Mua xong cất vào Túi đồ; kiếm và súng dùng lâu dài, trái cần ăn để nhận sức mạnh. Không có mua bán bằng tiền thật.',acts);
+  }
+  function randomDialog(){
+    var wait=Math.max(0,Math.ceil((S.market.rollAt+60000-Date.now())/1000));
+    openDialog('Người Quay Trái','#b399df','Q','Mỗi lượt 25 Mảnh Sao, nhận đúng 1 trái và cất vào túi. Tỉ lệ: Gió Lốc 55% · Tinh Thạch 30% · Hỏa Triều 15%. Có thể trùng trái. Hồi 60 giây giữa các lượt; không dùng tiền thật.',[
+      {label:wait?'Chờ '+wait+'s':'Quay 1 trái · 25 Mảnh Sao',disabled:wait>0||S.shards<25,fn:function(){shopPurchase('random');}},
+      {label:'Xem túi trái',cls:'ghost',fn:function(){closeDialog();openBag();}}, {label:'Để sau',cls:'ghost',fn:closeDialog}
+    ]);
+  }
+  function updateRandomCooldown(){
+    if(!dialogOpen||ui.pzDName.textContent!=='Người Quay Trái')return;
+    var b=ui.pzDActs.querySelector('button');if(!b)return;
+    var wait=Math.max(0,Math.ceil((S.market.rollAt+60000-Date.now())/1000));
+    var label=wait?'Chờ '+wait+'s':'Quay 1 trái · 25 Mảnh Sao';
+    b.disabled=wait>0||S.shards<25;if(b.textContent!==label)b.textContent=label;
+  }
+  function equipMode(mode,id){
+    if(!playing||P.dead||P.boat||dialogOpen)return;
+    if(P.atkT>0||P.kickT>0||P.slam){toast('Đợi kết thúc đòn rồi đổi trang bị.','info');return;}
+    var r=marketApply(E.equip(S,mode,id));if(r.ok){refreshPlayer();toast('Đang dùng '+gearLabel(),'info');bagUi();}return r;
+  }
+  function eatFruit(id,confirmed){
+    if(!playing||P.dead||P.boat)return;
+    var f=E.find('fruit',id);if(!f||!S.bag.fruit[id])return;
+    if(S.gear.fruit&&!confirmed){show(ui.pzBag,false);syncOverlays();var old=E.find('fruit',S.gear.fruit);
+      openDialog('Ăn trái mới','#b399df','T','Ăn '+f.name+' sẽ thay sức mạnh '+old.name+'. Trái cũ đã ăn không được trả lại; chỉ trừ 1 trái mới trong túi.',[
+        {label:'Đồng ý ăn '+f.name,fn:function(){closeDialog();eatFruit(id,true);openBag();}},{label:'Giữ trái cũ',cls:'ghost',fn:function(){closeDialog();openBag();}}
+      ]);return;
+    }
+    var r=marketApply(E.eat(S,id));if(r.ok){refreshPlayer();toast('Đã ăn '+f.name+' · chọn ô 4 để dùng','gold');sfx.cast();bagUi();}return r;
+  }
+  function closePanels(){['pzStats','pzBag','pzMap'].forEach(function(k){show(ui[k],false);});syncOverlays();}
+  function openPanel(id){
+    if(!inited||!playing||P.dead||dialogOpen||!ui.pzCreate.hidden||!ui.pzStart.hidden||!ui.pzHelp.hidden||!ui.pzWin.hidden)return false;
+    var on=ui[id].hidden;clearMovement();closePanels();show(ui[id],on);syncOverlays();return on;
+  }
+  function openBag(){if(openPanel('pzBag'))bagUi();}
+  function bagUi(){
+    if(!ui.pzBagList)return;ui.pzBagMoney.textContent='Có '+S.shards+' Mảnh Sao · đang dùng '+gearLabel();ui.pzBagList.innerHTML='';
+    function row(name,desc,action,disabled,selected,fn){
+      var d=document.createElement('div');d.className='pz-item'+(selected?' equipped':'');
+      var body=document.createElement('div'),b=document.createElement('b'),s=document.createElement('small');b.textContent=name;s.textContent=desc;body.append(b,s);d.appendChild(body);
+      var btn=document.createElement('button');btn.className='pz-btn ghost';btn.type='button';btn.textContent=action;btn.disabled=!!disabled;btn.addEventListener('click',fn);d.appendChild(btn);ui.pzBagList.appendChild(d);
+    }
+    row('1 · Võ Combat','Tay không · Z lướt đá / X đập đất','Dùng',P.boat,S.gear.mode==='combat',function(){equipMode('combat');});
+    ['sword','gun'].forEach(function(k){E.catalog[k].forEach(function(f){var has=S.bag[k].indexOf(f.id)>=0;row((k==='sword'?'2':'3')+' · '+f.name,f.desc+' · '+(has?'Đã mua':f.price+' Mảnh Sao ở Cảng Kim Sa'),has?'Dùng':'Khóa',!has||P.boat,S.gear.mode===k&&S.gear[k]===f.id,function(){equipMode(k,f.id);});});});
+    if(S.gear.fruit){var active=E.find('fruit',S.gear.fruit);row('4 · '+active.name,'Sức mạnh đã ăn · '+active.desc,'Dùng',P.boat,S.gear.mode==='fruit',function(){equipMode('fruit');});}
+    E.catalog.fruit.forEach(function(f){var count=S.bag.fruit[f.id];row(f.name+' × '+count,'Trái trong túi · '+f.desc,count?'Ăn 1':'Chưa có',!count||P.boat,false,function(){eatFruit(f.id);});});
+  }
+  function openMap(){if(openPanel('pzMap'))mapUi();}
+  function mapUi(){
+    ui.pzMapCaption.textContent=P.boat?(ride?'Đang đi thuyền tới '+ISLANDS[ride.dest].name:'Đang lái thuyền tự do'):'Đang ở '+islandNow().name+' · tới Thuyền Trưởng ở bến để ra khơi.';
+    ui.pzIslandList.innerHTML='';var svg=ui.pzMapDrawing;svg.innerHTML='<path d="M22 130 Q150 45 290 130 T458 130 M25 225 Q165 160 280 225 T460 225" fill="none" stroke="#2c6471" stroke-dasharray="4 6"/>';
+    ISLANDS.forEach(function(i){
+      var x=250+i.x*1.05,y=200+i.z*.75,ns='http://www.w3.org/2000/svg';var circle=document.createElementNS(ns,'circle');circle.setAttribute('cx',x);circle.setAttribute('cy',y);circle.setAttribute('r',i.r*.34);circle.setAttribute('fill','#'+i.color.toString(16).padStart(6,'0'));circle.setAttribute('stroke',S.world.island===i.id&&!P.boat?'#f5ca7f':'#92bec4');circle.setAttribute('stroke-width','3');svg.appendChild(circle);
+      var text=document.createElementNS(ns,'text');text.setAttribute('x',x);text.setAttribute('y',y+i.r*.34+17);text.setAttribute('text-anchor','middle');text.setAttribute('fill','#dfedf0');text.setAttribute('font-size','12');text.textContent=i.name;svg.appendChild(text);
+      var b=document.createElement('button');b.type='button';b.className='pz-route'+(i.id===S.world.island&&!P.boat?' current':'');b.dataset.island=i.id;
+      var name=document.createElement('b'),desc=document.createElement('span'),small=document.createElement('small');name.textContent=i.name;desc.textContent=i.desc;small.textContent='Gợi ý Lv '+i.level+' · '+(S.world.visited.indexOf(i.id)>=0?'Đã ghé':'Chưa ghé')+' · '+(i.id===S.world.island&&!P.boat?'Đang ở đây':P.boat||nearPort()?'Đi thuyền miễn phí':'Chỉ đường tới bến');b.append(name,desc,small);b.disabled=i.id===S.world.island&&!P.boat;
+      b.addEventListener('click',function(){closePanels();if(P.boat||nearPort())travelTo(i.id);else{navPort=true;questUi();toast('Đi theo la bàn tới Thuyền Trưởng ở bến.','info');}});ui.pzIslandList.appendChild(b);
+    });
+    show(ui.pzBoatManual,P.boat);
+  }
+  function captainDialog(id){
+    var acts=ISLANDS.filter(function(i){return i.id!==id;}).map(function(i){return {label:'Tới '+i.name+' · miễn phí',fn:function(){closeDialog();travelTo(i.id);}};});
+    acts.push({label:'Lái thuyền tự do',fn:function(){closeDialog();mountBoat();}}, {label:'Xem hải đồ',cls:'ghost',fn:function(){closeDialog();openMap();}}, {label:'Để sau',cls:'ghost',fn:closeDialog});
+    openDialog('Thuyền Trưởng','#6db8ca','B','Bến '+ISLANDS[id].name+'. Cả 5 đảo đều có thể khám phá ngay; cấp ghi trên hải đồ chỉ là gợi ý sức mạnh của quái. Đi thuyền theo tuyến hoặc tự lái bằng WASD / joystick; gần bờ bấm F hoặc nút tương tác để lên bờ.',acts);
+  }
+  function extraNpcDefs(){
+    var pal={skin:0xc58a61,hair:0x293546,coat:0x256d83,shirt:0xf2eee2,sash:0xd8b363,pants:0x273848,boot:0x15262e,hat:0x256d83};
+    var defs=ISLANDS.map(function(i){return {key:'captain'+i.id,pos:i.port,pal:pal,prop:'spyglass',name:'Thuyền Trưởng',color:'#67bace',ini:'B',talk:function(){captainDialog(i.id);}};});
+    [['fruit','Người Bán Trái',-15,0x367c63],['random','Người Quay Trái',-5,0x725493],['sword','Người Bán Kiếm',5,0x967442],['gun','Người Bán Súng',15,0x4b6d8d]].forEach(function(q){var c=ISLANDS[1];defs.push({key:'shop-'+q[0],pos:{x:c.x+q[2],z:c.z+6},pal:Object.assign({},pal,{coat:q[3],hat:false}),name:q[1],color:'#bdab8e',ini:q[1].slice(0,1),talk:function(){if(q[0]==='random')randomDialog();else vendorDialog(q[0]);}});});return defs;
+  }
+  function buildExtraWorld(){
+    E.buildProps({T:THREE,scene:scene,mat:mat,mesh:mesh,rng:rng,palm:palm,house:house,rock:rock,sign:signPost,colliders:colliders});
+    boat=E.boat(THREE,mat);boat.visible=false;scene.add(boat);
+    var c=ISLANDS[1];
+    E.catalog.fruit.forEach(function(f,j){var x=c.x-15+(j-1)*.75,z=c.z+3;mesh(new THREE.DodecahedronGeometry(.36),mat(f.color),x,groundH(x,z)+1.2,z);mesh(new THREE.CylinderGeometry(.03,.04,.15,5),mat(0x437454),x,groundH(x,z)+1.63,z);});
+    [['sword','neo',5],['gun','song',15]].forEach(function(q){var g=new THREE.Group(),w=new THREE.Group();g.userData.parts={wristR:w};g.add(w);w.rotation.z=Math.PI/2;g.position.set(c.x+q[2],groundH(c.x+q[2],c.z+3)+1,c.z+3);E.attachGear(THREE,g,{mode:q[0],sword:q[1],gun:q[1]},mat);scene.add(g);});
+  }
+  function mountBoat(){
+    if(!playing||P.dead)return;clearMovement();P.airY=P.vy=P.atkT=P.kickT=0;P.slam=false;
+    if(!P.boat){var i=islandNow();P.x=i.dock.x;P.z=i.dock.z;P.yaw=angleTo(i.port.x,i.port.z,P.x,P.z);cam.yaw=P.yaw+Math.PI;}
+    var parked=scene.getObjectByName('dock-boat-'+S.world.island);if(parked)parked.visible=false;
+    P.boat=true;ride=null;boat.visible=true;navPort=false;setBoatPose();closePanels();questUi();toast('Lái bằng WASD / joystick · F lên bờ khi gần đảo.','info');
+  }
+  function travelTo(id){
+    if(!playing||P.dead||!ISLANDS[id]||(!P.boat&&!nearPort()))return {ok:false,msg:'Cần tới bến thuyền.'};
+    if(!P.boat&&id===S.world.island)return {ok:false,msg:'Bạn đang ở đảo này.'};
+    var source=P.boat?{x:P.x,z:P.z}:islandNow().dock,target=ISLANDS[id].dock,path=E.seaRoute(source,target);
+    if(!path){toast('Chưa tìm được hải trình an toàn.','warn');return {ok:false};}
+    if(!P.boat)mountBoat();closeDialog();closePanels();ride={dest:id,path:path.slice(1)};navPort=false;questUi();toast('Ra khơi tới '+ISLANDS[id].name,'info');return {ok:true,path:path};
+  }
+  function landOn(id){
+    var old=S,next=JSON.parse(JSON.stringify(S));next.world.island=id;if(next.world.visited.indexOf(id)<0)next.world.visited.push(id);S=next;
+    if(!save()){S=old;toast('Chưa lưu được điểm cập bến; thuyền vẫn ở đây.','warn');return false;}
+    ISLANDS.forEach(function(i){var g=scene.getObjectByName('dock-boat-'+i.id);if(g)g.visible=true;});
+    var sp=ISLANDS[id].spawn;P.boat=false;ride=null;navPort=false;boat.visible=false;P.x=sp.x;P.z=sp.z;P.airY=P.vy=0;clearMovement();P.iframe=Math.max(P.iframe,1.5);
+    P.yaw=angleTo(P.x,P.z,ISLANDS[id].x,ISLANDS[id].z);cam.yaw=P.yaw+Math.PI;player.position.set(P.x,groundH(P.x,P.z),P.z);questUi();hudBars();banner(ISLANDS[id].name.toUpperCase(),ISLANDS[id].desc);return true;
+  }
+  function canLand(){var i=E.nearest(P.x,P.z);return Math.hypot(P.x-i.x,P.z-i.z)<=i.r+15?i:null;}
+  function disembark(){if(ride){toast('Thuyền đang theo hải trình. Mở hải đồ để chuyển sang tự lái.','info');return;}var i=canLand();if(i)landOn(i.id);else toast('Lái thuyền lại gần bờ rồi bấm F.','info');}
+  function setBoatPose(){
+    if(!P.boat)return;boat.position.set(P.x,waterWave(P.x,P.z),P.z);boat.rotation.y=P.yaw;boat.rotation.z=Math.sin(tGlobal*1.6)*.024;
+    player.position.set(P.x,baseH(),P.z);player.rotation.y=P.yaw;P.moving=0;animHumanoid(player,P,tGlobal);
+  }
+  function updateBoat(dt){
+    computeMove();P.airY=P.vy=0;var speed=ride?27:P.dashT>0?32:20;
+    P.dashCd=Math.max(0,P.dashCd-dt);P.dashT=Math.max(0,P.dashT-dt);P.iframe=Math.max(0,P.iframe-dt);P.en=Math.min(maxEn(),P.en+7*dt);
+    Object.keys(P.hakiCd).forEach(function(k){P.hakiCd[k]=Math.max(0,P.hakiCd[k]-dt);});Object.keys(P.hakiT).forEach(function(k){P.hakiT[k]=Math.max(0,P.hakiT[k]-dt);});hakiVisual();
+    if(ride){
+      var q=ride.path[0],dx=q.x-P.x,dz=q.z-P.z,d=Math.hypot(dx,dz),step=speed*dt;P.yaw=Math.atan2(dx,dz);
+      if(d<=step){P.x=q.x;P.z=q.z;ride.path.shift();if(!ride.path.length){var id=ride.dest;if(!landOn(id))ride=null;return;}}
+      else{P.x+=dx/d*step;P.z+=dz/d*step;}
+    }else{
+      var nx=P.x+moveX*speed*dt,nz=P.z+moveZ*speed*dt;
+      if(groundH(nx,nz)<-.35&&Math.hypot(nx,nz)<245){P.x=nx;P.z=nz;}
+      if(Math.hypot(moveX,moveZ)>.1)P.yaw=Math.atan2(moveX,moveZ);
+    }
+    setBoatPose();if(Math.random()<dt*10)burst({x:P.x-Math.sin(P.yaw)*2,y:.1,z:P.z-Math.cos(P.yaw)*2},4,0xe0f2fe,1,.4,0);
+  }
+  function weaponShot(){
+    var mode=S.gear.mode,isFruit=mode==='fruit',f=E.find(mode,S.gear[mode]);if(!f)return;
+    if(isFruit&&P.en<10){toast('Trái cần 10 mana.','warn');return false;}
+    if(isFruit)P.en-=10;
+    // Hướng đạn theo nhân vật, hỗ trợ ngắm quái trong một góc nhỏ phía trước.
+    var target=null,best=30;enemies.forEach(function(e){var d=Math.hypot(e.x-P.x,e.z-P.z);if(!e.dead&&d<best&&angDiff(P.yaw,angleTo(P.x,P.z,e.x,e.z))<.48){best=d;target=e;}});
+    if(target)P.yaw=angleTo(P.x,P.z,target.x,target.z);
+    var speed=isFruit?18:42,pos=playerPos(1.35),color=isFruit?f.color:0xffdc9c;
+    var geo=isFruit?(f.id==='stone'?new THREE.OctahedronGeometry(.22):new THREE.SphereGeometry(.21,8,6)):new THREE.SphereGeometry(.09,6,4);
+    var g=new THREE.Mesh(geo,mat(color,{emissive:color,emissiveIntensity:.7}));scene.add(g);
+    playerShots.push({g:g,x:pos.x,y:pos.y,z:pos.z,vx:Math.sin(P.yaw)*speed,vz:Math.cos(P.yaw)*speed,life:30/speed,damage:itemDamage(mode),kind:isFruit?f.id:'bullet',hits:[],pierce:isFruit&&f.id==='wind'?3:1});
+    P.atkT=.34;P.atkHit=true;P.weaponCd=isFruit?.9:.55;sfx.zap();hudBars();return true;
+  }
+  function updatePlayerShots(dt){
+    for(var j=playerShots.length-1;j>=0;j--){var s=playerShots[j];s.life-=dt;
+      var ox=s.x,oz=s.z;s.x+=s.vx*dt;s.z+=s.vz*dt;s.g.position.set(s.x,s.y,s.z);var gone=s.life<=0;
+      enemies.forEach(function(e){if(gone||e.dead||s.hits.indexOf(e)>=0)return;
+        var d=(function(){var dx=s.x-ox,dz=s.z-oz,L=dx*dx+dz*dz,t=L?Math.max(0,Math.min(1,((e.x-ox)*dx+(e.z-oz)*dz)/L)):0;return Math.hypot(e.x-ox-t*dx,e.z-oz-t*dz);})();
+        if(d<.65*(e.sh||1)&&Math.abs(s.y-groundH(e.x,e.z)-1)<1.2){
+          s.hits.push(e);var a=angleTo(P.x,P.z,e.x,e.z),kb=s.kind==='stone'?6:2;damageEnemy(e,s.damage,Math.sin(a)*kb,Math.cos(a)*kb,false);
+          if(s.kind==='fire'){enemies.forEach(function(other){if(other!==e&&!other.dead&&Math.hypot(other.x-e.x,other.z-e.z)<2.5)damageEnemy(other,s.damage*.7,0,0,false);});burst({x:e.x,y:groundH(e.x,e.z)+1,z:e.z},22,0xff9758,3,.5);}
+          s.pierce--;if(s.pierce<=0)gone=true;
+        }
+      });
+      if(gone){scene.remove(s.g);s.g.geometry.dispose();playerShots.splice(j,1);}
+    }
+  }
+  function disposeFoe(e){if(e.g)e.g.traverse(function(o){if(o.isMesh){o.geometry.dispose();if(o.userData.privateMat)o.material.dispose();}});}
+  function farmRespawn(){
+    enemies.forEach(function(e){if(e.gone&&e.kind!=='boss'&&!e.retired&&playT-e.diedAt>24&&e.island===S.world.island){e.retired=true;disposeFoe(e);spawnEnemy(e.kind,e.hx,e.hz);}});
+    enemies=enemies.filter(function(e){return !e.retired;});
+  }
+
   /* ------------------------------- dev hooks ---------------------------- */
   if (DEV) {
     window.__pz = {
-      state: function () { return { lv: S.lv, exp: S.exp, shards: S.shards, q: S.q, hp: P.hp, en: P.en, x: P.x, z: P.z, airY: P.airY, vy: P.vy, atkT: P.atkT, dashT: P.dashT, kickT: P.kickT, slam: P.slam, cd: P.cd, haki: S.haki, hakiT: P.hakiT, hakiCd: P.hakiCd, dodges: P.dodges, char: S.char, name: S.name, armed: !!(player && player.userData.parts.sword), enemies: enemies.filter(function (e) { return !e.dead; }).length, playing: playing, paused: paused, dialog: dialogOpen, overlay: overlayOpen }; },
-      tp: function (x, z) { P.x = x; P.z = z; P.vx = 0; P.vz = 0; P.dashT = 0; P.airY = P.vy = 0; },
+      state: function () { return { lv: S.lv, exp: S.exp, shards: S.shards, q: S.q, hp: P.hp, en: P.en, x: P.x, z: P.z, world:S.world,bag:S.bag,gear:S.gear,boat:P.boat,ride:ride?{dest:ride.dest,points:ride.path.length}:null,playerShots:playerShots.length,airY: P.airY, vy: P.vy, atkT: P.atkT, dashT: P.dashT, kickT: P.kickT, slam: P.slam, cd: P.cd, haki: S.haki, hakiT: P.hakiT, hakiCd: P.hakiCd, dodges: P.dodges, char: S.char, name: S.name, armed: !!(player && player.userData.parts.sword), enemies: enemies.filter(function (e) { return !e.dead; }).length, playing: playing, paused: paused, dead:P.dead, dialog: dialogOpen, overlay: overlayOpen }; },
+      tp: function (x, z) { P.x = x; P.z = z; S.world.island=E.nearest(x,z).id; P.boat=false;ride=null;if(boat)boat.visible=false;P.vx = 0; P.vz = 0; P.dashT = 0; P.airY = P.vy = 0; },
       face: function (a) { P.yaw = a; },
-      foes: function () { return enemies.filter(function (e) { return !e.dead; }).map(function (e) { return { kind: e.kind, x: e.x, z: e.z, hp: e.hp, stun: e.stunT || 0 }; }); },
+      foes: function () { return enemies.filter(function (e) { return !e.dead; }).map(function (e) { return { kind: e.kind,island:e.island, x: e.x, z: e.z, hp: e.hp, stun: e.stunT || 0 }; }); },
       hurt: function (n) { P.iframe = 0; hurtPlayer(n, P.x, P.z - 1); },
       reset: function () { resetRun(); },
       exp: function (n) { gainExp(n); },
@@ -15704,9 +16049,18 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
       kill: function (kind) { var e = enemies.filter(function (x) { return !x.dead && (kind ? x.kind === kind : true); })[0]; if (e) damageEnemy(e, 99999, 0, 0, false); return !!e; },
       touch: function (on) { root.classList.toggle('pz-touch', !!on); },
       start: function () { ui.pzPlayBtn.click(); },
+      world: function(){return ISLANDS;},
+      route:function(a,b){return E.seaRoute(ISLANDS[a].dock,ISLANDS[b].dock);},
+      rig:function(){var p=player.userData.parts,keys=['legL','kneeL','ankleL','armL','elbowL','wristL'];return keys.map(function(k){return {name:k,parent:p[k].parent.name,x:p[k].rotation.x,position:p[k].getWorldPosition(new THREE.Vector3()).toArray()};});},
+      view:function(yaw,pitch,dist){cam.yaw=yaw;cam.pitch=pitch;cam.dist=dist;updateCamera(.016);},
+      sceneInfo:function(){return {terrain:scene.children.filter(function(o){return o.name.indexOf('terrain-')===0;}).length,npcs:npcs.map(function(n){return {key:n.key,x:n.x,z:n.z};}),draw:renderer.info.render};},
+      market:function(k,id,u){return marketApply(E.purchase(S,k,id,u===undefined?randomUnit():u));},
+      equip:function(m,id){return equipMode(m,id);},
+      eat:function(id){return eatFruit(id,true);},
+      travel:travelTo,mount:mountBoat,land:disembark,
       heal: function () { P.hp = maxHp(); P.en = maxEn(); hudBars(); },
       shot: function () { renderer.render(scene, camera); return renderer.domElement.toDataURL('image/png'); },
-      step: function (n) { for (var i = 0; i < (n || 1); i++) { lastT += 16.7; tick(lastT); } },
+      step: function (n) { for (var i = 0; i < (n || 1); i++) { tick(lastT + 16.7); } lastT = performance.now(); },
       noRender: function (v) { noRender = !!v; },
       dbg: function () { return { cam: camera.position.toArray().map(function (v) { return +v.toFixed(2); }), player: player.position.toArray().map(function (v) { return +v.toFixed(2); }), raf: rafId, paused: paused, hidden: document.hidden, vel: [+P.vx.toFixed(2), +P.vz.toFixed(2)], foes: enemies.filter(function(e){return !e.dead && !e.gone;}).map(function(e){ return e.kind + ':' + e.state + ':' + Math.hypot(e.x-P.x, e.z-P.z).toFixed(1); }) }; }
     };
