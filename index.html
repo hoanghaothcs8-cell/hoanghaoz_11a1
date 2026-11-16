@@ -2769,6 +2769,9 @@
 }
 @media(max-width:340px){#gameTab .pz-world-chip,#gameTab .pz-gear-chip{max-width:132px;font-size:9px;}#gameTab .pz-world-chip{left:8px;}#gameTab .pz-gear-chip{right:8px;}}
 @media(max-height:450px){#gameTab .pz-map-drawing{max-height:125px;}#gameTab .pz-d-acts{max-height:145px;}#gameTab .pz-world-chip,#gameTab .pz-gear-chip{bottom:160px;}#gameTab .pz-quest{top:104px;max-height:65px;padding:8px;overflow:hidden;}#gameTab .pz-quest p{font-size:9px;margin:5px 0;}#gameTab .pz-quest #pzQHint{display:none;}}
+#gameTab .pz-sk > b{white-space:nowrap;overflow:hidden;}
+#gameTab .pz-sk.sk-lock{opacity:.6;}
+#gameTab .pz-sk.sk-lock > b{color:var(--pz-mut);}
 </style>
 
   <!-- TAB: GAME — TRIỀU TINH SA: phiêu lưu hành động 3D nguyên bản (Three.js), thay game pixel farm 2D ngày 16/11/2026 -->
@@ -2816,7 +2819,7 @@
         <button class="pz-gear-chip" id="pzBagBtn" type="button" title="Túi đồ (I)"><span id="pzGearName">Combat · 1</span><small>Túi đồ · 1/2/3/4</small></button>
         <div class="pz-stick" id="pzStick" aria-label="Joystick di chuyển"><i id="pzKnob"></i></div>
         <button class="pz-touch-act" id="pzTouchAct" type="button" aria-label="Tương tác" hidden><svg viewBox="0 0 24 24"><path d="M8 13V5.5a1.5 1.5 0 0 1 3 0V11l6 1.2 1 2-.5 4.2-2 1.8H10l-5-5c-.6-.8-.4-1.9.4-2.4.6-.4 1.4-.3 2 .2z"/></svg></button>
-        <div class="pz-hint" id="pzHint">WASD đi · kéo chuột xoay · lăn chuột zoom · bấm chuột đấm · Q lướt · Space nhảy · Z/X Combat · E/J/U Haki (Admin cấp) · B chỉ số · I túi đồ · N hải đồ · 1–4 trang bị · F tương tác</div>
+        <div class="pz-hint" id="pzHint">WASD đi · kéo chuột xoay · lăn chuột zoom · bấm chuột đấm · Q lướt · Space nhảy · Z/X chiêu theo vũ khí · E/J/U Haki (Admin cấp) · B chỉ số · I túi đồ · N hải đồ · 1–4 trang bị · F tương tác</div>
       </div>
       <div class="pz-dialog" id="pzDialog" hidden role="dialog" aria-label="Đối thoại"><div class="pz-d-ava" id="pzDAva" aria-hidden="true"></div><div class="pz-d-body"><b id="pzDName">—</b><p id="pzDText">—</p><div class="pz-d-acts" id="pzDActs"></div></div><button class="pz-d-x" id="pzDX" type="button" aria-label="Đóng đối thoại">×</button></div>
       <div class="pz-ovl" id="pzLoad" hidden><div class="pz-load-in"><div class="pz-spin" aria-hidden="true"></div><b>Đang dựng biển sao…</b><span id="pzLoadT">Tải bộ máy 3D</span></div></div>
@@ -2824,9 +2827,9 @@
         <div class="pz-start-in">
           <div class="pz-logo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 8.4 6.5 11 12 5.2 17.5 11 21 8.4l-1.6 8.9H4.6z"/><path d="M4.8 19.6h14.4"/></svg></div>
           <h2>TRIỀU TINH SA</h2><p class="pz-sub">5 đảo nguyên bản · Hải trình · Chợ Kim Sa</p>
-          <p class="pz-lore">Bạn vừa cập bến Đảo Neo Sao. Bắt đầu bằng <b>võ Combat</b>, khám phá đảo với lướt và nhảy. Combat chỉ có hai chiêu: <b>lướt lên đá</b> và <b>đập xuống đất</b>. Kiếm, súng và trái cần mua tại Cảng Kim Sa. Khám phá <b>5 đảo</b> bằng thuyền miễn phí. Ba Haki vẫn khóa; Haki chỉ Admin cấp. Chưa có nhiệm vụ mở Haki.</p>
+          <p class="pz-lore">Bạn vừa cập bến Đảo Neo Sao. Bắt đầu bằng <b>võ Combat</b>, khám phá đảo với lướt và nhảy. Combat có hai chiêu: <b>lướt lên đá</b> và <b>đập xuống đất</b>. Kiếm, súng và trái mua tại Cảng Kim Sa; mỗi món có chiêu Z riêng, chiêu X mở ở <b>Thành thạo 10</b>. Khám phá <b>5 đảo</b> bằng thuyền miễn phí. Ba Haki vẫn khóa; Haki chỉ Admin cấp. Chưa có nhiệm vụ mở Haki.</p>
           <div class="pz-start-btns"><button class="pz-btn main" id="pzPlayBtn" type="button">Tạo nhân vật &amp; ra khơi</button><button class="pz-btn ghost" id="pzResetBtn" type="button" hidden>Chơi lại từ đầu</button></div>
-          <div class="pz-keys"><span><kbd>WASD</kbd> đi</span><span><kbd>Q</kbd> lướt</span><span><kbd>Space</kbd> nhảy</span><span><kbd>Chuột</kbd> đấm / kéo xoay</span><span><kbd>Z</kbd><kbd>X</kbd> Combat</span><span><kbd>B</kbd> chỉ số</span><span><kbd>E</kbd><kbd>J</kbd><kbd>U</kbd> Haki khóa</span></div>
+          <div class="pz-keys"><span><kbd>WASD</kbd> đi</span><span><kbd>Q</kbd> lướt</span><span><kbd>Space</kbd> nhảy</span><span><kbd>Chuột</kbd> đấm / kéo xoay</span><span><kbd>Z</kbd><kbd>X</kbd> chiêu</span><span><kbd>B</kbd> chỉ số</span><span><kbd>E</kbd><kbd>J</kbd><kbd>U</kbd> Haki khóa</span></div>
           <p class="pz-touch-note">Điện thoại: joystick trái, cụm nút phải. Chạm “Chỉ số” để xem nhân vật và Haki.</p>
         </div>
       </div>
@@ -2858,7 +2861,7 @@
             <div><span>Võ Combat</span><b id="pzStatCombat">10 sát thương cơ bản</b></div>
             <div><span>Kiếm</span><b id="pzStatSword">0 · Khóa</b></div><div><span>Súng</span><b id="pzStatGun">0 · Khóa</b></div><div><span>Trái ác quỷ</span><b id="pzStatFruit">0 · Khóa</b></div>
           </div>
-          <p class="pz-help-tip">Combat: Z lướt lên đá (12 mana, hồi 3s) · X đập xuống đất (20 mana, hồi 5s). Mua kiếm, súng và trái tại Cảng Kim Sa, rồi chọn dùng trong Túi đồ.</p>
+          <p class="pz-help-tip">Combat: Z lướt lên đá (12 mana, hồi 3s) · X đập xuống đất (20 mana, hồi 5s). Kiếm, súng, trái: Z dùng ngay, X mở ở Thành thạo 10. TT = Thành thạo, tăng khi đánh trúng và hạ quái bằng món đó (mỗi cấp +1% sát thương).</p>
           <div class="pz-haki-list"><button class="pz-btn ghost locked" id="pzObsBtn" type="button" aria-disabled="true">E · Quan sát — Khóa</button><button class="pz-btn ghost locked" id="pzArmBtn" type="button" aria-disabled="true">J · Vũ trang — Khóa</button><button class="pz-btn ghost locked" id="pzConBtn" type="button" aria-disabled="true">U · Bá vương — Khóa</button></div>
           <p id="pzHakiHint" class="pz-help-tip">Chỉ Admin cấp. Chưa có nhiệm vụ mở Haki.</p>
           <div class="pz-panel-actions"><button class="pz-btn ghost" id="pzOpenBag" type="button">Túi đồ</button><button class="pz-btn ghost" id="pzOpenMap" type="button">Hải đồ</button><button class="pz-btn ghost" id="pzEditChar" type="button">Đổi ngoại hình</button><button class="pz-btn main" id="pzStatsClose" type="button">Trở lại chơi</button></div>
@@ -2866,7 +2869,7 @@
       </div>
       <div class="pz-ovl" id="pzBag" hidden role="dialog" aria-modal="true" aria-labelledby="pzBagTitle"><div class="pz-card pz-bag-card">
         <h3 id="pzBagTitle">Túi đồ &amp; trang bị</h3><p id="pzBagMoney"></p><div class="pz-item-list" id="pzBagList"></div>
-        <p class="pz-help-tip">1 Combat · 2 kiếm · 3 súng · 4 trái đã ăn. Mua ở Cảng Kim Sa; ăn trái mới sẽ thay sức mạnh trái cũ. Z/X hiện chỉ dành cho Combat. Kiếm, súng và trái có đòn đánh thường; chưa có bộ chiêu riêng.</p><button class="pz-btn main" id="pzBagClose" type="button">Trở lại chơi</button>
+        <p class="pz-help-tip">1 Combat · 2 kiếm · 3 súng · 4 trái đã ăn. Mua ở Cảng Kim Sa; ăn trái mới sẽ thay sức mạnh trái cũ. Mỗi món có Thành thạo (TT) riêng: đánh trúng +2, hạ quái +6 trở lên. Z dùng ngay; X mở ở TT 10. Mỗi cấp TT +1% sát thương món đó.</p><button class="pz-btn main" id="pzBagClose" type="button">Trở lại chơi</button>
       </div></div>
       <div class="pz-ovl" id="pzMap" hidden role="dialog" aria-modal="true" aria-labelledby="pzMapTitle"><div class="pz-card pz-map-card">
         <h3 id="pzMapTitle">Hải đồ Biển Sao</h3><p id="pzMapCaption"></p><svg id="pzMapDrawing" class="pz-map-drawing" viewBox="0 0 500 330" role="img" aria-label="Vị trí năm đảo trong quần đảo"></svg><div class="pz-island-list" id="pzIslandList"></div>
@@ -2876,8 +2879,8 @@
       <div class="pz-ovl" id="pzDead" hidden><div class="pz-card"><h3>Gục ngã giữa triều…</h3><p>Sóng đưa bạn về bến trên đảo vừa cập. Giữ tiến trình, trang bị, trái đã ăn và quyền Haki.</p><button class="pz-btn main" id="pzRespawnBtn" type="button">Đứng dậy chơi tiếp</button></div></div>
       <div class="pz-ovl" id="pzWin" hidden><div class="pz-card win"><div class="pz-win-star" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m12 2 2.4 6.2L21 9l-5 4.4 1.6 6.8L12 16.6 6.4 20.2 8 13.4 3 9l6.6-.8z"/></svg></div><h3>CHƯƠNG 1 HOÀN THÀNH</h3><p>Biển lặng, hải đăng sáng tỏ. Đảo Neo Sao đã nhận bạn làm người giữ triều. Hoàn thành chương không tự mở Haki hay vũ khí.</p><div class="pz-win-stats" id="pzWinStats"></div><button class="pz-btn main" id="pzWinBtn" type="button">Tiếp tục tuần tra biển</button></div></div>
       <div class="pz-ovl" id="pzHelp" hidden><div class="pz-card help"><h3>Hướng dẫn nhanh</h3><div class="pz-help-grid">
-        <span><kbd>WASD</kbd> / joystick — di chuyển</span><span><kbd>Kéo chuột</kbd> / kéo nền — xoay camera</span><span><kbd>Lăn chuột</kbd> / chụm 2 ngón — zoom</span><span><kbd>Bấm chuột</kbd> / nút Đấm — Combat thường</span><span><kbd>Q</kbd> — lướt né (8 mana)</span><span><kbd>Space</kbd> — nhảy, không tốn mana</span><span><kbd>Z</kbd> — Combat: lướt lên đá (12 mana)</span><span><kbd>X</kbd> — Combat: đập xuống đất (20 mana)</span><span><kbd>E</kbd> — Haki quan sát (Admin cấp)</span><span><kbd>J</kbd> — Haki vũ trang (Admin cấp), không phải đấm</span><span><kbd>U</kbd> — Haki bá vương (Admin cấp)</span><span><kbd>B</kbd> chỉ số · <kbd>C</kbd> ngoại hình</span><span><kbd>I</kbd> / Túi đồ — trang bị / ăn trái</span><span><kbd>N</kbd> / Hải đồ — xem 5 đảo</span><span><kbd>1/2/3/4</kbd> — Combat / kiếm / súng / trái</span><span><kbd>F</kbd> — nói chuyện / lên bờ</span><span><kbd>H</kbd> hướng dẫn · <kbd>M</kbd> âm thanh · <kbd>Esc</kbd> đóng bảng</span>
-        </div><p class="pz-help-tip">Chỉ võ Combat có sẵn với hai chiêu Z/X. Ba Haki chỉ Admin cấp; chưa có nhiệm vụ mở. Sau khi được cấp: Quan sát né tối đa 3 đòn trong 10s; Vũ trang tăng 25% lực Combat và kiếm trong 12s; Bá vương làm choáng quái gần, không gây sát thương. Mana tự hồi; máu hồi khi thoát chiến đấu 5s.</p><button class="pz-btn main" id="pzHelpClose" type="button">Đã hiểu</button></div></div>
+        <span><kbd>WASD</kbd> / joystick — di chuyển</span><span><kbd>Kéo chuột</kbd> / kéo nền — xoay camera</span><span><kbd>Lăn chuột</kbd> / chụm 2 ngón — zoom</span><span><kbd>Bấm chuột</kbd> / nút Đấm — Combat thường</span><span><kbd>Q</kbd> — lướt né (8 mana)</span><span><kbd>Space</kbd> — nhảy, không tốn mana</span><span><kbd>Z</kbd> — chiêu 1 của món đang dùng (Combat: lướt lên đá)</span><span><kbd>X</kbd> — chiêu 2 (Combat: đập đất · món khác: Thành thạo 10)</span><span><kbd>E</kbd> — Haki quan sát (Admin cấp)</span><span><kbd>J</kbd> — Haki vũ trang (Admin cấp), không phải đấm</span><span><kbd>U</kbd> — Haki bá vương (Admin cấp)</span><span><kbd>B</kbd> chỉ số · <kbd>C</kbd> ngoại hình</span><span><kbd>I</kbd> / Túi đồ — trang bị / ăn trái</span><span><kbd>N</kbd> / Hải đồ — xem 5 đảo</span><span><kbd>1/2/3/4</kbd> — Combat / kiếm / súng / trái</span><span><kbd>F</kbd> — nói chuyện / lên bờ</span><span><kbd>H</kbd> hướng dẫn · <kbd>M</kbd> âm thanh · <kbd>Esc</kbd> đóng bảng</span>
+        </div><p class="pz-help-tip">Bắt đầu chỉ có võ Combat. Kiếm/súng/trái có chiêu riêng: Z dùng ngay, X mở ở Thành thạo 10. Ba Haki chỉ Admin cấp; chưa có nhiệm vụ mở. Sau khi được cấp: Quan sát né tối đa 3 đòn trong 10s; Vũ trang tăng 25% lực Combat và kiếm trong 12s; Bá vương làm choáng quái gần, không gây sát thương. Mana tự hồi; máu hồi khi thoát chiến đấu 5s.</p><button class="pz-btn main" id="pzHelpClose" type="button">Đã hiểu</button></div></div>
       <div class="pz-ovl" id="pzFail" hidden><div class="pz-card"><h3>Chưa dựng được biển 3D</h3><p id="pzFailT">Trình duyệt hoặc máy này không hỗ trợ WebGL.</p><p class="pz-help-tip">Thử Chrome / Edge / Safari mới, bật tăng tốc phần cứng hoặc tải lại trang. Các tab khác vẫn dùng bình thường.</p><button class="pz-btn main" id="pzRetryBtn" type="button">Thử lại</button></div></div>
     </div>
   </div>
@@ -13579,7 +13582,9 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     var a=i.id===0?-.25:.55;
     i.port={x:i.x+Math.sin(a)*(i.r-7),z:i.z+Math.cos(a)*(i.r-7)};
     i.dock={x:i.x+Math.sin(a)*(i.r+10),z:i.z+Math.cos(a)*(i.r+10)};
-    i.spawn=i.id===0?{x:0,z:14}:{x:i.port.x-3,z:i.port.z-3};
+    // Điểm cập bến: lùi vào trong đảo 7m và lệch ngang 3m để Thuyền Trưởng không che camera.
+    var ux=-Math.sin(a),uz=-Math.cos(a);
+    i.spawn=i.id===0?{x:0,z:14}:{x:i.port.x+ux*7+uz*3,z:i.port.z+uz*7-ux*3};
   });
   var catalog={
     sword:[{id:'neo',name:'Kiếm Neo',price:20,power:16,factor:.5,desc:'Kiếm thép gọn · tầm 2,8m.'},{id:'gon',name:'Kiếm Gợn Sao',price:55,power:24,factor:.55,desc:'Lưỡi xanh ngọc · tầm 2,8m.'}],
@@ -13587,7 +13592,39 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     fruit:[{id:'wind',name:'Trái Gió Lốc',price:40,weight:55,power:8,factor:1.5,color:0x69e1d4,desc:'Bắn luồng gió xuyên tối đa 3 quái · 10 mana.'},{id:'stone',name:'Trái Tinh Thạch',price:75,weight:30,power:10,factor:1.7,color:0xba9af3,desc:'Bắn tinh thạch, đẩy lùi quái · 10 mana.'},{id:'fire',name:'Trái Hỏa Triều',price:120,weight:15,power:15,factor:1.2,color:0xff9758,desc:'Bắn cầu lửa nổ trong bán kính 2,5m · 10 mana.'}]
   };
   function find(kind,id){return (catalog[kind]||[]).find(function(a){return a.id===id;});}
-  function fresh(){return {world:{island:0,visited:[0]},bag:{sword:[],gun:[],fruit:{wind:0,stone:0,fire:0}},gear:{mode:'combat',sword:'',gun:'',fruit:''},market:{rollAt:0}};}
+  // Chiêu Z/X theo vũ khí. lv = Thành thạo cần để mở. mult nhân với sát thương món đang dùng.
+  var skills={
+    sword:{z:{name:'Chém Lướt',short:'Chém xa',type:'dash',mana:14,cd:4,mult:1.7,lv:1,desc:'Lướt 6m, chém mọi quái trên đường'},
+           x:{name:'Vòng Kiếm',short:'Xoay',type:'area',mana:22,cd:7,mult:2.4,radius:3.6,kb:7,lv:10,desc:'Xoay kiếm quanh người · bán kính 3,6m'}},
+    gun:{z:{name:'Ba Phát Tỏa',short:'Ba phát',type:'shot',mana:12,cd:4,mult:.9,count:3,spread:.2,speed:42,lv:1,desc:'Bắn 3 viên hình quạt'},
+         x:{name:'Đạn Nổ Sao',short:'Đạn nổ',type:'shot',mana:22,cd:7,mult:2.2,count:1,speed:26,size:.2,splash:3.2,lv:10,desc:'Đạn nổ bán kính 3,2m khi trúng hoặc hết tầm'}},
+    wind:{z:{name:'Lốc Xoáy',short:'Lốc gió',type:'shot',mana:18,cd:5,mult:1.5,count:1,speed:13,size:.55,pierce:99,lv:1,desc:'Lốc xuyên mọi quái trên đường 30m'},
+          x:{name:'Gió Nâng',short:'Gió nâng',type:'area',mana:26,cd:8,mult:1.6,radius:5,stun:1.5,lv:10,desc:'Gió quanh người 5m · choáng 1,5s'}},
+    stone:{z:{name:'Mưa Tinh Thạch',short:'Mưa đá',type:'area',at:'target',delay:.45,mana:18,cd:5,mult:2,radius:2.8,lv:1,desc:'Tinh thạch rơi vào quái gần nhất phía trước'},
+           x:{name:'Chấn Sóng Đá',short:'Chấn đá',type:'area',cone:1,mana:26,cd:8,mult:2.2,radius:6,kb:9,lv:10,desc:'Sóng đá hình quạt 6m · đẩy lùi mạnh'}},
+    fire:{z:{name:'Cột Lửa',short:'Cột lửa',type:'area',at:'target',delay:.35,mana:18,cd:5,mult:2.2,radius:2.6,lv:1,desc:'Cột lửa phun dưới chân quái phía trước'},
+          x:{name:'Sóng Lửa',short:'Sóng lửa',type:'area',cone:.9,mana:26,cd:8,mult:2.5,radius:7,lv:10,desc:'Sóng lửa hình quạt 7m'}}
+  };
+  var MASTERY_MAX=100;
+  function masteryNeed(lv){return 6+lv*3;}
+  function masteryBonus(lv){return 1+(Math.max(1,Math.min(MASTERY_MAX,lv))-1)*.01;}
+  function validMasteryKey(k){var p=String(k).split(':');return p.length===2&&['sword','gun','fruit'].indexOf(p[0])>=0&&!!find(p[0],p[1]);}
+  function masteryKey(gear){var m=gear&&gear.mode;if(m!=='sword'&&m!=='gun'&&m!=='fruit')return '';var id=gear[m];return id&&find(m,id)?m+':'+id:'';}
+  function masteryOf(s,key){var m=s&&s.mastery&&s.mastery[key];return m?{lv:m.lv,xp:m.xp}:{lv:1,xp:0};}
+  // Cộng điểm Thành thạo (thuần, không đụng state): trả về cấp mới và số cấp vừa lên.
+  function addMastery(entry,amount){
+    var lv=entry&&Number.isInteger(entry.lv)?Math.max(1,Math.min(MASTERY_MAX,entry.lv)):1,xp=entry&&Number.isInteger(entry.xp)&&entry.xp>=0?entry.xp:0,ups=0;
+    if(!Number.isFinite(amount)||amount<=0||lv>=MASTERY_MAX)return {lv:lv,xp:lv>=MASTERY_MAX?0:xp,ups:0};
+    xp+=Math.floor(amount);
+    while(lv<MASTERY_MAX&&xp>=masteryNeed(lv)){xp-=masteryNeed(lv);lv++;ups++;}
+    if(lv>=MASTERY_MAX)xp=0;
+    return {lv:lv,xp:xp,ups:ups};
+  }
+  function skillFor(gear,slot){
+    var m=gear&&gear.mode,set=m==='sword'||m==='gun'?skills[m]:m==='fruit'&&gear.fruit?skills[gear.fruit]:null;
+    return set&&(slot==='z'||slot==='x')?set[slot]:null;
+  }
+  function fresh(){return {world:{island:0,visited:[0]},bag:{sword:[],gun:[],fruit:{wind:0,stone:0,fire:0}},gear:{mode:'combat',sword:'',gun:'',fruit:''},market:{rollAt:0},mastery:{}};}
   function normalize(o){
     var n=fresh();o=o||{};
     if(o.world){var id=o.world.island;if(Number.isInteger(id)&&islands[id])n.world.island=id;if(Array.isArray(o.world.visited))n.world.visited=o.world.visited.filter(function(v,i,a){return Number.isInteger(v)&&islands[v]&&a.indexOf(v)===i;});}
@@ -13595,6 +13632,10 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     if(o.bag){['sword','gun'].forEach(function(k){if(Array.isArray(o.bag[k]))n.bag[k]=o.bag[k].filter(function(v,i,a){return !!find(k,v)&&a.indexOf(v)===i;});});catalog.fruit.forEach(function(f){var v=o.bag.fruit&&o.bag.fruit[f.id];if(Number.isInteger(v)&&v>=0&&v<=99)n.bag.fruit[f.id]=v;});}
     if(o.gear){['sword','gun'].forEach(function(k){n.gear[k]=n.bag[k].indexOf(o.gear[k])>=0?o.gear[k]:n.bag[k][0]||'';});n.gear.fruit=find('fruit',o.gear.fruit)?o.gear.fruit:'';var m=o.gear.mode;if(m==='combat'||(['sword','gun','fruit'].indexOf(m)>=0&&n.gear[m]))n.gear.mode=m;}
     if(o.market&&Number.isSafeInteger(o.market.rollAt)&&o.market.rollAt>=0&&o.market.rollAt<=Date.now()+60000)n.market.rollAt=o.market.rollAt;
+    if(o.mastery&&typeof o.mastery==='object'&&!Array.isArray(o.mastery))Object.keys(o.mastery).forEach(function(k){
+      var m=o.mastery[k];if(!validMasteryKey(k)||!m||!Number.isInteger(m.lv)||m.lv<1||m.lv>MASTERY_MAX)return;
+      var xp=Number.isInteger(m.xp)&&m.xp>=0&&m.xp<masteryNeed(m.lv)&&m.lv<MASTERY_MAX?m.xp:0;n.mastery[k]={lv:m.lv,xp:xp};
+    });
     return n;
   }
   function result(s,fn){var n=JSON.parse(JSON.stringify(s));var e=fn(n);return e?{ok:false,msg:e}:{ok:true,next:n};}
@@ -13714,7 +13755,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
       var f=find('fruit',gear.fruit),q=add(new T.DodecahedronGeometry(.19),f.color,0,-.14,.08);q.rotation.z=.4;add(new T.CylinderGeometry(.018,.023,.1,5),0x4b8153,0,.08,.08);p.fruit=root;
     }
   }
-  window.PZExpansion={islands:islands,catalog:catalog,find:find,fresh:fresh,normalize:normalize,purchase:purchase,equip:equip,eat:eat,nearest:nearest,height:height,clearSea:clearSea,seaRoute:seaRoute,buildTerrain:buildTerrain,buildProps:buildProps,boat:boat,attachGear:attachGear};
+  window.PZExpansion={islands:islands,catalog:catalog,skills:skills,MASTERY_MAX:MASTERY_MAX,masteryNeed:masteryNeed,masteryBonus:masteryBonus,masteryKey:masteryKey,masteryOf:masteryOf,addMastery:addMastery,skillFor:skillFor,find:find,fresh:fresh,normalize:normalize,purchase:purchase,equip:equip,eat:eat,nearest:nearest,height:height,clearSea:clearSea,seaRoute:seaRoute,buildTerrain:buildTerrain,buildProps:buildProps,boat:boat,attachGear:attachGear};
 })();
 /* Avatar khối nguyên bản, các khớp thật trong scenegraph, Three.js r149. */
 (function(){
@@ -13849,7 +13890,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
       set: { sound: true, quality: 'high' }, name: '',
       char: { made: false, skin: 0, hair: 0, coat: 0, hat: false },
       haki: { observation: false, armament: false, conqueror: false },
-      world: E.fresh().world, bag: E.fresh().bag, gear: E.fresh().gear, market: E.fresh().market
+      world: E.fresh().world, bag: E.fresh().bag, gear: E.fresh().gear, market: E.fresh().market, mastery: {}
     };
   }
   var S = blankSave();
@@ -14055,7 +14096,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
   var player = null;
   var P = { x: 0, z: 14, yaw: Math.PI, vx: 0, vz: 0, hp: 100, en: 60, iframe: 0, dashT: 0, dashCd: 0, atkT: 0, atkHit: false, combo: 0, comboT: 0, castT: 0, hurtT: 0, lastHurt: -99, dead: false, phase: 0, moving: 0,
     airY: 0, vy: 0, kickT: 0, kickHit: false, slam: false, boat: false, weaponCd: 0,
-    cd: { s1: 0, s2: 0 }, hakiT: { observation: 0, armament: 0 }, hakiCd: { observation: 0, armament: 0, conqueror: 0 }, dodges: 0 };
+    cd: { s1: 0, s2: 0 }, skillCd: {}, sDash: null, pending: [], hakiT: { observation: 0, armament: 0 }, hakiCd: { observation: 0, armament: 0, conqueror: 0 }, dodges: 0 };
   var cam = { yaw: Math.PI, pitch: 0.42, dist: 8.5, shake: 0 };
   var timeScale = 1, hitstop = 0;
   var playing = false, inited = false, paused = false, dialogOpen = false, overlayOpen = true;
@@ -14063,12 +14104,16 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
 
   /* ------------------------------ UI helpers ---------------------------- */
   function toast(msg, kind) {
-    var d = document.createElement('div');
-    d.className = 'pz-toast' + (kind ? ' ' + kind : '');
-    d.textContent = msg;
+    // Gộp thông báo trùng (ví dụ bấm Haki khóa nhiều lần) thành một dòng "×n", tối đa 3 dòng.
+    var cls = 'pz-toast' + (kind ? ' ' + kind : '');
+    var same = Array.prototype.find.call(ui.pzToasts.children, function (x) { return x.dataset.msg === msg && x.className === cls; });
+    var d = same || document.createElement('div'), n = same ? (Number(same.dataset.n) || 1) + 1 : 1;
+    d.className = cls; d.dataset.msg = msg; d.dataset.n = n;
+    d.textContent = n > 1 ? msg + ' ×' + n : msg;
     ui.pzToasts.appendChild(d);
-    while (ui.pzToasts.children.length > 4) ui.pzToasts.removeChild(ui.pzToasts.firstChild);
-    setTimeout(function () { if (d.parentNode) d.parentNode.removeChild(d); }, 3050);
+    while (ui.pzToasts.children.length > 3) ui.pzToasts.removeChild(ui.pzToasts.firstChild);
+    clearTimeout(d._t);
+    d._t = setTimeout(function () { if (d.parentNode) d.parentNode.removeChild(d); }, 3050);
   }
   var bannerT = null;
   function banner(main, sub) {
@@ -14619,7 +14664,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     ui.pzStatHp.textContent = Math.ceil(P.hp) + ' / ' + maxHp();
     ui.pzStatMana.textContent = Math.floor(P.en) + ' / ' + maxEn();
     ui.pzStatCombat.textContent = atk() + ' sát thương cơ bản';
-    [['sword','pzStatSword'],['gun','pzStatGun'],['fruit','pzStatFruit']].forEach(function(a){var f=E.find(a[0],S.gear[a[0]]);ui[a[1]].textContent=f?itemDamage(a[0])+' · '+f.name:'0 · Khóa';ui[a[1]].parentNode.classList.toggle('locked',!f);});
+    [['sword','pzStatSword'],['gun','pzStatGun'],['fruit','pzStatFruit']].forEach(function(a){var f=E.find(a[0],S.gear[a[0]]);ui[a[1]].textContent=f?itemDamage(a[0])+' · '+f.name+' · TT '+E.masteryOf(S,a[0]+':'+f.id).lv:'0 · Khóa';ui[a[1]].parentNode.classList.toggle('locked',!f);});
     [['observation', 'pzObsBtn', 'E', 'Quan sát'], ['armament', 'pzArmBtn', 'J', 'Vũ trang'], ['conqueror', 'pzConBtn', 'U', 'Bá vương']].forEach(function (a) {
       var b = ui[a[1]], unlocked = S.haki[a[0]], active = P.hakiT[a[0]] > 0;
       b.classList.toggle('locked', !unlocked); b.setAttribute('aria-disabled', String(!unlocked));
@@ -14845,10 +14890,12 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
   /* ------------------------------- combat ------------------------------- */
   function angleTo(ax, az, bx, bz) { return Math.atan2(bx - ax, bz - az); }
   function angDiff(a, b) { var d = (a - b) % TAU; if (d > Math.PI) d -= TAU; if (d < -Math.PI) d += TAU; return Math.abs(d); }
-  function damageEnemy(e, dmg, kx, kz, crit) {
+  function damageEnemy(e, dmg, kx, kz, crit, src) {
     if (e.dead) return;
     e.hp -= dmg; e.flash = 0.14; e.barT = 4;
     e.kx += kx; e.kz += kz;
+    e.lastSrc = src || '';
+    if (src) masteryGain(src, 2);
     var p = { x: e.x, y: groundH(e.x, e.z) + (e.sh || 1) * 0.8, z: e.z };
     dmgNum(p, Math.round(dmg), crit ? 'crit' : '');
     burst(p, crit ? 18 : 10, crit ? 0xfde68a : 0x67e8f9, 3.5, 0.5);
@@ -14863,10 +14910,12 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     var p = { x: e.x, y: groundH(e.x, e.z) + 0.8, z: e.z };
     burst(p, 26, e.kind === 'jelly' ? 0x67e8f9 : 0xfbbf24, 4.5, 0.8);
     sfx.die();
-    // drops
+    // drops: đảo khó hơn (máu quái ×1+id·0,55) thì rơi nhiều Mảnh Sao hơn theo cùng tỉ lệ.
     var nSh = e.kind === 'boss' ? 30 : (e.kind === 'crab' ? 1 + Math.floor(Math.random() * 2) : 2 + Math.floor(Math.random() * 2));
+    if (e.kind !== 'boss' && e.island > 1) nSh = Math.round(nSh * (1 + e.island * 0.55));
+    if (e.lastSrc) masteryGain(e.lastSrc, 6 + (e.island || 0) * 2);
     spawnDrop(e.x, e.z, 'exp', e.exp);
-    for (var i = 0; i < Math.min(nSh, 6); i++) spawnDrop(e.x + (Math.random() - 0.5) * 1.4, e.z + (Math.random() - 0.5) * 1.4, 'shard', Math.ceil(nSh / Math.min(nSh, 6)));
+    for (var i = 0, nDrop = Math.min(nSh, 6); i < nDrop; i++) spawnDrop(e.x + (Math.random() - 0.5) * 1.4, e.z + (Math.random() - 0.5) * 1.4, 'shard', Math.floor(nSh / nDrop) + (i < nSh % nDrop ? 1 : 0));
     if (e.kind === 'boss') {
       S.q.boss = true;
       show(ui.pzBoss, false);
@@ -14939,7 +14988,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
   function applyAttackHit() {
     if(S.gear.mode!=='combat'&&S.gear.mode!=='sword')return;
     var base = (S.gear.mode==='sword'?itemDamage('sword')*(P.hakiT.armament>0?1.25:1):meleePower()) * (P.combo === 2 ? 1.6 : 1);
-    var reach = S.gear.mode==='sword'?2.8:1.8, arc = 1.15;
+    var reach = S.gear.mode==='sword'?2.8:1.8, arc = 1.15, src = S.gear.mode==='sword'?E.masteryKey(S.gear):'';
     enemies.forEach(function (e) {
       if (e.dead) return;
       var d = Math.hypot(e.x - P.x, e.z - P.z);
@@ -14947,7 +14996,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
         var crit = Math.random() < 0.15;
         var dmg = base * (crit ? 1.8 : 1);
         var a = angleTo(P.x, P.z, e.x, e.z);
-        damageEnemy(e, dmg, Math.sin(a) * 3.5, Math.cos(a) * 3.5, crit);
+        damageEnemy(e, dmg, Math.sin(a) * 3.5, Math.cos(a) * 3.5, crit, src);
       }
     });
     burst(playerPos(1.25), 7, 0xe0f2fe, 2, 0.22, 0);
@@ -14987,7 +15036,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     scene.add(g);
     ghosts.push({ g: g, t: -delay, life: 0.3 });
   }
-  function combatBusy() { return !playing || P.dead || P.boat || dialogOpen || overlayOpen || P.atkT > 0 || P.kickT > 0 || P.slam; }
+  function combatBusy() { return !playing || P.dead || P.boat || dialogOpen || overlayOpen || P.atkT > 0 || P.kickT > 0 || P.slam || !!P.sDash; }
   function tryJump() {
     if(P.boat){if(!overlayOpen&&!dialogOpen)disembark();return;}
     if (!playing || P.dead || dialogOpen || overlayOpen || P.airY > 0.01 || P.vy > 0 || P.slam || P.kickT > 0) return;
@@ -14995,7 +15044,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     burst(playerPos(0.08), 7, 0xe0f2fe, 1.5, 0.25, 0);
   }
   function castS1() {
-    if(S.gear.mode!=='combat')return;
+    if(S.gear.mode!=='combat')return castItemSkill('z');
     if (combatBusy() || P.cd.s1 > 0 || P.dashT > 0) return;
     if (P.en < 12) { toast('Lướt lên đá cần 12 mana.', 'warn'); return; }
     P.en -= 12; P.cd.s1 = 3; P.kickT = 0.38; P.kickHit = false;
@@ -15003,7 +15052,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     sfx.dash(); burst(playerPos(0.5), 12, 0xe0f2fe, 2, 0.35); hudBars();
   }
   function castS2() {
-    if(S.gear.mode!=='combat')return;
+    if(S.gear.mode!=='combat')return castItemSkill('x');
     if (combatBusy() || P.cd.s2 > 0 || P.dashT > 0) return;
     if (P.en < 20) { toast('Đập xuống đất cần 20 mana.', 'warn'); return; }
     P.en -= 20; P.cd.s2 = 5; P.slam = true;
@@ -15059,7 +15108,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     P.boat=false;ride=null;navPort=false;P.weaponCd=0;if(boat)boat.visible=false;
     if(scene)ISLANDS.forEach(function(i){var g=scene.getObjectByName('dock-boat-'+i.id);if(g)g.visible=true;});
     clearMovement(); P.airY = P.vy = P.kickT = P.atkT = P.dashT = P.dashCd = 0; P.slam = false;
-    P.comboT = 0; P.cd.s1 = P.cd.s2 = 0; P.dodges = 0;
+    P.comboT = 0; P.cd.s1 = P.cd.s2 = 0; P.dodges = 0; P.skillCd = {}; P.sDash = null; P.pending = []; clearSkillFx();
     Object.keys(P.hakiCd).forEach(function (k) { P.hakiCd[k] = 0; });
     P.hakiT.observation = P.hakiT.armament = 0; hakiVisual();
     if (impactMesh) impactMesh.visible = false;
@@ -15289,10 +15338,28 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     return 'Tân Hải Tặc';
   }
   var cdPrev = {};
+  var skillIcons = {
+    combat: ['<path d="m6 3 6 7 8-4 2 3-10 7-6-6M3 18h6M2 21h4"/>', '<path d="M12 3v11M7 9l5 5 5-5M3 20l4-3 5 3 5-3 4 3"/>'],
+    sword: ['<path d="M3 12h7M3 16h5"/><path d="m11 17 9-9 1-4-4 1-9 9M9 13l3 3"/>', '<path d="M12 4a8 8 0 1 1-7.4 5"/><path d="M4 4v5h5M12 9l3 3-3 3-3-3z"/>'],
+    gun: ['<path d="M4 12h6M12 12l8-6M12 12h9M12 12l8 6"/>', '<path d="m12 3 2 5 5-2-2 5 5 2-5 2 2 5-5-2-2 5-2-5-5 2 2-5-5-2 5-2-2-5 5 2z"/>'],
+    fruit: ['<path d="M4 6h14M6 10h12M8 14h9M10 18h6M12 22h2"/>', '<path d="M2 15c3-4 6 4 10 0s7 4 10 0M2 9c3-4 6 4 10 0s7 4 10 0"/>']
+  };
+  function skillCdKey(slot) { return E.masteryKey(S.gear) + ':' + slot; }
   function hudSkills(dt) {
-    var ranged=S.gear.mode==='gun'||S.gear.mode==='fruit',cooldown=S.gear.mode==='fruit'?.9:.55;
-    var list = [['pzAtkBtn', ranged?P.weaponCd/cooldown:P.atkT > 0 ? P.atkT / 0.34 : 0, S.gear.mode==='fruit'?10:0, ranged?cooldown:.34], ['pzDashBtn', P.dashCd / 1.1, 8, 1.1], ['pzJumpBtn', P.airY > 0.01 || P.vy > 0 ? 1 : 0, 0, 0], ['pzS1Btn', P.cd.s1 / 3, 12, 3], ['pzS2Btn', P.cd.s2 / 5, 20, 5]];
-    var locked=P.boat||S.gear.mode!=='combat';ui.pzS1Btn.disabled=ui.pzS2Btn.disabled=locked;ui.pzAtkBtn.disabled=P.boat;
+    var ranged=S.gear.mode==='gun'||S.gear.mode==='fruit',cooldown=S.gear.mode==='fruit'?.9:.55,item=S.gear.mode!=='combat';
+    var sz=item?E.skillFor(S.gear,'z'):null,sx=item?E.skillFor(S.gear,'x'):null,mlv=item?E.masteryOf(S,E.masteryKey(S.gear)).lv:1;
+    var s1=sz?[(P.skillCd[skillCdKey('z')]||0)/sz.cd,sz.mana,sz.cd]:[P.cd.s1/3,12,3],s2=sx?[(P.skillCd[skillCdKey('x')]||0)/sx.cd,sx.mana,sx.cd]:[P.cd.s2/5,20,5];
+    var list = [['pzAtkBtn', ranged?P.weaponCd/cooldown:P.atkT > 0 ? P.atkT / 0.34 : 0, S.gear.mode==='fruit'?10:0, ranged?cooldown:.34], ['pzDashBtn', P.dashCd / 1.1, 8, 1.1], ['pzJumpBtn', P.airY > 0.01 || P.vy > 0 ? 1 : 0, 0, 0], ['pzS1Btn', s1[0], s1[1], s1[2]], ['pzS2Btn', s2[0], s2[1], s2[2]]];
+    var locked=P.boat||(item&&!sz);ui.pzS1Btn.disabled=ui.pzS2Btn.disabled=locked;ui.pzAtkBtn.disabled=P.boat;
+    // Nút Z/X đổi tên, biểu tượng theo món đang dùng; X hiện "TT 10" khi chưa đủ Thành thạo.
+    var xLock=!!(sx&&mlv<sx.lv),skKey=S.gear.mode+':'+(sz?sz.name:'')+':'+xLock;
+    if(ui.pzS1Btn.dataset.sk!==skKey){
+      ui.pzS1Btn.dataset.sk=skKey;var fam=item?S.gear.mode:'combat';
+      [[ui.pzS1Btn,sz,'Lướt đá','Z — Combat: lướt lên đá, 12 mana',0,false],[ui.pzS2Btn,sx,'Đập đất','X — Combat: đập xuống đất, 20 mana',1,xLock]].forEach(function(r){
+        var b=r[0],sk=r[1],name=sk?(r[5]?'TT '+sk.lv:sk.short):r[2],title=sk?(r[4]?'X':'Z')+' — '+sk.name+': '+sk.desc+', '+sk.mana+' mana'+(r[5]?' · mở ở Thành thạo '+sk.lv:''):r[3];
+        b.querySelector('b').textContent=name;b.title=title;b.setAttribute('aria-label',title);b.querySelector('svg').innerHTML=skillIcons[fam][r[4]];b.classList.toggle('sk-lock',r[5]);
+      });
+    }
     var label={combat:'Đấm',sword:'Chém',gun:'Bắn',fruit:'Trái'}[S.gear.mode],atkBtn=ui.pzAtkBtn;
     if(atkBtn.dataset.mode!==S.gear.mode){
       atkBtn.dataset.mode=S.gear.mode;atkBtn.querySelector('b').textContent=label;atkBtn.setAttribute('aria-label',label+' · '+gearLabel());atkBtn.title=label+' thường · '+gearLabel();
@@ -15413,6 +15480,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     computeMove();
     var spd = 6.2;
     if (P.slam) { P.vx = P.vz = 0; }
+    else if (P.sDash) { P.vx = P.sDash.x * 22; P.vz = P.sDash.z * 22; if (Math.random() < 0.6) ghost(0); }
     else if (P.kickT > 0) { P.vx = P.kickX * 14; P.vz = P.kickZ * 14; }
     else if (P.dashT > 0) {
       P.dashT -= dt;
@@ -15446,6 +15514,8 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     P.iframe = Math.max(0, P.iframe - dt);
     P.dashCd = Math.max(0, P.dashCd - dt);
     P.cd.s1 = Math.max(0, P.cd.s1 - dt); P.cd.s2 = Math.max(0, P.cd.s2 - dt);
+    Object.keys(P.skillCd).forEach(function (k) { P.skillCd[k] = Math.max(0, P.skillCd[k] - dt); });
+    updateItemSkills(dt);
     var wasHaki = P.hakiT.observation > 0 || P.hakiT.armament > 0;
     Object.keys(P.hakiCd).forEach(function (k) { P.hakiCd[k] = Math.max(0, P.hakiCd[k] - dt); });
     Object.keys(P.hakiT).forEach(function (k) { P.hakiT[k] = Math.max(0, P.hakiT[k] - dt); });
@@ -15718,7 +15788,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
       if (!dialogOpen) updatePlayer(dt);
       else { P.vx *= 0.8; P.vz *= 0.8; animHumanoid(player, P, tGlobal); player.position.set(P.x, groundH(P.x, P.z) + P.airY, P.z); }
       enemies.forEach(function (e) { e.g.visible=!e.gone&&Math.hypot(e.x-P.x,e.z-P.z)<85; if (!e.gone&&(e.dead||Math.hypot(e.x-P.x,e.z-P.z)<65)) updateEnemy(e, dt); });
-      farmRespawn();updatePlayerShots(dt);
+      farmRespawn();updatePlayerShots(dt);updateSkillFx(dt);
       updateShots(dt); updateDrops(dt); updateGhosts(dt);
       naviCd = Math.max(0, naviCd - dt);
       saveT += dt; if (saveT > 10) { saveT = 0; save(); }
@@ -15860,7 +15930,17 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
   function baseH(){return P.boat ? .62 + waterWave(P.x,P.z) : groundH(P.x,P.z);}
   function waterWave(x,z){return Math.sin(x*.16+tGlobal*1.1)*.10+Math.sin(z*.13-tGlobal*.8)*.09+Math.sin((x+z)*.07+tGlobal*.5)*.07;}
   function nearPort(){var p=islandNow().port;return !P.boat&&Math.hypot(P.x-p.x,P.z-p.z)<9;}
-  function itemDamage(kind){var f=E.find(kind,S.gear[kind]);return f?Math.round(f.power+atk()*f.factor):0;}
+  function itemDamage(kind){var f=E.find(kind,S.gear[kind]);return f?Math.round((f.power+atk()*f.factor)*E.masteryBonus(E.masteryOf(S,kind+':'+f.id).lv)):0;}
+  function masteryLabel(kind,id){var m=E.masteryOf(S,kind+':'+id);return 'Thành thạo '+m.lv+(m.lv<E.MASTERY_MAX?' ('+m.xp+'/'+E.masteryNeed(m.lv)+')':' (tối đa)');}
+  function masteryGain(key,n){
+    if(!key||!S.mastery)return;
+    var r=E.addMastery(E.masteryOf(S,key),n);S.mastery[key]={lv:r.lv,xp:r.xp};
+    if(r.ups){
+      var p=key.split(':'),f=E.find(p[0],p[1]),opened=['z','x'].map(function(sl){var g={mode:p[0]};g[p[0]]=p[1];var sk=E.skillFor(g,sl);return sk&&sk.lv>r.lv-r.ups&&sk.lv<=r.lv?sk.name:'';}).filter(Boolean);
+      toast('Thành thạo '+(f?f.name:key)+' lên '+r.lv+(opened.length?' · mở chiêu '+opened.join(', '):''),'gold');save();
+      if(!ui.pzBag.hidden)bagUi();
+    }
+  }
   function gearLabel(){var m=S.gear.mode,f=E.find(m,S.gear[m]);return m==='combat'?'Combat':f?f.name:'Combat';}
   function marketApply(r){
     if(!r.ok){if(inited)toast(r.msg,'warn');return r;}
@@ -15899,7 +15979,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
   }
   function equipMode(mode,id){
     if(!playing||P.dead||P.boat||dialogOpen)return;
-    if(P.atkT>0||P.kickT>0||P.slam){toast('Đợi kết thúc đòn rồi đổi trang bị.','info');return;}
+    if(P.atkT>0||P.kickT>0||P.slam||P.sDash){toast('Đợi kết thúc đòn rồi đổi trang bị.','info');return;}
     var r=marketApply(E.equip(S,mode,id));if(r.ok){refreshPlayer();toast('Đang dùng '+gearLabel(),'info');bagUi();}return r;
   }
   function eatFruit(id,confirmed){
@@ -15925,9 +16005,10 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
       var body=document.createElement('div'),b=document.createElement('b'),s=document.createElement('small');b.textContent=name;s.textContent=desc;body.append(b,s);d.appendChild(body);
       var btn=document.createElement('button');btn.className='pz-btn ghost';btn.type='button';btn.textContent=action;btn.disabled=!!disabled;btn.addEventListener('click',fn);d.appendChild(btn);ui.pzBagList.appendChild(d);
     }
+    function skillLine(kind,id){var g={mode:kind};g[kind]=id;var z=E.skillFor(g,'z'),x=E.skillFor(g,'x'),lv=E.masteryOf(S,kind+':'+id).lv;return ' · '+masteryLabel(kind,id)+' · Z '+z.name+' · X '+x.name+(lv<x.lv?' (mở ở TT '+x.lv+')':'');}
     row('1 · Võ Combat','Tay không · Z lướt đá / X đập đất','Dùng',P.boat,S.gear.mode==='combat',function(){equipMode('combat');});
-    ['sword','gun'].forEach(function(k){E.catalog[k].forEach(function(f){var has=S.bag[k].indexOf(f.id)>=0;row((k==='sword'?'2':'3')+' · '+f.name,f.desc+' · '+(has?'Đã mua':f.price+' Mảnh Sao ở Cảng Kim Sa'),has?'Dùng':'Khóa',!has||P.boat,S.gear.mode===k&&S.gear[k]===f.id,function(){equipMode(k,f.id);});});});
-    if(S.gear.fruit){var active=E.find('fruit',S.gear.fruit);row('4 · '+active.name,'Sức mạnh đã ăn · '+active.desc,'Dùng',P.boat,S.gear.mode==='fruit',function(){equipMode('fruit');});}
+    ['sword','gun'].forEach(function(k){E.catalog[k].forEach(function(f){var has=S.bag[k].indexOf(f.id)>=0;row((k==='sword'?'2':'3')+' · '+f.name,f.desc+' · '+(has?'Đã mua'+skillLine(k,f.id):f.price+' Mảnh Sao ở Cảng Kim Sa'),has?'Dùng':'Khóa',!has||P.boat,S.gear.mode===k&&S.gear[k]===f.id,function(){equipMode(k,f.id);});});});
+    if(S.gear.fruit){var active=E.find('fruit',S.gear.fruit);row('4 · '+active.name,'Sức mạnh đã ăn · '+active.desc+skillLine('fruit',active.id),'Dùng',P.boat,S.gear.mode==='fruit',function(){equipMode('fruit');});}
     E.catalog.fruit.forEach(function(f){var count=S.bag.fruit[f.id];row(f.name+' × '+count,'Trái trong túi · '+f.desc,count?'Ăn 1':'Chưa có',!count||P.boat,false,function(){eatFruit(f.id);});});
   }
   function openMap(){if(openPanel('pzMap'))mapUi();}
@@ -16011,23 +16092,99 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     var speed=isFruit?18:42,pos=playerPos(1.35),color=isFruit?f.color:0xffdc9c;
     var geo=isFruit?(f.id==='stone'?new THREE.OctahedronGeometry(.22):new THREE.SphereGeometry(.21,8,6)):new THREE.SphereGeometry(.09,6,4);
     var g=new THREE.Mesh(geo,mat(color,{emissive:color,emissiveIntensity:.7}));scene.add(g);
-    playerShots.push({g:g,x:pos.x,y:pos.y,z:pos.z,vx:Math.sin(P.yaw)*speed,vz:Math.cos(P.yaw)*speed,life:30/speed,damage:itemDamage(mode),kind:isFruit?f.id:'bullet',hits:[],pierce:isFruit&&f.id==='wind'?3:1});
+    playerShots.push({g:g,x:pos.x,y:pos.y,z:pos.z,vx:Math.sin(P.yaw)*speed,vz:Math.cos(P.yaw)*speed,life:30/speed,damage:itemDamage(mode),kind:isFruit?f.id:'bullet',hits:[],pierce:isFruit&&f.id==='wind'?3:1,kb:isFruit&&f.id==='stone'?6:2,splash:isFruit&&f.id==='fire'?2.5:0,splashMult:.7,src:E.masteryKey(S.gear)});
     P.atkT=.34;P.atkHit=true;P.weaponCd=isFruit?.9:.55;sfx.zap();hudBars();return true;
+  }
+  function autoAim(range,arc){
+    var target=null,best=range;enemies.forEach(function(e){var d=Math.hypot(e.x-P.x,e.z-P.z);if(!e.dead&&e.island===S.world.island&&d<best&&angDiff(P.yaw,angleTo(P.x,P.z,e.x,e.z))<arc){best=d;target=e;}});
+    if(target)P.yaw=angleTo(P.x,P.z,target.x,target.z);return target;
+  }
+  function shotExplode(s,x,z,skip){
+    s.exploded=true;
+    enemies.forEach(function(o){if(o!==skip&&!o.dead&&Math.hypot(o.x-x,o.z-z)<s.splash+(o.sh||1)*.3){var a=angleTo(x,z,o.x,o.z);damageEnemy(o,s.damage*s.splashMult,Math.sin(a)*3,Math.cos(a)*3,false,s.src);}});
+    burst({x:x,y:groundH(x,z)+1,z:z},s.splash>3?30:22,s.kind==='bullet'||s.kind==='skill-gun'?0xffd27a:0xff9758,3.4,.5);
+    if(s.splash>3){skillRing(x,z,s.splash,0xffc864,.4);cam.shake=Math.max(cam.shake,.2);}
   }
   function updatePlayerShots(dt){
     for(var j=playerShots.length-1;j>=0;j--){var s=playerShots[j];s.life-=dt;
-      var ox=s.x,oz=s.z;s.x+=s.vx*dt;s.z+=s.vz*dt;s.g.position.set(s.x,s.y,s.z);var gone=s.life<=0;
+      var ox=s.x,oz=s.z;s.x+=s.vx*dt;s.z+=s.vz*dt;s.g.position.set(s.x,s.y,s.z);if(s.spin)s.g.rotation.y+=dt*14;var gone=s.life<=0;
       enemies.forEach(function(e){if(gone||e.dead||s.hits.indexOf(e)>=0)return;
         var d=(function(){var dx=s.x-ox,dz=s.z-oz,L=dx*dx+dz*dz,t=L?Math.max(0,Math.min(1,((e.x-ox)*dx+(e.z-oz)*dz)/L)):0;return Math.hypot(e.x-ox-t*dx,e.z-oz-t*dz);})();
-        if(d<.65*(e.sh||1)&&Math.abs(s.y-groundH(e.x,e.z)-1)<1.2){
-          s.hits.push(e);var a=angleTo(P.x,P.z,e.x,e.z),kb=s.kind==='stone'?6:2;damageEnemy(e,s.damage,Math.sin(a)*kb,Math.cos(a)*kb,false);
-          if(s.kind==='fire'){enemies.forEach(function(other){if(other!==e&&!other.dead&&Math.hypot(other.x-e.x,other.z-e.z)<2.5)damageEnemy(other,s.damage*.7,0,0,false);});burst({x:e.x,y:groundH(e.x,e.z)+1,z:e.z},22,0xff9758,3,.5);}
+        if(d<(.65+(s.size||0))*(e.sh||1)&&Math.abs(s.y-groundH(e.x,e.z)-1)<1.2+(s.size||0)){
+          s.hits.push(e);var a=angleTo(P.x,P.z,e.x,e.z);damageEnemy(e,s.damage,Math.sin(a)*s.kb,Math.cos(a)*s.kb,false,s.src);
+          if(s.splash&&!s.exploded)shotExplode(s,e.x,e.z,e);
           s.pierce--;if(s.pierce<=0)gone=true;
         }
       });
-      if(gone){scene.remove(s.g);s.g.geometry.dispose();playerShots.splice(j,1);}
+      if(gone&&s.splashEnd&&!s.exploded)shotExplode(s,s.x,s.z,null);
+      if(gone){scene.remove(s.g);s.g.geometry.dispose();if(s.g.userData.privateMat)s.g.material.dispose();playerShots.splice(j,1);}
     }
   }
+  /* ---- Chiêu Z/X của kiếm, súng, trái (mở bằng Thành thạo) ---- */
+  function castItemSkill(slot){
+    if(combatBusy()||P.dashT>0)return false;
+    var key=E.masteryKey(S.gear),sk=E.skillFor(S.gear,slot);if(!key||!sk)return false;
+    var m=E.masteryOf(S,key);
+    if(m.lv<sk.lv){toast(sk.name+' mở ở Thành thạo '+sk.lv+' · đang '+m.lv+'.','warn');return false;}
+    var ck=key+':'+slot;if((P.skillCd[ck]||0)>0)return false;
+    if(P.en<sk.mana){toast(sk.name+' cần '+sk.mana+' mana.','warn');return false;}
+    P.en-=sk.mana;P.skillCd[ck]=sk.cd;
+    var mode=S.gear.mode,dmg=itemDamage(mode)*sk.mult*(mode==='sword'&&P.hakiT.armament>0?1.25:1);
+    var color=mode==='sword'?0xdbeafe:mode==='gun'?0xffd27a:E.find('fruit',S.gear.fruit).color;
+    if(sk.type==='dash'){
+      autoAim(9,.6);P.sDash={t:.3,x:Math.sin(P.yaw),z:Math.cos(P.yaw),hits:[],dmg:dmg,src:key};P.iframe=Math.max(P.iframe,.35);P.atkT=0;sfx.slash();
+    }else if(sk.type==='shot'){
+      autoAim(30,.5);var n=sk.count||1;
+      for(var i=0;i<n;i++){
+        var yaw=P.yaw+(n>1?(i-(n-1)/2)*sk.spread:0),pos=playerPos(1.35),size=sk.size||.09;
+        var g=new THREE.Mesh(sk.pierce?new THREE.TorusGeometry(size,size*.35,6,14):new THREE.SphereGeometry(size,8,6),new THREE.MeshBasicMaterial({color:color,transparent:true,opacity:sk.pierce?.75:1}));g.userData.privateMat=true;if(sk.pierce)g.rotation.x=Math.PI/2;scene.add(g);
+        playerShots.push({g:g,x:pos.x,y:sk.pierce?pos.y-.4:pos.y,z:pos.z,vx:Math.sin(yaw)*sk.speed,vz:Math.cos(yaw)*sk.speed,life:30/sk.speed,damage:dmg,kind:'skill-'+mode,hits:[],pierce:sk.pierce||1,kb:sk.pierce?3:2.5,size:sk.pierce?sk.size:0,splash:sk.splash||0,splashMult:1,splashEnd:!!sk.splash,spin:!!sk.pierce,src:key});
+      }
+      P.weaponCd=Math.max(P.weaponCd,.35);sfx.zap();
+    }else if(sk.at==='target'){
+      var t=autoAim(14,.8),dist=6,tx=t?t.x:P.x+Math.sin(P.yaw)*dist,tz=t?t.z:P.z+Math.cos(P.yaw)*dist;
+      P.pending.push({t:sk.delay,x:tx,z:tz,sk:sk,dmg:dmg,src:key,color:color});skillRing(tx,tz,sk.radius,color,sk.delay+.05,true);sfx.cast();
+    }else{
+      if(sk.cone)autoAim(sk.radius,.9);
+      skillArea(P.x,P.z,sk,dmg,key,color);sfx.cast();
+    }
+    P.castT=.3;hudBars();return true;
+  }
+  function skillArea(x,z,sk,dmg,src,color){
+    var hit=0;
+    enemies.forEach(function(e){
+      if(e.dead||Math.hypot(e.x-x,e.z-z)>sk.radius+(e.sh||1)*.4)return;
+      if(sk.cone&&angDiff(P.yaw,angleTo(P.x,P.z,e.x,e.z))>sk.cone)return;
+      var a=angleTo(x,z,e.x,e.z),kb=sk.kb||4;hit++;
+      damageEnemy(e,dmg,Math.sin(a)*kb,Math.cos(a)*kb,false,src);
+      if(sk.stun&&!e.dead){e.stunT=e.kind==='boss'?Math.min(.5,sk.stun):sk.stun;if(e.tele)e.tele.visible=false;}
+    });
+    if(sk.cone){for(var i=0;i<5;i++){var d=1.5+i*(sk.radius-1.5)/4;burst({x:P.x+Math.sin(P.yaw)*d,y:groundH(x,z)+.8,z:P.z+Math.cos(P.yaw)*d},8,color,2.6,.4);}skillRing(P.x+Math.sin(P.yaw)*sk.radius*.5,P.z+Math.cos(P.yaw)*sk.radius*.5,sk.radius*.5,color,.35);}
+    else{skillRing(x,z,sk.radius,color,.4);burst({x:x,y:groundH(x,z)+1,z:z},26,color,4,.55);if(sk.at==='target')skillPillar(x,z,sk.radius,color);}
+    cam.shake=Math.max(cam.shake,.18);return hit;
+  }
+  function updateItemSkills(dt){
+    if(P.sDash){
+      var s=P.sDash;s.t-=dt;
+      enemies.forEach(function(e){if(!e.dead&&s.hits.indexOf(e)<0&&Math.hypot(e.x-P.x,e.z-P.z)<1.9+(e.sh||1)*.4){s.hits.push(e);damageEnemy(e,s.dmg,s.x*4,s.z*4,false,s.src);}});
+      if(s.t<=0){P.sDash=null;P.vx*=.25;P.vz*=.25;punchTrail();}
+    }
+    for(var i=P.pending.length-1;i>=0;i--){var q=P.pending[i];q.t-=dt;if(q.t<=0){P.pending.splice(i,1);skillArea(q.x,q.z,q.sk,q.dmg,q.src,q.color);}}
+  }
+  var skillFx=[];
+  function skillRing(x,z,r,color,life,warn){
+    var m=new THREE.Mesh(new THREE.RingGeometry(r*(warn?.92:.7),r,40),new THREE.MeshBasicMaterial({color:color,transparent:true,opacity:warn?.45:.75,side:THREE.DoubleSide,depthWrite:false,blending:THREE.AdditiveBlending}));
+    m.rotation.x=-Math.PI/2;m.position.set(x,groundH(x,z)+.08,z);scene.add(m);skillFx.push({m:m,t:life,life:life,grow:!warn});
+  }
+  function skillPillar(x,z,r,color){
+    var m=new THREE.Mesh(new THREE.CylinderGeometry(r*.55,r*.8,5,14,1,true),new THREE.MeshBasicMaterial({color:color,transparent:true,opacity:.55,side:THREE.DoubleSide,depthWrite:false,blending:THREE.AdditiveBlending}));
+    m.position.set(x,groundH(x,z)+2.5,z);scene.add(m);skillFx.push({m:m,t:.45,life:.45,grow:false});
+  }
+  function updateSkillFx(dt){
+    for(var i=skillFx.length-1;i>=0;i--){var f=skillFx[i];f.t-=dt;var k=Math.max(0,f.t/f.life);f.m.material.opacity=k*.75;if(f.grow)f.m.scale.setScalar(1+(1-k)*.25);
+      if(f.t<=0){scene.remove(f.m);f.m.geometry.dispose();f.m.material.dispose();skillFx.splice(i,1);}}
+  }
+  function clearSkillFx(){skillFx.forEach(function(f){if(scene)scene.remove(f.m);f.m.geometry.dispose();f.m.material.dispose();});skillFx=[];}
   function disposeFoe(e){if(e.g)e.g.traverse(function(o){if(o.isMesh){o.geometry.dispose();if(o.userData.privateMat)o.material.dispose();}});}
   function farmRespawn(){
     enemies.forEach(function(e){if(e.gone&&e.kind!=='boss'&&!e.retired&&playT-e.diedAt>24&&e.island===S.world.island){e.retired=true;disposeFoe(e);spawnEnemy(e.kind,e.hx,e.hz);}});
@@ -16037,7 +16194,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
   /* ------------------------------- dev hooks ---------------------------- */
   if (DEV) {
     window.__pz = {
-      state: function () { return { lv: S.lv, exp: S.exp, shards: S.shards, q: S.q, hp: P.hp, en: P.en, x: P.x, z: P.z, world:S.world,bag:S.bag,gear:S.gear,boat:P.boat,ride:ride?{dest:ride.dest,points:ride.path.length}:null,playerShots:playerShots.length,airY: P.airY, vy: P.vy, atkT: P.atkT, dashT: P.dashT, kickT: P.kickT, slam: P.slam, cd: P.cd, haki: S.haki, hakiT: P.hakiT, hakiCd: P.hakiCd, dodges: P.dodges, char: S.char, name: S.name, armed: !!(player && player.userData.parts.sword), enemies: enemies.filter(function (e) { return !e.dead; }).length, playing: playing, paused: paused, dead:P.dead, dialog: dialogOpen, overlay: overlayOpen }; },
+      state: function () { return { lv: S.lv, exp: S.exp, shards: S.shards, q: S.q, hp: P.hp, en: P.en, x: P.x, z: P.z, world:S.world,bag:S.bag,gear:S.gear,mastery:S.mastery,skillCd:P.skillCd,sDash:!!P.sDash,pending:P.pending.length,fx:skillFx.length,boat:P.boat,ride:ride?{dest:ride.dest,points:ride.path.length}:null,playerShots:playerShots.length,airY: P.airY, vy: P.vy, atkT: P.atkT, dashT: P.dashT, kickT: P.kickT, slam: P.slam, cd: P.cd, haki: S.haki, hakiT: P.hakiT, hakiCd: P.hakiCd, dodges: P.dodges, char: S.char, name: S.name, armed: !!(player && player.userData.parts.sword), enemies: enemies.filter(function (e) { return !e.dead; }).length, playing: playing, paused: paused, dead:P.dead, dialog: dialogOpen, overlay: overlayOpen }; },
       tp: function (x, z) { P.x = x; P.z = z; S.world.island=E.nearest(x,z).id; P.boat=false;ride=null;if(boat)boat.visible=false;P.vx = 0; P.vz = 0; P.dashT = 0; P.airY = P.vy = 0; },
       face: function (a) { P.yaw = a; },
       foes: function () { return enemies.filter(function (e) { return !e.dead; }).map(function (e) { return { kind: e.kind,island:e.island, x: e.x, z: e.z, hp: e.hp, stun: e.stunT || 0 }; }); },
@@ -16057,6 +16214,8 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
       market:function(k,id,u){return marketApply(E.purchase(S,k,id,u===undefined?randomUnit():u));},
       equip:function(m,id){return equipMode(m,id);},
       eat:function(id){return eatFruit(id,true);},
+      mastery:function(key,lv){S.mastery[key]={lv:lv,xp:0};hudBars();return E.masteryOf(S,key);},
+      skill:function(slot){return castItemSkill(slot);},
       travel:travelTo,mount:mountBoat,land:disembark,
       heal: function () { P.hp = maxHp(); P.en = maxEn(); hudBars(); },
       shot: function () { renderer.render(scene, camera); return renderer.domElement.toDataURL('image/png'); },
