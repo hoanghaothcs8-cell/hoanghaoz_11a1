@@ -2505,8 +2505,6 @@
 #gameTab .pz-sk.atk{width:68px; height:68px; border-radius:20px; border-color:rgba(251,191,36,.6) !important;
   background:linear-gradient(160deg,rgba(180,83,9,.92),rgba(6,24,43,.94)) !important; color:var(--pz-gold2) !important;}
 #gameTab .pz-sk.atk svg{width:30px; height:30px;}
-#gameTab .pz-sk.ult{border-color:rgba(251,191,36,.5) !important; color:var(--pz-gold2) !important;
-  background:linear-gradient(160deg,rgba(19,78,74,.95),rgba(6,24,43,.94)) !important;}
 #gameTab .pz-sk.no-en{opacity:.55;}
 
 #gameTab .pz-stick{position:absolute; left:18px; bottom:18px; width:132px; height:132px; border-radius:50%;
@@ -2666,193 +2664,176 @@
   #gameTab .pz-touch-act{right:64px; bottom:70px; width:44px; height:44px;}
 }
 @media (max-height:560px){ #gameTab .pz-wrap{min-height:300px;} #gameTab .pz-plate{transform:scale(.85); transform-origin:top left;} #gameTab .pz-quest{max-width:200px;} }
+
+/* Tạo nhân vật, Combat và các ô Haki khóa. */
+#gameTab .pz-ico{padding:0 !important;min-width:0 !important;flex-shrink:0;}
+#gameTab .pz-sk{padding:0 !important;}
+#gameTab .pz-ico.stats{width:54px;font-size:10px;white-space:nowrap;}
+#gameTab .pz-sk svg{margin-top:-7px;}
+#gameTab .pz-sk > b{position:absolute;bottom:4px;left:0;right:0;font-size:8px;font-weight:800;line-height:1.1;}
+#gameTab .pz-sk.atk > b{font-size:10px;}
+#gameTab .pz-sk.jump .pz-cd{background:rgba(3,12,22,.23);}
+#gameTab .pz-ovl{align-items:safe center;box-sizing:border-box;overscroll-behavior:contain;touch-action:pan-y;}
+#gameTab .pz-char-card,#gameTab .pz-stats-card{width:min(540px,100%);max-width:540px;box-sizing:border-box;min-width:0;}
+#gameTab .pz-char-card h3,#gameTab .pz-stats-card h3{font-size:19px;letter-spacing:1px;}
+#gameTab .pz-char-layout{display:grid;grid-template-columns:140px minmax(0,1fr);gap:18px;align-items:center;}
+#gameTab .pz-char-preview{--char-skin:#fcd9b8;--char-hair:#16324f;--char-coat:#0f766e;border:1px solid var(--pz-line);border-radius:14px;background:radial-gradient(ellipse at 50% 30%,#164255,#06182b);padding:12px 6px;}
+#gameTab .pz-char-preview svg{display:block;width:100%;height:190px;}
+#gameTab .pz-char-preview span{display:block;font-size:10px;color:var(--pz-mut);margin-top:8px;}
+#gameTab .pz-preview-hat{display:none;}
+#gameTab .has-hat .pz-preview-hat{display:inline;}
+#gameTab .pz-char-form{display:grid;grid-template-columns:80px minmax(0,1fr);gap:9px 8px;align-items:center;text-align:left;min-width:0;}
+#gameTab .pz-char-form label{color:var(--pz-mut);font-size:11px;line-height:1.3;margin:0;}
+#gameTab .pz-char-form input,#gameTab .pz-char-form select{width:100% !important;min-width:0;height:36px !important;margin:0 !important;padding:6px 9px !important;background:#071b2e !important;border:1px solid var(--pz-line) !important;border-radius:9px !important;color:var(--pz-foam) !important;font-family:inherit;font-size:12px;box-sizing:border-box;}
+#gameTab .pz-char-form input:focus,#gameTab .pz-char-form select:focus{outline:2px solid var(--pz-teal);outline-offset:2px;}
+#gameTab .pz-char-msg{color:var(--pz-coral) !important;min-height:18px;font-size:11px !important;margin:10px 0 !important;}
+#gameTab .pz-panel-actions{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;}
+#gameTab .pz-stat-list{display:grid;gap:6px;margin:16px 0;text-align:left;}
+#gameTab .pz-stat-list > div{display:flex;justify-content:space-between;gap:10px;align-items:center;background:rgba(3,14,26,.65);border:1px solid var(--pz-line);border-radius:9px;padding:8px 12px;font-size:12px;}
+#gameTab .pz-stat-list span{color:var(--pz-mut);flex-shrink:0;}
+#gameTab .pz-stat-list b{color:var(--pz-cyan);font-size:11px;text-align:right;}
+#gameTab .pz-stat-list .locked{border-color:rgba(143,179,205,.15);}
+#gameTab .pz-stat-list .locked b{color:#8498ac;}
+#gameTab .pz-haki-list{display:grid;gap:6px;margin-bottom:10px;}
+#gameTab .pz-haki-list .pz-btn{text-align:left;font-size:11px;}
+#gameTab .pz-haki-list .locked{color:#8498ac !important;border-style:dashed !important;}
+#gameTab .pz-observing .pz-ehp{border:1px solid #a5f3fc;box-shadow:0 0 10px rgba(103,232,249,.6);height:7px;}
+@media(max-width:820px){
+  #gameTab .pz-top-r{display:grid;grid-template-columns:repeat(3,32px);gap:5px;right:10px;top:10px;}
+  #gameTab .pz-shard{grid-column:1/-1;justify-content:center;min-width:0;box-sizing:border-box;}
+  #gameTab .pz-ico.stats{width:32px;height:32px;font-size:8px;}
+  #gameTab .pz-boss{top:121px;left:auto;right:10px;transform:none;width:43%;}
+  #gameTab .pz-toasts{top:205px;width:calc(100% - 24px);}
+}
+@media(max-width:560px){
+  #gameTab .pz-ovl{padding:12px;}
+  #gameTab .pz-char-card,#gameTab .pz-stats-card{padding:18px 14px;}
+  #gameTab .pz-char-layout{grid-template-columns:1fr;gap:12px;}
+  #gameTab .pz-char-preview{display:flex;justify-content:center;align-items:center;gap:12px;padding:5px 10px;}
+  #gameTab .pz-char-preview svg{width:62px;height:98px;}
+  #gameTab .pz-char-preview span{max-width:100px;text-align:left;margin:0;}
+  #gameTab .pz-char-form{grid-template-columns:80px minmax(0,1fr);}
+  #gameTab .pz-skills{display:grid;grid-template-columns:repeat(3,44px);grid-template-rows:44px 50px;gap:6px;right:10px;bottom:12px;align-items:center;justify-items:center;}
+  #gameTab .pz-sk{width:44px;height:44px;}
+  #gameTab .pz-sk.atk{width:50px;height:50px;grid-column:3;grid-row:2;}
+  #gameTab .pz-sk.dash{grid-column:2;grid-row:2;}
+  #gameTab .pz-sk.jump{grid-column:3;grid-row:1;}
+  #gameTab .pz-sk.s1{grid-column:1;grid-row:1;}
+  #gameTab .pz-sk.s2{grid-column:2;grid-row:1;}
+  #gameTab .pz-touch-act{width:44px;height:44px;right:112px;bottom:12px;}
+  #gameTab .pz-interact{bottom:128px;max-width:calc(100% - 40px);text-align:center;}
+  #gameTab .pz-stick{width:92px;height:92px;left:10px;bottom:14px;}
+  #gameTab .pz-stick i{width:38px;height:38px;}
+  #gameTab .pz-hint{display:none;}
+}
+@media(max-width:340px){
+  #gameTab .pz-plate{left:8px;padding:6px;gap:5px;max-width:48%;}
+  #gameTab .pz-ava{width:26px;height:26px;}
+  #gameTab .pz-name-row{gap:3px;}#gameTab .pz-name-row b{max-width:42px;font-size:10px;}
+  #gameTab .pz-lv{padding:1px 4px;font-size:9px;}
+  #gameTab .pz-skills{right:8px;gap:5px;}
+  #gameTab .pz-stick{left:8px;width:80px;height:80px;}
+  #gameTab .pz-touch-act{right:109px;}
+}
 </style>
 
   <!-- TAB: GAME — TRIỀU TINH SA: phiêu lưu hành động 3D nguyên bản (Three.js), thay game pixel farm 2D ngày 16/11/2026 -->
   <div id="gameTab" class="tab-content">
-    <!-- ================================================================
-         GAME 3D "TRIỀU TINH SA" — hải tặc fantasy nguyên bản.
-         Toàn bộ UI game nằm trong #pzRoot; engine ở script TRIỀU TINH SA
-         cuối thân trang. Không đụng dữ liệu lớp học / Firebase.
-         ================================================================ -->
+    <!-- GAME 3D TRIỀU TINH SA — UI riêng, không đụng dữ liệu lớp học. -->
     <div class="pz-wrap" id="pzRoot">
       <div class="pz-stage" id="pzStage" aria-label="Khung chơi 3D Triều Tinh Sa"></div>
       <div class="pz-vignette" id="pzVignette" aria-hidden="true"></div>
       <div class="pz-dmg" id="pzDmg" aria-hidden="true"></div>
-
       <div class="pz-hud" id="pzHud">
         <div class="pz-plate">
-          <div class="pz-ava" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><path d="M3 8.4 6.5 11 12 5.2 17.5 11 21 8.4l-1.6 8.9H4.6z"/><path d="M4.8 19.6h14.4"/></svg>
-          </div>
+          <div class="pz-ava" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 8.4 6.5 11 12 5.2 17.5 11 21 8.4l-1.6 8.9H4.6z"/><path d="M4.8 19.6h14.4"/></svg></div>
           <div class="pz-plate-r">
             <div class="pz-name-row"><b id="pzName">Tân Hải Tặc</b><span class="pz-lv" id="pzLv">Lv 1</span></div>
             <div class="pz-bar hp" role="img" aria-label="Máu"><i id="pzHp"></i><em id="pzHpT">100/100</em></div>
-            <div class="pz-bar en" role="img" aria-label="Năng lượng Tinh Sa"><i id="pzEn"></i><em id="pzEnT">60/60</em></div>
+            <div class="pz-bar en" role="img" aria-label="Mana"><i id="pzEn"></i><em id="pzEnT">60/60</em></div>
             <div class="pz-bar xp" role="img" aria-label="Kinh nghiệm"><i id="pzXp"></i><em id="pzXpT">0/50</em></div>
           </div>
         </div>
-
         <div class="pz-quest" id="pzQuest">
-          <div class="pz-q-head">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg>
-            <b id="pzQTitle">Lời Gọi Hải Đăng</b>
-          </div>
+          <div class="pz-q-head"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg><b id="pzQTitle">Lời Gọi Hải Đăng</b></div>
           <p id="pzQObj">Gặp Lão Hải Đăng trên đồi hải đăng.</p>
-          <div class="pz-q-prog"><i id="pzQBar"></i></div>
-          <span id="pzQHint">Đi theo mũi tên chỉ đường.</span>
+          <div class="pz-q-prog"><i id="pzQBar"></i></div><span id="pzQHint">Đi theo mũi tên chỉ đường.</span>
         </div>
-
         <div class="pz-top-r">
-          <div class="pz-shard" title="Mảnh Sao — tiền nâng cấp ở Thợ Rèn Sóng">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 2.4 6.2L21 9l-5 4.4 1.6 6.8L12 16.6 6.4 20.2 8 13.4 3 9l6.6-.8z"/></svg>
-            <b id="pzShard">0</b>
-          </div>
-          <button class="pz-ico" id="pzSoundBtn" type="button" title="Bật / tắt âm thanh (M)" aria-label="Bật tắt âm thanh">
-            <svg viewBox="0 0 24 24" class="on"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>
-            <svg viewBox="0 0 24 24" class="off"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="m16 9 5 6M21 9l-5 6"/></svg>
-          </button>
-          <button class="pz-ico txt" id="pzQualBtn" type="button" title="Đổi chất lượng Cao / Thấp" aria-label="Đổi chất lượng đồ hoạ">Cao</button>
-          <button class="pz-ico" id="pzFsBtn" type="button" title="Phóng to kín màn hình" aria-label="Phóng to kín màn hình">
-            <svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
-          </button>
+          <div class="pz-shard" title="Mảnh Sao — tiền nâng cấp ở Thợ Rèn Sóng"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 2.4 6.2L21 9l-5 4.4 1.6 6.8L12 16.6 6.4 20.2 8 13.4 3 9l6.6-.8z"/></svg><b id="pzShard">0</b></div>
+          <button class="pz-ico" id="pzSoundBtn" type="button" title="Âm thanh (M)" aria-label="Bật tắt âm thanh"><svg viewBox="0 0 24 24" class="on"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg><svg viewBox="0 0 24 24" class="off"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="m16 9 5 6M21 9l-5 6"/></svg></button>
+          <button class="pz-ico txt" id="pzQualBtn" type="button" title="Đổi chất lượng đồ họa" aria-label="Đổi chất lượng đồ họa">Cao</button>
+          <button class="pz-ico" id="pzFsBtn" type="button" title="Toàn màn hình" aria-label="Toàn màn hình"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
           <button class="pz-ico txt" id="pzHelpBtn" type="button" title="Hướng dẫn (H)" aria-label="Mở hướng dẫn">?</button>
+          <button class="pz-ico txt stats" id="pzStatsBtn" type="button" title="Chỉ số, nhân vật và Haki (B)" aria-label="Mở bảng chỉ số">Chỉ số</button>
         </div>
-
-        <div class="pz-boss" id="pzBoss" hidden>
-          <b>VUA CUA THỦY TRIỀU</b>
-          <div class="pz-boss-bar"><i id="pzBossHp"></i></div>
-        </div>
-
-        <div class="pz-toasts" id="pzToasts" role="log" aria-live="polite"></div>
-        <div class="pz-banner" id="pzBanner" aria-hidden="true"></div>
-        <div class="pz-compass" id="pzCompass" hidden>
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 18-7-4-7 4z"/></svg>
-          <span id="pzCompassT">0m</span>
-        </div>
-
+        <div class="pz-boss" id="pzBoss" hidden><b>VUA CUA THỦY TRIỀU</b><div class="pz-boss-bar"><i id="pzBossHp"></i></div></div>
+        <div class="pz-toasts" id="pzToasts" role="log" aria-live="polite"></div><div class="pz-banner" id="pzBanner" aria-hidden="true"></div>
+        <div class="pz-compass" id="pzCompass" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 18-7-4-7 4z"/></svg><span id="pzCompassT">0m</span></div>
         <div class="pz-interact" id="pzInteract" hidden><kbd>F</kbd><span id="pzInteractT">Nói chuyện</span></div>
-
         <div class="pz-skills" id="pzSkills">
-          <button class="pz-sk atk" id="pzAtkBtn" type="button" title="Tấn công — kiếm sao (J hoặc bấm chuột)" aria-label="Tấn công">
-            <svg viewBox="0 0 24 24"><path d="M5 3h3l11.5 11.5V18l-2 2h-3.5L4 8V3z"/><path d="M19 3h-3L9.5 12"/><path d="m14 17 4 4M18 14l4 4"/></svg>
-            <kbd>J</kbd><i class="pz-cd"></i>
-          </button>
-          <button class="pz-sk dash" id="pzDashBtn" type="button" title="Lướt Sa — né đòn (Space)" aria-label="Lướt né">
-            <svg viewBox="0 0 24 24"><path d="M3 8h9M3 12h13M3 16h9"/><path d="m17 8 4 4-4 4"/></svg>
-            <kbd>Space</kbd><i class="pz-cd"></i>
-          </button>
-          <button class="pz-sk s1" id="pzS1Btn" type="button" title="Sa Thương — phóng thương Tinh Sa (Q)" aria-label="Kỹ năng Sa Thương">
-            <svg viewBox="0 0 24 24"><path d="M12 2l3 6-3 14-3-14z"/><path d="M5 8h14"/></svg>
-            <kbd>Q</kbd><i class="pz-cd"></i><u>20</u>
-          </button>
-          <button class="pz-sk s2" id="pzS2Btn" type="button" title="Bão Tinh Sa — xoáy cát sao quanh thân (E)" aria-label="Kỹ năng Bão Tinh Sa">
-            <svg viewBox="0 0 24 24"><path d="M12 12m-2 0a2 2 0 1 0 4 0 2 2 0 1 0-4 0"/><path d="M12 5a7 7 0 0 1 7 7M12 19a7 7 0 0 1-7-7M12 8.5a3.5 3.5 0 0 0-3.5 3.5M12 15.5a3.5 3.5 0 0 0 3.5-3.5"/></svg>
-            <kbd>E</kbd><i class="pz-cd"></i><u>35</u>
-          </button>
-          <button class="pz-sk ult" id="pzUltBtn" type="button" title="Triều Sao Vỡ — sóng Tinh Sa diện rộng (R)" aria-label="Tuyệt kỹ Triều Sao Vỡ">
-            <svg viewBox="0 0 24 24"><path d="M2 12c2.5-4 5-4 7.5 0s5 4 7.5 0 3-3 5-1"/><path d="M2 17c2.5-4 5-4 7.5 0s5 4 7.5 0 3-3 5-1"/><path d="m12 2 1.2 3.2L16.5 6l-3.3 1L12 10l-1.2-3L7.5 6l3.3-.8z"/></svg>
-            <kbd>R</kbd><i class="pz-cd"></i><u>60</u>
-          </button>
+          <button class="pz-sk atk" id="pzAtkBtn" type="button" title="Đấm thường — bấm chuột hoặc nút này" aria-label="Đấm Combat"><svg viewBox="0 0 24 24"><path d="M5 12V8a2 2 0 0 1 4 0V6a2 2 0 0 1 4 0v1a2 2 0 0 1 4 0v2a2 2 0 0 1 4 0v5l-4 6H9l-5-5a2 2 0 0 1 1-3z"/><path d="M9 8v4M13 7v5M17 9v3"/></svg><b>Đấm</b><i class="pz-cd"></i></button>
+          <button class="pz-sk dash" id="pzDashBtn" type="button" title="Q — lướt né, 8 mana" aria-label="Lướt né"><svg viewBox="0 0 24 24"><path d="M3 8h9M3 12h13M3 16h9"/><path d="m17 8 4 4-4 4"/></svg><kbd>Q</kbd><b>Lướt</b><i class="pz-cd"></i></button>
+          <button class="pz-sk jump" id="pzJumpBtn" type="button" title="Space — nhảy" aria-label="Nhảy"><svg viewBox="0 0 24 24"><path d="M12 18V4M7 9l5-5 5 5M4 20h16"/></svg><kbd>Space</kbd><b>Nhảy</b><i class="pz-cd"></i></button>
+          <button class="pz-sk s1" id="pzS1Btn" type="button" title="Z — Combat: lướt lên đá, 12 mana" aria-label="Combat lướt lên đá"><svg viewBox="0 0 24 24"><path d="m6 3 6 7 8-4 2 3-10 7-6-6M3 18h6M2 21h4"/></svg><kbd>Z</kbd><b>Lướt đá</b><i class="pz-cd"></i></button>
+          <button class="pz-sk s2" id="pzS2Btn" type="button" title="X — Combat: đập xuống đất, 20 mana" aria-label="Combat đập xuống đất"><svg viewBox="0 0 24 24"><path d="M12 3v11M7 9l5 5 5-5M3 20l4-3 5 3 5-3 4 3"/></svg><kbd>X</kbd><b>Đập đất</b><i class="pz-cd"></i></button>
         </div>
-
         <div class="pz-stick" id="pzStick" aria-label="Joystick di chuyển"><i id="pzKnob"></i></div>
-        <button class="pz-touch-act" id="pzTouchAct" type="button" aria-label="Tương tác" hidden>
-          <svg viewBox="0 0 24 24"><path d="M8 13V5.5a1.5 1.5 0 0 1 3 0V11l1.2.2 4.6 1c1 .2 1.7 1.1 1.6 2.1l-.5 4.2a2 2 0 0 1-2 1.8H10a2 2 0 0 1-1.6-.8L5 15.4c-.6-.8-.4-1.9.4-2.4.6-.4 1.4-.3 2 .2z"/></svg>
-        </button>
-        <div class="pz-hint" id="pzHint">WASD di chuyển · kéo chuột xoay camera · lăn chuột zoom · J đánh · Space lướt · Q/E/R kỹ năng · F nói chuyện · H hướng dẫn</div>
+        <button class="pz-touch-act" id="pzTouchAct" type="button" aria-label="Tương tác" hidden><svg viewBox="0 0 24 24"><path d="M8 13V5.5a1.5 1.5 0 0 1 3 0V11l6 1.2 1 2-.5 4.2-2 1.8H10l-5-5c-.6-.8-.4-1.9.4-2.4.6-.4 1.4-.3 2 .2z"/></svg></button>
+        <div class="pz-hint" id="pzHint">WASD đi · kéo chuột xoay · lăn chuột zoom · bấm chuột đấm · Q lướt · Space nhảy · Z/X Combat · E/J/U Haki (Admin cấp) · B chỉ số · C nhân vật · F nói chuyện</div>
       </div>
-
-      <div class="pz-dialog" id="pzDialog" hidden role="dialog" aria-label="Đối thoại">
-        <div class="pz-d-ava" id="pzDAva" aria-hidden="true"></div>
-        <div class="pz-d-body">
-          <b id="pzDName">—</b>
-          <p id="pzDText">—</p>
-          <div class="pz-d-acts" id="pzDActs"></div>
-        </div>
-        <button class="pz-d-x" id="pzDX" type="button" aria-label="Đóng đối thoại">×</button>
-      </div>
-
-      <div class="pz-ovl" id="pzLoad" hidden>
-        <div class="pz-load-in">
-          <div class="pz-spin" aria-hidden="true"></div>
-          <b>Đang dựng biển sao…</b>
-          <span id="pzLoadT">Tải bộ máy 3D</span>
-        </div>
-      </div>
-
+      <div class="pz-dialog" id="pzDialog" hidden role="dialog" aria-label="Đối thoại"><div class="pz-d-ava" id="pzDAva" aria-hidden="true"></div><div class="pz-d-body"><b id="pzDName">—</b><p id="pzDText">—</p><div class="pz-d-acts" id="pzDActs"></div></div><button class="pz-d-x" id="pzDX" type="button" aria-label="Đóng đối thoại">×</button></div>
+      <div class="pz-ovl" id="pzLoad" hidden><div class="pz-load-in"><div class="pz-spin" aria-hidden="true"></div><b>Đang dựng biển sao…</b><span id="pzLoadT">Tải bộ máy 3D</span></div></div>
       <div class="pz-ovl start" id="pzStart" hidden>
         <div class="pz-start-in">
-          <div class="pz-logo" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><path d="M3 8.4 6.5 11 12 5.2 17.5 11 21 8.4l-1.6 8.9H4.6z"/><path d="M4.8 19.6h14.4"/></svg>
-          </div>
-          <h2>TRIỀU TINH SA</h2>
-          <p class="pz-sub">Hải trình phiêu lưu nguyên bản · Chương 1: Đảo Neo Sao</p>
-          <p class="pz-lore">Đêm ấy, biển sao rơi xuống Đảo Neo Sao. Cát biển hoá thành <b>Tinh Sa</b> — thứ nguyên tố chưa từng có tên trong bất kỳ hải đồ nào. Người ta nói kẻ nắm được Tinh Sa sẽ nghe thấy tiếng gọi của những vì sao chìm dưới đáy triều. Bạn — một tân thuyền trưởng cập bến bằng chiếc thuyền con — vừa đặt chân lên bãi cát thì hải đăng trên đồi bừng sáng, gọi đúng tên bạn…</p>
-          <div class="pz-start-btns">
-            <button class="pz-btn main" id="pzPlayBtn" type="button">Ra khơi</button>
-            <button class="pz-btn ghost" id="pzResetBtn" type="button" hidden>Chơi lại từ đầu</button>
-          </div>
-          <div class="pz-keys">
-            <span><kbd>WASD</kbd> di chuyển</span>
-            <span><kbd>Chuột kéo</kbd> xoay camera</span>
-            <span><kbd>J</kbd>/<kbd>bấm</kbd> tấn công</span>
-            <span><kbd>Space</kbd> lướt né</span>
-            <span><kbd>Q</kbd><kbd>E</kbd><kbd>R</kbd> kỹ năng Tinh Sa</span>
-            <span><kbd>F</kbd> nói chuyện / đọc biển</span>
-          </div>
-          <p class="pz-touch-note">Trên điện thoại: joystick trái để đi, cụm nút phải để đánh — kéo nền biển để xoay camera.</p>
+          <div class="pz-logo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 8.4 6.5 11 12 5.2 17.5 11 21 8.4l-1.6 8.9H4.6z"/><path d="M4.8 19.6h14.4"/></svg></div>
+          <h2>TRIỀU TINH SA</h2><p class="pz-sub">Tân nhân vật · Võ Combat · Đảo Neo Sao</p>
+          <p class="pz-lore">Bạn vừa cập bến Đảo Neo Sao. Bắt đầu bằng <b>võ Combat</b>, khám phá đảo với lướt và nhảy. Combat chỉ có hai chiêu: <b>lướt lên đá</b> và <b>đập xuống đất</b>. Kiếm, súng, trái ác quỷ và cả ba Haki đều khóa; Haki chỉ Admin cấp. Chưa có nhiệm vụ mở Haki.</p>
+          <div class="pz-start-btns"><button class="pz-btn main" id="pzPlayBtn" type="button">Tạo nhân vật &amp; ra khơi</button><button class="pz-btn ghost" id="pzResetBtn" type="button" hidden>Chơi lại từ đầu</button></div>
+          <div class="pz-keys"><span><kbd>WASD</kbd> đi</span><span><kbd>Q</kbd> lướt</span><span><kbd>Space</kbd> nhảy</span><span><kbd>Chuột</kbd> đấm / kéo xoay</span><span><kbd>Z</kbd><kbd>X</kbd> Combat</span><span><kbd>B</kbd> chỉ số</span><span><kbd>E</kbd><kbd>J</kbd><kbd>U</kbd> Haki khóa</span></div>
+          <p class="pz-touch-note">Điện thoại: joystick trái, cụm nút phải. Chạm “Chỉ số” để xem nhân vật và Haki.</p>
         </div>
       </div>
-
-      <div class="pz-ovl" id="pzDead" hidden>
-        <div class="pz-card">
-          <h3>Gục ngã giữa triều…</h3>
-          <p>Tinh Sa trong người bạn tắt lịm. Sóng đưa bạn về Bến Neo Sao — mất chút thể diện, không mất tiến trình.</p>
-          <button class="pz-btn main" id="pzRespawnBtn" type="button">Đứng dậy ra khơi lại</button>
-        </div>
-      </div>
-
-      <div class="pz-ovl" id="pzWin" hidden>
-        <div class="pz-card win">
-          <div class="pz-win-star" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><path d="m12 2 2.4 6.2L21 9l-5 4.4 1.6 6.8L12 16.6 6.4 20.2 8 13.4 3 9l6.6-.8z"/></svg>
+      <div class="pz-ovl" id="pzCreate" hidden role="dialog" aria-modal="true" aria-labelledby="pzCreateTitle">
+        <div class="pz-card pz-char-card">
+          <h3 id="pzCreateTitle">Tạo nhân vật</h3><p>Chọn ngoại hình đơn giản. Không thay đổi cấp, EXP hay hành trình đang lưu.</p>
+          <div class="pz-char-layout">
+            <div class="pz-char-preview" id="pzCharPreview" aria-label="Xem trước màu ngoại hình">
+              <svg viewBox="0 0 120 190" aria-hidden="true"><ellipse cx="60" cy="180" rx="33" ry="6" fill="#03131e"/><path d="M43 115v54h14v-48h6v48h14v-54" fill="#1f2937"/><path d="M39 166h21v11H36zm25 0h20v11H63" fill="#111827"/><path d="m39 64-12 42 13 5 8-28h25l8 28 13-5-12-42z" style="fill:var(--char-coat)"/><path d="M45 68h31l7 55H38z" style="fill:var(--char-coat)"/><path d="M54 67h13v29H54" fill="#f8fafc"/><path d="M39 99h43v9H39" fill="#dc2626"/><circle cx="60" cy="44" r="23" style="fill:var(--char-skin)"/><path d="M37 45c-5-36 50-38 46 0L70 29l-11 6-14-4z" style="fill:var(--char-hair)"/><circle cx="52" cy="45" r="2.4" fill="#101826"/><circle cx="69" cy="45" r="2.4" fill="#101826"/><path d="M56 56h9" stroke="#9a3412" stroke-width="2"/><g class="pz-preview-hat" style="fill:var(--char-coat)"><ellipse cx="60" cy="24" rx="31" ry="5"/><path d="M41 24V14q19-15 38 0v10z"/><path d="M41 21h38" stroke="#fbbf24" stroke-width="3"/></g></svg>
+              <span>Võ Combat · Tay không</span>
+            </div>
+            <div class="pz-char-form">
+              <label for="pzCharName">Tên nhân vật</label><input id="pzCharName" type="text" maxlength="24" autocomplete="off" placeholder="1–24 ký tự">
+              <label for="pzCharSkin">Màu da</label><select id="pzCharSkin"><option value="0">Sáng</option><option value="1">Nâu</option><option value="2">Nâu đậm</option></select>
+              <label for="pzCharHair">Màu tóc</label><select id="pzCharHair"><option value="0">Đen</option><option value="1">Vàng</option><option value="2">Nâu đỏ</option></select>
+              <label for="pzCharCoat">Áo khoác</label><select id="pzCharCoat"><option value="0">Xanh ngọc</option><option value="1">Xanh biển</option><option value="2">Đỏ mận</option></select>
+              <label for="pzCharHat">Mũ</label><select id="pzCharHat"><option value="no">Không đội</option><option value="yes">Đội mũ</option></select>
+            </div>
           </div>
-          <h3>CHƯƠNG 1 HOÀN THÀNH</h3>
-          <p>Vua Cua Thủy Triều tan thành cát sao. Biển lặng, hải đăng sáng tỏ — Đảo Neo Sao đã nhận bạn làm người giữ triều.</p>
-          <div class="pz-win-stats" id="pzWinStats"></div>
-          <button class="pz-btn main" id="pzWinBtn" type="button">Tiếp tục tuần tra biển</button>
+          <p id="pzCharMsg" class="pz-char-msg" role="status" aria-live="polite"></p>
+          <div class="pz-panel-actions"><button class="pz-btn main" id="pzCharSave" type="button">Lưu nhân vật</button><button class="pz-btn ghost" id="pzCharCancel" type="button">Quay lại</button></div>
         </div>
       </div>
-
-      <div class="pz-ovl" id="pzHelp" hidden>
-        <div class="pz-card help">
-          <h3>Hướng dẫn nhanh</h3>
-          <div class="pz-help-grid">
-            <span><kbd>WASD</kbd> / joystick — di chuyển</span>
-            <span><kbd>Kéo chuột</kbd> / kéo nền — xoay camera</span>
-            <span><kbd>Lăn chuột</kbd> / chụm 2 ngón — zoom</span>
-            <span><kbd>J</kbd> / bấm chuột / nút kiếm — chém (3 đòn liên hoàn)</span>
-            <span><kbd>Space</kbd> / nút lướt — Lướt Sa, né đòn 0,4s</span>
-            <span><kbd>Q</kbd> Sa Thương — thương sao xuyên thấu (20 NL)</span>
-            <span><kbd>E</kbd> Bão Tinh Sa — xoáy cát sao quanh thân (35 NL)</span>
-            <span><kbd>R</kbd> Triều Sao Vỡ — sóng sao diện rộng (60 NL)</span>
-            <span><kbd>F</kbd> / nút tay — nói chuyện, đọc biển chỉ dẫn</span>
-            <span><kbd>H</kbd> hướng dẫn · <kbd>M</kbd> âm thanh · <kbd>Esc</kbd> đóng bảng</span>
+      <div class="pz-ovl" id="pzStats" hidden role="dialog" aria-modal="true" aria-labelledby="pzStatsTitle">
+        <div class="pz-card pz-stats-card">
+          <h3 id="pzStatsTitle">Thông số nhân vật</h3>
+          <div class="pz-stat-list">
+            <div><span>Máu</span><b id="pzStatHp">100 / 100</b></div><div><span>Mana</span><b id="pzStatMana">60 / 60</b></div>
+            <div><span>Võ Combat</span><b id="pzStatCombat">10 sát thương cơ bản</b></div>
+            <div class="locked"><span>Kiếm</span><b>0 · Khóa</b></div><div class="locked"><span>Súng</span><b>0 · Khóa</b></div><div class="locked"><span>Trái ác quỷ</span><b>0 · Khóa</b></div>
           </div>
-          <p class="pz-help-tip">Mẹo: quái chớp sáng là sắp đánh — lướt né rồi chém lưng. Mảnh Sao rơi từ quái dùng để nâng cấp ở <b>Thợ Rèn Sóng</b>. Năng lượng tự hồi; máu tự hồi khi thoát chiến đấu 5 giây.</p>
-          <button class="pz-btn main" id="pzHelpClose" type="button">Đã hiểu, ra khơi!</button>
+          <p class="pz-help-tip">Combat: Z lướt lên đá (12 mana, hồi 3s) · X đập xuống đất (20 mana, hồi 5s). Kiếm, súng và trái ác quỷ chưa mở.</p>
+          <div class="pz-haki-list"><button class="pz-btn ghost locked" id="pzObsBtn" type="button" aria-disabled="true">E · Quan sát — Khóa</button><button class="pz-btn ghost locked" id="pzArmBtn" type="button" aria-disabled="true">J · Vũ trang — Khóa</button><button class="pz-btn ghost locked" id="pzConBtn" type="button" aria-disabled="true">U · Bá vương — Khóa</button></div>
+          <p id="pzHakiHint" class="pz-help-tip">Chỉ Admin cấp. Chưa có nhiệm vụ mở Haki.</p>
+          <div class="pz-panel-actions"><button class="pz-btn ghost" id="pzEditChar" type="button">Đổi ngoại hình</button><button class="pz-btn main" id="pzStatsClose" type="button">Trở lại chơi</button></div>
         </div>
       </div>
-
-      <div class="pz-ovl" id="pzFail" hidden>
-        <div class="pz-card">
-          <h3>Chưa dựng được biển 3D</h3>
-          <p id="pzFailT">Trình duyệt hoặc máy này không hỗ trợ WebGL nên chưa chơi được bản 3D.</p>
-          <p class="pz-help-tip">Thử: mở bằng Chrome / Edge / Safari mới, bật tăng tốc phần cứng trong cài đặt trình duyệt, hoặc tải lại trang. Các tab khác của app vẫn dùng bình thường.</p>
-          <button class="pz-btn main" id="pzRetryBtn" type="button">Thử lại</button>
-        </div>
-      </div>
+      <div class="pz-ovl" id="pzDead" hidden><div class="pz-card"><h3>Gục ngã giữa triều…</h3><p>Sóng đưa bạn về Bến Neo Sao. Không mất tiến trình hay quyền Haki đã được cấp.</p><button class="pz-btn main" id="pzRespawnBtn" type="button">Đứng dậy chơi tiếp</button></div></div>
+      <div class="pz-ovl" id="pzWin" hidden><div class="pz-card win"><div class="pz-win-star" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m12 2 2.4 6.2L21 9l-5 4.4 1.6 6.8L12 16.6 6.4 20.2 8 13.4 3 9l6.6-.8z"/></svg></div><h3>CHƯƠNG 1 HOÀN THÀNH</h3><p>Biển lặng, hải đăng sáng tỏ. Đảo Neo Sao đã nhận bạn làm người giữ triều. Hoàn thành chương không tự mở Haki hay vũ khí.</p><div class="pz-win-stats" id="pzWinStats"></div><button class="pz-btn main" id="pzWinBtn" type="button">Tiếp tục tuần tra biển</button></div></div>
+      <div class="pz-ovl" id="pzHelp" hidden><div class="pz-card help"><h3>Hướng dẫn nhanh</h3><div class="pz-help-grid">
+        <span><kbd>WASD</kbd> / joystick — di chuyển</span><span><kbd>Kéo chuột</kbd> / kéo nền — xoay camera</span><span><kbd>Lăn chuột</kbd> / chụm 2 ngón — zoom</span><span><kbd>Bấm chuột</kbd> / nút Đấm — Combat thường</span><span><kbd>Q</kbd> — lướt né (8 mana)</span><span><kbd>Space</kbd> — nhảy, không tốn mana</span><span><kbd>Z</kbd> — Combat: lướt lên đá (12 mana)</span><span><kbd>X</kbd> — Combat: đập xuống đất (20 mana)</span><span><kbd>E</kbd> — Haki quan sát (Admin cấp)</span><span><kbd>J</kbd> — Haki vũ trang (Admin cấp), không phải đấm</span><span><kbd>U</kbd> — Haki bá vương (Admin cấp)</span><span><kbd>B</kbd> chỉ số · <kbd>C</kbd> ngoại hình</span><span><kbd>F</kbd> — nói chuyện / đọc biển</span><span><kbd>H</kbd> hướng dẫn · <kbd>M</kbd> âm thanh · <kbd>Esc</kbd> đóng bảng</span>
+        </div><p class="pz-help-tip">Chỉ võ Combat có sẵn với hai chiêu Z/X. Ba Haki chỉ Admin cấp; chưa có nhiệm vụ mở. Sau khi được cấp: Quan sát né tối đa 3 đòn trong 10s; Vũ trang tăng 25% lực Combat trong 12s; Bá vương làm choáng quái gần, không gây sát thương. Mana tự hồi; máu hồi khi thoát chiến đấu 5s.</p><button class="pz-btn main" id="pzHelpClose" type="button">Đã hiểu</button></div></div>
+      <div class="pz-ovl" id="pzFail" hidden><div class="pz-card"><h3>Chưa dựng được biển 3D</h3><p id="pzFailT">Trình duyệt hoặc máy này không hỗ trợ WebGL.</p><p class="pz-help-tip">Thử Chrome / Edge / Safari mới, bật tăng tốc phần cứng hoặc tải lại trang. Các tab khác vẫn dùng bình thường.</p><button class="pz-btn main" id="pzRetryBtn" type="button">Thử lại</button></div></div>
     </div>
   </div>
 
@@ -13564,7 +13545,10 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
       'pzDialog', 'pzDAva', 'pzDName', 'pzDText', 'pzDActs', 'pzDX', 'pzLoad', 'pzLoadT', 'pzStart', 'pzPlayBtn', 'pzResetBtn',
       'pzDead', 'pzRespawnBtn', 'pzWin', 'pzWinStats', 'pzWinBtn', 'pzHelp', 'pzHelpClose', 'pzFail', 'pzFailT', 'pzRetryBtn',
       'pzSoundBtn', 'pzQualBtn', 'pzFsBtn', 'pzHelpBtn', 'pzStick', 'pzKnob', 'pzTouchAct', 'pzHint',
-      'pzAtkBtn', 'pzDashBtn', 'pzS1Btn', 'pzS2Btn', 'pzUltBtn'].forEach(function (k) { ui[k] = el(k); });
+      'pzAtkBtn', 'pzDashBtn', 'pzJumpBtn', 'pzS1Btn', 'pzS2Btn',
+      'pzStatsBtn', 'pzStats', 'pzStatsClose', 'pzStatHp', 'pzStatMana', 'pzStatCombat', 'pzEditChar',
+      'pzObsBtn', 'pzArmBtn', 'pzConBtn', 'pzHakiHint', 'pzCreate', 'pzCharName', 'pzCharSkin', 'pzCharHair', 'pzCharCoat', 'pzCharHat',
+      'pzCharSave', 'pzCharCancel', 'pzCharMsg', 'pzCharPreview'].forEach(function (k) { ui[k] = el(k); });
   }
 
   /* ------------------------------ save data ----------------------------- */
@@ -13572,7 +13556,10 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     return {
       v: 1, lv: 1, exp: 0, shards: 0, up: { hp: 0, atk: 0, en: 0 },
       q: { stage: 0, kills: 0, boss: false }, stats: { kills: 0, deaths: 0, time: 0 },
-      set: { sound: true, quality: 'high' }, name: ''
+      set: { sound: true, quality: 'high' }, name: '',
+      char: { made: false, skin: 0, hair: 0, coat: 0, hat: false },
+      haki: { observation: false, armament: false, conqueror: false }
+      // Kiếm, súng và trái ác quỷ chưa có hệ mở khóa; không tự cấp theo cấp/nhiệm vụ.
     };
   }
   var S = blankSave();
@@ -13590,7 +13577,15 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
       if (o.q) { S.q.stage = Math.min(7, Math.max(0, Math.floor(Number(o.q.stage) || 0))); S.q.kills = Math.max(0, Math.floor(Number(o.q.kills) || 0)); S.q.boss = !!o.q.boss; }
       if (o.stats) { S.stats.kills = Number(o.stats.kills) || 0; S.stats.deaths = Number(o.stats.deaths) || 0; S.stats.time = Number(o.stats.time) || 0; }
       if (o.set) { S.set.sound = o.set.sound !== false; S.set.quality = o.set.quality === 'low' ? 'low' : 'high'; }
-      S.name = String(o.name || '');
+      S.name = String(o.name || '').replace(/[<>\x00-\x1f]/g, '').trim().slice(0, 24);
+      if (o.char && typeof o.char === 'object') {
+        S.char.made = o.char.made === true;
+        ['skin', 'hair', 'coat'].forEach(function (k) { S.char[k] = Number.isInteger(o.char[k]) && o.char[k] >= 0 && o.char[k] <= 2 ? o.char[k] : 0; });
+        S.char.hat = o.char.hat === true;
+      }
+      if (o.haki && typeof o.haki === 'object') {
+        Object.keys(S.haki).forEach(function (k) { S.haki[k] = o.haki[k] === true; });
+      }
       return true;
     } catch (e) { return false; }
   }
@@ -13635,13 +13630,29 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
       }
       return { ok: true, msg: 'Đã lưu tiến trình 3D trên máy này. Không thay đổi điểm hay vật phẩm lớp học.' };
     },
+    grantHaki: function (v) {
+      if (!adminAllowed()) return { ok: false, msg: 'Chỉ Admin được cấp hoặc thu hồi Haki.' };
+      if (!v || Object.keys(v).length !== 3 || ['observation', 'armament', 'conqueror'].some(function (k) { return typeof v[k] !== 'boolean'; }))
+        return { ok: false, msg: 'Cần chọn rõ trạng thái của cả ba Haki.' };
+      if (!inited) loadSave();
+      var old = S, next = JSON.parse(JSON.stringify(S));
+      next.haki = { observation: v.observation, armament: v.armament, conqueror: v.conqueror };
+      S = next;
+      if (!save()) { S = old; return { ok: false, msg: 'Không lưu được: bộ nhớ máy đầy hoặc bị chặn.' }; }
+      if (inited) {
+        Object.keys(P.hakiT).forEach(function (k) { if (!S.haki[k]) P.hakiT[k] = 0; });
+        hakiVisual(); statsUi();
+        toast('Admin đã cập nhật quyền Haki trên máy này.', 'info');
+      }
+      return { ok: true, msg: 'Đã lưu quyền Haki trên máy này; không cấp cho tài khoản ở máy khác.' };
+    },
     heal: function () {
       if (!adminAllowed()) return { ok: false, msg: 'Chỉ Admin được hồi phục.' };
       if (!inited) return { ok: false, msg: 'Mở game và ra khơi trước khi hồi phục.' };
       if (P.dead) respawn();
       P.hp = maxHp(); P.en = maxEn(); hudBars();
-      toast('Đã hồi đầy máu và năng lượng', 'good');
-      return { ok: true, msg: 'Đã hồi đầy máu và năng lượng trong game 3D.' };
+      toast('Đã hồi đầy máu và mana', 'good');
+      return { ok: true, msg: 'Đã hồi đầy máu và mana trong game 3D.' };
     }
   };
 
@@ -13712,8 +13723,6 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     hurt: function () { tone(220, 90, 0.2, 'sawtooth', 0.16); },
     dash: function () { noiseBurst(0.2, 1200, 0.16); tone(500, 900, 0.16, 'sine', 0.07); },
     cast: function () { tone(620, 1240, 0.22, 'triangle', 0.14); tone(930, 1860, 0.2, 'sine', 0.08, 0.04); },
-    storm: function () { noiseBurst(0.5, 700, 0.2); tone(240, 480, 0.45, 'sawtooth', 0.08); },
-    ult: function () { tone(90, 40, 0.7, 'sawtooth', 0.26); noiseBurst(0.6, 500, 0.26); tone(880, 1760, 0.5, 'sine', 0.1, 0.1); },
     pick: function () { tone(1040, 1560, 0.09, 'sine', 0.12); },
     shard: function () { tone(1320, 1980, 0.1, 'triangle', 0.12); tone(1980, 2640, 0.09, 'sine', 0.07, 0.06); },
     level: function () { [523, 659, 784, 1046].forEach(function (f, i) { tone(f, f, 0.16, 'triangle', 0.14, i * 0.09); }); },
@@ -13763,7 +13772,9 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
   var enemies = [], npcs = [], signs = [], drops = [], shots = [], ghosts = [];
   var boss = null;
   var player = null;
-  var P = { x: 0, z: 14, yaw: Math.PI, vx: 0, vz: 0, hp: 100, en: 60, iframe: 0, dashT: 0, dashCd: 0, atkT: 0, atkHit: false, combo: 0, comboT: 0, castT: 0, hurtT: 0, lastHurt: -99, dead: false, phase: 0, moving: 0, cd: { s1: 0, s2: 0, ult: 0 }, stormT: 0, stormTick: 0, ultT: 0, ultHit: null };
+  var P = { x: 0, z: 14, yaw: Math.PI, vx: 0, vz: 0, hp: 100, en: 60, iframe: 0, dashT: 0, dashCd: 0, atkT: 0, atkHit: false, combo: 0, comboT: 0, castT: 0, hurtT: 0, lastHurt: -99, dead: false, phase: 0, moving: 0,
+    airY: 0, vy: 0, kickT: 0, kickHit: false, slam: false,
+    cd: { s1: 0, s2: 0 }, hakiT: { observation: 0, armament: 0 }, hakiCd: { observation: 0, armament: 0, conqueror: 0 }, dodges: 0 };
   var cam = { yaw: Math.PI, pitch: 0.42, dist: 8.5, shake: 0 };
   var timeScale = 1, hitstop = 0;
   var playing = false, inited = false, paused = false, dialogOpen = false, overlayOpen = true;
@@ -13790,7 +13801,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
   }
   function show(node, on) { if (node) node.hidden = !on; }
   function syncOverlays() {
-    overlayOpen = !ui.pzStart.hidden || !ui.pzDead.hidden || !ui.pzWin.hidden || !ui.pzHelp.hidden || !ui.pzFail.hidden || !ui.pzLoad.hidden;
+    overlayOpen = !ui.pzStart.hidden || !ui.pzDead.hidden || !ui.pzWin.hidden || !ui.pzHelp.hidden || !ui.pzFail.hidden || !ui.pzLoad.hidden || !ui.pzCreate.hidden || !ui.pzStats.hidden;
   }
 
   /* damage numbers + enemy bars + npc labels (projected divs) */
@@ -13824,7 +13835,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
   var BEACH = { x: 33, z: 10 }, RUINS = { x: -33, z: 2 }, CAVE = { x: 18, z: -34 };
   var STAGES = [
     { title: 'Lời Gọi Hải Đăng', obj: 'Gặp Lão Hải Đăng trên đồi hải đăng phía tây bắc.', hint: 'Đi theo mũi tên vàng trên màn hình.', type: 'talk', target: ELDER },
-    { title: 'Dẹp Bãi San Hô', obj: 'Hạ 3 Cua Giáp San Hô ở bãi cát phía đông.', hint: 'Quái chớp sáng là sắp đánh — lướt né rồi chém.', type: 'kill', kind: 'crab', need: 3, target: BEACH },
+    { title: 'Dẹp Bãi San Hô', obj: 'Hạ 3 Cua Giáp San Hô ở bãi cát phía đông.', hint: 'Quái chớp sáng là sắp đánh — lướt né rồi đấm.', type: 'kill', kind: 'crab', need: 3, target: BEACH },
     { title: 'Trả Lời Hải Đăng', obj: 'Về báo cáo Lão Hải Đăng.', hint: 'Hải đăng sáng là ông đang đợi.', type: 'talk', target: ELDER },
     { title: 'Bóng Ma Cảng Cổ', obj: 'Hạ 4 Xương Rong Biển ở cảng cổ phía tây.', hint: 'Xương rong đánh nhanh — canh nhịp lướt né.', type: 'kill', kind: 'skel', need: 4, target: RUINS },
     { title: 'Tin Từ Cảng Cổ', obj: 'Về báo cáo Lão Hải Đăng.', hint: 'Ông sẽ nói về tiếng gọi dưới hang triều.', type: 'talk', target: ELDER },
@@ -13876,12 +13887,12 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
       sfx.level();
       burst(playerPos(1.2), 60, 0xfde68a, 5, 1.1);
       burst(playerPos(1.0), 30, 0x67e8f9, 3.5, 1.3);
-      toast('Thăng cấp ' + S.lv + '! Hồi đầy máu và năng lượng.', 'gold');
+      toast('Thăng cấp ' + S.lv + '! Hồi đầy máu và mana.', 'gold');
       save();
     }
     hudBars();
   }
-  function playerPos(y) { return { x: P.x, y: (y || 0) + groundH(P.x, P.z), z: P.z }; }
+  function playerPos(y) { return { x: P.x, y: (y || 0) + groundH(P.x, P.z) + P.airY, z: P.z }; }
 
   /* ------------------------------- dialog ------------------------------- */
   function openDialog(name, color, initial, text, acts) {
@@ -13917,7 +13928,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
       2: ['Khá lắm! Bãi cát đã thở lại được. Nhưng cảng cổ phía tây vừa nổi bóng ma: lũ Xương Rong Biển — xương thủy thủ cũ bị Tinh Sa đánh thức — đang kéo nhau lên bờ. Dẹp 4 con cho lão.'],
       4: ['Con nghe thấy không? Tiếng gầm dưới Hang Triều phía nam. Vua Cua Thủy Triều đã nuốt quá nhiều Tinh Sa và hoá khổng lồ. Nó giữ nguồn sao của đảo — hạ nó, biển mới lặng thật sự.'],
       5: ['Hang triều ở mép nam, chỗ vòm đá đen. Tới gần là nó dậy đấy. Nhớ: né vòng đỏ khi nó giơ càng, và đánh vào lúc nó thở dốc sau đòn đập.'],
-      6: ['Nó dậy rồi! Lão giữ hải đăng sáng cho con soi đường. Đừng tiếc năng lượng — Tinh Sa hồi lại nhanh như sóng thôi.'],
+      6: ['Nó dậy rồi! Lão giữ hải đăng sáng cho con soi đường. Đừng tiếc mana — Tinh Sa hồi lại nhanh như sóng thôi.'],
       7: ['Người giữ triều của Đảo Neo Sao! Biển còn quái lạc thì con còn việc để làm — tuần tra kiếm Mảnh Sao, thằng Rèn Sóng nâng cấp cho con.']
     };
     var acts = [];
@@ -13927,7 +13938,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     if (st === 1 || st === 3) acts.push({ label: 'Con đang làm đây', cls: 'ghost', fn: closeDialog });
     if (st === 5) acts.push({ label: 'Con đã sẵn sàng', fn: closeDialog });
     if (st === 6 || st === 7) acts.push({ label: 'Con ra biển đây', cls: 'ghost', fn: closeDialog });
-    acts.push({ label: 'Hỏi về Tinh Sa', cls: 'ghost', fn: function () { openDialog('Lão Hải Đăng', '#f59e0b', 'L', 'Tinh Sa là cát sao chìm dưới triều đêm ấy. Nó không phải trái cây quỷ dữ gì đâu — nó là nguyên tố mới: cát biết hoá thương, hoá bão, hoá sóng. Con dùng Q phóng thương, E gọi xoáy bão, R gọi triều sao vỡ. Năng lượng cạn thì chờ sóng hồi, đừng đứng chịu đòn.', [{ label: 'Con nhớ rồi', fn: elderDialog }]); } });
+    acts.push({ label: 'Hỏi về Tinh Sa', cls: 'ghost', fn: function () { openDialog('Lão Hải Đăng', '#f59e0b', 'L', 'Tinh Sa là cát sao của đảo, chưa phải sức mạnh con sử dụng. Hiện con chỉ có võ Combat: Z lướt lên đá, X đập xuống đất. Q để lướt, Space để nhảy. Kiếm, súng và trái ác quỷ còn khóa. E/J/U là ba Haki, chỉ Admin cấp; chưa có nhiệm vụ mở Haki.', [{ label: 'Con nhớ rồi', fn: elderDialog }]); } });
     openDialog('Lão Hải Đăng', '#f59e0b', 'L', (L[st] || L[7])[0], acts);
   }
   function smithCost(k) { return 8 + S.up[k] * 6; }
@@ -13935,10 +13946,10 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     var acts = [
       { shop: true, label: 'Giáp Sao (+20 máu tối đa)', desc: 'Đã rèn ' + S.up.hp + ' lần', cost: smithCost('hp'), disabled: S.shards < smithCost('hp'), fn: function () { buy('hp'); } },
       { shop: true, label: 'Lưỡi Sao (+3 công kích)', desc: 'Đã rèn ' + S.up.atk + ' lần', cost: smithCost('atk'), disabled: S.shards < smithCost('atk'), fn: function () { buy('atk'); } },
-      { shop: true, label: 'Lõi Sao (+10 năng lượng)', desc: 'Đã rèn ' + S.up.en + ' lần', cost: smithCost('en'), disabled: S.shards < smithCost('en'), fn: function () { buy('en'); } },
+      { shop: true, label: 'Lõi Sao (+10 mana)', desc: 'Đã rèn ' + S.up.en + ' lần', cost: smithCost('en'), disabled: S.shards < smithCost('en'), fn: function () { buy('en'); } },
       { label: 'Để sau nhé', cls: 'ghost', fn: closeDialog }
     ];
-    openDialog('Thợ Rèn Sóng', '#fb7185', 'R', 'Mảnh Sao con nhặt được là thứ kim loại lạ nhất lão từng rèn. Đưa đây lão dát vào giáp, vào lưỡi kiếm, vào lõi năng lượng cho con. Giá cả tăng theo số lần rèn — biển mà, thuận mua vừa bán.', acts);
+    openDialog('Thợ Rèn Sóng', '#fb7185', 'R', 'Mảnh Sao con nhặt được là thứ kim loại lạ nhất lão từng rèn. Đưa đây lão nâng sức bền, lực Combat và mana cho con. Không mở kiếm, súng, trái ác quỷ hay Haki. Giá cả tăng theo số lần rèn — biển mà, thuận mua vừa bán.', acts);
   }
   function buy(k) {
     var c = smithCost(k);
@@ -13953,7 +13964,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
   var naviCd = 0;
   function naviDialog() {
     openDialog('Hoa Tiêu Muối', '#22d3ee', 'H', 'Biển hôm nay lặng bất thường — lũ quái dạt hết vào bờ vì tiếng gầm hang triều. Uống ngụm nước ngọt biển lão chưng từ sương sao đi, hồi đầy máu rồi hãy ra khơi. Lão cũng ghi hải trình của con vào sổ rồi đấy.', [
-      { label: naviCd > 0 ? 'Chờ ' + Math.ceil(naviCd) + 's nữa mới uống được' : 'Uống nước sương sao (hồi đầy)', disabled: naviCd > 0, fn: function () { P.hp = maxHp(); P.en = maxEn(); naviCd = 20; save(); hudBars(); sfx.heal(); toast('Hồi đầy máu và năng lượng!', 'good'); closeDialog(); } },
+      { label: naviCd > 0 ? 'Chờ ' + Math.ceil(naviCd) + 's nữa mới uống được' : 'Uống nước sương sao (hồi đầy)', disabled: naviCd > 0, fn: function () { P.hp = maxHp(); P.en = maxEn(); naviCd = 20; save(); hudBars(); sfx.heal(); toast('Hồi đầy máu và mana!', 'good'); closeDialog(); } },
       { label: 'Chỉ đường giúp con', cls: 'ghost', fn: function () { openDialog('Hoa Tiêu Muối', '#22d3ee', 'H', 'Cua giáp ở bãi cát ĐÔNG (nắng chiếu chỗ đó đỏ nhất). Xương rong ở cảng cổ TÂY, chỗ cầu gãy. Sứa lôi quang lượn mép NAM. Hang triều nằm sau vòm đá đen đông nam. Cứ nhìn mũi tên vàng trên màn hình — lão buộc nó vào la bàn của con rồi.', [{ label: 'Đa tạ hoa tiêu', fn: closeDialog }]); } },
       { label: 'Con đi đây', cls: 'ghost', fn: closeDialog }
     ]);
@@ -14326,7 +14337,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
       var arm = new THREE.Mesh(new THREE.CapsuleGeometry(0.07, 0.3, 3, 6), mat(pal.coat));
       arm.position.y = -0.2; arm.castShadow = true; piv.add(arm);
       var hand = new THREE.Mesh(new THREE.SphereGeometry(0.08, 6, 5), skin);
-      hand.position.y = -0.4; piv.add(hand);
+      hand.position.y = -0.4; piv.add(hand); parts['hand' + side] = hand;
       var cuff = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.1, 0.1, 6), mat(0xfbbf24));
       cuff.position.y = -0.32; piv.add(cuff);
       torso.add(piv); parts['arm' + side] = piv;
@@ -14408,14 +14419,16 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     p.legR.rotation.x = -sw * 0.75 * mov;
     p.armL.rotation.x = -sw * 0.55 * mov + Math.sin(t * 1.7) * 0.05;
     var armR = sw * 0.55 * mov + Math.sin(t * 1.7 + 1) * 0.05;
+    p.armR.rotation.z = 0; p.torso.rotation.y = 0;
+    if (st.airY > 0.05) { p.legL.rotation.x = -0.45; p.legR.rotation.x = 0.55; p.armL.rotation.x = -0.65; armR = -0.65; }
     if (st.atkT > 0) {
-      var pr = 1 - st.atkT / 0.34;
-      var dir = (st.combo % 2 === 0) ? 1 : -1;
-      armR = -2.3 + pr * 3.1;
-      p.armR.rotation.z = dir * Math.sin(pr * Math.PI) * 0.9;
-      p.torso.rotation.y = dir * Math.sin(pr * Math.PI) * 0.5;
-    } else { p.armR.rotation.z = 0; p.torso.rotation.y = 0; }
-    if (st.castT > 0) { p.armL.rotation.x = -1.9 + Math.sin(t * 20) * 0.1; p.armR.rotation.x = -1.9; }
+      var pr = 1 - st.atkT / 0.34, punch = Math.sin(pr * Math.PI);
+      if (st.combo % 2) p.armL.rotation.x = -0.7 - punch * 1.2;
+      else armR = -0.7 - punch * 1.2;
+      p.torso.rotation.y = (st.combo % 2 ? -1 : 1) * punch * 0.3;
+    }
+    if (st.kickT > 0) { p.legR.rotation.x = -1.6; p.legL.rotation.x = 0.9; p.armL.rotation.x = -0.8; armR = -0.8; }
+    if (st.slam) { p.armL.rotation.x = st.vy > 0 ? -2.7 : -1.1; armR = p.armL.rotation.x; p.legL.rotation.x = -0.65; p.legR.rotation.x = -0.65; }
     p.armR.rotation.x = armR;
     p.torso.position.y = 0.98 + Math.abs(cw) * 0.06 * mov + Math.sin(t * 2.2) * 0.015;
     p.coat.rotation.x = 0.14 + Math.sin(t * 2.4) * 0.05 + mov * 0.3;
@@ -14424,10 +14437,75 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     if (st.deadT > 0) { g.rotation.x = -Math.min(1, st.deadT * 3) * Math.PI / 2; g.position.y -= 0; }
   }
 
+  var charColors = { skin: [0xfcd9b8, 0xc58a61, 0x805237], hair: [0x16324f, 0xe6c885, 0x783e31], coat: [0x0f766e, 0x334f94, 0x88405b] };
   function buildPlayer() {
-    var g = humanoid({ skin: 0xfcd9b8, hair: 0x16324f, coat: 0x0f766e, shirt: 0xf8fafc, sash: 0xdc2626, pants: 0x1f2937, boot: 0x111827, hat: 0x134e4a, feather: 0x22d3ee });
-    scene.add(g);
-    player = g;
+    var c = S.char;
+    var g = humanoid({ skin: charColors.skin[c.skin], hair: charColors.hair[c.hair], coat: charColors.coat[c.coat], shirt: 0xf8fafc, sash: 0xdc2626, pants: 0x1f2937, boot: 0x111827, hat: charColors.coat[c.coat], feather: 0x22d3ee }, { weapon: false, hat: c.hat });
+    ['handL', 'handR'].forEach(function (k) { var m = g.userData.parts[k]; m.material = m.material.clone(); m.userData.baseColor = m.material.color.clone(); });
+    scene.add(g); player = g;
+  }
+  function refreshPlayer() {
+    if (!scene || !player) return;
+    var pos = player.position.clone(), yaw = player.rotation.y, old = player;
+    scene.remove(old);
+    old.traverse(function (o) { if (o.isMesh) o.geometry.dispose(); });
+    ['handL', 'handR'].forEach(function (k) { old.userData.parts[k].material.dispose(); });
+    buildPlayer(); player.position.copy(pos); player.rotation.y = yaw; hakiVisual();
+  }
+  function draftCharacter() {
+    return { made: true, skin: Number(ui.pzCharSkin.value), hair: Number(ui.pzCharHair.value), coat: Number(ui.pzCharCoat.value), hat: ui.pzCharHat.value === 'yes' };
+  }
+  function previewCharacter() {
+    var c = draftCharacter();
+    ['skin', 'hair', 'coat'].forEach(function (k) { ui.pzCharPreview.style.setProperty('--char-' + k, '#' + charColors[k][c[k]].toString(16).padStart(6, '0')); });
+    ui.pzCharPreview.classList.toggle('has-hat', c.hat);
+  }
+  function openCreator() {
+    if (!inited || P.dead || dialogOpen) return;
+    clearMovement();
+    ui.pzCharName.value = S.name || heroName();
+    ['skin', 'hair', 'coat'].forEach(function (k) { ui['pzChar' + k.charAt(0).toUpperCase() + k.slice(1)].value = S.char[k]; });
+    ui.pzCharHat.value = S.char.hat ? 'yes' : 'no'; ui.pzCharMsg.textContent = '';
+    previewCharacter(); show(ui.pzStats, false); show(ui.pzStart, false); show(ui.pzCreate, true); syncOverlays();
+  }
+  function cancelCreator() {
+    show(ui.pzCreate, false); if (!playing) show(ui.pzStart, true); syncOverlays();
+  }
+  function saveCharacter() {
+    var name = ui.pzCharName.value.replace(/[<>\x00-\x1f]/g, '').trim();
+    var c = draftCharacter();
+    if (!name || name.length > 24 || ['skin', 'hair', 'coat'].some(function (k) { return !Number.isInteger(c[k]) || c[k] < 0 || c[k] > 2; })) {
+      ui.pzCharMsg.textContent = 'Tên cần 1–24 ký tự; chọn các tùy chọn trong danh sách.'; return;
+    }
+    var old = S, next = JSON.parse(JSON.stringify(S)); next.name = name; next.char = c; S = next;
+    if (!save()) { S = old; ui.pzCharMsg.textContent = 'Chưa lưu được. Kiểm tra bộ nhớ trình duyệt rồi thử lại.'; return; }
+    refreshPlayer(); hudBars(); show(ui.pzCreate, false); syncOverlays();
+    if (!playing) beginPlay(); else toast('Đã lưu ngoại hình, giữ nguyên tiến trình.', 'good');
+  }
+  function clearMovement() {
+    keys = {}; moveX = moveZ = 0; stick.on = false; stick.vx = stick.vy = 0;
+    P.vx = P.vz = 0; if (ui.pzKnob) ui.pzKnob.style.transform = '';
+  }
+  function beginPlay() {
+    if (!S.char.made) { openCreator(); return; }
+    show(ui.pzStart, false); syncOverlays(); clearMovement(); playing = true; audioInit();
+    hudBars(); questUi(); if (S.q.stage === 0) banner('ĐẢO NEO SAO', 'Tân nhân vật · Võ Combat đã sẵn sàng');
+  }
+  function openStats() {
+    if (!inited || !playing || P.dead || dialogOpen || (overlayOpen && ui.pzStats.hidden)) return;
+    clearMovement(); statsUi(); show(ui.pzStats, ui.pzStats.hidden); syncOverlays();
+  }
+  function statsUi() {
+    if (!ui.pzStatHp) return;
+    ui.pzStatHp.textContent = Math.ceil(P.hp) + ' / ' + maxHp();
+    ui.pzStatMana.textContent = Math.floor(P.en) + ' / ' + maxEn();
+    ui.pzStatCombat.textContent = atk() + ' sát thương cơ bản';
+    [['observation', 'pzObsBtn', 'E', 'Quan sát'], ['armament', 'pzArmBtn', 'J', 'Vũ trang'], ['conqueror', 'pzConBtn', 'U', 'Bá vương']].forEach(function (a) {
+      var b = ui[a[1]], unlocked = S.haki[a[0]], active = P.hakiT[a[0]] > 0;
+      b.classList.toggle('locked', !unlocked); b.setAttribute('aria-disabled', String(!unlocked));
+      b.textContent = a[2] + ' · ' + a[3] + ' — ' + (!unlocked ? 'Khóa' : active ? 'Đang bật' : P.hakiCd[a[0]] > 0 ? Math.ceil(P.hakiCd[a[0]]) + 's' : 'Đã cấp');
+    });
+    ui.pzHakiHint.textContent = 'Chỉ Admin cấp Haki trên máy này. Chưa có nhiệm vụ mở Haki; cấp và EXP không tự mở.';
   }
   function buildNpcs() {
     var defs = [
@@ -14689,8 +14767,12 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     scene.add(g);
     drops.push({ g: g, kind: kind, val: val, x: x, z: z, t: 0, life: 40 });
   }
-  function hurtPlayer(dmg, srcX, srcZ) {
-    if (P.iframe > 0 || P.dead || !playing || dialogOpen) return;
+  function hurtPlayer(dmg, srcX, srcZ, groundOnly) {
+    if (P.iframe > 0 || P.dead || !playing || dialogOpen || (groundOnly && P.airY > 1.1)) return;
+    if (P.hakiT.observation > 0 && P.dodges > 0) {
+      P.dodges--; P.iframe = 0.4; burst(playerPos(1), 8, 0xa5f3fc, 3, 0.35);
+      toast('Quan sát: né đòn · còn ' + P.dodges + ' lần', 'info'); return;
+    }
     P.hp -= dmg; P.lastHurt = playT; P.hurtT = 0.3;
     var a = angleTo(srcX, srcZ, P.x, P.z);
     P.vx += Math.sin(a) * 5; P.vz += Math.cos(a) * 5;
@@ -14711,7 +14793,8 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
   }
   function respawn() {
     P.dead = false; P.hp = maxHp(); P.en = maxEn();
-    P.x = 0; P.z = 14; P.vx = P.vz = 0; P.iframe = 1.5;
+    P.x = 0; P.z = 14; resetActions(); P.iframe = 1.5;
+    player.position.set(P.x, groundH(P.x, P.z), P.z);
     enemies.forEach(function (e) { if (!e.dead && e.state !== 'idle') { e.state = 'return'; } });
     show(ui.pzDead, false); syncOverlays();
     ui.pzVignette.classList.remove('on');
@@ -14721,14 +14804,14 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
 
   /* ------------------------------ actions ------------------------------- */
   function tryAttack() {
-    if (!playing || P.dead || dialogOpen || overlayOpen || P.atkT > 0) return;
+    if (combatBusy() || P.airY > 1.4) return;
     P.combo = P.comboT > 0 ? (P.combo + 1) % 3 : 0;
     P.comboT = 0.9; P.atkT = 0.34; P.atkHit = false;
     sfx.slash();
   }
   function applyAttackHit() {
-    var base = atk() * (P.combo === 2 ? 1.6 : 1);
-    var reach = 2.4, arc = 1.15;
+    var base = meleePower() * (P.combo === 2 ? 1.6 : 1);
+    var reach = 1.8, arc = 1.15;
     enemies.forEach(function (e) {
       if (e.dead) return;
       var d = Math.hypot(e.x - P.x, e.z - P.z);
@@ -14739,24 +14822,24 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
         damageEnemy(e, dmg, Math.sin(a) * 3.5, Math.cos(a) * 3.5, crit);
       }
     });
-    // slash trail
-    slashTrail();
+    burst(playerPos(1.25), 7, 0xe0f2fe, 2, 0.22, 0);
+    punchTrail();
   }
   var trailMesh = null;
-  function slashTrail() {
+  function punchTrail() {
     if (!trailMesh) {
-      var g = new THREE.RingGeometry(1.1, 2.1, 20, 1, 0, 1.9);
+      var g = new THREE.RingGeometry(0.65, 0.9, 16, 1, 0, 1.9);
       trailMesh = new THREE.Mesh(g, new THREE.MeshBasicMaterial({ color: 0x67e8f9, transparent: true, opacity: 0.7, side: THREE.DoubleSide, blending: THREE.AdditiveBlending, depthWrite: false }));
       scene.add(trailMesh);
     }
     trailMesh.visible = true;
     trailMesh.userData.t = 0.18;
-    trailMesh.position.set(P.x, groundH(P.x, P.z) + 1.1, P.z);
+    trailMesh.position.set(P.x + Math.sin(P.yaw) * 0.6, groundH(P.x, P.z) + P.airY + 1.1, P.z + Math.cos(P.yaw) * 0.6);
     trailMesh.rotation.set(-Math.PI / 2 + 0.3, 0, -P.yaw + (P.combo % 2 ? 1.6 : -0.4));
   }
   function tryDash() {
-    if (!playing || P.dead || dialogOpen || overlayOpen || P.dashCd > 0) return;
-    if (P.en < 8) { toast('Không đủ năng lượng để lướt.', 'warn'); return; }
+    if (!playing || P.dead || dialogOpen || overlayOpen || P.dashCd > 0 || P.kickT > 0 || P.slam) return;
+    if (P.en < 8) { toast('Không đủ mana để lướt.', 'warn'); return; }
     P.en -= 8; P.dashCd = 1.1; P.dashT = 0.22; P.iframe = Math.max(P.iframe, 0.4);
     var mx = moveX, mz = moveZ;
     if (!mx && !mz) { mx = Math.sin(P.yaw); mz = Math.cos(P.yaw); }
@@ -14775,51 +14858,77 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     scene.add(g);
     ghosts.push({ g: g, t: -delay, life: 0.3 });
   }
+  function combatBusy() { return !playing || P.dead || dialogOpen || overlayOpen || P.atkT > 0 || P.kickT > 0 || P.slam; }
+  function tryJump() {
+    if (!playing || P.dead || dialogOpen || overlayOpen || P.airY > 0.01 || P.vy > 0 || P.slam || P.kickT > 0) return;
+    P.vy = 7.2; sfx.dash();
+    burst(playerPos(0.08), 7, 0xe0f2fe, 1.5, 0.25, 0);
+  }
   function castS1() {
-    if (!playing || P.dead || dialogOpen || overlayOpen || P.cd.s1 > 0) return;
-    if (P.en < 20) { toast('Sa Thương cần 20 năng lượng.', 'warn'); return; }
-    P.en -= 20; P.cd.s1 = 2.5; P.castT = 0.3;
-    var g = new THREE.Group();
-    var shaft = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 1.5, 6), mat(0xfde68a, { emissive: 0xfbbf24, emissiveIntensity: 1.4 }));
-    shaft.rotation.x = Math.PI / 2; g.add(shaft);
-    var tip = new THREE.Mesh(new THREE.ConeGeometry(0.14, 0.45, 6), mat(0x67e8f9, { emissive: 0x22d3ee, emissiveIntensity: 1.6 }));
-    tip.rotation.x = Math.PI / 2; tip.position.z = 0.95; g.add(tip);
-    var y = groundH(P.x, P.z) + 1.2;
-    g.position.set(P.x + Math.sin(P.yaw) * 0.8, y, P.z + Math.cos(P.yaw) * 0.8);
-    g.rotation.y = P.yaw;
-    scene.add(g);
-    shots.push({ g: g, x: g.position.x, y: y, z: g.position.z, vx: Math.sin(P.yaw) * 17, vz: Math.cos(P.yaw) * 17, life: 1.1, kind: 'spear', dmg: atk() * 1.5 + 8, hit: {} });
-    sfx.cast(); burst(playerPos(1.2), 10, 0xfde68a, 2, 0.4, 0);
-    hudBars();
+    if (combatBusy() || P.cd.s1 > 0 || P.dashT > 0) return;
+    if (P.en < 12) { toast('Lướt lên đá cần 12 mana.', 'warn'); return; }
+    P.en -= 12; P.cd.s1 = 3; P.kickT = 0.38; P.kickHit = false;
+    P.kickX = Math.sin(P.yaw); P.kickZ = Math.cos(P.yaw); P.vy = Math.max(P.vy, 5.4);
+    sfx.dash(); burst(playerPos(0.5), 12, 0xe0f2fe, 2, 0.35); hudBars();
   }
   function castS2() {
-    if (!playing || P.dead || dialogOpen || overlayOpen || P.cd.s2 > 0) return;
-    if (P.en < 35) { toast('Bão Tinh Sa cần 35 năng lượng.', 'warn'); return; }
-    P.en -= 35; P.cd.s2 = 6; P.stormT = 0.9; P.stormTick = 0; P.castT = 0.4;
-    sfx.storm();
-    if (!stormMesh) {
-      stormMesh = new THREE.Mesh(new THREE.TorusGeometry(3.4, 0.35, 8, 32), new THREE.MeshBasicMaterial({ color: 0xfbbf24, transparent: true, opacity: 0.55, blending: THREE.AdditiveBlending, depthWrite: false }));
-      stormMesh.rotation.x = Math.PI / 2; scene.add(stormMesh);
-    }
-    stormMesh.visible = true;
-    hudBars();
+    if (combatBusy() || P.cd.s2 > 0 || P.dashT > 0) return;
+    if (P.en < 20) { toast('Đập xuống đất cần 20 mana.', 'warn'); return; }
+    P.en -= 20; P.cd.s2 = 5; P.slam = true;
+    if (P.airY > 0.1) P.vy = -12; else P.vy = 6.5;
+    P.vx = P.vz = 0; sfx.cast(); hudBars();
   }
-  var stormMesh = null;
-  function castUlt() {
-    if (!playing || P.dead || dialogOpen || overlayOpen || P.cd.ult > 0) return;
-    if (P.en < 60) { toast('Triều Sao Vỡ cần 60 năng lượng.', 'warn'); return; }
-    P.en -= 60; P.cd.ult = 14; P.ultT = 0.75; P.ultHit = {}; P.castT = 0.5;
-    sfx.ult(); cam.shake = 0.55;
-    if (!ultMesh) {
-      ultMesh = new THREE.Mesh(new THREE.RingGeometry(0.6, 1.0, 40), new THREE.MeshBasicMaterial({ color: 0xfde68a, transparent: true, opacity: 0.8, side: THREE.DoubleSide, blending: THREE.AdditiveBlending, depthWrite: false }));
-      ultMesh.rotation.x = -Math.PI / 2; scene.add(ultMesh);
-    }
-    ultMesh.visible = true;
-    burst(playerPos(1), 70, 0xfde68a, 7, 1, 2);
-    burst(playerPos(0.5), 50, 0x67e8f9, 5, 1.2, 1);
-    hudBars();
+  function meleePower() { return atk() * (P.hakiT.armament > 0 ? 1.25 : 1); }
+  function combatHit(radius, multiplier, frontal) {
+    enemies.forEach(function (e) {
+      if (e.dead || Math.hypot(e.x - P.x, e.z - P.z) > radius + (e.sh || 1) * 0.4) return;
+      if (frontal && angDiff(P.yaw, angleTo(P.x, P.z, e.x, e.z)) > 1.25) return;
+      var a = angleTo(P.x, P.z, e.x, e.z);
+      damageEnemy(e, meleePower() * multiplier, Math.sin(a) * 6, Math.cos(a) * 6, false);
+    });
   }
-  var ultMesh = null;
+  function groundSlam() {
+    combatHit(3.2, 2.2, false); cam.shake = 0.3; sfx.boss();
+    burst(playerPos(0.1), 36, 0xd6c0a3, 5, 0.6, 1);
+    if (!impactMesh) {
+      impactMesh = new THREE.Mesh(new THREE.RingGeometry(0.88, 1, 32), new THREE.MeshBasicMaterial({ color: 0xd6c0a3, transparent: true, opacity: 0.6, side: THREE.DoubleSide, depthWrite: false }));
+      impactMesh.rotation.x = -Math.PI / 2; scene.add(impactMesh);
+    }
+    impactMesh.visible = true; impactMesh.userData.t = 0.35; impactMesh.position.set(P.x, groundH(P.x, P.z) + 0.05, P.z);
+  }
+  var impactMesh = null;
+  var hakiNames = { observation: 'Haki quan sát', armament: 'Haki vũ trang', conqueror: 'Haki bá vương' };
+  function useHaki(k) {
+    if (!playing || P.dead || dialogOpen || !ui.pzCreate.hidden || !ui.pzStart.hidden || !ui.pzHelp.hidden || !ui.pzWin.hidden || !ui.pzDead.hidden) return;
+    if (!S.haki[k]) { toast(hakiNames[k] + ' đang khóa — chỉ Admin được cấp.', 'warn'); return; }
+    if (P.hakiT[k] > 0) { P.hakiT[k] = 0; hakiVisual(); statsUi(); return; }
+    if (P.hakiCd[k] > 0) { toast('Haki đang hồi: ' + Math.ceil(P.hakiCd[k]) + 's.', 'info'); return; }
+    var cost = k === 'conqueror' ? 30 : 15;
+    if (P.en < cost) { toast('Cần ' + cost + ' mana.', 'warn'); return; }
+    P.en -= cost;
+    if (k === 'observation') { P.hakiT[k] = 10; P.hakiCd[k] = 18; P.dodges = 3; }
+    else if (k === 'armament') { P.hakiT[k] = 12; P.hakiCd[k] = 18; }
+    else {
+      P.hakiCd[k] = 20;
+      enemies.forEach(function (e) { if (!e.dead && Math.hypot(e.x - P.x, e.z - P.z) < 6) { e.stunT = e.kind === 'boss' ? 0.8 : 3; if (e.tele) e.tele.visible = false; } });
+      burst(playerPos(0.8), 30, 0xc4b5fd, 5, 0.6, 0); cam.shake = 0.2;
+    }
+    hakiVisual(); hudBars(); statsUi(); sfx.cast(); toast(hakiNames[k] + ' đã kích hoạt.', 'info');
+    if (!ui.pzStats.hidden) { show(ui.pzStats, false); syncOverlays(); }
+  }
+  function hakiVisual() {
+    if (!player) return;
+    var active = P.hakiT.armament > 0, parts = player.userData.parts;
+    ['handL', 'handR'].forEach(function (k) { var m = parts[k]; if (active) m.material.color.setHex(0x162237).convertSRGBToLinear(); else m.material.color.copy(m.userData.baseColor); });
+    root.classList.toggle('pz-observing', P.hakiT.observation > 0);
+  }
+  function resetActions() {
+    clearMovement(); P.airY = P.vy = P.kickT = P.atkT = P.dashT = P.dashCd = 0; P.slam = false;
+    P.comboT = 0; P.cd.s1 = P.cd.s2 = 0; P.dodges = 0;
+    Object.keys(P.hakiCd).forEach(function (k) { P.hakiCd[k] = 0; });
+    P.hakiT.observation = P.hakiT.armament = 0; hakiVisual();
+    if (impactMesh) impactMesh.visible = false;
+  }
 
   /* ------------------------------- input -------------------------------- */
   var keys = {}, moveX = 0, moveZ = 0;
@@ -14830,21 +14939,31 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     document.addEventListener('keydown', function (e) {
       if (!inited || paused) return;
       var tag = (e.target && e.target.tagName) || '';
-      if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || (e.target && e.target.isContentEditable)) return;
       if (!isGameTab()) return;
       var c = e.code;
-      if (c === 'Escape') { if (dialogOpen) closeDialog(); else if (!ui.pzHelp.hidden) show(ui.pzHelp, false), syncOverlays(); return; }
+      if (c === 'Escape') {
+        if (!ui.pzCreate.hidden) cancelCreator();
+        else if (!ui.pzStats.hidden) { show(ui.pzStats, false); syncOverlays(); }
+        else if (dialogOpen) closeDialog(); else if (!ui.pzHelp.hidden) { show(ui.pzHelp, false); syncOverlays(); }
+        return;
+      }
+      if (e.repeat && ['Space', 'KeyQ', 'KeyZ', 'KeyX', 'KeyE', 'KeyJ', 'KeyU', 'KeyB', 'KeyC', 'KeyF', 'KeyH', 'KeyM'].indexOf(c) >= 0) { e.preventDefault(); return; }
+      if (c === 'KeyB') { e.preventDefault(); openStats(); return; }
       if (overlayOpen) return;
-      if (c === 'KeyH') { show(ui.pzHelp, true); syncOverlays(); e.preventDefault(); return; }
+      if (c === 'KeyC') { openCreator(); e.preventDefault(); return; }
+      if (c === 'KeyH') { clearMovement(); show(ui.pzHelp, true); syncOverlays(); e.preventDefault(); return; }
       if (c === 'KeyM') { setSound(!S.set.sound); return; }
       if (dialogOpen) { if (c === 'KeyF' || c === 'Enter') closeDialog(); return; }
-      if (['KeyW', 'KeyA', 'KeyS', 'KeyD', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space', 'KeyJ', 'KeyQ', 'KeyE', 'KeyR', 'KeyF'].indexOf(c) >= 0) e.preventDefault();
+      if (['KeyW', 'KeyA', 'KeyS', 'KeyD', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space', 'KeyJ', 'KeyQ', 'KeyE', 'KeyU', 'KeyZ', 'KeyX', 'KeyF'].indexOf(c) >= 0) e.preventDefault();
       keys[c] = true;
-      if (c === 'Space') tryDash();
-      if (c === 'KeyJ') tryAttack();
-      if (c === 'KeyQ') castS1();
-      if (c === 'KeyE') castS2();
-      if (c === 'KeyR') castUlt();
+      if (c === 'Space') tryJump();
+      if (c === 'KeyQ') tryDash();
+      if (c === 'KeyZ') castS1();
+      if (c === 'KeyX') castS2();
+      if (c === 'KeyE') useHaki('observation');
+      if (c === 'KeyJ') useHaki('armament');
+      if (c === 'KeyU') useHaki('conqueror');
       if (c === 'KeyF') interact();
     });
     document.addEventListener('keyup', function (e) { keys[e.code] = false; });
@@ -14928,9 +15047,16 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     }
     press(ui.pzAtkBtn, tryAttack);
     press(ui.pzDashBtn, tryDash);
+    press(ui.pzJumpBtn, tryJump);
     press(ui.pzS1Btn, castS1);
     press(ui.pzS2Btn, castS2);
-    press(ui.pzUltBtn, castUlt);
+    ui.pzStatsBtn.addEventListener('click', openStats);
+    ui.pzStatsClose.addEventListener('click', function () { show(ui.pzStats, false); syncOverlays(); });
+    ui.pzEditChar.addEventListener('click', openCreator);
+    ui.pzCharSave.addEventListener('click', saveCharacter);
+    ui.pzCharCancel.addEventListener('click', cancelCreator);
+    ['pzCharSkin', 'pzCharHair', 'pzCharCoat', 'pzCharHat'].forEach(function (k) { ui[k].addEventListener('change', previewCharacter); });
+    [['pzObsBtn', 'observation'], ['pzArmBtn', 'armament'], ['pzConBtn', 'conqueror']].forEach(function (a) { ui[a[0]].addEventListener('click', function () { useHaki(a[1]); }); });
     press(ui.pzTouchAct, interact);
     ui.pzSoundBtn.addEventListener('click', function () { audioInit(); setSound(!S.set.sound); });
     ui.pzQualBtn.addEventListener('click', function () {
@@ -14943,22 +15069,14 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     ui.pzDX.addEventListener('click', closeDialog);
     ui.pzRespawnBtn.addEventListener('click', function () { sfx.ui(); respawn(); });
     ui.pzWinBtn.addEventListener('click', function () { show(ui.pzWin, false); syncOverlays(); sfx.ui(); toast('Nhiệm vụ tuần tra đã mở — biển còn quái lạc!', 'good'); });
-    ui.pzPlayBtn.addEventListener('click', function () {
-      audioInit(); sfx.ui();
-      show(ui.pzStart, false); syncOverlays();
-      playing = true;
-      if (S.q.stage === 0) banner('ĐẢO NEO SAO', 'Đi gặp Lão Hải Đăng theo mũi tên vàng');
-      toast('Chào mừng thuyền trưởng ' + heroName() + '!', 'good');
-    });
+    ui.pzPlayBtn.addEventListener('click', function () { beginPlay(); });
     var resetArm = false;
     ui.pzResetBtn.addEventListener('click', function () {
       if (!resetArm) { resetArm = true; ui.pzResetBtn.textContent = 'Bấm lần nữa để xoá tiến trình'; ui.pzResetBtn.classList.add('bad'); setTimeout(function () { resetArm = false; ui.pzResetBtn.textContent = 'Chơi lại từ đầu'; ui.pzResetBtn.classList.remove('bad'); }, 3000); return; }
       resetArm = false;
-      S = blankSave(); S.name = heroName(); save();
-      resetRun();
-      show(ui.pzStart, false); syncOverlays();
-      playing = true; audioInit(); sfx.quest();
-      banner('HẢI TRÌNH MỚI', 'Chương 1: Đảo Neo Sao');
+      var old = S; S = blankSave(); S.name = heroName();
+      if (!save()) { S = old; toast('Không lưu được, chưa xóa tiến trình.', 'warn'); return; }
+      playing = false; resetRun(); refreshPlayer(); openCreator();
     });
     document.addEventListener('fullscreenchange', function () {
       if (!document.fullscreenElement) root.classList.remove('pz-fs');
@@ -15001,7 +15119,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     signs.forEach(function (s) { var d = Math.hypot(s.x - P.x, s.z - P.z); if (d < bsd) { bsd = d; bs = s; } });
     if (bs) {
       sfx.ui();
-      var dir = { 'Bãi San Hô →': 'Bãi cát phía đông: Cua Giáp San Hô đục bờ biển. Tới đó chém cho lão hải đăng nhờ.', '← Cảng Cổ': 'Cảng cổ phía tây: cầu gãy, cột đổ — Xương Rong Biển lang thang chỗ đó.', 'Hang Triều ↓': 'Mép nam đảo: vòm đá đen. Vua Cua Thủy Triều gầm dưới đó — chỉ tới khi hải đăng bảo sẵn sàng.', '↑ Hải Đăng': 'Đồi tây bắc: Lão Hải Đăng giữ đèn và giữ luôn mọi nhiệm vụ của đảo.' };
+      var dir = { 'Bãi San Hô →': 'Bãi cát phía đông: Cua Giáp San Hô đục bờ biển. Tới đó đấm cho lão hải đăng nhờ.', '← Cảng Cổ': 'Cảng cổ phía tây: cầu gãy, cột đổ — Xương Rong Biển lang thang chỗ đó.', 'Hang Triều ↓': 'Mép nam đảo: vòm đá đen. Vua Cua Thủy Triều gầm dưới đó — chỉ tới khi hải đăng bảo sẵn sàng.', '↑ Hải Đăng': 'Đồi tây bắc: Lão Hải Đăng giữ đèn và giữ luôn mọi nhiệm vụ của đảo.' };
       openDialog('Biển chỉ dẫn', '#a5825a', '✦', bs.text + ' — ' + (dir[bs.text] || 'Đường này dẫn tới chỗ ghi trên biển.'), [{ label: 'Đã đọc', fn: closeDialog }]);
     }
   }
@@ -15017,6 +15135,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     ui.pzLv.textContent = 'Lv ' + S.lv;
     ui.pzShard.textContent = S.shards;
     ui.pzName.textContent = heroName();
+    statsUi();
   }
   function heroName() {
     if (S.name) return S.name;
@@ -15027,14 +15146,14 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
   }
   var cdPrev = {};
   function hudSkills(dt) {
-    var list = [['pzAtkBtn', P.atkT > 0 ? P.atkT / 0.34 : 0, 0], ['pzDashBtn', P.dashCd / 1.1, 8], ['pzS1Btn', P.cd.s1 / 2.5, 20], ['pzS2Btn', P.cd.s2 / 6, 35], ['pzUltBtn', P.cd.ult / 14, 60]];
+    var list = [['pzAtkBtn', P.atkT > 0 ? P.atkT / 0.34 : 0, 0, 0.34], ['pzDashBtn', P.dashCd / 1.1, 8, 1.1], ['pzJumpBtn', P.airY > 0.01 || P.vy > 0 ? 1 : 0, 0, 0], ['pzS1Btn', P.cd.s1 / 3, 12, 3], ['pzS2Btn', P.cd.s2 / 5, 20, 5]];
     list.forEach(function (r) {
       var b = ui[r[0]], cd = b.querySelector('.pz-cd');
       var f = Math.max(0, Math.min(1, r[1]));
       var fs2 = f.toFixed(3);
       if (b._cf !== fs2) { cd.style.transform = 'scaleY(' + fs2 + ')'; b._cf = fs2; }
       if (!cd.firstChild) { var bb = document.createElement('b'); cd.appendChild(bb); }
-      var ct = f > 0.02 ? String(Math.ceil(f * (r[0] === 'pzAtkBtn' ? 0.34 : r[0] === 'pzDashBtn' ? 1.1 : r[0] === 'pzS1Btn' ? 2.5 : r[0] === 'pzS2Btn' ? 6 : 14))) : '';
+      var ct = f > 0.02 && r[3] > 0 ? String(Math.ceil(f * r[3])) : '';
       if (cd.firstChild.textContent !== ct) cd.firstChild.textContent = ct;
       var ne = r[2] > 0 && P.en < r[2];
       if (b._ne !== ne) { b.classList.toggle('no-en', ne); b._ne = ne; }
@@ -15135,7 +15254,9 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     if (P.dead) return;
     computeMove();
     var spd = 6.2;
-    if (P.dashT > 0) {
+    if (P.slam) { P.vx = P.vz = 0; }
+    else if (P.kickT > 0) { P.vx = P.kickX * 14; P.vz = P.kickZ * 14; }
+    else if (P.dashT > 0) {
       P.dashT -= dt;
       P.vx = P.dashX * 16; P.vz = P.dashZ * 16;
       if (Math.random() < 0.5) ghost(0);
@@ -15165,7 +15286,20 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     // timers
     P.iframe = Math.max(0, P.iframe - dt);
     P.dashCd = Math.max(0, P.dashCd - dt);
-    P.cd.s1 = Math.max(0, P.cd.s1 - dt); P.cd.s2 = Math.max(0, P.cd.s2 - dt); P.cd.ult = Math.max(0, P.cd.ult - dt);
+    P.cd.s1 = Math.max(0, P.cd.s1 - dt); P.cd.s2 = Math.max(0, P.cd.s2 - dt);
+    var wasHaki = P.hakiT.observation > 0 || P.hakiT.armament > 0;
+    Object.keys(P.hakiCd).forEach(function (k) { P.hakiCd[k] = Math.max(0, P.hakiCd[k] - dt); });
+    Object.keys(P.hakiT).forEach(function (k) { P.hakiT[k] = Math.max(0, P.hakiT[k] - dt); });
+    if (wasHaki) hakiVisual();
+    if (P.hakiT.observation > 0) enemies.forEach(function (e) { if (!e.dead && Math.hypot(e.x - P.x, e.z - P.z) < 18) e.barT = 1; });
+    if (P.kickT > 0) {
+      P.kickT = Math.max(0, P.kickT - dt);
+      if (!P.kickHit && P.kickT <= 0.18) { P.kickHit = true; combatHit(2.6, 1.8, true); burst(playerPos(0.9), 10, 0xe0f2fe, 3, 0.3); }
+    }
+    if (P.airY > 0 || P.vy > 0) {
+      P.vy -= (P.slam ? 30 : 18) * dt; P.airY += P.vy * dt;
+      if (P.airY <= 0) { P.airY = P.vy = 0; if (P.slam) { P.slam = false; groundSlam(); } }
+    }
     P.comboT = Math.max(0, P.comboT - dt);
     P.hurtT = Math.max(0, P.hurtT - dt);
     P.castT = Math.max(0, P.castT - dt);
@@ -15176,47 +15310,8 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     // energy / hp regen
     P.en = Math.min(maxEn(), P.en + 7 * dt);
     if (playT - P.lastHurt > 5) P.hp = Math.min(maxHp(), P.hp + 3 * dt);
-    // storm
-    if (P.stormT > 0) {
-      P.stormT -= dt; P.stormTick -= dt;
-      stormMesh.position.set(P.x, groundH(P.x, P.z) + 0.8, P.z);
-      stormMesh.rotation.z += dt * 9;
-      stormMesh.material.opacity = 0.55 * (P.stormT / 0.9);
-      if (P.stormTick <= 0) {
-        P.stormTick = 0.15;
-        enemies.forEach(function (e) {
-          if (e.dead) return;
-          var d = Math.hypot(e.x - P.x, e.z - P.z);
-          if (d < 4.5) {
-            var a = angleTo(e.x, e.z, P.x, P.z);
-            e.kx += Math.sin(a) * 2.2; e.kz += Math.cos(a) * 2.2;
-            damageEnemy(e, 7 + atk() * 0.4, 0, 0, false);
-          }
-        });
-        burst(playerPos(0.9), 6, 0xfbbf24, 4, 0.4, 0);
-      }
-      if (P.stormT <= 0) stormMesh.visible = false;
-    }
-    // ult wave
-    if (P.ultT > 0) {
-      P.ultT -= dt;
-      var pr = 1 - P.ultT / 0.75, rad = pr * 9;
-      ultMesh.position.set(P.x, groundH(P.x, P.z) + 0.35, P.z);
-      ultMesh.scale.set(rad, rad, rad);
-      ultMesh.material.opacity = 0.8 * (1 - pr);
-      enemies.forEach(function (e) {
-        if (e.dead || P.ultHit[eId(e)]) return;
-        var d = Math.hypot(e.x - P.x, e.z - P.z);
-        if (d < rad) {
-          P.ultHit[eId(e)] = 1;
-          var a = angleTo(P.x, P.z, e.x, e.z);
-          damageEnemy(e, 45 + atk() * 1.5, Math.sin(a) * 8, Math.cos(a) * 8, true);
-        }
-      });
-      if (P.ultT <= 0) ultMesh.visible = false;
-    }
-    // place mesh
-    player.position.set(P.x, groundH(P.x, P.z), P.z);
+    // place mesh: nhảy có chiều cao thật, không chỉ chuyển động chân.
+    player.position.set(P.x, groundH(P.x, P.z) + P.airY, P.z);
     player.rotation.y = P.yaw;
     animHumanoid(player, P, tGlobal);
     // quest goto
@@ -15225,8 +15320,6 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
       S.q.stage = 6; save(); questUi(); spawnBoss();
     }
   }
-  var eIdN = 0;
-  function eId(e) { if (!e.__id) e.__id = ++eIdN; return e.__id; }
 
   function updateEnemy(e, dt) {
     if (e.dead) {
@@ -15236,6 +15329,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
       if (e.deadT > 0.7) { scene.remove(e.g); if (e.bar && e.bar.el.parentNode) e.bar.el.parentNode.removeChild(e.bar.el); e.gone = true; }
       return;
     }
+    if (e.stunT > 0) { e.stunT = Math.max(0, e.stunT - dt); e.barT = 1; if (e.tele) e.tele.visible = false; return; }
     e.flash = Math.max(0, e.flash - dt);
     e.barT = Math.max(0, e.barT - dt);
     var dP = Math.hypot(P.x - e.x, P.z - e.z);
@@ -15277,14 +15371,14 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
           // slam AoE
           burst({ x: e.x + Math.sin(e.yaw) * 2, y: groundH(e.x, e.z) + 0.4, z: e.z + Math.cos(e.yaw) * 2 }, 40, 0xfb7185, 6, 0.7);
           cam.shake = Math.max(cam.shake, 0.45); sfx.boss();
-          if (Math.hypot(P.x - (e.x + Math.sin(e.yaw) * 2), P.z - (e.z + Math.cos(e.yaw) * 2)) < 4.2) hurtPlayer(e.dmg, e.x, e.z);
+          if (Math.hypot(P.x - (e.x + Math.sin(e.yaw) * 2), P.z - (e.z + Math.cos(e.yaw) * 2)) < 4.2) hurtPlayer(e.dmg, e.x, e.z, true);
           if (e.hp < e.maxHp * 0.3 && !e.summoned) {
             e.summoned = true;
             spawnEnemy('crab', e.x - 3, e.z + 2); spawnEnemy('crab', e.x + 3, e.z + 2);
             toast('Vua cua gọi cua con tới trợ chiến!', 'warn');
           }
         } else {
-          if (dP < e.range + 0.5 && angDiff(e.yaw, aP) < 1.2) hurtPlayer(e.dmg, e.x, e.z);
+          if (dP < e.range + 0.5 && angDiff(e.yaw, aP) < 1.2) hurtPlayer(e.dmg, e.x, e.z, true);
           burst({ x: e.x + Math.sin(e.yaw) * 1.2, y: groundH(e.x, e.z) + 0.8, z: e.z + Math.cos(e.yaw) * 1.2 }, 6, 0xfda4af, 2.5, 0.35);
         }
       }
@@ -15354,21 +15448,9 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
       s.x += s.vx * dt; s.z += s.vz * dt;
       s.g.position.set(s.x, s.y, s.z);
       var dead = s.life <= 0;
-      if (s.kind === 'spear') {
-        s.g.rotation.y += 0; // fixed dir
-        if (Math.random() < 0.6) burst({ x: s.x, y: s.y, z: s.z }, 2, 0xfde68a, 0.6, 0.3, 0);
-        enemies.forEach(function (e) {
-          if (e.dead || s.hit[eId(e)]) return;
-          if (Math.hypot(e.x - s.x, e.z - s.z) < 1.1 + (e.sh || 1) * 0.4) {
-            s.hit[eId(e)] = 1;
-            damageEnemy(e, s.dmg, s.vx * 0.12, s.vz * 0.12, false);
-          }
-        });
-      } else {
-        if (Math.random() < 0.5) burst({ x: s.x, y: s.y, z: s.z }, 1, 0xfbbf24, 0.4, 0.25, 0);
-        if (!P.dead && Math.hypot(P.x - s.x, P.z - s.z) < 0.7 && Math.abs((groundH(P.x, P.z) + 1.1) - s.y) < 1.6) {
-          hurtPlayer(s.dmg, s.x - s.vx, s.z - s.vz); dead = true;
-        }
+      if (Math.random() < 0.5) burst({ x: s.x, y: s.y, z: s.z }, 1, 0xfbbf24, 0.4, 0.25, 0);
+      if (!P.dead && Math.hypot(P.x - s.x, P.z - s.z) < 0.7 && Math.abs((groundH(P.x, P.z) + P.airY + 1.1) - s.y) < 0.9) {
+        hurtPlayer(s.dmg, s.x - s.vx, s.z - s.vz); dead = true;
       }
       if (dead) { scene.remove(s.g); shots.splice(i, 1); }
     }
@@ -15409,7 +15491,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     var cp = Math.cos(cam.pitch), sp = Math.sin(cam.pitch);
     var tx = P.x + Math.sin(cam.yaw) * cp * cam.dist;
     var tz = P.z + Math.cos(cam.yaw) * cp * cam.dist;
-    var ty = groundH(P.x, P.z) + 1.3 + sp * cam.dist;
+    var ty = groundH(P.x, P.z) + P.airY + 1.3 + sp * cam.dist;
     ty = Math.max(ty, groundH(tx, tz) + 0.7);
     for (var i = 0; i < colliders.length; i++) {
       var c = colliders[i];
@@ -15419,7 +15501,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     cam.shake = Math.max(0, cam.shake - dt * 1.6);
     var sh = cam.shake * cam.shake * 0.35;
     camera.position.set(tx + (Math.random() - 0.5) * sh, ty + (Math.random() - 0.5) * sh, tz + (Math.random() - 0.5) * sh);
-    camera.lookAt(P.x, groundH(P.x, P.z) + 1.25, P.z);
+    camera.lookAt(P.x, groundH(P.x, P.z) + P.airY + 1.25, P.z);
   }
   function updateAmbient(dt) {
     water.material.uniforms.uTime.value = tGlobal;
@@ -15434,6 +15516,11 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     });
     var ba = tGlobal * 0.5;
     beaconTarget.position.set(ELDER.x + Math.sin(ba) * 40, groundH(ELDER.x, ELDER.z) + 2, ELDER.z + Math.cos(ba) * 40);
+    if (impactMesh && impactMesh.visible) {
+      impactMesh.userData.t -= dt; var ip = Math.max(0, impactMesh.userData.t / 0.35);
+      impactMesh.scale.setScalar(0.8 + (1 - ip) * 2.4); impactMesh.material.opacity = ip * 0.6;
+      if (ip <= 0) impactMesh.visible = false;
+    }
     if (trailMesh && trailMesh.visible) {
       trailMesh.userData.t -= dt;
       trailMesh.material.opacity = Math.max(0, trailMesh.userData.t / 0.18) * 0.7;
@@ -15468,7 +15555,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     if (playing && !P.dead && !overlayOpen) {
       playT += dt; S.stats.time += dt;
       if (!dialogOpen) updatePlayer(dt);
-      else { P.vx *= 0.8; P.vz *= 0.8; animHumanoid(player, P, tGlobal); player.position.set(P.x, groundH(P.x, P.z), P.z); }
+      else { P.vx *= 0.8; P.vz *= 0.8; animHumanoid(player, P, tGlobal); player.position.set(P.x, groundH(P.x, P.z) + P.airY, P.z); }
       enemies.forEach(function (e) { if (!e.gone) updateEnemy(e, dt); });
       updateShots(dt); updateDrops(dt); updateGhosts(dt);
       naviCd = Math.max(0, naviCd - dt);
@@ -15488,7 +15575,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     if (!noRender) renderer.render(scene, camera);
   }
   function pause() {
-    paused = true;
+    paused = true; clearMovement();
     if (rafId) { cancelAnimationFrame(rafId); rafId = 0; }
     save();
   }
@@ -15520,9 +15607,8 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     // reset positions & enemies without rebuilding scene
     P.x = 0; P.z = 14; P.yaw = Math.PI; P.vx = P.vz = 0;
     P.hp = maxHp(); P.en = maxEn(); P.dead = false; P.iframe = 1;
-    P.cd.s1 = P.cd.s2 = P.cd.ult = 0; P.atkT = 0; P.dashT = 0; P.stormT = 0; P.ultT = 0;
-    if (stormMesh) stormMesh.visible = false;
-    if (ultMesh) ultMesh.visible = false;
+    resetActions();
+    player.position.set(P.x, groundH(P.x, P.z), P.z);
     enemies.forEach(function (e) { if (e.g) scene.remove(e.g); if (e.bar && e.bar.el.parentNode) e.bar.el.parentNode.removeChild(e.bar.el); if (e.tele) scene.remove(e.tele); });
     enemies.length = 0; boss = null;
     drops.forEach(function (d) { scene.remove(d.g); }); drops.length = 0;
@@ -15571,11 +15657,11 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
           inited = true;
           if (S.q.stage === 6 && !S.q.boss) spawnBoss();
           show(ui.pzLoad, false);
-          if (had && (S.lv > 1 || S.q.stage > 0 || S.shards > 0)) {
+          if (had && (S.char.made || S.lv > 1 || S.q.stage > 0 || S.shards > 0)) {
             ui.pzPlayBtn.textContent = 'Tiếp tục hành trình · Lv ' + S.lv;
             show(ui.pzResetBtn, true);
           } else {
-            ui.pzPlayBtn.textContent = 'Ra khơi';
+            ui.pzPlayBtn.textContent = 'Tạo nhân vật & ra khơi';
             show(ui.pzResetBtn, false);
           }
           show(ui.pzStart, true); syncOverlays();
@@ -15606,8 +15692,12 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
   /* ------------------------------- dev hooks ---------------------------- */
   if (DEV) {
     window.__pz = {
-      state: function () { return { lv: S.lv, exp: S.exp, shards: S.shards, q: S.q, hp: P.hp, en: P.en, x: P.x, z: P.z, enemies: enemies.filter(function (e) { return !e.dead; }).length, playing: playing, paused: paused, dialog: dialogOpen, overlay: overlayOpen }; },
-      tp: function (x, z) { P.x = x; P.z = z; P.vx = 0; P.vz = 0; P.dashT = 0; },
+      state: function () { return { lv: S.lv, exp: S.exp, shards: S.shards, q: S.q, hp: P.hp, en: P.en, x: P.x, z: P.z, airY: P.airY, vy: P.vy, atkT: P.atkT, dashT: P.dashT, kickT: P.kickT, slam: P.slam, cd: P.cd, haki: S.haki, hakiT: P.hakiT, hakiCd: P.hakiCd, dodges: P.dodges, char: S.char, name: S.name, armed: !!(player && player.userData.parts.sword), enemies: enemies.filter(function (e) { return !e.dead; }).length, playing: playing, paused: paused, dialog: dialogOpen, overlay: overlayOpen }; },
+      tp: function (x, z) { P.x = x; P.z = z; P.vx = 0; P.vz = 0; P.dashT = 0; P.airY = P.vy = 0; },
+      face: function (a) { P.yaw = a; },
+      foes: function () { return enemies.filter(function (e) { return !e.dead; }).map(function (e) { return { kind: e.kind, x: e.x, z: e.z, hp: e.hp, stun: e.stunT || 0 }; }); },
+      hurt: function (n) { P.iframe = 0; hurtPlayer(n, P.x, P.z - 1); },
+      reset: function () { resetRun(); },
       exp: function (n) { gainExp(n); },
       shard: function (n) { S.shards += n; hudBars(); },
       stage: function (n) { S.q.stage = n; S.q.kills = 0; questUi(); if (n === 6) spawnBoss(); },
@@ -20143,11 +20233,11 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     <input id="hzPzHp" type="number" min="0" max="100" step="1">
     <label class="hz-lb" for="hzPzAtk">Số lần nâng công (+3 mỗi lần, tối đa 100)</label>
     <input id="hzPzAtk" type="number" min="0" max="100" step="1">
-    <label class="hz-lb" for="hzPzEn">Số lần nâng năng lượng (+10 mỗi lần, tối đa 100)</label>
+    <label class="hz-lb" for="hzPzEn">Số lần nâng mana (+10 mỗi lần, tối đa 100)</label>
     <input id="hzPzEn" type="number" min="0" max="100" step="1">
     <label class="hz-lb" for="hzPzQuest">Nhiệm vụ hiện tại</label>
     <select id="hzPzQuest"></select>
-    <p class="hz-hint">Đổi nhiệm vụ sẽ đưa nhân vật về bến và khởi tạo lại quái. Chọn nhiệm vụ Vua Cua để đánh boss; chọn Tuần Tra để tiếp tục sau cốt truyện. Bốn kỹ năng Tinh Sa đã dùng được ngay từ đầu.</p>
+    <p class="hz-hint">Đổi nhiệm vụ sẽ đưa nhân vật về bến và khởi tạo lại quái. Chọn nhiệm vụ Vua Cua để đánh boss; chọn Tuần Tra để tiếp tục sau cốt truyện. Ban đầu chỉ có võ Combat với hai chiêu Z/X. Kiếm, súng, trái ác quỷ và ba Haki đều khóa. Tăng cấp hoặc đổi nhiệm vụ không tự mở Haki.</p>
     <div class="hz-row">
       <button class="hz-b" type="button" id="hzPzApplyBtn" onclick="adminWidget.gameApply()">Lưu thay đổi</button>
       <button class="hz-b ghost" type="button" id="hzPzReadBtn" onclick="adminWidget.gameUi()">Đọc lại</button>
@@ -20155,6 +20245,13 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
       <button class="hz-b ghost" type="button" id="hzPzOpenBtn" onclick="adminWidget.gameOpen()">Vào game</button>
     </div>
     <p class="hz-hint" id="hzPzHint" role="status" aria-live="polite"></p>
+    <h4>Cấp / thu hồi Haki</h4>
+    <p class="hz-hint">Chỉ Admin thay đổi các quyền này. Chọn “Được Admin cấp” để mở hoặc “Khóa” để thu hồi rồi bấm lưu. Chỉ áp dụng save trên máy này; chưa có nhiệm vụ mở Haki.</p>
+    <label class="hz-lb" for="hzPzObs">E — Haki quan sát</label><select id="hzPzObs"><option value="0">Khóa</option><option value="1">Được Admin cấp</option></select>
+    <label class="hz-lb" for="hzPzArm">J — Haki vũ trang</label><select id="hzPzArm"><option value="0">Khóa</option><option value="1">Được Admin cấp</option></select>
+    <label class="hz-lb" for="hzPzCon">U — Haki bá vương</label><select id="hzPzCon"><option value="0">Khóa</option><option value="1">Được Admin cấp</option></select>
+    <div class="hz-row"><button class="hz-b" id="hzPzHakiBtn" type="button" onclick="adminWidget.gameHaki()">Lưu quyền Haki</button></div>
+    <p class="hz-hint" id="hzPzHakiHint" role="status" aria-live="polite"></p>
   </div>
 
   <div class="hz-sec" data-hzsec="unlock">
@@ -20426,7 +20523,7 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
       curTab = id;
       applyTab();
     }
-    window.adminWidget = { close: close, open: open, toggle: toggle, tab: setTab, zoom: zoomMenu, gameUi: gameUi, gameApply: gameApply, gameHeal: gameHeal, gameOpen: gameOpen, gameExpHint: gameExpHint, unlockUi: function () { unlockUi(); }, doUnlock: doUnlock, unlockAll: unlockAll, lockUi: function () { lockUi(); }, lockAllNow: lockAllNow, lockOpenAll: lockOpenAll, lockToggle: lockToggle, lockRowClick: lockRowClick, hintUi: function () { hintUi(); }, hintSave: hintSave, gasUi: function () { gasUi(); }, gasSave: gasSave };
+    window.adminWidget = { close: close, open: open, toggle: toggle, tab: setTab, zoom: zoomMenu, gameUi: gameUi, gameApply: gameApply, gameHaki: gameHaki, gameHeal: gameHeal, gameOpen: gameOpen, gameExpHint: gameExpHint, unlockUi: function () { unlockUi(); }, doUnlock: doUnlock, unlockAll: unlockAll, lockUi: function () { lockUi(); }, lockAllNow: lockAllNow, lockOpenAll: lockOpenAll, lockToggle: lockToggle, lockRowClick: lockRowClick, hintUi: function () { hintUi(); }, hintSave: hintSave, gasUi: function () { gasUi(); }, gasSave: gasSave };
     function applyTab() {
       if (!panel) return;
       var nodes = panel.querySelectorAll('[data-hzsec]'), i;
@@ -20619,6 +20716,9 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
       Object.keys(vals).forEach(function (id) { el(id).value = vals[id]; });
       fill(el('hzPzQuest'), d.quests.map(function (q) { return { v: String(q.id), l: q.title }; }), String(s.q.stage));
       gameExpHint();
+      el('hzPzObs').value = s.haki.observation ? '1' : '0';
+      el('hzPzArm').value = s.haki.armament ? '1' : '0';
+      el('hzPzCon').value = s.haki.conqueror ? '1' : '0';
       el('hzPzHint').textContent = 'Máu tối đa ' + d.hp + ' · năng lượng ' + d.en + ' · công ' + d.atk + '. ' + (d.ready ? 'Đang đọc hành trình đang chơi.' : 'Chưa cần mở game vẫn chỉnh được save.');
     }
     function gameApply() {
@@ -20633,6 +20733,14 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
       if (!r) { el('hzPzHint').textContent = 'Bộ máy game 3D chưa sẵn sàng.'; return; }
       if (r.ok) gameUi();
       el('hzPzHint').textContent = r.msg;
+    }
+    function gameHaki() {
+      if (!isAdmin()) return;
+      var values = ['hzPzObs', 'hzPzArm', 'hzPzCon'].map(function (id) { return el(id).value; });
+      if (values.some(function (v) { return v !== '0' && v !== '1'; })) { el('hzPzHakiHint').textContent = 'Chọn đầy đủ cả ba trạng thái.'; return; }
+      var r = window.pirateAdmin && window.pirateAdmin.grantHaki({ observation: values[0] === '1', armament: values[1] === '1', conqueror: values[2] === '1' });
+      if (r && r.ok) gameUi();
+      el('hzPzHakiHint').textContent = r ? r.msg : 'Bộ máy game chưa sẵn sàng.';
     }
     function gameHeal() {
       if (!isAdmin()) return;
