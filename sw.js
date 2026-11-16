@@ -2,8 +2,8 @@
    Nhờ tệp này mà mất wifi lớp vẫn mở được app và chơi tiếp.
    Mỗi lần phát hành bản mới: đổi VERSION bên dưới thành 'hz-v2', 'hz-v3'... */
 
-const VERSION = 'hz-v7';
-const SHELL = ['index.html', 'manifest.json', 'icon-512.png', 'splash-character.png'];
+const VERSION = 'hz-v8';
+const SHELL = ['index.html', 'manifest.json', 'icon-512.png', 'splash-character.png', 'three.min.js'];
 
 /* Chỉ những nơi này được lưu lại. Database Firebase và máy AI không bị chạm tới. */
 const CACHE_HOSTS = [
