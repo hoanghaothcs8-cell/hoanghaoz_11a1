@@ -2704,6 +2704,8 @@
   #gameTab .pz-ico.stats{width:32px;height:32px;font-size:8px;}
   #gameTab .pz-boss{top:121px;left:auto;right:10px;transform:none;width:43%;}
   #gameTab .pz-toasts{top:205px;width:calc(100% - 24px);}
+  /* Băng tên đảo / hạ boss nhường chỗ cho chồng thông báo phía trên. */
+  #gameTab .pz-banner{top:44%;}
 }
 @media(max-width:560px){
   #gameTab .pz-ovl{padding:12px;}
@@ -2835,6 +2837,8 @@
 }
 @media(max-height:600px){
   #gameTab .pz-rail{top:var(--pz-rail-top,224px);flex-direction:row;}
+  /* Màn ngang thấp: chồng thông báo chiếm nửa trên, băng chữ xuống giữa dưới. */
+  #gameTab .pz-banner{top:56%;}
 }
 @media(max-width:820px) and (max-height:600px){
   #gameTab .pz-rail{top:var(--pz-rail-top,176px);flex-direction:row;}
