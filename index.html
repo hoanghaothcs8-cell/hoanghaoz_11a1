@@ -15759,7 +15759,9 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     if(P.boat||P.swim)return;
     var ni=E.nearest(P.x,P.z);
     if(ni.id===S.world.island)return;
-    if(Math.hypot(P.x-ni.x,P.z-ni.z)>ni.r*.98||groundH(P.x,P.z)<.15)return;
+    // Vừa hết bơi (lội nông) là tính đã cập bến: đổi đảo + lưu ngay. Không bắt đứng sâu trong bãi
+    // vì mép nước nông vẫn nằm ngoài vành đĩa r*.98 — chỉ cần đáy cao hơn ngưỡng thoát bơi.
+    if(groundH(P.x,P.z)<-0.05)return;
     var oldS=S,nx=JSON.parse(JSON.stringify(S));nx.world.island=ni.id;
     if(nx.world.visited.indexOf(ni.id)<0)nx.world.visited.push(ni.id);
     S=nx;if(!save()){S=oldS;return;}
@@ -16536,6 +16538,8 @@ window.OT_BANK = {"hoa":{"id":"hoa","name":"Hóa học","grades":{"11":{"source"
     window.__pz = {
       state: function () { return { lv: S.lv, exp: S.exp, shards: S.shards, q: S.q, hp: P.hp, en: P.en, x: P.x, z: P.z, world:S.world,bag:S.bag,gear:S.gear,mastery:S.mastery,skillCd:P.skillCd,sDash:!!P.sDash,pending:P.pending.length,fx:skillFx.length,boat:P.boat,swim:P.swim,iq:S.iq,grantSeq:S.grantSeq,iboss:Object.keys(islandBosses).map(function(k){var b=islandBosses[k];return {id:Number(k),name:b.bossName,hp:b.hp,maxHp:b.maxHp,dead:b.dead};}),respawn:Object.keys(bossRespawn).map(function(k){return {id:Number(k),left:Math.max(0,Math.ceil(bossRespawn[k]-playT))};}),ride:ride?{dest:ride.dest,points:ride.path.length}:null,playerShots:playerShots.length,airY: P.airY, vy: P.vy, atkT: P.atkT, dashT: P.dashT, kickT: P.kickT, slam: P.slam, cd: P.cd, haki: S.haki, hakiT: P.hakiT, hakiCd: P.hakiCd, dodges: P.dodges, char: S.char, name: S.name, armed: !!(player && player.userData.parts.sword), enemies: enemies.filter(function (e) { return !e.dead; }).length, playing: playing, paused: paused, dead:P.dead, dialog: dialogOpen, overlay: overlayOpen }; },
       tp: function (x, z) { P.x = x; P.z = z; S.world.island=E.nearest(x,z).id; P.boat=false;P.swim=false;P.swimWarn=0;ride=null;if(boat)boat.visible=false;P.vx = 0; P.vz = 0; P.dashT = 0; P.airY = P.vy = 0; },
+      // Chỉ cho QA: giả lập "đang xuất phát từ đảo khác" để bơi thật sang đảo mới rồi kiểm tra lưu hồ sơ.
+      setIsland: function (id) { S.world.island = id; },
       face: function (a) { P.yaw = a; },
       foes: function () { return enemies.filter(function (e) { return !e.dead; }).map(function (e) { return { kind: e.kind,island:e.island,iboss:e.iboss||0, x: e.x, z: e.z, hp: e.hp, stun: e.stunT || 0 }; }); },
       iq: function (id, step, kills) { var q = iqOf(id); if (step !== undefined) q.step = step; if (kills !== undefined) q.kills = kills; save(); questUi(); return q; },
